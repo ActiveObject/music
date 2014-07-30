@@ -1,7 +1,9 @@
+@import 'group-activity'
+
 *
   box-sizing: border-box
 
-html, body
+html, body, #app
   margin: 0
   padding: 0
   width: 100%
@@ -15,8 +17,20 @@ html, body
 .main-view
   width: 60%
   height: 100%
+  overflow: hidden
 
 .sidebar-view
   background-color: #F0F0F0
   width: 40%
   height: 100%
+
+.main-container
+  width: 600px
+  margin: 0 auto
+  padding: 50px 0
+
+.main-groups-title
+  color: rgba(0,0,0, .54)
+  font-size: 34px
+  font-family: 'Roboto', sans-serif
+  font-weight: 100

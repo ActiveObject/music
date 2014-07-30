@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       options: {
         livereload: true
       },
-      files: ['build/app.js'],
+      files: ['src/**/*.js'],
     },
 
     assets: {
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         livereload: true
       },
       files: 'src/styles/**/*.styl',
-      tasks: ['stylus:dev']
+      tasks: ['stylus']
     }
   });
 };

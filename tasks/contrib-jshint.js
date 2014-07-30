@@ -6,7 +6,8 @@ module.exports = function(grunt) {
       eqnull: true,
       eqeqeq: true,
       undef: true,
-      browser: true
+      browser: true,
+      node: true
     },
 
     dev: {

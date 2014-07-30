@@ -31,6 +31,11 @@
     "time-grunt": "^0.4.0"
   },
   "dependencies": {
-    "react": "^0.11.1"
+    "color": "^0.7.1",
+    "curry": "^1.2.0",
+    "iscroll": "^5.1.2",
+    "moment": "^2.7.0",
+    "react": "^0.11.1",
+    "underscore": "^1.6.0"
   }
 }

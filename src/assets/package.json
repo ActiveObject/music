@@ -4,8 +4,9 @@
   "main": "index.html",
   "window": {
     "toolbar": false,
-    "width": 900,
-    "height": 700,
+    "frame": false,
+    "width": 1300,
+    "height": 900,
     "resizable": true
   }
 }
