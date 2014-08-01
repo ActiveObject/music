@@ -1,7 +1,7 @@
 var React = require('react');
 var IScroll = require('iscroll');
-var GroupActivityCard = require('app/components/GroupActivityCard');
-var _ = React.DOM;
+var ActivityCard = require('app/components/ActivityCard');
+var dom = React.DOM;
 
 module.exports = React.createClass({
   componentDidMount: function() {
@@ -13,14 +13,25 @@ module.exports = React.createClass({
 
   render: function() {
     var groupActivities = this.props.groups.map(function(group) {
-      return new GroupActivityCard(group);
+      return new ActivityCard(group);
     });
 
-    var groups = _.div({ className: 'main-groups'},
-      [_.span({ className: 'main-groups-title' }, 'Спільноти')].concat(groupActivities)
-    );
+    var userActivity = new ActivityCard({
+      name: 'Test',
+      activity: this.props.activity
+    });
 
-    return _.div({ className: 'main-view', ref: 'view' },
-      _.div({ className: 'main-container' }, groups));
+    var groups = dom.div({ key: 'groups', className: 'main-section' }, [
+      dom.span({ key: 'title', className: 'main-section-title' }, 'Спільноти'),
+      dom.div({ key: 'cards' }, groupActivities)
+    ]);
+
+    var user = dom.div({ key: 'user', className: 'main-section' }, [
+      dom.span({ key: 'title' , className: 'main-section-title' }, 'Активність'),
+      dom.div({ key: 'cards', className: 'main-user-activity' }, userActivity )
+    ]);
+
+    return dom.div({ key: 'main', className: 'main-view', ref: 'view' },
+      dom.div({ className: 'main-container' }, [user, groups]));
   }
 });

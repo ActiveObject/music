@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-  require('time-grunt')(grunt);
+  // require('time-grunt')(grunt);
   require('jit-grunt')(grunt, {
     nodewebkit: 'grunt-node-webkit-builder'
   });
@@ -17,6 +17,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', [
     'clean:build', 'copy:build', 'jshint:dev', 'stylus',
-    'watchify', 'connect', 'watch'
+    'connect', 'watchify', 'watch'
   ]);
 };

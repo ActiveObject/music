@@ -1,10 +1,9 @@
 var React = require('react');
-var Layout = require('app/core/Layout');
 
-var App = React.createClass({
+module.exports = React.createClass({
+  name: 'App',
+
   render: function() {
-    return React.DOM.div({ className: 'app-container' }, Layout.make(this.props.layout, this.props));
+    return React.DOM.div({ className: 'app-container' }, this.props.children);
   }
 });
-
-module.exports = App;

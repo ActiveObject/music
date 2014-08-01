@@ -1,5 +1,6 @@
 var App = require('app/components/App');
+var View = require('app/core/View');
 
-module.exports = function(appstate) {
-  return new App(appstate);
-};
+module.exports = new View(function(appstate, children) {
+  return new App(appstate, children);
+});
