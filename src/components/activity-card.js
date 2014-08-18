@@ -2,7 +2,7 @@ var React = require('react');
 var _ = require('underscore');
 var Color = require('color');
 var curry = require('curry');
-var Activity = require('app/models/Activity');
+var Activity = require('app/models/activity');
 
 var div = React.DOM.div;
 var rect = React.DOM.rect;
@@ -10,7 +10,7 @@ var svg = React.DOM.svg;
 var g = React.DOM.g;
 
 module.exports = React.createClass({
-  name: 'ActivityCard',
+  displayName: 'ActivityCard',
 
   getDefaultProps: function() {
     return {
@@ -20,7 +20,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var dateRange = Activity.makeDateRange(new Date(), 188);
+    var dateRange = Activity.makeDateRange(new Date(), 30);
     var activity = Activity.fillEmptyDates(dateRange, this.props.activity);
     var achart = this.makeActivityChart(this.props.size, this.props.margin, activity);
     var name = div({ key: 'name', className: 'activity-name' }, this.props.name);

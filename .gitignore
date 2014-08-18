@@ -1,3 +1,16 @@
+# OS Files
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Temp Files
+*~
+*.tmp*
+*.orig
+*.cache
+*.log
+
 # Logs
 logs
 *.log

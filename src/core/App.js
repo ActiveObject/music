@@ -1,30 +1,48 @@
 var React = require('react');
+var page = require('page');
+var when = require('when');
+var curry = require('curry');
+var Router = require('app/core/router');
 
-function App(init) {
-  this.state = init(this);
-  this.target = document.body;
+function renderTo(target) {
+  return function renderTo(root) {
+    React.renderComponent(root, target);
+  };
 }
 
+function App(init) {
+  this.state = init;
+  this.router = new Router();
+}
+
+App.prototype.use = function (path, middleware) {
+  if (arguments.length === 1) {
+    middleware = path;
+    path = '*';
+  }
+
+  this.router.use(path, middleware);
+
+  return this;
+};
+
+App.prototype.on = function (path, fn) {
+  this.router.on(path, fn);
+};
+
 App.prototype.renderTo = function (el) {
-  this.target = document.querySelector(el);
+  this.router.use(renderTo(el));
 };
 
-App.prototype.layout = function () {
-  var views = this.state.views;
-
-  if (!views || !Array.isArray(views)) {
-    throw new Error('The app should have some views to render');
-  }
-
-  if (views.length === 0) {
-    throw new Error('There is not any view to layout');
-  }
-
-  return views[0].layout(this.state);
+App.prototype.start = function () {
+  page(this.dispatch.bind(this));
+  page();
 };
 
-App.prototype.render = function () {
-  React.renderComponent(this.layout(), this.target);
+App.prototype.dispatch = function (ctx) {
+  return this.router(this.state, ctx, function (app) {
+    console.log('dispatch is finished ', app);
+  });
 };
 
 module.exports = App;

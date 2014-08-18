@@ -1,10 +1,10 @@
 {
   "name": "music",
   "version": "0.0.1",
-  "main": "index.html",
+  "main": "app://localhost:5003/index.html",
   "window": {
-    "toolbar": false,
-    "frame": false,
+    "toolbar": true,
+    "frame": true,
     "width": 1300,
     "height": 900,
     "resizable": true

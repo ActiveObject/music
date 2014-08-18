@@ -1,220 +1,26 @@
-var App = require('app/core/App');
-var GroupsStore = require('app/stores/GroupsStore');
-var views = require('app/views');
+var Immutable = require('immutable');
+var App = require('app/core/app');
+var Auth = require('app/core/auth');
+var routes = require('app/routes');
 
-var app = new App(function() {
-  return {
-    user: { id: 123 },
-    groups: [
-      {
-        id: 1,
-        name: '♥ PROGRESSIVE BREAKS ♥',
-        activity: [
-          { date: '2014-07-27', news: 13 },
-          { date: '2014-07-26', news: 8 },
-          { date: '2014-07-01', news: 4 },
-          { date: '2014-06-01', news: 8 },
-          { date: '2014-06-02', news: 12 },
-          { date: '2014-06-03', news: 7 },
-          { date: '2014-06-04', news: 19 },
-          { date: '2014-06-05', news: 15 },
-          { date: '2014-06-06', news: 7 },
-          { date: '2014-06-07', news: 15 },
-          { date: '2014-06-08', news: 7 },
-          { date: '2014-06-09', news: 10 },
-          { date: '2014-06-10', news: 10 },
-          { date: '2014-06-11', news: 4 },
-          { date: '2014-06-12', news: 2 },
-          { date: '2014-06-13', news: 19 },
-          { date: '2014-06-14', news: 10 },
-          { date: '2014-06-15', news: 7 },
-          { date: '2014-06-16', news: 8 },
-          { date: '2014-06-17', news: 19 },
-          { date: '2014-06-18', news: 11 },
-          { date: '2014-06-19', news: 19 },
-          { date: '2014-06-20', news: 12 },
-          { date: '2014-05-01', news: 4 },
-          { date: '2014-05-02', news: 4 },
-          { date: '2014-05-03', news: 10 },
-          { date: '2014-05-04', news: 4 },
-          { date: '2014-05-05', news: 14 },
-          { date: '2014-05-05', news: 11 },
-          { date: '2014-05-07', news: 12 },
-          { date: '2014-05-08', news: 4 },
-          { date: '2014-05-09', news: 4 },
-          { date: '2014-05-10', news: 8 },
-          { date: '2014-04-01', news: 7 },
-          { date: '2014-04-02', news: 4 },
-          { date: '2014-04-03', news: 5 },
-          { date: '2014-04-04', news: 4 },
-          { date: '2014-04-05', news: 2 },
-          { date: '2014-04-06', news: 4 },
-          { date: '2014-04-07', news: 4 },
-          { date: '2014-04-08', news: 7 },
-          { date: '2014-04-09', news: 9 },
-          { date: '2014-04-10', news: 4 },
-          { date: '2014-04-11', news: 13 },
-          { date: '2014-04-12', news: 4 },
-          { date: '2014-04-13', news: 4 },
-          { date: '2014-04-14', news: 12 },
-          { date: '2014-04-15', news: 4 },
-          { date: '2014-04-16', news: 11 },
-          { date: '2014-04-21', news: 13 },
-          { date: '2014-04-22', news: 14 },
-          { date: '2014-04-23', news: 6 },
-          { date: '2014-04-27', news: 5 },
-          { date: '2014-04-28', news: 4 },
-          { date: '2014-04-29', news: 3 },
-          { date: '2014-03-01', news: 6 },
-          { date: '2014-03-02', news: 16 },
-          { date: '2014-03-03', news: 8 },
-          { date: '2014-03-04', news: 16 },
-          { date: '2014-03-05', news: 9 },
-          { date: '2014-03-06', news: 8 },
-          { date: '2014-03-07', news: 16 },
-          { date: '2014-03-08', news: 13 },
-          { date: '2014-03-09', news: 13 },
-          { date: '2014-03-10', news: 12 },
-          { date: '2014-03-11', news: 16 },
-          { date: '2014-03-12', news: 4 },
-          { date: '2014-03-13', news: 6 },
-          { date: '2014-03-14', news: 8 },
-          { date: '2014-03-15', news: 9 },
-          { date: '2014-03-16', news: 16 },
-          { date: '2014-03-17', news: 11 },
-          { date: '2014-03-18', news: 12 },
-          { date: '2014-03-19', news: 16 },
-          { date: '2014-03-20', news: 11 },
-          { date: '2014-03-21', news: 12 },
-          { date: '2014-03-22', news: 16 },
-          { date: '2014-03-23', news: 16 },
-          { date: '2014-03-27', news: 7 },
-          { date: '2014-03-28', news: 8 },
-        ]
-      }, {
-        id: 2,
-        name: 'Dubstep and Chillstep',
-        activity: [
-          { date: '2014-07-27', news: 13 },
-          { date: '2014-07-26', news: 8 },
-          { date: '2014-06-19', news: 8 },
-          { date: '2014-06-13', news: 8 },
-          { date: '2014-06-12', news: 78 },
-          { date: '2014-06-11', news: 3 },
-          { date: '2014-06-10', news: 2 },
-          { date: '2014-06-07', news: 8 },
-          { date: '2014-06-06', news: 1 },
-          { date: '2014-06-04', news: 8 },
-          { date: '2014-06-03', news: 8 },
-          { date: '2014-06-02', news: 13 },
-          { date: '2014-05-30', news: 45 },
-          { date: '2014-05-27', news: 8 },
-          { date: '2014-05-26', news: 8 }
-        ]
-      }, {
-        id: 3,
-        name: 'Группа Ломаный БиТ Breaks, Drum&Bass, UK Garage✔',
-        activity: [
-          { date: '2014-07-27', news: 13 },
-          { date: '2014-07-26', news: 8 },
-          { date: '2014-06-19', news: 8 },
-          { date: '2014-06-13', news: 8 },
-          { date: '2014-06-12', news: 10 },
-          { date: '2014-06-11', news: 3 },
-          { date: '2014-06-10', news: 2 },
-          { date: '2014-06-17', news: 8 },
-          { date: '2014-06-16', news: 1 },
-          { date: '2014-06-14', news: 10 },
-          { date: '2014-06-13', news: 8 },
-          { date: '2014-06-16', news: 13 },
-          { date: '2014-05-30', news: 23 },
-          { date: '2014-04-27', news: 8 },
-          { date: '2014-04-26', news: 8 }
-        ]
-      }, {
-        id: 4,
-        name: '[Atmospheric Progressive Breaks]',
-        activity: [
-          { date: '2014-07-27', news: 13 },
-          { date: '2014-07-26', news: 8 },
-          { date: '2014-07-19', news: 8 },
-          { date: '2014-07-13', news: 8 },
-          { date: '2014-07-12', news: 8 },
-          { date: '2014-06-20', news: 3 },
-          { date: '2014-06-19', news: 13 },
-          { date: '2014-06-17', news: 8 },
-          { date: '2014-06-16', news: 1 },
-          { date: '2014-06-04', news: 13 },
-          { date: '2014-06-03', news: 8 },
-          { date: '2014-06-02', news: 13 },
-          { date: '2014-05-30', news: 12 },
-          { date: '2014-05-27', news: 8 },
-          { date: '2014-05-26', news: 8 }
-        ]
-      }, {
-        id: 5,
-        name: '"Sound Alliance"',
-        activity: [
-          { date: '2014-07-27', news: 13 },
-          { date: '2014-07-26', news: 8 },
-          { date: '2014-07-19', news: 8 },
-          { date: '2014-07-13', news: 8 },
-          { date: '2014-07-12', news: 8 },
-          { date: '2014-06-20', news: 3 },
-          { date: '2014-06-19', news: 13 },
-          { date: '2014-06-17', news: 8 },
-          { date: '2014-06-16', news: 1 },
-          { date: '2014-05-30', news: 12 },
-          { date: '2014-05-27', news: 8 },
-          { date: '2014-05-26', news: 8 },
-          { date: '2014-05-04', news: 18 },
-          { date: '2014-05-03', news: 19 },
-          { date: '2014-05-02', news: 10 }
-        ]
-      }, {
-        id: 6,
-        name: '#relax #instrumental #beats',
-        activity: [
-          { date: '2014-07-27', news: 13 },
-          { date: '2014-07-26', news: 8 },
-          { date: '2014-07-19', news: 8 },
-          { date: '2014-07-20', news: 3 },
-          { date: '2014-07-19', news: 13 },
-          { date: '2014-07-17', news: 8 },
-          { date: '2014-07-16', news: 1 },
-          { date: '2014-07-13', news: 8 },
-          { date: '2014-07-12', news: 8 },
-          { date: '2014-07-04', news: 13 },
-          { date: '2014-07-03', news: 8 },
-          { date: '2014-06-02', news: 13 },
-          { date: '2014-05-30', news: 12 },
-          { date: '2014-05-27', news: 8 },
-          { date: '2014-05-26', news: 8 }
-        ]
-      }
-    ],
+if (Auth.hasToken(location.hash)) {
+  Auth.storeToLs(location.hash);
+  location.hash = '';
+}
 
-    activity: [
-      { date: '2014-07-27', news: 13 },
-      { date: '2014-07-26', news: 8 },
-      { date: '2014-07-19', news: 8 },
-      { date: '2014-07-20', news: 3 },
-      { date: '2014-07-19', news: 13 },
-      { date: '2014-07-17', news: 8 },
-      { date: '2014-07-16', news: 1 },
-      { date: '2014-07-13', news: 8 },
-      { date: '2014-07-12', news: 8 },
-      { date: '2014-07-04', news: 13 },
-      { date: '2014-07-03', news: 8 },
-      { date: '2014-06-02', news: 13 },
-      { date: '2014-05-30', news: 12 },
-      { date: '2014-05-27', news: 8 },
-      { date: '2014-05-26', news: 8 }
-    ],
+var app = new App(Immutable.Map({
+  activity: require('app/fixtures/activity'),
+  activeTrack: Immutable.Map({
+    title: 'Got 2 Know',
+    artist: 'Flux Pavilion',
+    duration: 150
+  })
+}));
 
-    views: [views.app, views.main, views.sidebar, views.activeTrack, views.tracks.all()]
-  };
-});
+app.use(Auth.readFromLs);
 
-app.renderTo('#app');
-app.render();
+app.on('/', routes.main);
+app.on('/groups/:id', routes.group);
+
+app.renderTo(document.getElementById('app'));
+app.start();
