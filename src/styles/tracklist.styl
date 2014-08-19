@@ -22,7 +22,8 @@
   border: 2px solid #EEE
   border-radius: 2px
   cursor: pointer
-  transition: background-color 0.2s, border-color 0.2s
+  transform: rotate(0)
+  transition: background-color 0.2s, border-color 0.2s, transform 0.3s
   box-sizing: content-box
 
   .icon
@@ -37,6 +38,15 @@
 
   .icon
     fill: accent-color
+
+.play-btn.active
+  background-color: accent-color
+  transform: rotate(90deg)
+  border-color: accent-color
+
+  .icon
+    transform: rotate(-90deg)
+    fill: white
 
 .tracklist-item-title,
 .tracklist-item-artist
