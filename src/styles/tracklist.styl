@@ -1,3 +1,5 @@
+@import 'config'
+
 .tracklist
   width: 100%
   color: #616161
@@ -17,7 +19,13 @@
   height: @width
   min-width: @width
   margin: 0 15px
-  background-color: #44413E
+  border: 2px solid #EEE
+  border-radius: 2px
+  cursor: pointer
+  transition: background-color 0.2s, border-color 0.2s
+
+.play-btn:hover
+  border-color: accent-color
 
 .tracklist-item-title,
 .tracklist-item-artist
