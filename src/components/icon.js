@@ -17,8 +17,6 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    return React.DOM.svg({
-      className: 'icon'
-    });
+    return React.DOM.svg({ className: 'icon' });
   }
 });

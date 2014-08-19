@@ -4,11 +4,7 @@ var Color = require('color');
 var curry = require('curry');
 var Activity = require('app/models/activity');
 
-var dom = React.DOM;
-var div = React.DOM.div;
-var rect = React.DOM.rect;
-var svg = React.DOM.svg;
-var g = React.DOM.g;
+var dom = require('app/core/dom');
 
 module.exports = React.createClass({
   displayName: 'ActivityCard',
@@ -25,11 +21,17 @@ module.exports = React.createClass({
     var dateRange = Activity.makeDateRange(new Date(), 185);
     var activity = Activity.fillEmptyDates(dateRange, this.props.activity);
     var achart = this.makeActivityChart(this.props.size, this.props.margin, activity, this.props.defaultColor);
-    var name = dom.a({ key: 'name', className: 'activity-name', href: '/groups/' + this.props.id }, this.props.name);
 
-    return div({
-      className: 'activity'
-    }, [name, achart]);
+    var name = dom.a()
+      .key('name')
+      .className('activity-name')
+      .attr('href', '/groups/' + this.props.id )
+      .append(this.props.name);
+
+    return dom.div()
+      .className('activity')
+      .append(name, achart)
+      .make();
   },
 
   makeActivityChart: function(size, margin, activity, defaultColor) {
@@ -37,30 +39,31 @@ module.exports = React.createClass({
     var maxNewsCount = Math.max.apply(null, _.pluck(activity, 'news'));
     var items = weeks.map(this.makeWeek(maxNewsCount, size, margin, defaultColor));
 
-    return div({
-      key: 'chart',
-      className: 'activity-chart'
-    }, svg({
-      width: (size + margin) * weeks.length,
-      height: (size + margin) * 7
-    }, items));
+    var body = dom.svg()
+      .attr('width', (size + margin) * weeks.length)
+      .attr('height', (size + margin) * 7)
+      .append(items);
+
+    return dom.div()
+      .key('chart')
+      .className('activity-chart')
+      .append(body);
   },
 
   makeWeek: curry(function(maxValue, size, margin, defaultColor, week, i) {
     var items = week.items.map(function(item, i) {
-      return rect({
-        key: i,
-        width: size,
-        height: size,
-        y: i * (size + margin),
-        fill: item.news > 0 ? makeFillColor(item.news, maxValue) : defaultColor
-      });
+      return dom.rect()
+        .key(i)
+        .attr('width', size)
+        .attr('height', size)
+        .attr('y', i * (size + margin))
+        .attr('fill', item.news > 0 ? makeFillColor(item.news, maxValue) : defaultColor);
     });
 
-    return g({
-      key: week.number,
-      transform: 'translate(' + [(size + margin) * i, 0].join(',') + ')'
-    }, items);
+    return dom.g()
+      .key(week.number)
+      .attr('transform', 'translate(' + [(size + margin) * i, 0].join(',') + ')')
+      .append(items);
   })
 });
 

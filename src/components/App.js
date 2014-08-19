@@ -1,9 +1,10 @@
 var React = require('react');
+var dom = require('app/core/dom');
 
 module.exports = React.createClass({
   displayName: 'App',
 
   render: function() {
-    return React.DOM.div({ className: 'app-container' }, this.props.children);
+    return dom.div().className('app-container').append(this.props.children).make();
   }
 });

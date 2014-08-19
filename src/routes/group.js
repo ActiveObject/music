@@ -72,13 +72,13 @@ function getAvailableTracks(appstate, next) {
 
 var makeApp = curry(function makeApp(groupId, appstate) {
   var group = new GroupProfile({
+    key: 'group',
     group: _.find(appstate.get('groups'), function (group) {
       return group.id === groupId;
     })
   });
 
   var tracklist = new Tracklist({
-    key: 'tracklist',
     tracks: appstate.get('tracks'),
     activeTrack: appstate.get('activeTrack'),
     name: 'Аудіозаписи'

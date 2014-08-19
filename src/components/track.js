@@ -6,7 +6,7 @@ var dom = React.DOM;
 require('moment-duration-format');
 
 module.exports = React.createClass({
-  displayName: 'track',
+  displayName: 'Track',
 
   getInitialState: function () {
     return {
@@ -26,6 +26,7 @@ module.exports = React.createClass({
     }, this.props.track.artist);
 
     var playBtn = new PlayBtn({
+      key: 'play-btn',
       isPlaying: this.state.isPlaying,
       onClick: this.togglePlay
     });

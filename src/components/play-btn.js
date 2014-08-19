@@ -1,5 +1,6 @@
 var React = require('react');
 var Icon = require('app/components/icon');
+var dom = require('app/core/dom');
 
 module.exports = React.createClass({
   render: function () {
@@ -8,10 +9,12 @@ module.exports = React.createClass({
       onClick: this.props.onClick
     });
 
-    return React.DOM.div({
-      key: 'play-btn',
-      className: 'play-btn' + (this.props.isPlaying ? ' active' : ''),
-      onClick: this.props.onClick
-    }, icon);
+    return dom.div()
+      .key('play-btn')
+      .className('play-btn')
+      .className('active', this.props.isPlaying)
+      .attr('onClick', this.props.onClick)
+      .append(icon)
+      .make();
   }
 });

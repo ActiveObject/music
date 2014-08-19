@@ -1,5 +1,6 @@
 var React = require('react');
 var IScroll = require('iscroll');
+var dom = require('app/core/dom');
 
 module.exports = React.createClass({
   displayName: 'Sidebar',
@@ -16,8 +17,10 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return React.DOM.div({ className: 'scroll-wrapper sidebar-view', ref: 'view' },
-      React.DOM.div({ className: 'sidebar-content' }, this.props.children)
-    );
+    return dom.div()
+      .className('scroll-wrapper sidebar-view')
+      .attr('ref', 'view')
+      .append(dom.div().className('sidebar-content').append(this.props.children))
+      .make();
   }
 });

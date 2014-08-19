@@ -3,10 +3,10 @@ var ActivityCard = require('app/components/activity-card');
 var dom = React.DOM;
 
 module.exports = React.createClass({
-  displayName: 'group-profile',
+  displayName: 'GroupProfile',
 
   render: function () {
-    var avatar = dom.div({ className: 'group-profile-avatar' },
+    var avatar = dom.div({ key: 'avatar', className: 'group-profile-avatar' },
       dom.img({
         width: 150,
         height: 150,
@@ -14,9 +14,9 @@ module.exports = React.createClass({
       })
     );
 
-    var name = dom.div(null, this.props.group.name);
+    var name = dom.div({ key: 'name' }, this.props.group.name);
 
-    var profile = dom.div({ className: 'group-profile-info' }, [avatar, name]);
+    var profile = dom.div({ key: 'profile', className: 'group-profile-info' }, [avatar, name]);
 
     var activity = new ActivityCard({
       key: 'activity',
@@ -42,7 +42,6 @@ module.exports = React.createClass({
     });
 
     return dom.div({
-      key: 'group-profile',
       className: 'main-view group-profile',
     }, [profile, activity]);
   }

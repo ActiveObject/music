@@ -82,7 +82,6 @@ function makeApp(appstate) {
   });
 
   var tracklist = new Tracklist({
-    key: 'tracklist',
     tracks: appstate.get('tracks'),
     activeTrack: appstate.get('activeTrack'),
     name: 'Аудіозаписи'
