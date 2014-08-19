@@ -18,6 +18,7 @@ var app = new App(Immutable.Map({
 }));
 
 app.use(Auth.readFromLs);
+app.use(routes.auth);
 
 app.on('/', routes.main);
 app.on('/groups/:id', routes.group);

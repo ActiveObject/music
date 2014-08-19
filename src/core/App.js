@@ -13,6 +13,7 @@ function renderTo(target) {
 function App(init) {
   this.state = init;
   this.router = new Router();
+  this.target = document.body;
 }
 
 App.prototype.use = function (path, middleware) {
@@ -31,7 +32,7 @@ App.prototype.on = function (path, fn) {
 };
 
 App.prototype.renderTo = function (el) {
-  this.router.use(renderTo(el));
+  this.target = el;
 };
 
 App.prototype.start = function () {
@@ -40,9 +41,8 @@ App.prototype.start = function () {
 };
 
 App.prototype.dispatch = function (ctx) {
-  return this.router(this.state, ctx, function (app) {
-    console.log('dispatch is finished ', app);
-  });
+  when(this.router(this.state, ctx))
+    .then(renderTo(this.target))
 };
 
 module.exports = App;

@@ -4,13 +4,11 @@ var _ = require('underscore');
 var Vk = require('app/services/vk');
 var VkApi = require('app/services/vk/vk-api');
 var Router = require('app/core/router');
-var accounts = require('app/accounts');
 
 var App = require('app/components/app');
 var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
 var ActiveTrack = require('app/components/active-track');
-var AuthView = require('app/components/auth');
 var GroupProfile = require('app/components/group-profile');
 var Tracklist = require('app/components/tracklist');
 
@@ -72,16 +70,6 @@ var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
   }).then(next)
 });
 
-var authenticate = curry(function authenticate(appstate, next) {
-  if (!Vk.isAuthenticated(appstate.get('user'))) {
-    return new AuthView({
-      url: Vk.makeAuthUrl(accounts.vk)
-    });
-  }
-
-  return next(appstate);
-});
-
 var makeApp = curry(function makeApp(groupId, appstate) {
   var group = new GroupProfile({
     group: _.find(appstate.get('groups'), function (group) {
@@ -104,16 +92,12 @@ var makeApp = curry(function makeApp(groupId, appstate) {
   return new App(null, [group, sidebar]);
 });
 
-module.exports = function (appstate, ctx, next) {
+module.exports = function groupRoute(appstate, ctx) {
   var id = parseInt(ctx.params.id, 10);
 
-  var result = authenticate(appstate, function (appstate) {
-    return getAvailableGroups(appstate, function (appstate) {
-      return getAvailableTracks(appstate, function (appstate) {
-        return makeApp(id, appstate);
-      });
+  return getAvailableGroups(appstate, function (appstate) {
+    return getAvailableTracks(appstate, function (appstate) {
+      return makeApp(id, appstate);
     });
   });
-
-  when(result).then(next);
 };

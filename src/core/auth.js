@@ -1,18 +1,18 @@
 var QS = require('querystring');
 
-exports.readFromLs = function readFromLs(appstate) {
+exports.readFromLs = function readFromLs(appstate, ctx, next) {
   if (localStorage.getItem('user_id') && localStorage.getItem('access_token')) {
-    return appstate.set('user', {
+    return next(appstate.set('user', {
       accounts: {
         vk: {
           user_id: localStorage.getItem('user_id'),
           access_token: localStorage.getItem('access_token')
         }
       }
-    });
+    }));
   }
 
-  return appstate;
+  return next(appstate);
 };
 
 exports.hasToken = function hasToken(hash) {
