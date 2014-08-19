@@ -39,7 +39,7 @@ var getAvailableGroups = curry(function getAvailableGroups(appstate, next) {
 
       resolve(appstate.set('groups', data.response.items));
     });
-  }).then(next)
+  }).then(next);
 });
 
 var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
@@ -67,7 +67,7 @@ var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
 
       resolve(appstate.set('tracks', data.response.items));
     });
-  }).then(next)
+  }).then(next);
 });
 
 var makeApp = curry(function makeApp(groupId, appstate) {

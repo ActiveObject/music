@@ -11,12 +11,13 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   grunt.registerTask('dist', [
-    'clean:dist', 'copy:dist', 'jshint:prod', 'stylus',
-    'browserify', 'cssmin', 'uglify', 'nodewebkit'
+    'clean:dist', 'clean:build', 'copy:assets', 'jshint:prod',
+    'stylus', 'svgstore', 'embed-icons', 'browserify',
+    'cssmin', 'uglify', 'copy:dist', 'nodewebkit'
   ]);
 
   grunt.registerTask('default', [
-    'clean:build', 'copy:build', 'jshint:dev', 'stylus',
-    'connect', 'watchify', 'watch'
+    'clean:build', 'copy:assets', 'svgstore', 'embed-icons',
+    'jshint:dev', 'stylus', 'connect', 'watchify', 'watch'
   ]);
 };

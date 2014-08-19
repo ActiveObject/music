@@ -7,6 +7,7 @@ module.exports = function(grunt) {
       eqeqeq: true,
       undef: true,
       browser: true,
+      proto: true,
       node: true
     },
 

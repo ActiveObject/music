@@ -26,6 +26,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-node-webkit-builder": "^0.1.21",
     "grunt-notify": "^0.3.0",
+    "grunt-svgstore": "^0.3.3",
     "grunt-watchify": "^0.1.0",
     "jit-grunt": "^0.7.0",
     "jshint-stylish": "^0.4.0",

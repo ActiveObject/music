@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
   grunt.config('copy', {
-    build: {
+    assets: {
       files: [{
         expand: true,
         src: '**/*',
@@ -10,12 +10,12 @@ module.exports = function(grunt) {
     },
 
     dist: {
-      files: [{
-        expand: true,
-        src: '**/*',
-        dest: 'dist/',
-        cwd: 'src/assets'
-      }]
+      files: [
+        { src: 'build/app.js', dest: 'dist/app.js' },
+        { src: 'build/app.css', dest: 'dist/app.css' },
+        { src: 'build/index.html', dest: 'dist/index.html' },
+        { src: 'build/package.json', dest: 'dist/package.json' }
+      ]
     }
   });
 };

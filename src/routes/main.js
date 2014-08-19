@@ -37,7 +37,7 @@ var getAvailableGroups = curry(function getAvailableGroups(appstate, next) {
 
       resolve(appstate.set('groups', data.response.items));
     });
-  }).then(next)
+  }).then(next);
 });
 
 var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
@@ -65,13 +65,13 @@ var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
 
       resolve(appstate.set('tracks', data.response.items));
     });
-  }).then(next)
+  }).then(next);
 });
 
 var setVisibleGroups = curry(function setVisibleGroups(appstate, next) {
   return next(appstate.set('visibleGroups', appstate.get('groups').slice(0, 10).map(function (group) {
     return group.id;
-  })))
+  })));
 });
 
 var makeApp = curry(function makeApp(appstate) {

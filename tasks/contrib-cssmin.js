@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
     minify: {
       src: ['build/app.css'],
-      dest: 'dist/app.css'
+      dest: 'build/app.css'
     }
   });
 };

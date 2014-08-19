@@ -42,7 +42,7 @@ App.prototype.start = function () {
 
 App.prototype.dispatch = function (ctx) {
   when(this.router(this.state, ctx))
-    .then(renderTo(this.target))
+    .then(renderTo(this.target));
 };
 
 module.exports = App;
