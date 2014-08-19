@@ -26,6 +26,14 @@ module.exports = function(grunt) {
       },
       files: 'src/styles/**/*.styl',
       tasks: ['stylus']
+    },
+
+    icons: {
+      options: {
+        livereload: true
+      },
+      files: 'src/icons/**/*.svg',
+      tasks: ['svgstore', 'embed-icons']
     }
   });
 };
