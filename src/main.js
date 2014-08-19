@@ -11,9 +11,7 @@ if (Auth.hasToken(location.hash)) {
 var app = new App(Immutable.Map({
   activity: require('app/fixtures/activity'),
   activeTrack: Immutable.Map({
-    title: 'Got 2 Know',
-    artist: 'Flux Pavilion',
-    duration: 150
+    id: 302544109
   })
 }));
 

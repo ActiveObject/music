@@ -1,5 +1,8 @@
 var when = require('when');
 var curry = require('curry');
+var _ = require('underscore');
+var Immutable = require('immutable');
+
 var Vk = require('app/services/vk');
 var VkApi = require('app/services/vk/vk-api');
 var Router = require('app/core/router');
@@ -9,6 +12,7 @@ var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
 var Tracklist = require('app/components/tracklist');
 
+var where = require('app/utils').where;
 var Promise = when.Promise;
 
 function getAvailableGroups(appstate, next) {
@@ -81,9 +85,13 @@ function makeApp(appstate) {
     visibleGroups: appstate.get('visibleGroups')
   });
 
+  var activeTrack = _.find(appstate.get('tracks'), where({
+    id: appstate.get('activeTrack').get('id')
+  }));
+
   var tracklist = new Tracklist({
     tracks: appstate.get('tracks'),
-    activeTrack: appstate.get('activeTrack'),
+    activeTrack: Immutable.Map(activeTrack),
     name: 'Аудіозаписи'
   });
 

@@ -10,7 +10,7 @@ module.exports = React.createClass({
 
   getInitialState: function () {
     return {
-      isPlaying: false
+      isPlaying: true
     };
   },
 
@@ -29,7 +29,7 @@ module.exports = React.createClass({
     var artist = dom.span()
       .key('artist')
       .className('active-track-artist')
-      .append(this.props.track.get('title'));
+      .append(this.props.track.get('artist'));
 
     var duration = dom.span()
       .key('duration')
@@ -41,7 +41,11 @@ module.exports = React.createClass({
       .className('active-track-separator')
       .append('-');
 
-    var track = dom.div().key('track').append(artist, separator, title);
+    var track = dom.div()
+      .key('track')
+      .className('active-track-desc')
+      .attr('title', [this.props.track.get('artist'), this.props.track.get('title')].join(' - '))
+      .append(artist, separator, title);
 
     return dom.div()
       .className('active-track')
