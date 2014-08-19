@@ -11,6 +11,10 @@ module.exports = React.createClass({
     });
   },
 
+  componentDidUpdate: function () {
+    this.scroll.refresh();
+  },
+
   render: function() {
     return React.DOM.div({ className: 'scroll-wrapper sidebar-view', ref: 'view' },
       React.DOM.div({ className: 'sidebar-content' }, this.props.children)

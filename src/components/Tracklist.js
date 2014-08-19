@@ -1,5 +1,6 @@
 var React = require('react');
 var Track = require('app/components/track');
+var ActiveTrack = require('app/components/active-track');
 var dom = React.DOM;
 
 module.exports = React.createClass({
@@ -11,8 +12,14 @@ module.exports = React.createClass({
       });
     });
 
-    var header = dom.div({ key: 'header', className: 'tracklist-header' }, this.props.name);
+    var activeTrack = new ActiveTrack({
+      track: this.props.activeTrack
+    });
 
-    return dom.div({ className: 'card tracklist' }, [header].concat(tracks));
+    var header = dom.div({ key: 'header', className: 'tracklist-header' }, activeTrack);
+
+    var name = dom.div({ key: 'section', className: 'tracklist-section-name' }, this.props.name + ' (1243)');
+
+    return dom.div({ className: 'card tracklist' }, [header, name].concat(tracks));
   }
 });

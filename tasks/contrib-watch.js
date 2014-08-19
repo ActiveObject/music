@@ -20,6 +20,14 @@ module.exports = function(grunt) {
       tasks: ['copy:build']
     },
 
+    templates: {
+      options: {
+        livereload: true
+      },
+      files: ['src/templates/**/*'],
+      tasks: ['svgstore', 'embed-icons']
+    },
+
     css: {
       options: {
         livereload: true

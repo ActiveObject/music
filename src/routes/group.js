@@ -77,17 +77,14 @@ var makeApp = curry(function makeApp(groupId, appstate) {
     })
   });
 
-  var activeTrack = new ActiveTrack({
-    track: appstate.get('activeTrack')
-  });
-
   var tracklist = new Tracklist({
     key: 'tracklist',
     tracks: appstate.get('tracks'),
+    activeTrack: appstate.get('activeTrack'),
     name: 'Аудіозаписи'
   });
 
-  var sidebar = new Sidebar({ key: 'sidebar' }, [activeTrack, tracklist]);
+  var sidebar = new Sidebar({ key: 'sidebar' }, tracklist);
 
   return new App(null, [group, sidebar]);
 });

@@ -7,7 +7,6 @@ var Router = require('app/core/router');
 var App = require('app/components/app');
 var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
-var ActiveTrack = require('app/components/active-track');
 var Tracklist = require('app/components/tracklist');
 
 var Promise = when.Promise;
@@ -56,7 +55,7 @@ var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
     vk.audio.get({
       owner_id: user.accounts.vk.user_id,
       offset: 0,
-      count: 20,
+      count: 8,
       v: '5.23  '
     }, function (err, data) {
       if (err) {
@@ -82,18 +81,14 @@ var makeApp = curry(function makeApp(appstate) {
     visibleGroups: appstate.get('visibleGroups')
   });
 
-  var activeTrack = new ActiveTrack({
-    key: 'active-track',
-    track: appstate.get('activeTrack')
-  });
-
   var tracklist = new Tracklist({
     key: 'tracklist',
     tracks: appstate.get('tracks'),
+    activeTrack: appstate.get('activeTrack'),
     name: 'Аудіозаписи'
   });
 
-  var sidebar = new Sidebar({ key: 'sidebar' }, [activeTrack, tracklist]);
+  var sidebar = new Sidebar({ key: 'sidebar' }, tracklist);
 
   return new App(null, [main, sidebar]);
 });

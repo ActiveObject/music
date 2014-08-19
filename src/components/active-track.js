@@ -47,7 +47,7 @@ module.exports = React.createClass({
 
     var track = dom.div({ key: 'track' }, [ artist, separator, title ]);
 
-    return dom.div({ className: 'card active-track' }, [ playBtn, track, duration ]);
+    return dom.div({ className: 'active-track' }, [ playBtn, track, duration ]);
   },
 
   togglePlay: function () {
