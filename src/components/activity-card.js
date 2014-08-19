@@ -22,7 +22,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var dateRange = Activity.makeDateRange(new Date(), 184);
+    var dateRange = Activity.makeDateRange(new Date(), 185);
     var activity = Activity.fillEmptyDates(dateRange, this.props.activity);
     var achart = this.makeActivityChart(this.props.size, this.props.margin, activity, this.props.defaultColor);
     var name = dom.a({ key: 'name', className: 'activity-name', href: '/groups/' + this.props.id }, this.props.name);
