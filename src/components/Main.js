@@ -29,7 +29,7 @@ module.exports = React.createClass({
       dom.div({ key: 'cards', className: 'main-user-activity' }, userActivity )
     ]);
 
-    return dom.div({ key: 'main', className: 'main-view', ref: 'view' },
+    return dom.div({ key: 'main', className: 'main-view scroll-wrapper', ref: 'view' },
       dom.div({ className: 'main-container' }, [user, groups]));
   },
 
@@ -41,6 +41,7 @@ module.exports = React.createClass({
     return groups.map(function(group) {
       return new ActivityCard({
         key: group.id,
+        id: group.id,
         name: group.name,
         activity: []
       });
