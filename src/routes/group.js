@@ -14,7 +14,7 @@ var Tracklist = require('app/components/tracklist');
 
 var Promise = when.Promise;
 
-var getAvailableGroups = curry(function getAvailableGroups(appstate, next) {
+function getAvailableGroups(appstate, next) {
   var user = appstate.get('user');
 
   var vk = new VkApi({
@@ -40,9 +40,9 @@ var getAvailableGroups = curry(function getAvailableGroups(appstate, next) {
       resolve(appstate.set('groups', data.response.items));
     });
   }).then(next);
-});
+}
 
-var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
+function getAvailableTracks(appstate, next) {
   var user = appstate.get('user');
     var vk = new VkApi({
     auth: {
@@ -68,7 +68,7 @@ var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
       resolve(appstate.set('tracks', data.response.items));
     });
   }).then(next);
-});
+}
 
 var makeApp = curry(function makeApp(groupId, appstate) {
   var group = new GroupProfile({
@@ -93,8 +93,6 @@ module.exports = function groupRoute(appstate, ctx) {
   var id = parseInt(ctx.params.id, 10);
 
   return getAvailableGroups(appstate, function (appstate) {
-    return getAvailableTracks(appstate, function (appstate) {
-      return makeApp(id, appstate);
-    });
+    return getAvailableTracks(appstate, makeApp(id));
   });
 };

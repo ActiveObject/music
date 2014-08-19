@@ -11,7 +11,7 @@ var Tracklist = require('app/components/tracklist');
 
 var Promise = when.Promise;
 
-var getAvailableGroups = curry(function getAvailableGroups(appstate, next) {
+function getAvailableGroups(appstate, next) {
   var user = appstate.get('user');
 
   var vk = new VkApi({
@@ -37,9 +37,9 @@ var getAvailableGroups = curry(function getAvailableGroups(appstate, next) {
       resolve(appstate.set('groups', data.response.items));
     });
   }).then(next);
-});
+}
 
-var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
+function getAvailableTracks(appstate, next) {
   var user = appstate.get('user');
     var vk = new VkApi({
     auth: {
@@ -65,15 +65,15 @@ var getAvailableTracks = curry(function getAvailableTracks(appstate, next) {
       resolve(appstate.set('tracks', data.response.items));
     });
   }).then(next);
-});
+}
 
-var setVisibleGroups = curry(function setVisibleGroups(appstate, next) {
+function setVisibleGroups(appstate, next) {
   return next(appstate.set('visibleGroups', appstate.get('groups').slice(0, 10).map(function (group) {
     return group.id;
   })));
-});
+}
 
-var makeApp = curry(function makeApp(appstate) {
+function makeApp(appstate) {
   var main = new Main({
     key: 'main',
     activity: appstate.get('activity'),
@@ -91,14 +91,12 @@ var makeApp = curry(function makeApp(appstate) {
   var sidebar = new Sidebar({ key: 'sidebar' }, tracklist);
 
   return new App(null, [main, sidebar]);
-});
+}
 
 module.exports = function mainRoute(appstate) {
   return getAvailableGroups(appstate, function (appstate) {
     return setVisibleGroups(appstate, function (appstate) {
-      return getAvailableTracks(appstate, function (appstate) {
-        return makeApp(appstate);
-      });
+      return getAvailableTracks(appstate, makeApp);
     });
   });
 };
