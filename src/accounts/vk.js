@@ -1,7 +1,7 @@
 exports.API_BASE = 'https://api.vk.com/method';
 exports.AUTH_URL = 'https://oauth.vk.com/authorize';
-exports.REDIRECT_URI = process.env.APP_HOST;
+exports.REDIRECT_URI = process.env.MUSIC_APP_HOST;
 exports.API_VERSION = '5.23';
-exports.APP_ID = process.env.APP_ID;
+exports.APP_ID = process.env.MUSIC_APP_ID;
 exports.PERMISSIONS = ['friends', 'audio', 'groups', 'wall', 'offline', 'newsfeed'];
 exports.DISPLAY = 'popup';
