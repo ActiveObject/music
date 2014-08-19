@@ -1,8 +1,9 @@
 var React = require('react');
 var moment = require('moment');
+var PlayBtn = require('app/components/play-btn');
 var dom = React.DOM;
 
-require("moment-duration-format");
+require('moment-duration-format');
 
 function print(value) {
   console.log(value);
@@ -12,14 +13,16 @@ function print(value) {
 module.exports = React.createClass({
   displayName: 'ActiveTrack',
 
-  shouldComponentUpdate: function (newProps) {
-    return print(this.props.track !== newProps.track);
+  getInitialState: function () {
+    return {
+      isPlaying: false
+    };
   },
 
   render: function() {
-    var playBtn = dom.span({
-      key: 'play-btn',
-      className: 'active-track-play-btn'
+    var playBtn = new PlayBtn({
+      isPlaying: this.state.isPlaying,
+      onClick: this.togglePlay
     });
 
     var title = dom.span({
@@ -45,5 +48,11 @@ module.exports = React.createClass({
     var track = dom.div({ key: 'track' }, [ artist, separator, title ]);
 
     return dom.div({ className: 'card active-track' }, [ playBtn, track, duration ]);
+  },
+
+  togglePlay: function () {
+    this.setState({
+      isPlaying: !this.state.isPlaying
+    });
   }
 });

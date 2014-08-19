@@ -1,5 +1,5 @@
 var React = require('react');
-var Icon = require('app/components/icon');
+var PlayBtn = require('app/components/play-btn');
 var dom = React.DOM;
 
 module.exports = React.createClass({
@@ -15,16 +15,10 @@ module.exports = React.createClass({
     var title = dom.div({ key: 'title', className: 'tracklist-item-title' }, this.props.track.title);
     var artist = dom.div({ key: 'artist', className: 'tracklist-item-artist' }, this.props.track.artist);
 
-    var icon = new Icon({
-      id: this.state.isPlaying ? 'shape-pause' : 'shape-iconmonstr-arrow-37-icon',
+    var playBtn = new PlayBtn({
+      isPlaying: this.state.isPlaying,
       onClick: this.togglePlay
     });
-
-    var playBtn = dom.div({
-      key: 'play-btn',
-      className: 'play-btn' + (this.state.isPlaying ? ' active' : ''),
-      onClick: this.togglePlay
-    }, icon);
 
     var desc = dom.div({ key: 'desc', className: 'tracklist-item-desc' }, [artist, title]);
 
