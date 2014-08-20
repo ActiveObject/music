@@ -13,22 +13,26 @@ module.exports = React.createClass({
 
   getInitialState: function () {
     return {
-      visible: [0, 400]
+      visible: [0, 10]
     };
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    return print(nextProps.tracks !== this.props.tracks || !_.isEqual(this.state, nextState));
+    return print(nextProps.tracks !== this.props.tracks || !_.isEqual(nextState, this.state) || nextProps.activeTrack !== this.props.activeTrack);
   },
 
   render: function() {
     var tracks = this.props.tracks
       .slice(this.state.visible[0], this.state.visible[1])
       .map(function (track) {
+
         return new Track({
           key: track.get('id'),
-          track: track.toJS(),
-          activeTrack: this.props.cursor.activeTrack
+          track: track,
+          activeTrack: this.props.activeTrack,
+          cursor: {
+            activeTrack: this.props.cursor.activeTrack
+          }
         });
       }, this)
       .toJS();

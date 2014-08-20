@@ -18,13 +18,15 @@ module.exports = React.createClass({
   render: function() {
     var tracklist = new Tracklist({
       tracks: this.props.tracks,
+      activeTrack: this.props.activeTrack,
       cursor: {
         activeTrack: this.props.cursor.activeTrack
       }
     });
 
     var activeTrack = new ActiveTrack({
-      track: this.props.activeTrack
+      track: this.props.activeTrack,
+      cursor: { track: this.props.cursor.activeTrack }
     });
 
     var header = dom.div()

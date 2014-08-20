@@ -14,7 +14,7 @@ module.exports = React.createClass({
     return dom.div()
       .key('play-btn')
       .className('play-btn')
-      .className('active', this.props.isPlaying)
+      .className('active', this.props.isActive)
       .attr('onClick', this.props.onClick)
       .append(icon)
       .make();

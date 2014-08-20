@@ -23,7 +23,8 @@ module.exports = React.createClass({
 
     var playBtn = new PlayBtn({
       key: 'play-btn',
-      isPlaying: this.state.isPlaying,
+      isPlaying: this.props.track.get('isPlaying', false),
+      isActive: true,
       onClick: this.togglePlay
     });
 
@@ -60,8 +61,8 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    this.setState({
-      isPlaying: !this.state.isPlaying
+    this.props.cursor.track(function (track, update) {
+      update(track.set('isPlaying', !track.get('isPlaying')));
     });
   }
 });

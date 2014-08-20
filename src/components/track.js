@@ -2,55 +2,60 @@ var React = require('react');
 var moment = require('moment');
 var Immutable = require('immutable');
 var PlayBtn = require('app/components/play-btn');
-var dom = React.DOM;
+var dom = require('app/core/dom');
 
 require('moment-duration-format');
 
 module.exports = React.createClass({
   displayName: 'Track',
 
-  getInitialState: function () {
-    return {
-      isPlaying: false
-    };
-  },
-
   render: function() {
-    var title = dom.div({
-      key: 'title',
-      className: 'tracklist-item-title',
-    }, this.props.track.title);
-
-    var artist = dom.div({
-      key: 'artist',
-      className: 'tracklist-item-artist'
-    }, this.props.track.artist);
+    var isActive = this.props.track.get('id') === this.props.activeTrack.get('id');
+    var isPlaying = isActive && this.props.activeTrack.get('isPlaying', false);
 
     var playBtn = new PlayBtn({
       key: 'play-btn',
-      isPlaying: this.state.isPlaying,
+      isPlaying: isPlaying,
+      isActive: isActive,
       onClick: this.togglePlay
     });
 
-    var duration = dom.span({
-      key: 'duration',
-      className: 'track-duration'
-    }, moment.duration(this.props.track.duration, 's').format('mm:ss'));
+    var title = dom.div()
+      .key('title')
+      .className('tracklist-item-title')
+      .append(this.props.track.get('title'));
 
-    var desc = dom.div({
-      key: 'desc',
-      className: 'tracklist-item-desc',
-      title: [this.props.track.artist, this.props.track.title].join(' - ')
-    }, [artist, title]);
+    var artist = dom.div()
+      .key('artist')
+      .className('tracklist-item-artist')
+      .append(this.props.track.get('artist'));
 
-    return dom.div({ className: 'tracklist-item' }, [playBtn, desc, duration]);
+    var duration = dom.span()
+      .key('duration')
+      .className('track-duration')
+      .append(moment.duration(this.props.track.get('duration'), 's').format('mm:ss'));
+
+    var desc = dom.div()
+      .key('desc')
+      .className('tracklist-item-desc')
+      .attr('title', [this.props.track.get('artist'), this.props.track.get('title')].join(' - '))
+      .append(artist, title);
+
+    return dom.div()
+      .className('tracklist-item')
+      .append(playBtn, desc, duration)
+      .make();
   },
 
   togglePlay: function () {
     var track = Immutable.fromJS(this.props.track);
 
-    this.props.activeTrack(function (_, update) {
-      update(track);
+    this.props.cursor.activeTrack(function (activeTrack, update) {
+      if (track.get('id') !== activeTrack.get('id')) {
+        return update(track.set('isPlaying', true));
+      }
+
+      return update(activeTrack.set('isPlaying', !activeTrack.get('isPlaying')));
     });
   }
 });
