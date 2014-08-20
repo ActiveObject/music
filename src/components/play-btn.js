@@ -3,6 +3,8 @@ var Icon = require('app/components/icon');
 var dom = require('app/core/dom');
 
 module.exports = React.createClass({
+  displayName: 'PlayBtn',
+
   render: function () {
     var icon = new Icon({
       id: this.props.isPlaying ? 'shape-pause' : 'shape-iconmonstr-arrow-37-icon',

@@ -1,6 +1,8 @@
 var React = require('react');
 
 module.exports = React.createClass({
+  displayName: 'Icon',
+
   componentDidMount: function () {
     this.getDOMNode().innerHTML = '<use xlink:href="#' + this.props.id + '"></use>';
     this.getDOMNode().querySelector('use').addEventListener('click', this.props.onClick, false);

@@ -4,7 +4,7 @@ var AuthView = require('app/components/auth');
 var accounts = require('app/accounts');
 
 function authenticate(appstate, ctx, next) {
-  if (!Vk.isAuthenticated(appstate.get('user'))) {
+  if (!Vk.isAuthenticated(appstate.get('user').toJS())) {
     return new AuthView({
       url: Vk.makeAuthUrl(accounts.vk)
     });

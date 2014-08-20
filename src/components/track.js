@@ -1,5 +1,6 @@
 var React = require('react');
 var moment = require('moment');
+var Immutable = require('immutable');
 var PlayBtn = require('app/components/play-btn');
 var dom = React.DOM;
 
@@ -46,8 +47,10 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    this.setState({
-      isPlaying: !this.state.isPlaying
+    var track = Immutable.fromJS(this.props.track);
+
+    this.props.activeTrack(function (_, update) {
+      update(track);
     });
   }
 });
