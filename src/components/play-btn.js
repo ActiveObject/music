@@ -1,9 +1,14 @@
 var React = require('react');
+var _ = require('underscore');
 var Icon = require('app/components/icon');
 var dom = require('app/core/dom');
 
 module.exports = React.createClass({
   displayName: 'PlayBtn',
+
+  shouldComponentUpdate: function (nextProps) {
+    return !_.isEqual(nextProps, this.props);
+  },
 
   render: function () {
     var icon = new Icon({
