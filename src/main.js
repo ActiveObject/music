@@ -2,17 +2,14 @@ var Immutable = require('immutable');
 var app = require('app/core/app');
 var Auth = require('app/core/auth');
 var routes = require('app/routes');
-var actions = require('app/actions');
 
 if (Auth.hasToken(location.hash)) {
   Auth.storeToLs(location.hash);
   location.hash = '';
 }
 
-
-app.use(actions.loadGroups);
-app.use(actions.loadTracks);
-app.use(actions.updateActiveTrack);
+app.use(require('app/services/vk'));
+app.use(require('app/services/soundmanager'));
 
 app.r(routes.auth);
 app.on('/', routes.main);
