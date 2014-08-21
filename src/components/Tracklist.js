@@ -1,10 +1,11 @@
 var React = require('react');
 var _ = require('underscore');
+var debug = require('debug')('app:tracklist');
 var dom = require('app/core/dom');
 var Track = require('app/components/track');
 
 function print(shouldUpdate) {
-  console.log('Tracklist shouldUpdate: ', shouldUpdate);
+  debug('should update: %s', shouldUpdate);
   return shouldUpdate;
 }
 

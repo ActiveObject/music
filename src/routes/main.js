@@ -1,33 +1,40 @@
 var App = require('app/components/app');
 var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
+var ActiveTrack = require('app/components/active-track');
+var Tracklist = require('app/components/tracklist');
 var TracklistCard = require('app/components/tracklist-card');
 
-function makeApp(activity, groups, tracks, activeTrack, cursor) {
+module.exports = function mainRoute(appstate) {
+  var activeTrack = new ActiveTrack({
+    track: appstate.get('activeTrack'),
+    cursor: {
+      track: this.cursor('activeTrack')
+    }
+  });
+
+  var tracklist = new Tracklist({
+    key: 'tracklist',
+    tracks: appstate.get('tracks'),
+    activeTrack: appstate.get('activeTrack'),
+    cursor: {
+      activeTrack: this.cursor('activeTrack')
+    }
+  });
+
+  var tracklistCard = new TracklistCard({
+    name: 'Аудіозаписи',
+    activeTrack: activeTrack,
+    tracklist: tracklist
+  });
+
   var main = new Main({
     key: 'main',
-    activity: activity,
-    groups: groups
+    activity: appstate.get('activity'),
+    groups: appstate.get('groups')
   });
 
-  var tracklist = new TracklistCard({
-    tracks: tracks,
-    activeTrack: activeTrack,
-    cursor: { activeTrack: cursor },
-    name: 'Аудіозаписи'
-  });
-
-  var sidebar = new Sidebar({ key: 'sidebar' }, tracklist);
+  var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
 
   return new App(null, [main, sidebar]);
-}
-
-module.exports = function mainRoute(appstate) {
-  var activity = appstate.get('activity');
-  var groups = appstate.get('groups');
-  var tracks = appstate.get('tracks');
-  var activeTrack = appstate.get('activeTrack');
-  var activeTrackCursor = this.cursor('activeTrack');
-
-  return makeApp(activity, groups, tracks, activeTrack, activeTrackCursor);
 };
