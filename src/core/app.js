@@ -47,13 +47,13 @@ function use(handler) {
 }
 
 function dispatch(type, payload) {
-  debug('dispatching started %s', type);
+  debug('dispath - %s', type);
 
   db = handlers.reduce(function (db, handler) {
     return handler(db, type, payload);
   }, db);
 
-  debug('dispatching finished %s', type);
+  debug('dispath finished - %s', type);
 
   if (db.has('location')) {
     render(db);

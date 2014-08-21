@@ -9,16 +9,17 @@ if (Auth.hasToken(location.hash)) {
   location.hash = '';
 }
 
-app.r(routes.auth);
 
 app.use(actions.loadGroups);
 app.use(actions.loadTracks);
 app.use(actions.updateActiveTrack);
 
+app.r(routes.auth);
 app.on('/', routes.main);
 app.on('/groups/:id', routes.group);
 
 app.renderTo(document.getElementById('app'));
+
 app.start(Immutable.fromJS({
   activity: require('app/fixtures/activity'),
 
@@ -33,5 +34,3 @@ app.start(Immutable.fromJS({
 
   user: Auth.readFromLs()
 }));
-
-module.exports = app;
