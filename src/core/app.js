@@ -4,7 +4,6 @@ var page = require('page');
 var when = require('when');
 var curry = require('curry');
 var router = require('app/core/router');
-var cursor = require('app/core/cursor');
 
 function renderTo(target) {
   return function renderTo(root) {
