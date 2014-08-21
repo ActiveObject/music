@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     },
 
     js: {
-      src: './src/**/*.js',
+      src: './src/main.js',
       dest: 'build/app.js'
     }
   });

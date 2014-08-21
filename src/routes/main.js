@@ -7,19 +7,13 @@ var TracklistCard = require('app/components/tracklist-card');
 
 module.exports = function mainRoute(appstate) {
   var activeTrack = new ActiveTrack({
-    track: appstate.get('activeTrack'),
-    cursor: {
-      track: this.cursor('activeTrack')
-    }
+    track: appstate.get('activeTrack')
   });
 
   var tracklist = new Tracklist({
     key: 'tracklist',
     tracks: appstate.get('tracks'),
-    activeTrack: appstate.get('activeTrack'),
-    cursor: {
-      activeTrack: this.cursor('activeTrack')
-    }
+    activeTrack: appstate.get('activeTrack')
   });
 
   var tracklistCard = new TracklistCard({

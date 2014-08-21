@@ -1,3 +1,4 @@
+var debug = require('debug')('app:core:app');
 var React = require('react');
 var page = require('page');
 var when = require('when');
@@ -11,56 +12,78 @@ function renderTo(target) {
   };
 }
 
-function App(init) {
-  this.state = init;
-  this.cursor = cursor(this.getState.bind(this), this.render.bind(this));
-  this.location = this.cursor.cursor('location');
-  this.router = router(this.cursor.cursor.bind(this.cursor));
-  this.target = document.body;
+var handlers = [];
+var db = null;
+var appRouter = router();
+var target = document.body;
 
-  page(this.dispatch.bind(this));
-}
-
-App.prototype.use = function (path, middleware) {
+exports.r = function (path, middleware) {
   if (arguments.length === 1) {
     middleware = path;
     path = '*';
   }
 
-  this.router.use(path, middleware);
-
-  return this;
+  appRouter.use(path, middleware);
 };
 
-App.prototype.on = function (path, fn) {
-  this.router.on(path, fn);
-};
+function registerRoute(path, fn) {
+  appRouter.on(path, fn);
+}
 
-App.prototype.renderTo = function (el) {
-  this.target = el;
-};
+function render(appstate) {
+  when(appRouter(appstate))
+    .then(renderTo(target));
 
-App.prototype.render = function (appstate) {
-  console.log('render app', appstate.toJS());
+  return appstate;
+}
 
-  this.state = appstate;
+function start(initState) {
+  db = initState;
+  dispatch('app:start');
+  page();
+}
 
-  when(this.router(appstate))
-    .then(renderTo(this.target));
-};
+function use(handler) {
+  handlers.push(handler);
+}
 
-App.prototype.dispatch = function (ctx) {
-  this.location(function (value, update) {
-    update(ctx);
+function dispatch(type, payload) {
+  debug('dispatching started %s', type);
+
+  db = handlers.reduce(function (db, handler) {
+    return handler(db, type, payload);
+  }, db);
+
+  debug('dispatching finished %s', type);
+
+  if (db.has('location')) {
+    render(db);
+  }
+}
+
+use(function (appstate, type, data) {
+  if (type === 'route:change') {
+    return appstate.set('location', data.ctx);
+  }
+
+  return appstate;
+});
+
+page(function (ctx) {
+  dispatch('route:change', { ctx: ctx });
+});
+
+exports.togglePlay = function (track) {
+  dispatch('toggle:play', {
+    track: track
   });
 };
 
-App.prototype.getState = function () {
-  return this.state;
+exports.renderTo = function (el) {
+  target = el;
 };
 
-App.prototype.start = function () {
-  page();
-};
-
-module.exports = App;
+exports.use = use;
+exports.on = registerRoute;
+exports.start = start;
+exports.dispatch = dispatch;

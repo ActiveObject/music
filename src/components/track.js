@@ -3,6 +3,7 @@ var moment = require('moment');
 var Immutable = require('immutable');
 var PlayBtn = require('app/components/play-btn');
 var dom = require('app/core/dom');
+var app = require('app/core/app');
 
 require('moment-duration-format');
 
@@ -52,14 +53,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    var track = Immutable.fromJS(this.props.track);
-
-    this.props.cursor.activeTrack(function (activeTrack, update) {
-      if (track.get('id') !== activeTrack.get('id')) {
-        return update(track.set('isPlaying', true));
-      }
-
-      return update(activeTrack.set('isPlaying', !activeTrack.get('isPlaying')));
-    });
+    app.togglePlay(this.props.track);
   }
 });

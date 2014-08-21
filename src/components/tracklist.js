@@ -30,10 +30,7 @@ module.exports = React.createClass({
         return new Track({
           key: track.get('id'),
           track: track,
-          activeTrack: this.props.activeTrack,
-          cursor: {
-            activeTrack: this.props.cursor.activeTrack
-          }
+          activeTrack: this.props.activeTrack
         });
       }, this)
       .toJS();

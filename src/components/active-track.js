@@ -1,5 +1,6 @@
 var React = require('react');
 var moment = require('moment');
+var app = require('app/core/app');
 var PlayBtn = require('app/components/play-btn');
 var dom = require('app/core/dom');
 
@@ -61,8 +62,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    this.props.cursor.track(function (track, update) {
-      update(track.set('isPlaying', !track.get('isPlaying')));
-    });
+    app.togglePlay(this.props.track);
   }
 });
