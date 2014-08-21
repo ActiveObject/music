@@ -4,7 +4,11 @@ module.exports = function(grunt) {
       detectGlobals: true,
       insertGlobals: false,
       ignoreMissing: false,
-      debug: true
+      debug: true,
+      callback: function (b) {
+        b.require('react');
+        return b;
+      }
     },
 
     js: {
