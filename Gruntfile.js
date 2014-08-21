@@ -17,7 +17,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'clean:build', 'copy:assets', 'svgstore', 'embed-icons',
+    'clean:build', 'copy:assets', 'copy:dev', 'svgstore', 'embed-icons',
     'jshint:dev', 'stylus', 'connect', 'watchify', 'watch'
   ]);
 };
