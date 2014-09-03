@@ -9,6 +9,7 @@ if (Auth.hasToken(location.hash)) {
 }
 
 app.use(require('app/services/vk'));
+app.use(require('app/services/player'));
 app.use(require('app/services/soundmanager'));
 
 app.r(routes.auth);
@@ -23,7 +24,8 @@ app.start(Immutable.fromJS({
   activeTrack: {
     artist: 'Flux Pavilion',
     title: 'Got I to Know',
-    duration: 350
+    duration: 350,
+    isPlaying: false
   },
 
   groups: [],

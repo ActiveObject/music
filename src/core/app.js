@@ -12,7 +12,7 @@ function renderTo(target) {
 }
 
 var handlers = [];
-var db = null;
+var appstate = null;
 var appRouter = router();
 var target = document.body;
 
@@ -30,6 +30,7 @@ function registerRoute(path, fn) {
 }
 
 function render(appstate) {
+  debug('render');
   when(appRouter(appstate))
     .then(renderTo(target));
 
@@ -37,7 +38,7 @@ function render(appstate) {
 }
 
 function start(initState) {
-  db = initState;
+  appstate = initState;
   dispatch('app:start');
   page();
 }
@@ -49,15 +50,19 @@ function use(handler) {
 function dispatch(type, payload) {
   debug('dispath - %s', type);
 
-  db = handlers.reduce(function (db, handler) {
-    return handler(db, type, payload);
-  }, db);
+  var nextState = handlers.reduce(function (state, handler) {
+    return handler(state, type, payload, dispatch);
+  }, appstate);
 
   debug('dispath finished - %s', type);
 
-  if (db.has('location')) {
-    render(db);
+  if (nextState.has('location') && nextState !== appstate) {
+    window.requestAnimationFrame(function () {
+      render(appstate);
+    });
   }
+
+  appstate = nextState;
 }
 
 use(function (appstate, type, data) {

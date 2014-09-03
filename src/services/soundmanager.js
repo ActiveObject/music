@@ -1,6 +1,50 @@
 var sm = require('sound-manager');
 var isReady = false;
 
+function Watch(path, fn) {
+  this.prevValue = null;
+  this.path = path;
+  this.fn = fn;
+}
+
+Watch.prototype.update = function (appstate) {
+  if (!this.prevValue) {
+    return this.prevValue = appstate;
+  }
+
+  var prev = this.prevValue.get(this.path);
+  var next = appstate.get(this.path);
+
+  this.prevValue = appstate;
+
+  if (next !== prev) {
+    this.fn.call(null, next, prev);
+  }
+};
+
+var activeTrack = new Watch('activeTrack', function (nextTrack, prevTrack) {
+  if (nextTrack.get('id') !== prevTrack.get('id')) {
+    sm.stop(prevTrack.get('id'));
+    sm.unload(prevTrack.get('id'));
+
+    return sm.createSound({
+      id: nextTrack.get('id'),
+      url: nextTrack.get('url'),
+      autoLoad: true,
+      autoPlay: true,
+      volume: 100
+    });
+  }
+
+  if (nextTrack.get('isPlaying') && !prevTrack.get('isPlaying')) {
+    return sm.play(nextTrack.get('id'));
+  }
+
+  if (!nextTrack.get('isPlaying') && prevTrack.get('isPlaying')) {
+    return sm.pause(nextTrack.get('id'));
+  }
+});
+
 module.exports = function (appstate, type, data) {
   if (type === 'app:start') {
     sm.setup({
@@ -20,28 +64,7 @@ module.exports = function (appstate, type, data) {
     return appstate;
   }
 
-  if (type === 'toggle:play') {
-    var activeTrack = appstate.get('activeTrack');
-
-    if (data.track.get('id') !== activeTrack.get('id')) {
-      sm.stop(activeTrack.get('id'));
-      sm.unload(activeTrack.get('id'));
-
-      sm.createSound({
-        id: data.track.get('id'),
-        url: data.track.get('url'),
-        autoLoad: true,
-        autoPlay: true,
-        volume: 100
-      });
-
-      return appstate.set('activeTrack', data.track.set('isPlaying', true));
-    }
-
-    sm.togglePause(activeTrack.get('id'));
-
-    return appstate.set('activeTrack', activeTrack.set('isPlaying', !activeTrack.get('isPlaying')));
-  }
+  activeTrack.update(appstate);
 
   return appstate;
 };
