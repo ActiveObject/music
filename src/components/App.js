@@ -1,3 +1,5 @@
+require('app/styles/main.styl');
+
 var React = require('react');
 var dom = require('app/core/dom');
 

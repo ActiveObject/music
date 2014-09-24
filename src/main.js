@@ -14,6 +14,7 @@ app.use(require('app/services/soundmanager'));
 
 app.r(routes.auth);
 app.on('/', routes.main);
+app.on('/index.html', routes.main);
 app.on('/groups/:id', routes.group);
 
 app.renderTo(document.getElementById('app'));

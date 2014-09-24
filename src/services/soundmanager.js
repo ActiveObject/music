@@ -9,7 +9,8 @@ function Watch(path, fn) {
 
 Watch.prototype.update = function (appstate) {
   if (!this.prevValue) {
-    return this.prevValue = appstate;
+    this.prevValue = appstate;
+    return;
   }
 
   var prev = this.prevValue.get(this.path);

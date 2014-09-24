@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
   grunt.config('clean', {
-    build: ['build'],
-    dist: ['dist']
+    public: ['<%= publicDir %>'],
+    build: ['build']
   });
 };

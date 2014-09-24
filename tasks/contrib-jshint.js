@@ -8,7 +8,8 @@ module.exports = function(grunt) {
       undef: true,
       browser: true,
       proto: true,
-      node: true
+      node: true,
+      predef: [ '-Promise' ]
     },
 
     dev: {

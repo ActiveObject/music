@@ -1,3 +1,5 @@
+require('app/styles/active-track.styl');
+
 var React = require('react');
 var moment = require('moment');
 var app = require('app/core/app');

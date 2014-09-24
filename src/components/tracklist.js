@@ -1,3 +1,5 @@
+require('app/styles/tracklist.styl');
+
 var React = require('react');
 var _ = require('underscore');
 var debug = require('debug')('app:tracklist');

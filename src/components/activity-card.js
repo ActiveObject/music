@@ -1,3 +1,5 @@
+require('app/styles/activity-card.styl');
+
 var React = require('react');
 var _ = require('underscore');
 var Color = require('color');

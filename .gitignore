@@ -38,4 +38,6 @@ build/Release
 node_modules/*
 !node_modules/app
 nw/
-public/
+_public/
+
+.vagrant

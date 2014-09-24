@@ -9,6 +9,6 @@ module.exports = function(grunt) {
       zip: true
     },
 
-    src: ['build/**/*']
+    public: ['<%= publicDir %>/**/*']
   });
 };
