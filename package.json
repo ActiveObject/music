@@ -47,8 +47,8 @@
   "scripts": {
     "start": "http-server _public",
     "test": "mocha -R spec",
+    "build": "grunt build && webpack -p --progress",
     "dev": "grunt build-dev && webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool source-map --output-pathinfo",
-    "dist": "grunt build-dist && webpack -p --progress",
-    "nw": "grunt build-dist && webpack -p --progress --target node-webkit && grunt nodewebkit"
+    "nw": "grunt build && webpack -p --progress --target node-webkit && grunt nodewebkit"
   }
 }

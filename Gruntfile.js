@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     'svgstore', 'embed-icons', 'jshint:dev', 'clean:build'
   ]);
 
-  grunt.registerTask('build-dist', [
+  grunt.registerTask('build', [
     'clean:build', 'clean:public', 'copy:assets', 'copy:dist',
     'svgstore', 'embed-icons', 'jshint:prod', 'clean:build'
   ]);
