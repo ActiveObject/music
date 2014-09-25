@@ -10,8 +10,11 @@ if (!process.env.MUSIC_APP_HOST) {
 }
 
 var definePlugin = new webpack.DefinePlugin({
-  __MUSIC_APP_HOST__: JSON.stringify(process.env.MUSIC_APP_HOST),
-  __MUSIC_APP_ID__: JSON.stringify(process.env.MUSIC_APP_ID)
+  'process.env': {
+    NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+    MUSIC_APP_HOST: JSON.stringify(process.env.MUSIC_APP_HOST),
+    MUSIC_APP_ID: JSON.stringify(process.env.MUSIC_APP_ID)
+  }
 });
 
 module.exports = {
