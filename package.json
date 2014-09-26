@@ -45,7 +45,7 @@
     "when": "^3.4.2"
   },
   "scripts": {
-    "start": "http-server _public",
+    "start": "http-server _public -a 127.0.0.1",
     "test": "mocha -R spec",
     "build": "grunt build && webpack -p --progress",
     "dev": "grunt build-dev && webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool source-map --output-pathinfo",
