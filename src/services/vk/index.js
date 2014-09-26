@@ -99,7 +99,7 @@ Vk.makeAuthUrl = function makeAuthUrl(config) {
     pathname: Url.parse(config.AUTH_URL).pathname,
     query: {
       client_id: config.APP_ID,
-      scope: config.PERMISSIONS,
+      scope: config.PERMISSIONS.join(','),
       redirect_uri: config.REDIRECT_URI,
       display: config.DISPLAY,
       v: config.API_VERSION,
