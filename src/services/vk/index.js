@@ -3,14 +3,15 @@ var Immutable = require('immutable');
 var Promise = require('when').Promise;
 var app = require('app/core/app');
 var accounts = require('app/accounts');
+var User = require('app/models/user');
 var VkApi = require('./vk-api') ;
 
 function getAvailableGroups(user) {
   var vk = new VkApi({
     auth: {
       type: 'oauth',
-      user: user.accounts.vk.user_id,
-      token: user.accounts.vk.access_token
+      user: user.id,
+      token: user.accessToken
     },
 
     rateLimit: 2
@@ -18,7 +19,7 @@ function getAvailableGroups(user) {
 
   return new Promise(function (resolve, reject) {
     vk.groups.get({
-      user_id: user.accounts.vk.user_id,
+      user_id: user.id,
       extended: 1,
       v: '5.23  '
     }, function (err, data) {
@@ -35,8 +36,8 @@ function getAvailableTracks(user) {
   var vk = new VkApi({
     auth: {
       type: 'oauth',
-      user: user.accounts.vk.user_id,
-      token: user.accounts.vk.access_token
+      user: user.id,
+      token: user.accessToken
     },
 
     rateLimit: 2
@@ -44,7 +45,7 @@ function getAvailableTracks(user) {
 
   return new Promise(function (resolve, reject) {
     vk.audio.get({
-      owner_id: user.accounts.vk.user_id,
+      owner_id: user.id,
       offset: 0,
       count: 1000,
       v: '5.23  '
@@ -68,17 +69,19 @@ function Vk(appstate, type, data) {
   }
 
   if (type === 'app:start') {
-    getAvailableGroups(appstate.get('user').toJS()).then(function (groups) {
-      app.dispatch('groups:load', {
-        groups: groups
+    if (Vk.isAuthenticated(appstate.get('user'))) {
+      getAvailableGroups(appstate.get('user')).then(function (groups) {
+        app.dispatch('groups:load', {
+          groups: groups
+        });
       });
-    });
 
-    getAvailableTracks(appstate.get('user').toJS()).then(function (tracks) {
-      app.dispatch('tracks:load', {
-        tracks: tracks
+      getAvailableTracks(appstate.get('user')).then(function (tracks) {
+        app.dispatch('tracks:load', {
+          tracks: tracks
+        });
       });
-    });
+    }
 
     return appstate;
   }
@@ -87,7 +90,7 @@ function Vk(appstate, type, data) {
 }
 
 Vk.isAuthenticated = function isAuthenticated(user) {
-  return user && user.accounts && user.accounts.vk && user.accounts.vk.access_token;
+  return user instanceof User.Authenticated;
 };
 
 Vk.makeAuthUrl = function makeAuthUrl(config) {
