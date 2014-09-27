@@ -12,8 +12,7 @@ module.exports = React.createClass({
 
   render: function () {
     var icon = new Icon({
-      id: this.props.isPlaying ? 'shape-pause' : 'shape-iconmonstr-arrow-37-icon',
-      onClick: this.props.onClick
+      id: this.props.isPlaying ? 'shape-pause' : 'shape-iconmonstr-arrow-37-icon'
     });
 
     return dom.div()
