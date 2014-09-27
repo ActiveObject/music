@@ -22,9 +22,7 @@ function fillEmptyDates(range, activity) {
 
   return range.map(function(d) {
     var doy = d.dayOfYear();
-    var found = _.find(activityDates, function(item) {
-      return doy === item.doy;
-    });
+    var found = _.find(activityDates, item => doy === item.doy);
 
     return {
       date: d,
@@ -34,16 +32,12 @@ function fillEmptyDates(range, activity) {
 }
 
 function weeks(activity) {
-  var dateByWeek = _.groupBy(activity, function(item) {
-    return item.date.week();
-  });
+  var dateByWeek = _.groupBy(activity, item => item.date.week());
 
   var unorderedWeeks = _.map(dateByWeek, function(items, key) {
     return {
       number: Number(key),
-      items: _.sortBy(items, function(item) {
-        return item.date.day();
-      })
+      items: _.sortBy(items, item => item.date.day())
     };
   });
 
