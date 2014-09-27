@@ -15,8 +15,8 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var isActive = this.props.track.get('id') === this.props.activeTrack.get('id');
-    var isPlaying = isActive && this.props.activeTrack.get('isPlaying', false);
+    var isActive = this.props.track.id === this.props.activeTrack.id;
+    var isPlaying = isActive && this.props.activeTrack.isPlaying;
 
     var playBtn = new PlayBtn({
       key: 'play-btn',
@@ -28,22 +28,22 @@ module.exports = React.createClass({
     var title = dom.div()
       .key('title')
       .className('tracklist-item-title')
-      .append(this.props.track.get('title'));
+      .append(this.props.track.title);
 
     var artist = dom.div()
       .key('artist')
       .className('tracklist-item-artist')
-      .append(this.props.track.get('artist'));
+      .append(this.props.track.artist);
 
     var duration = dom.span()
       .key('duration')
       .className('track-duration')
-      .append(moment.duration(this.props.track.get('duration'), 's').format('mm:ss'));
+      .append(moment.duration(this.props.track.duration, 's').format('mm:ss'));
 
     var desc = dom.div()
       .key('desc')
       .className('tracklist-item-desc')
-      .attr('title', [this.props.track.get('artist'), this.props.track.get('title')].join(' - '))
+      .attr('title', [this.props.track.artist, this.props.track.title].join(' - '))
       .append(artist, title);
 
     return dom.div()

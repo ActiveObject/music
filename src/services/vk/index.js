@@ -1,89 +1,121 @@
 var Url = require('url');
-var Immutable = require('immutable');
+var { Vector } = require('immutable');
 var Promise = require('when').Promise;
 var app = require('app/core/app');
 var accounts = require('app/accounts');
 var User = require('app/models/user');
+var Group = require('app/models/group');
+var Track = require('app/models/track');
 var VkApi = require('./vk-api') ;
+var _ = require('underscore');
 
-function getAvailableGroups(user) {
-  var vk = new VkApi({
-    auth: {
-      type: 'oauth',
-      user: user.id,
-      token: user.accessToken
-    },
+var vk = null;
 
-    rateLimit: 2
-  });
-
-  return new Promise(function (resolve, reject) {
-    vk.groups.get({
-      user_id: user.id,
-      extended: 1,
-      v: '5.23  '
-    }, function (err, data) {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve(data.response.items);
-    });
-  });
+function fetchGroups(vk, user, offset, count, callback) {
+  vk.groups.get({
+    user_id: user.id,
+    extended: 1,
+    offset: offset,
+    count: count,
+    v: '5.25'
+  }, callback);
 }
 
-function getAvailableTracks(user) {
-  var vk = new VkApi({
-    auth: {
-      type: 'oauth',
-      user: user.id,
-      token: user.accessToken
-    },
-
-    rateLimit: 2
-  });
-
-  return new Promise(function (resolve, reject) {
-    vk.audio.get({
-      owner_id: user.id,
-      offset: 0,
-      count: 1000,
-      v: '5.23  '
-    }, function (err, data) {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve(data.response.items);
-    });
-  });
+function fetchTracks(vk, user, offset, count, callback) {
+  vk.audio.get({
+    owner_id: user.id,
+    offset: offset,
+    count: count,
+    v: '5.25'
+  }, callback);
 }
 
 function Vk(appstate, type, data) {
+  if (!Vk.isAuthenticated(appstate.get('user'))) {
+    return appstate;
+  }
+
+  if (!vk) {
+    vk = new VkApi({
+      auth: {
+        type: 'oauth',
+        user: appstate.get('user').id,
+        token: appstate.get('user').accessToken
+      },
+
+      rateLimit: 2
+    });
+  }
+
   if (type === 'groups:load') {
-    return appstate.set('groups', Immutable.fromJS(data.groups));
-  }
+    var currentItemsCount = appstate.get('groups').items.count();
 
-  if (type === 'tracks:load') {
-    return appstate.set('tracks', Immutable.fromJS(data.tracks));
-  }
-
-  if (type === 'app:start') {
-    if (Vk.isAuthenticated(appstate.get('user'))) {
-      getAvailableGroups(appstate.get('user')).then(function (groups) {
+    if (currentItemsCount < data.response.count ) {
+      fetchGroups(vk, appstate.get('user'), currentItemsCount, 100, function (err, result) {
         app.dispatch('groups:load', {
-          groups: groups
-        });
-      });
-
-      getAvailableTracks(appstate.get('user')).then(function (tracks) {
-        app.dispatch('tracks:load', {
-          tracks: tracks
+          offset: currentItemsCount,
+          count: 100,
+          response: result.response
         });
       });
     }
 
-    return appstate;
+    var originalItems = appstate.get('groups').items;
+    var items = data.response.items.map(Group);
+    var groups = originalItems.splice.apply(originalItems, [data.offset, data.count].concat(items));
+
+    return appstate.set('groups', {
+      count: data.response.count,
+      items: groups
+    });
+  }
+
+  if (type === 'tracks:load') {
+    var currentItemsCount = appstate.get('tracks').items.count();
+
+    if (currentItemsCount < data.response.count ) {
+      fetchTracks(vk, appstate.get('user'), currentItemsCount, 100, function (err, result) {
+        app.dispatch('tracks:load', {
+          offset: currentItemsCount,
+          count: 100,
+          response: result.response
+        });
+      });
+    }
+
+    var originalItems = appstate.get('tracks').items;
+    var items = data.response.items.map(Track);
+    var tracks = originalItems.splice.apply(originalItems, [data.offset, data.count].concat(items));
+
+    return appstate.set('tracks', {
+      count: data.response.count,
+      items: tracks
+    });
+  }
+
+  if (appstate.get('groups').count === 0) {
+    fetchGroups(vk, appstate.get('user'), 0, 10, function (err, result) {
+      app.dispatch('groups:load', {
+        offset: 0,
+        count: 10,
+        response: result.response
+      });
+    });
+
+    fetchTracks(vk, appstate.get('user'), 0, 10, function (err, result) {
+      app.dispatch('tracks:load', {
+        offset: 0,
+        count: 10,
+        response: result.response
+      });
+    });
+
+    var groups = _.range(0, 10).map(Group.Empty);
+    var tracks = _.range(0, 10).map(Track.Empty);
+
+    return appstate
+      .set('groups', { count: 10, items: Vector.from(groups) })
+      .set('tracks', { count: 10, items: Vector.from(tracks) })
   }
 
   return appstate;
@@ -99,7 +131,7 @@ Vk.makeAuthUrl = function makeAuthUrl(config) {
     pathname: Url.parse(config.AUTH_URL).pathname,
     query: {
       client_id: config.APP_ID,
-      scope: config.PERMISSIONS,
+      scope: config.PERMISSIONS.join(','),
       redirect_uri: config.REDIRECT_URI,
       display: config.DISPLAY,
       v: config.API_VERSION,

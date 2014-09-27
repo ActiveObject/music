@@ -8,21 +8,18 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
-    this.getDOMNode().innerHTML = '<use xlink:href="#' + this.props.id + '"></use>';
-    this.getDOMNode().querySelector('use').addEventListener('click', this.props.onClick, false);
-  },
-
-  componentWillUnmount: function () {
-    this.getDOMNode().querySelector('use').removeEventListener('click', this.props.onClick, false);
+    this.getDOMNode().innerHTML = this.makeXlink(this.props.id);
   },
 
   componentDidUpdate: function () {
-    this.getDOMNode().querySelector('use').removeEventListener('click', this.props.onClick, false);
-    this.getDOMNode().innerHTML = '<use xlink:href="#' + this.props.id + '"></use>';
-    this.getDOMNode().querySelector('use').addEventListener('click', this.props.onClick, false);
+    this.getDOMNode().innerHTML = this.makeXlink(this.props.id);
   },
 
   render: function () {
     return React.DOM.svg({ className: 'icon' });
+  },
+
+  makeXlink: function (id) {
+    return '<use xlink:href="#' + id + '"></use>';
   }
 });

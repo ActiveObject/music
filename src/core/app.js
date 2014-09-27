@@ -57,9 +57,7 @@ function dispatch(type, payload) {
   debug('dispath finished - %s', type);
 
   if (nextState.has('location') && nextState !== appstate) {
-    window.requestAnimationFrame(function () {
-      render(appstate);
-    });
+    window.requestAnimationFrame(() => render(appstate));
   }
 
   appstate = nextState;

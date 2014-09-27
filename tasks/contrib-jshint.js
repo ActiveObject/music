@@ -9,7 +9,8 @@ module.exports = function(grunt) {
       browser: true,
       proto: true,
       node: true,
-      predef: [ '-Promise', '__MUSIC_APP_ID__', '__MUSIC_APP_HOST__' ]
+      esnext: true,
+      predef: [ '-Promise']
     },
 
     dev: {

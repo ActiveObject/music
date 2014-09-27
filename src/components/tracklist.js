@@ -5,6 +5,7 @@ var _ = require('underscore');
 var debug = require('debug')('app:tracklist');
 var dom = require('app/core/dom');
 var Track = require('app/components/track');
+var TrackModel = require('app/models/track');
 
 function print(shouldUpdate) {
   debug('should update: %s', shouldUpdate);
@@ -27,10 +28,10 @@ module.exports = React.createClass({
   render: function() {
     var tracks = this.props.tracks
       .slice(this.state.visible[0], this.state.visible[1])
+      .filter(_.negate(TrackModel.isEmpty))
       .map(function (track) {
-
         return new Track({
-          key: track.get('id'),
+          key: track.id,
           track: track,
           activeTrack: this.props.activeTrack
         });
