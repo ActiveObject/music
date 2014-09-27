@@ -30,6 +30,77 @@ function fetchTracks(vk, user, offset, count, callback) {
   }, callback);
 }
 
+function fetchInitialData(vk, appstate) {
+  fetchGroups(vk, appstate.get('user'), 0, 10, function (err, result) {
+    app.dispatch('groups:load', {
+      offset: 0,
+      count: 10,
+      response: result.response
+    });
+  });
+
+  fetchTracks(vk, appstate.get('user'), 0, 10, function (err, result) {
+    app.dispatch('tracks:load', {
+      offset: 0,
+      count: 10,
+      response: result.response
+    });
+  });
+
+  var groups = _.range(0, 10).map(Group.Empty);
+  var tracks = _.range(0, 10).map(Track.Empty);
+
+  return appstate
+    .set('groups', { count: 10, items: Vector.from(groups) })
+    .set('tracks', { count: 10, items: Vector.from(tracks) });
+}
+
+function loadGroups(vk, appstate, data, batchCount) {
+  var currentItemsCount = appstate.get('groups').items.count();
+
+  if (currentItemsCount < data.response.count ) {
+    fetchGroups(vk, appstate.get('user'), currentItemsCount, batchCount, function (err, result) {
+      app.dispatch('groups:load', {
+        offset: currentItemsCount,
+        count: batchCount,
+        response: result.response
+      });
+    });
+  }
+
+  var originalItems = appstate.get('groups').items;
+  var items = data.response.items.map(Group);
+  var groups = originalItems.splice.apply(originalItems, [data.offset, data.count].concat(items));
+
+  return appstate.set('groups', {
+    count: data.response.count,
+    items: groups
+  });
+}
+
+function loadTracks(vk, appstate, data, batchCount) {
+  var currentItemsCount = appstate.get('tracks').items.count();
+
+  if (currentItemsCount < data.response.count ) {
+    fetchTracks(vk, appstate.get('user'), currentItemsCount, batchCount, function (err, result) {
+      app.dispatch('tracks:load', {
+        offset: currentItemsCount,
+        count: batchCount,
+        response: result.response
+      });
+    });
+  }
+
+  var originalItems = appstate.get('tracks').items;
+  var items = data.response.items.map(Track);
+  var tracks = originalItems.splice.apply(originalItems, [data.offset, data.count].concat(items));
+
+  return appstate.set('tracks', {
+    count: data.response.count,
+    items: tracks
+  });
+}
+
 function Vk(appstate, type, data) {
   if (!Vk.isAuthenticated(appstate.get('user'))) {
     return appstate;
@@ -48,74 +119,15 @@ function Vk(appstate, type, data) {
   }
 
   if (type === 'groups:load') {
-    var currentItemsCount = appstate.get('groups').items.count();
-
-    if (currentItemsCount < data.response.count ) {
-      fetchGroups(vk, appstate.get('user'), currentItemsCount, 100, function (err, result) {
-        app.dispatch('groups:load', {
-          offset: currentItemsCount,
-          count: 100,
-          response: result.response
-        });
-      });
-    }
-
-    var originalItems = appstate.get('groups').items;
-    var items = data.response.items.map(Group);
-    var groups = originalItems.splice.apply(originalItems, [data.offset, data.count].concat(items));
-
-    return appstate.set('groups', {
-      count: data.response.count,
-      items: groups
-    });
+    return loadGroups(vk, appstate, data, 100);
   }
 
   if (type === 'tracks:load') {
-    var currentItemsCount = appstate.get('tracks').items.count();
-
-    if (currentItemsCount < data.response.count ) {
-      fetchTracks(vk, appstate.get('user'), currentItemsCount, 100, function (err, result) {
-        app.dispatch('tracks:load', {
-          offset: currentItemsCount,
-          count: 100,
-          response: result.response
-        });
-      });
-    }
-
-    var originalItems = appstate.get('tracks').items;
-    var items = data.response.items.map(Track);
-    var tracks = originalItems.splice.apply(originalItems, [data.offset, data.count].concat(items));
-
-    return appstate.set('tracks', {
-      count: data.response.count,
-      items: tracks
-    });
+    return loadTracks(vk, appstate, data, 100);
   }
 
   if (appstate.get('groups').count === 0) {
-    fetchGroups(vk, appstate.get('user'), 0, 10, function (err, result) {
-      app.dispatch('groups:load', {
-        offset: 0,
-        count: 10,
-        response: result.response
-      });
-    });
-
-    fetchTracks(vk, appstate.get('user'), 0, 10, function (err, result) {
-      app.dispatch('tracks:load', {
-        offset: 0,
-        count: 10,
-        response: result.response
-      });
-    });
-
-    var groups = _.range(0, 10).map(Group.Empty);
-    var tracks = _.range(0, 10).map(Track.Empty);
-
-    return appstate
-      .set('groups', { count: 10, items: Vector.from(groups) })
-      .set('tracks', { count: 10, items: Vector.from(tracks) })
+    return fetchInitialData(vk, appstate);
   }
 
   return appstate;
