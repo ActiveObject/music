@@ -19,14 +19,14 @@ module.exports = React.createClass({
 
   render: function() {
     var track = {
-      title: this.props.track.get('title'),
-      artist: this.props.track.get('artist'),
-      duration: moment.duration(this.props.track.get('duration'), 's').format('mm:ss')
+      title: this.props.track.title,
+      artist: this.props.track.artist,
+      duration: moment.duration(this.props.track.duration, 's').format('mm:ss')
     };
 
     var playBtn = new PlayBtn({
       key: 'play-btn',
-      isPlaying: this.props.track.get('isPlaying', false),
+      isPlaying: this.props.track.isPlaying,
       isActive: true,
       onClick: this.togglePlay
     });

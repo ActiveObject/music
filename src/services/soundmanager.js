@@ -24,25 +24,25 @@ Watch.prototype.update = function (appstate) {
 };
 
 var activeTrack = new Watch('activeTrack', function (nextTrack, prevTrack) {
-  if (nextTrack.get('id') !== prevTrack.get('id')) {
-    sm.stop(prevTrack.get('id'));
-    sm.unload(prevTrack.get('id'));
+  if (nextTrack.id !== prevTrack.id) {
+    sm.stop(prevTrack.id);
+    sm.unload(prevTrack.id);
 
     return sm.createSound({
-      id: nextTrack.get('id'),
-      url: nextTrack.get('url'),
+      id: nextTrack.id,
+      url: nextTrack.url,
       autoLoad: true,
       autoPlay: true,
       volume: 100
     });
   }
 
-  if (nextTrack.get('isPlaying') && !prevTrack.get('isPlaying')) {
-    return sm.play(nextTrack.get('id'));
+  if (nextTrack.isPlaying && !prevTrack.isPlaying) {
+    return sm.play(nextTrack.id);
   }
 
-  if (!nextTrack.get('isPlaying') && prevTrack.get('isPlaying')) {
-    return sm.pause(nextTrack.get('id'));
+  if (!nextTrack.isPlaying && prevTrack.isPlaying) {
+    return sm.pause(nextTrack.id);
   }
 });
 

@@ -19,7 +19,7 @@ app.on('/groups/:id', routes.group);
 
 app.renderTo(document.getElementById('app'));
 
-app.start(Immutable.fromJS({
+app.start(Immutable.Map.from({
   activity: require('app/fixtures/activity'),
 
   activeTrack: {
@@ -29,8 +29,15 @@ app.start(Immutable.fromJS({
     isPlaying: false
   },
 
-  groups: [],
-  tracks: [],
+  groups: {
+    count: 0,
+    items: []
+  },
+
+  tracks: {
+    count: 0,
+    items: []
+  },
 
   user: Auth.readFromLs()
 }));

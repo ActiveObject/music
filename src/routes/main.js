@@ -12,7 +12,7 @@ module.exports = function mainRoute(appstate) {
 
   var tracklist = new Tracklist({
     key: 'tracklist',
-    tracks: appstate.get('tracks'),
+    tracks: appstate.get('tracks').items,
     activeTrack: appstate.get('activeTrack')
   });
 
@@ -25,7 +25,7 @@ module.exports = function mainRoute(appstate) {
   var main = new Main({
     key: 'main',
     activity: appstate.get('activity'),
-    groups: appstate.get('groups')
+    groups: appstate.get('groups').items
   });
 
   var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
