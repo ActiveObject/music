@@ -31,6 +31,7 @@
     "webpack-dev-server": "^1.6.5"
   },
   "dependencies": {
+    "baconjs": "^0.7.22",
     "color": "^0.7.1",
     "colors": "^0.6.2",
     "curry": "^1.2.0",

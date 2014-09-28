@@ -1,29 +1,14 @@
 var sm = require('sound-manager');
+var Bacon = require('baconjs');
 var isReady = false;
 
-function Watch(path, fn) {
-  this.prevValue = null;
-  this.path = path;
-  this.fn = fn;
-}
+var dbStream = new Bacon.Bus();
+var activeTrack = dbStream
+  .map(db => db.get('activeTrack'))
+  .slidingWindow(2, 2)
+  .filter(values => values[0] !== values[1]);
 
-Watch.prototype.update = function (appstate) {
-  if (!this.prevValue) {
-    this.prevValue = appstate;
-    return;
-  }
-
-  var prev = this.prevValue.get(this.path);
-  var next = appstate.get(this.path);
-
-  this.prevValue = appstate;
-
-  if (next !== prev) {
-    this.fn.call(null, next, prev);
-  }
-};
-
-var activeTrack = new Watch('activeTrack', function (nextTrack, prevTrack) {
+function modifyTrackState(prevTrack, nextTrack) {
   if (nextTrack.id !== prevTrack.id) {
     sm.stop(prevTrack.id);
     sm.unload(prevTrack.id);
@@ -44,28 +29,25 @@ var activeTrack = new Watch('activeTrack', function (nextTrack, prevTrack) {
   if (!nextTrack.isPlaying && prevTrack.isPlaying) {
     return sm.pause(nextTrack.id);
   }
-});
+}
 
-module.exports = function (appstate, type, data) {
-  if (type === 'app:start') {
+module.exports = function (appstate, type, data, receive, send) {
+  dbStream.push(appstate);
+
+  receive('app:start', function () {
     sm.setup({
       url: 'swf',
       flashVersion: 9,
       preferFlash: false,
       onready: function() {
-        isReady = true;
+        send('sound-manager:is-ready');
       }
     });
+  });
 
-    return appstate;
-  }
-
-  // don't do anything while sound manager is initializing
-  if (!isReady) {
-    return appstate;
-  }
-
-  activeTrack.update(appstate);
+  receive('sound-manager:is-ready', function () {
+    activeTrack.onValues(modifyTrackState);
+  });
 
   return appstate;
 };

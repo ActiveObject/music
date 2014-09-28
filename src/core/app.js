@@ -47,14 +47,22 @@ function use(handler) {
   handlers.push(handler);
 }
 
+function receiveEvent(eventType, payload) {
+  return function receive(expectedType, fn) {
+    if (expectedType === eventType) {
+      fn(payload);
+    }
+  };
+}
+
 function dispatch(type, payload) {
-  debug('dispath - %s', type);
+  debug('dispatch - %s', type);
 
   var nextState = handlers.reduce(function (state, handler) {
-    return handler(state, type, payload, dispatch);
+    return handler(state, type, payload, receiveEvent(type, payload), dispatch);
   }, appstate);
 
-  debug('dispath finished - %s', type);
+  debug('dispatch finished - %s', type);
 
   if (nextState.has('location') && nextState !== appstate) {
     window.requestAnimationFrame(() => render(appstate));
