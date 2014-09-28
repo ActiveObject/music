@@ -1,12 +1,4 @@
 var sm = require('sound-manager');
-var Bacon = require('baconjs');
-var isReady = false;
-
-var dbStream = new Bacon.Bus();
-var activeTrack = dbStream
-  .map(db => db.get('activeTrack'))
-  .slidingWindow(2, 2)
-  .filter(values => values[0] !== values[1]);
 
 function modifyTrackState(prevTrack, nextTrack) {
   if (nextTrack.id !== prevTrack.id) {
@@ -31,8 +23,11 @@ function modifyTrackState(prevTrack, nextTrack) {
   }
 }
 
-module.exports = function (appstate, type, data, receive, send) {
-  dbStream.push(appstate);
+module.exports = function (dbStream, receive, send) {
+  var activeTrack = dbStream
+    .map(db => db.get('activeTrack'))
+    .slidingWindow(2, 2)
+    .filter(values => values[0] !== values[1]);
 
   receive('app:start', function () {
     sm.setup({
@@ -48,6 +43,4 @@ module.exports = function (appstate, type, data, receive, send) {
   receive('sound-manager:is-ready', function () {
     activeTrack.onValues(modifyTrackState);
   });
-
-  return appstate;
 };

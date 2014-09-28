@@ -101,36 +101,38 @@ function loadTracks(vk, appstate, data, batchCount) {
   });
 }
 
-function Vk(appstate, type, data) {
-  if (!Vk.isAuthenticated(appstate.get('user'))) {
+function Vk() {
+  return function (appstate, type, data) {
+    if (!Vk.isAuthenticated(appstate.get('user'))) {
+      return appstate;
+    }
+
+    if (!vk) {
+      vk = new VkApi({
+        auth: {
+          type: 'oauth',
+          user: appstate.get('user').id,
+          token: appstate.get('user').accessToken
+        },
+
+        rateLimit: 2
+      });
+    }
+
+    if (type === 'groups:load') {
+      return loadGroups(vk, appstate, data, 100);
+    }
+
+    if (type === 'tracks:load') {
+      return loadTracks(vk, appstate, data, 100);
+    }
+
+    if (appstate.get('groups').count === 0) {
+      return fetchInitialData(vk, appstate);
+    }
+
     return appstate;
-  }
-
-  if (!vk) {
-    vk = new VkApi({
-      auth: {
-        type: 'oauth',
-        user: appstate.get('user').id,
-        token: appstate.get('user').accessToken
-      },
-
-      rateLimit: 2
-    });
-  }
-
-  if (type === 'groups:load') {
-    return loadGroups(vk, appstate, data, 100);
-  }
-
-  if (type === 'tracks:load') {
-    return loadTracks(vk, appstate, data, 100);
-  }
-
-  if (appstate.get('groups').count === 0) {
-    return fetchInitialData(vk, appstate);
-  }
-
-  return appstate;
+  };
 }
 
 Vk.isAuthenticated = function isAuthenticated(user) {

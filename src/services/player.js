@@ -1,7 +1,7 @@
 var Track = require('app/models/track');
 
-module.exports = function (appstate, type, data, dispatch) {
-  if (type === 'toggle:play') {
+module.exports = function(dbStream, receive) {
+  receive('toggle:play', function (appstate, data) {
     var activeTrack = appstate.get('activeTrack');
 
     if (data.track.id !== activeTrack.id) {
@@ -9,7 +9,5 @@ module.exports = function (appstate, type, data, dispatch) {
     }
 
     return appstate.set('activeTrack', Track.togglePlay(activeTrack));
-  }
-
-  return appstate;
+  });
 };
