@@ -22,7 +22,7 @@ function renderTo(target) {
 }
 
 function makeReceiver(receivers) {
-  return function (expectedType, fn) {
+  return function createReceiverForEvent(expectedType, fn) {
     receivers.push(function (db, receivedType, payload) {
       var result;
 
@@ -43,6 +43,19 @@ function receiveEvent(eventType, payload) {
   };
 }
 
+function addWatch(dbStream) {
+  return function watch(key, callback) {
+    var x = dbStream
+      .map(db => db.get(key))
+      .slidingWindow(2, 2)
+      .filter(values => values[0] !== values[1]);
+
+    return x.onValues(function (prev, next) {
+      callback(prev, next, appstate);
+    });
+  };
+}
+
 use(function(dbStream, receive) {
   receive('route:change', function (db, data) {
     return db.set('location', data.ctx);
@@ -55,12 +68,12 @@ page(function (ctx) {
 
 function use(handler) {
   var receivers = [];
-  var onDbChange = handler(dbStream, makeReceiver(receivers), dispatch);
+  var onDbChange = handler(dbStream, makeReceiver(receivers), dispatch, addWatch(dbStream));
 
   handlers.push.apply(handlers, receivers);
 
   if (_.isFunction(onDbChange)) {
-    handlers.push(handler(dbStream));
+    handlers.push(onDbChange);
   }
 }
 

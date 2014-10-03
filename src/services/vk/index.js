@@ -9,8 +9,6 @@ var Track = require('app/models/track');
 var VkApi = require('./vk-api') ;
 var _ = require('underscore');
 
-var vk = null;
-
 function fetchGroups(vk, user, offset, count, callback) {
   vk.groups.get({
     user_id: user.id,
@@ -102,6 +100,8 @@ function loadTracks(vk, appstate, data, batchCount) {
 }
 
 function Vk() {
+  var vk = null;
+
   return function (appstate, type, data) {
     if (!Vk.isAuthenticated(appstate.get('user'))) {
       return appstate;

@@ -13,7 +13,6 @@ exports.where = curry(function where(condition, value) {
   });
 });
 
-
 exports.isValue = function isValue(x) {
   if (_.isUndefined(x)) {
     return false;

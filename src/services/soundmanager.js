@@ -23,12 +23,7 @@ function modifyTrackState(prevTrack, nextTrack) {
   }
 }
 
-module.exports = function (dbStream, receive, send) {
-  var activeTrack = dbStream
-    .map(db => db.get('activeTrack'))
-    .slidingWindow(2, 2)
-    .filter(values => values[0] !== values[1]);
-
+module.exports = function (dbStream, receive, send, watch) {
   receive('app:start', function () {
     sm.setup({
       url: 'swf',
@@ -41,6 +36,6 @@ module.exports = function (dbStream, receive, send) {
   });
 
   receive('sound-manager:is-ready', function () {
-    activeTrack.onValues(modifyTrackState);
+    watch('activeTrack', modifyTrackState);
   });
 };
