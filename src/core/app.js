@@ -78,13 +78,13 @@ function use(handler) {
 }
 
 function dispatch(type, payload) {
-  debug('dispatch - %s', type);
+  debug('%s - dispatching', type);
 
   var nextState = handlers.reduce(function (state, handler) {
     return handler(state, type, payload);
   }, appstate);
 
-  debug('dispatch finished - %s', type);
+  debug('%s - dispatch finished', type);
 
   if (nextState.has('location') && nextState !== appstate) {
     window.requestAnimationFrame(() => render(appstate));
