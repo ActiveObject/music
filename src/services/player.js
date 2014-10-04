@@ -12,6 +12,17 @@ module.exports = function(dbStream, receive, send, watch) {
     return appstate.update('activeTrack', Track.togglePlay);
   });
 
+  receive('sound-manager:finish', function (appstate, track) {
+    var tracks = appstate.get('playqueue').items;
+    var activeIndex = tracks.findIndex(t => t.id === track.id);
+
+    if (activeIndex === tracks.count()) {
+      return send('playqueue:finish');
+    }
+
+    return appstate.set('activeTrack', tracks.get(activeIndex + 1));
+  });
+
   receive('playqueue:change', function (appstate, tracks) {
     return appstate.update('playqueue', function (playqueue) {
       return {

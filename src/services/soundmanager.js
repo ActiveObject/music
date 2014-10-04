@@ -1,16 +1,27 @@
+var _ = require('underscore');
+var curry = require('curry');
 var sm = require('sound-manager');
 
-function modifyTrackState(prevTrack, nextTrack) {
+var modifyTrackState = curry(function modifyTrackState(send, prevTrack, nextTrack) {
   if (nextTrack.id !== prevTrack.id) {
     sm.stop(prevTrack.id);
     sm.unload(prevTrack.id);
+
+    var sound = sm.getSoundById(nextTrack.id);
+
+    if (_.isObject(sound)) {
+      return sound.play();
+    }
 
     return sm.createSound({
       id: nextTrack.id,
       url: nextTrack.url,
       autoLoad: true,
       autoPlay: true,
-      volume: 100
+      volume: 100,
+      onfinish: function () {
+        send('sound-manager:finish', nextTrack);
+      }
     });
   }
 
@@ -21,7 +32,7 @@ function modifyTrackState(prevTrack, nextTrack) {
   if (!nextTrack.isPlaying && prevTrack.isPlaying) {
     return sm.pause(nextTrack.id);
   }
-}
+});
 
 module.exports = function (dbStream, receive, send, watch) {
   receive('app:start', function () {
@@ -36,6 +47,6 @@ module.exports = function (dbStream, receive, send, watch) {
   });
 
   receive('sound-manager:is-ready', function () {
-    watch('activeTrack', modifyTrackState);
+    watch('activeTrack', modifyTrackState(send));
   });
 };

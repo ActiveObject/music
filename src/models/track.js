@@ -37,6 +37,10 @@ VkTrack.play = function (track) {
   return VkTrack.modify(track, { isPlaying: true });
 };
 
+VkTrack.pause = function (track) {
+  return VkTrack.modify(track, { isPlaying: false });
+};
+
 VkTrack.togglePlay = function (track) {
   return VkTrack.modify(track, { isPlaying: !track.isPlaying });
 };
