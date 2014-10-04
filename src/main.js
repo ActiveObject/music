@@ -29,6 +29,15 @@ app.start(Immutable.Map.from({
     isPlaying: false
   },
 
+  playqueue: {
+    source: {
+      path: 'tracks',
+      name: 'Аудіозаписи'
+    },
+
+    items: []
+  },
+
   groups: {
     count: 0,
     items: []

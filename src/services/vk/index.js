@@ -124,7 +124,7 @@ function Vk() {
     }
 
     if (type === 'tracks:load') {
-      return loadTracks(vk, appstate, data, 100);
+      return loadTracks(vk, appstate, data, 1000);
     }
 
     if (appstate.get('groups').count === 0) {
