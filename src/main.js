@@ -1,6 +1,7 @@
 var Immutable = require('immutable');
 var app = require('app/core/app');
 var Auth = require('app/core/auth');
+var Track = require('app/models/track');
 var routes = require('app/routes');
 
 if (Auth.hasToken(location.hash)) {
@@ -22,12 +23,7 @@ app.renderTo(document.getElementById('app'));
 app.start(Immutable.Map.from({
   activity: require('app/fixtures/activity'),
 
-  activeTrack: {
-    artist: 'Flux Pavilion',
-    title: 'Got I to Know',
-    duration: 350,
-    isPlaying: false
-  },
+  activeTrack: new Track.Empty(),
 
   playqueue: {
     source: {

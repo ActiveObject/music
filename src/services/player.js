@@ -20,7 +20,7 @@ module.exports = function(dbStream, receive, send, watch) {
       return send('playqueue:finish');
     }
 
-    return appstate.set('activeTrack', tracks.get(activeIndex + 1));
+    return appstate.set('activeTrack', Track.play(tracks.get(activeIndex + 1)));
   });
 
   receive('playqueue:change', function (appstate, tracks) {
@@ -28,8 +28,18 @@ module.exports = function(dbStream, receive, send, watch) {
       return {
         source: playqueue.source,
         items: tracks.items.filter(_.negate(Track.isEmpty))
-      }
+      };
     });
+  });
+
+  receive('playqueue:change', function (appstate, tracks) {
+    if (Track.isEmpty(appstate.get('activeTrack'))) {
+      var nonEmptyTracks = tracks.items.filter(_.negate(Track.isEmpty));
+
+      if (nonEmptyTracks.count() > 0) {
+        return appstate.set('activeTrack', nonEmptyTracks.first());
+      }
+    }
   });
 
   watch('tracks', function (prev, next) {

@@ -2,35 +2,39 @@ var _ = require('underscore');
 var curry = require('curry');
 var sm = require('sound-manager');
 
+function getSound(track, send) {
+  var sound = sm.getSoundById(track.id);
+
+  if (_.isObject(sound)) {
+    return sound;
+  }
+
+  return sm.createSound({
+    id: track.id,
+    url: track.url,
+    autoLoad: false,
+    autoPlay: false,
+    volume: 100,
+    onfinish: function () {
+      send('sound-manager:finish', track);
+    }
+  });
+}
+
 var modifyTrackState = curry(function modifyTrackState(send, prevTrack, nextTrack) {
-  if (nextTrack.id !== prevTrack.id) {
+  if (nextTrack.id !== prevTrack.id && nextTrack.isPlaying) {
     sm.stop(prevTrack.id);
     sm.unload(prevTrack.id);
 
-    var sound = sm.getSoundById(nextTrack.id);
-
-    if (_.isObject(sound)) {
-      return sound.play();
-    }
-
-    return sm.createSound({
-      id: nextTrack.id,
-      url: nextTrack.url,
-      autoLoad: true,
-      autoPlay: true,
-      volume: 100,
-      onfinish: function () {
-        send('sound-manager:finish', nextTrack);
-      }
-    });
+    return getSound(nextTrack, send).play();
   }
 
   if (nextTrack.isPlaying && !prevTrack.isPlaying) {
-    return sm.play(nextTrack.id);
+    return getSound(nextTrack, send).play();
   }
 
   if (!nextTrack.isPlaying && prevTrack.isPlaying) {
-    return sm.pause(nextTrack.id);
+    return getSound(nextTrack, send).pause();
   }
 });
 
