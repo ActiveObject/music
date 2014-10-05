@@ -7,13 +7,12 @@ var GroupProfile = require('app/components/group-profile');
 var ActiveTrack = require('app/components/active-track');
 var Tracklist = require('app/components/tracklist');
 var TracklistCard = require('app/components/tracklist-card');
+var Group = require('app/models/group');
 
 module.exports = function groupRoute(appstate, ctx) {
   var id = parseInt(ctx.params.id, 10);
-
-  var group = _.find(appstate.get('groups').toJS(), function (group) {
-    return group.id === id;
-  });
+  var groups = appstate.get('groups').items.filter(_.negate(Group.isEmpty));
+  var group = groups.find(group => group.id === id);
 
   var activeTrack = new ActiveTrack({
     track: appstate.get('activeTrack')
@@ -21,12 +20,12 @@ module.exports = function groupRoute(appstate, ctx) {
 
   var tracklist = new Tracklist({
     key: 'tracklist',
-    tracks: appstate.get('tracks'),
+    tracks: appstate.get('playqueue').items,
     activeTrack: appstate.get('activeTrack')
   });
 
   var tracklistCard = new TracklistCard({
-    name: 'Аудіозаписи',
+    name: appstate.get('playqueue').source.name,
     activeTrack: activeTrack,
     tracklist: tracklist
   });

@@ -11,12 +11,6 @@ require('moment-duration-format');
 module.exports = React.createClass({
   displayName: 'ActiveTrack',
 
-  getInitialState: function () {
-    return {
-      isPlaying: true
-    };
-  },
-
   render: function() {
     var track = {
       title: this.props.track.title,

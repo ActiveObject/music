@@ -8,18 +8,22 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
-    this.getDOMNode().innerHTML = this.makeXlink(this.props.id);
+    this.getDOMNode().appendChild(this.makeXlink(this.props.id));
   },
 
   componentDidUpdate: function () {
-    this.getDOMNode().innerHTML = this.makeXlink(this.props.id);
+    this.getDOMNode()
+      .querySelector('use')
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + this.props.id);
   },
 
   render: function () {
-    return React.DOM.svg({ className: 'icon' });
+    return React.DOM.svg({ className: 'icon', viewBox: '0 0 100 100' });
   },
 
   makeXlink: function (id) {
-    return '<use xlink:href="#' + id + '"></use>';
+    var el = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    el.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
+    return el;
   }
 });

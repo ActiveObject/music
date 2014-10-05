@@ -12,12 +12,12 @@ module.exports = function mainRoute(appstate) {
 
   var tracklist = new Tracklist({
     key: 'tracklist',
-    tracks: appstate.get('tracks').items,
+    tracks: appstate.get('playqueue').items,
     activeTrack: appstate.get('activeTrack')
   });
 
   var tracklistCard = new TracklistCard({
-    name: 'Аудіозаписи',
+    name: appstate.get('playqueue').source.name,
     activeTrack: activeTrack,
     tracklist: tracklist
   });

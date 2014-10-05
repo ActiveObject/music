@@ -1,71 +1,56 @@
+var _ = require('underscore');
+var curry = require('curry');
 var sm = require('sound-manager');
-var isReady = false;
 
-function Watch(path, fn) {
-  this.prevValue = null;
-  this.path = path;
-  this.fn = fn;
+function getSound(track, send) {
+  var sound = sm.getSoundById(track.id);
+
+  if (_.isObject(sound)) {
+    return sound;
+  }
+
+  return sm.createSound({
+    id: track.id,
+    url: track.url,
+    autoLoad: false,
+    autoPlay: false,
+    volume: 100,
+    onfinish: function () {
+      send('sound-manager:finish', track);
+    }
+  });
 }
 
-Watch.prototype.update = function (appstate) {
-  if (!this.prevValue) {
-    this.prevValue = appstate;
-    return;
-  }
-
-  var prev = this.prevValue.get(this.path);
-  var next = appstate.get(this.path);
-
-  this.prevValue = appstate;
-
-  if (next !== prev) {
-    this.fn.call(null, next, prev);
-  }
-};
-
-var activeTrack = new Watch('activeTrack', function (nextTrack, prevTrack) {
-  if (nextTrack.id !== prevTrack.id) {
+var modifyTrackState = curry(function modifyTrackState(send, prevTrack, nextTrack) {
+  if (nextTrack.id !== prevTrack.id && nextTrack.isPlaying) {
     sm.stop(prevTrack.id);
     sm.unload(prevTrack.id);
 
-    return sm.createSound({
-      id: nextTrack.id,
-      url: nextTrack.url,
-      autoLoad: true,
-      autoPlay: true,
-      volume: 100
-    });
+    return getSound(nextTrack, send).play();
   }
 
   if (nextTrack.isPlaying && !prevTrack.isPlaying) {
-    return sm.play(nextTrack.id);
+    return getSound(nextTrack, send).play();
   }
 
   if (!nextTrack.isPlaying && prevTrack.isPlaying) {
-    return sm.pause(nextTrack.id);
+    return getSound(nextTrack, send).pause();
   }
 });
 
-module.exports = function (appstate, type, data) {
-  if (type === 'app:start') {
+module.exports = function (dbStream, receive, send, watch) {
+  receive('app:start', function () {
     sm.setup({
       url: 'swf',
       flashVersion: 9,
       preferFlash: false,
       onready: function() {
-        isReady = true;
+        send('sound-manager:is-ready');
       }
     });
+  });
 
-    return appstate;
-  }
-
-  // don't do anything while sound manager is initializing
-  if (!isReady) {
-    return appstate;
-  }
-
-  activeTrack.update(appstate);
-
-  return appstate;
+  receive('sound-manager:is-ready', function () {
+    watch('activeTrack', modifyTrackState(send));
+  });
 };
