@@ -6,6 +6,7 @@ var page = require('page');
 var when = require('when');
 var curry = require('curry');
 var router = require('app/core/router');
+var BufferedEventStream = require('app/core/buffered-event-stream');
 var { isValue } = require('app/utils');
 
 
@@ -14,6 +15,10 @@ var appstate = null;
 var appRouter = router();
 var target = document.body;
 var dbStream = new Bacon.Bus();
+
+var appEventStream = new BufferedEventStream(function (event) {
+  dispatch(event.type, event.payload);
+});
 
 function renderTo(target) {
   return function renderTo(root) {
@@ -68,7 +73,7 @@ page(function (ctx) {
 
 function use(handler) {
   var receivers = [];
-  var onDbChange = handler(dbStream, makeReceiver(receivers), dispatch, addWatch(dbStream));
+  var onDbChange = handler(dbStream, makeReceiver(receivers), scheduleEvent, addWatch(dbStream));
 
   handlers.push.apply(handlers, receivers);
 
@@ -77,7 +82,13 @@ function use(handler) {
   }
 }
 
+function scheduleEvent(type, payload) {
+  appEventStream.push({ type: type, payload: payload });
+}
+
 function dispatch(type, payload) {
+  appEventStream.pause();
+
   debug('%s - dispatching', type);
 
   var nextState = handlers.reduce(function (state, handler) {
@@ -92,6 +103,8 @@ function dispatch(type, payload) {
 
   appstate = nextState;
   dbStream.push(nextState);
+
+  appEventStream.resume();
 }
 
 function registerRoute(path, fn) {
@@ -109,6 +122,7 @@ function render(appstate) {
 function start(initState) {
   appstate = initState;
   dbStream.push(appstate);
+  appEventStream.resume();
   dispatch('app:start');
   page();
 }
@@ -135,4 +149,4 @@ exports.r = function (path, middleware) {
 exports.use = use;
 exports.on = registerRoute;
 exports.start = start;
-exports.dispatch = dispatch;
+exports.dispatch = scheduleEvent;

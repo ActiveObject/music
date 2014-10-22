@@ -52,7 +52,7 @@ module.exports = React.createClass({
           key: group.id,
           id: group.id,
           name: group.name,
-          activity: []
+          activity: group.activity
         });
       })
       .toJS();

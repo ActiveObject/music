@@ -13,15 +13,15 @@ module.exports = React.createClass({
 
   getDefaultProps: function() {
     return {
-      size: 18,
-      margin: 1,
-      defaultColor: '#F5F5F5'
+      size: 16,
+      margin: 2,
+      defaultColor: '#F8F8F8'
     };
   },
 
   render: function() {
-    var dateRange = Activity.makeDateRange(new Date(), 185);
-    var activity = Activity.fillEmptyDates(dateRange, this.props.activity);
+    var dateRange = Activity.makeDateRange(new Date(), { weeks: 33 });
+    var activity = Activity.fillEmptyDates(dateRange, this.props.activity.items);
     var achart = this.makeActivityChart(this.props.size, this.props.margin, activity, this.props.defaultColor);
 
     var name = dom.a()

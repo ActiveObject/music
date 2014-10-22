@@ -44,5 +44,7 @@ app.start(Immutable.Map.from({
     items: []
   },
 
+  loadingActivities: new Immutable.Set(),
+
   user: Auth.readFromLs()
 }));

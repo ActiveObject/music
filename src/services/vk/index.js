@@ -99,8 +99,28 @@ function loadTracks(vk, appstate, data, batchCount) {
   });
 }
 
-function Vk() {
+function loadWall(vk, appstate, groupId, callback) {
+  vk.wall.get({
+    owner_id: -groupId,
+    offset: 0,
+    count: 100,
+    v: '5.25'
+  }, callback);
+}
+
+function Vk(dbStream, receive, send, watch) {
   var vk = null;
+
+  receive('vk:group-activity:fetched', function (appstate, group) {
+    return appstate.update('groups', function (groups) {
+      return {
+        count: groups.count,
+        items: groups.items.map(function (g) { // inefficient, take a look at sorted set data structure
+          return g.id === group.id ? group : g;
+        })
+      }
+    });
+  });
 
   return function (appstate, type, data) {
     if (!Vk.isAuthenticated(appstate.get('user'))) {
@@ -115,7 +135,7 @@ function Vk() {
           token: appstate.get('user').accessToken
         },
 
-        rateLimit: 2
+        rateLimit: 1
       });
     }
 
@@ -131,7 +151,25 @@ function Vk() {
       return fetchInitialData(vk, appstate);
     }
 
-    return appstate;
+    var loadingActivities = appstate.get('loadingActivities');
+    var groupsToLoadActivity = appstate
+      .get('groups')
+      .items
+      .filter(_.negate(Group.isEmpty))
+      .filter(group => group.activity.total <= (group.postsTotal > 300 ? 300 : group.postsTotal))
+      .filter(group => !loadingActivities.has(group.id))
+
+    groupsToLoadActivity.forEach(function (group) {
+      loadWall(vk, appstate, group.id, function (err, res) {
+        if (err) {
+          return console.log(err);
+        }
+
+        send('vk:group-activity:fetched', Group.updateWall(res.response, group));
+      });
+    });
+
+    return appstate.set('loadingActivities', loadingActivities.union(groupsToLoadActivity.map(g => g.id)));
   };
 }
 
