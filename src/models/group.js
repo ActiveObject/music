@@ -1,5 +1,4 @@
 var _ = require('underscore');
-var Set = require('immutable').Set;
 var getOrDefault = require('app/utils').getOrDefault;
 var Activity = require('app/models/activity');
 

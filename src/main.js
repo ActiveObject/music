@@ -2,21 +2,19 @@ var Immutable = require('immutable');
 var app = require('app/core/app');
 var Auth = require('app/core/auth');
 var Track = require('app/models/track');
-var routes = require('app/routes');
+var layouts = require('app/layouts');
 
 if (Auth.hasToken(location.hash)) {
   Auth.storeToLs(location.hash);
   location.hash = '';
 }
 
+app.use(require('app/services/auth'));
 app.use(require('app/services/vk'));
 app.use(require('app/services/player'));
 app.use(require('app/services/soundmanager'));
-
-app.r(routes.auth);
-app.on('/', routes.main);
-app.on('/index.html', routes.main);
-app.on('/groups/:id', routes.group);
+app.use(require('app/services/layout'));
+app.use(require('app/router'));
 
 app.renderTo(document.getElementById('app'));
 
@@ -31,20 +29,22 @@ app.start(Immutable.Map.from({
       name: 'Аудіозаписи'
     },
 
-    items: []
+    items: Immutable.Vector.from([])
   },
 
   groups: {
     count: 0,
-    items: []
+    items: Immutable.Vector.from([])
   },
 
   tracks: {
     count: 0,
-    items: []
+    items: Immutable.Vector.from([])
   },
 
   loadingActivities: new Immutable.Set(),
 
-  user: Auth.readFromLs()
+  user: Auth.readFromLs(),
+
+  layout: layouts.empty
 }));

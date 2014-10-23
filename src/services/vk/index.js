@@ -30,7 +30,7 @@ function fetchTracks(vk, user, offset, count, callback) {
 
 function fetchInitialData(vk, appstate) {
   fetchGroups(vk, appstate.get('user'), 0, 10, function (err, result) {
-    app.dispatch('groups:load', {
+    app.send('groups:load', {
       offset: 0,
       count: 10,
       response: result.response
@@ -38,7 +38,7 @@ function fetchInitialData(vk, appstate) {
   });
 
   fetchTracks(vk, appstate.get('user'), 0, 10, function (err, result) {
-    app.dispatch('tracks:load', {
+    app.send('tracks:load', {
       offset: 0,
       count: 10,
       response: result.response
@@ -58,7 +58,7 @@ function loadGroups(vk, appstate, data, batchCount) {
 
   if (currentItemsCount < data.response.count ) {
     fetchGroups(vk, appstate.get('user'), currentItemsCount, batchCount, function (err, result) {
-      app.dispatch('groups:load', {
+      app.send('groups:load', {
         offset: currentItemsCount,
         count: batchCount,
         response: result.response
@@ -81,7 +81,7 @@ function loadTracks(vk, appstate, data, batchCount) {
 
   if (currentItemsCount < data.response.count ) {
     fetchTracks(vk, appstate.get('user'), currentItemsCount, batchCount, function (err, result) {
-      app.dispatch('tracks:load', {
+      app.send('tracks:load', {
         offset: currentItemsCount,
         count: batchCount,
         response: result.response
@@ -118,7 +118,7 @@ function Vk(dbStream, receive, send, watch) {
         items: groups.items.map(function (g) { // inefficient, take a look at sorted set data structure
           return g.id === group.id ? group : g;
         })
-      }
+      };
     });
   });
 
@@ -157,7 +157,7 @@ function Vk(dbStream, receive, send, watch) {
       .items
       .filter(_.negate(Group.isEmpty))
       .filter(group => group.activity.total <= (group.postsTotal > 300 ? 300 : group.postsTotal))
-      .filter(group => !loadingActivities.has(group.id))
+      .filter(group => !loadingActivities.has(group.id));
 
     groupsToLoadActivity.forEach(function (group) {
       loadWall(vk, appstate, group.id, function (err, res) {

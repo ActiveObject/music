@@ -28,7 +28,7 @@ BufferedEventStream.prototype.resume = function () {
   this._paused = false;
 
   if (this._events.length > 0) {
-    this.emit('event')
+    this.emit('event');
   }
 };
 

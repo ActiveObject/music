@@ -2,29 +2,20 @@ var _ = require('underscore');
 var debug = require('debug')('app:core:app');
 var React = require('react');
 var Bacon = require('baconjs');
-var page = require('page');
 var when = require('when');
 var curry = require('curry');
-var router = require('app/core/router');
 var BufferedEventStream = require('app/core/buffered-event-stream');
 var { isValue } = require('app/utils');
 
 
 var handlers = [];
 var appstate = null;
-var appRouter = router();
 var target = document.body;
 var dbStream = new Bacon.Bus();
 
 var appEventStream = new BufferedEventStream(function (event) {
   dispatch(event.type, event.payload);
 });
-
-function renderTo(target) {
-  return function renderTo(root) {
-    React.renderComponent(root, target);
-  };
-}
 
 function makeReceiver(receivers) {
   return function createReceiverForEvent(expectedType, fn) {
@@ -61,16 +52,6 @@ function addWatch(dbStream) {
   };
 }
 
-use(function(dbStream, receive) {
-  receive('route:change', function (db, data) {
-    return db.set('location', data.ctx);
-  });
-});
-
-page(function (ctx) {
-  dispatch('route:change', { ctx: ctx });
-});
-
 function use(handler) {
   var receivers = [];
   var onDbChange = handler(dbStream, makeReceiver(receivers), scheduleEvent, addWatch(dbStream));
@@ -91,14 +72,30 @@ function dispatch(type, payload) {
 
   debug('%s - dispatching', type);
 
-  var nextState = handlers.reduce(function (state, handler) {
-    return handler(state, type, payload);
-  }, appstate);
+  function next(state, handlers) {
+    if (handlers.length === 0) {
+      return state;
+    }
+
+    var handler = handlers[0];
+
+    if (handler.length === 4) {
+      return handler(state, type, payload, function (appstate) {
+        return next(appstate, handlers.slice(1));
+      });
+    }
+
+    return next(handler(state, type, payload), handlers.slice(1));
+  }
+
+  var nextState = next(appstate, handlers);
 
   debug('%s - dispatch finished', type);
 
-  if (nextState.has('location') && nextState !== appstate) {
-    window.requestAnimationFrame(() => render(appstate));
+  if (nextState !== appstate) {
+    window.requestAnimationFrame(function () {
+      render(appstate);
+    });
   }
 
   appstate = nextState;
@@ -107,16 +104,10 @@ function dispatch(type, payload) {
   appEventStream.resume();
 }
 
-function registerRoute(path, fn) {
-  appRouter.on(path, fn);
-}
-
 function render(appstate) {
-  debug('render');
-  when(appRouter(appstate))
-    .then(renderTo(target));
-
-  return appstate;
+  var layout = appstate.get('layout');
+  var root = layout(appstate);
+  React.renderComponent(root, target);
 }
 
 function start(initState) {
@@ -124,11 +115,10 @@ function start(initState) {
   dbStream.push(appstate);
   appEventStream.resume();
   dispatch('app:start');
-  page();
 }
 
 exports.togglePlay = function (track) {
-  dispatch('toggle:play', {
+  scheduleEvent('toggle:play', {
     track: track
   });
 };
@@ -137,16 +127,6 @@ exports.renderTo = function (el) {
   target = el;
 };
 
-exports.r = function (path, middleware) {
-  if (arguments.length === 1) {
-    middleware = path;
-    path = '*';
-  }
-
-  appRouter.use(path, middleware);
-};
-
 exports.use = use;
-exports.on = registerRoute;
 exports.start = start;
-exports.dispatch = scheduleEvent;
+exports.send = scheduleEvent;

@@ -5,7 +5,7 @@ var ActiveTrack = require('app/components/active-track');
 var Tracklist = require('app/components/tracklist');
 var TracklistCard = require('app/components/tracklist-card');
 
-module.exports = function mainRoute(appstate) {
+module.exports = function layoutMainView(appstate) {
   var activeTrack = new ActiveTrack({
     track: appstate.get('activeTrack')
   });

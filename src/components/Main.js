@@ -45,7 +45,7 @@ module.exports = React.createClass({
 
   groupActivities: function () {
     return this.props.groups
-      .slice(0, 10)
+      .slice(0, 3)
       .filter(_.negate(Group.isEmpty))
       .map(function(group) {
         return new ActivityCard({

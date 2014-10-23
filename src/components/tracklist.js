@@ -17,7 +17,7 @@ module.exports = React.createClass({
 
   getInitialState: function () {
     return {
-      visible: [0, 100]
+      visible: [0, 200]
     };
   },
 
