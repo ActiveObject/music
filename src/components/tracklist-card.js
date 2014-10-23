@@ -1,13 +1,7 @@
 var React = require('react');
+var IScroll = require('iscroll');
 var debug = require('debug')('app:tracklist-card');
 var dom = require('app/core/dom');
-var ActiveTrack = require('app/components/active-track');
-var Tracklist = require('app/components/tracklist');
-
-function print(shouldUpdate) {
-  debug('should update: %s', shouldUpdate);
-  return shouldUpdate;
-}
 
 module.exports = React.createClass({
   displayName: 'TracklistCard',
@@ -18,20 +12,38 @@ module.exports = React.createClass({
     name: React.PropTypes.string
   },
 
-  render: function() {
-    var header = dom.div()
-      .key('header')
-      .className('tracklist-header')
-      .append(this.props.activeTrack);
+  componentDidMount: function () {
+    this.scroll = new IScroll(this.refs.view.getDOMNode(), {
+      mouseWheel: true,
+      scrollX: false
+    });
+  },
 
+  componentDidUpdate: function () {
+    this.scroll.refresh();
+  },
+
+  render: function() {
     var name = dom.div()
       .key('section')
       .className('tracklist-section-name')
       .append(this.props.name + ' (1243)');
 
+    var tracklist = dom.div()
+      .className('tracklist')
+      .append(name, this.props.tracklist)
+      .make();
+
+    var list = dom.div()
+      .className('scroll-wrapper')
+      .attr('ref', 'view')
+      .append(tracklist)
+      .make();
+
     return dom.div()
-      .className('card tracklist')
-      .append(header, name, this.props.tracklist)
+      .className('tracklist-card')
+      .append(list)
+      .append(this.props.activeTrack)
       .make();
   }
 });

@@ -22,8 +22,6 @@ module.exports = React.createClass({
 
     var activity = new ActivityCard({
       key: 'activity',
-      size: 20,
-      margin: 2,
       defaultColor: '#3949AB',
       id: this.props.group.id,
       name: this.props.name,
