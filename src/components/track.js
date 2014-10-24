@@ -11,7 +11,9 @@ module.exports = React.createClass({
   displayName: 'Track',
 
   shouldComponentUpdate: function (nextProps) {
-    return nextProps.track !== this.props.track || nextProps.activeTrack !== this.props.activeTrack;
+    return nextProps.track !== this.props.track ||
+      nextProps.activeTrack !== this.props.activeTrack ||
+      nextProps.y !== this.props.y;
   },
 
   render: function() {
@@ -48,6 +50,7 @@ module.exports = React.createClass({
 
     return dom.div()
       .className('tracklist-item')
+      .attr('style', { top: this.props.y })
       .append(playBtn, desc, duration)
       .make();
   },

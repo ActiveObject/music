@@ -1,6 +1,7 @@
 @import 'config'
 @import 'nib'
 @import 'card'
+@import 'theme-solarized'
 
 *
   box-sizing: border-box
@@ -13,6 +14,7 @@ html, body, #app
   font-family: 'Roboto', sans-serif
   font-weight: 400
   font-style: normal
+  font-size: 1rem
 
 .app-container
   display: flex
@@ -24,14 +26,9 @@ html, body, #app
   position: relative
 
 .sidebar-view
-  background-color: #F0F0F0
   width: 40%
   height: 100%
-  padding: 0 25px
   border-left: 1px solid #E2E2E2
-
-.sidebar-content
-  padding: 20px 0
 
 .main-container
   width: 600px
@@ -39,8 +36,7 @@ html, body, #app
   padding: 50px 0
 
 .main-section-title
-  color: rgba(0,0,0, .54)
-  font-size: 34px
+  font-size: 26px
   font-family: 'Roboto', sans-serif
   font-weight: 100
   line-height: 1.2em

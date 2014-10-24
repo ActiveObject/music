@@ -24,3 +24,7 @@ exports.isValue = function isValue(x) {
 
   return true;
 };
+
+exports.getOrDefault = function (obj, key, defaultValue) {
+  return _.has(obj, key) ? obj[key] : defaultValue;
+};

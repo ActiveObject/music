@@ -2,7 +2,19 @@ var _ = require('underscore');
 var moment = require('moment');
 var curry = require('curry');
 
-function makeDateRange(today, amout) {
+function Activity(data) {
+  if (!(this instanceof Activity)) {
+    return new Activity(data);
+  }
+
+  this.total = data.total;
+  this.indexed = data.indexed;
+  this.items = data.items;
+}
+
+function makeDateRange(today, options) {
+  var weeks = options.weeks;
+  var amout = moment(today).day() + (weeks - 1) * 7 + 1;
   var dates = [];
 
   for (var i = 0; i < amout; i++) {
@@ -22,7 +34,9 @@ function fillEmptyDates(range, activity) {
 
   return range.map(function(d) {
     var doy = d.dayOfYear();
-    var found = _.find(activityDates, item => doy === item.doy);
+    var found = _.find(activityDates, function (item) {
+      return doy === item.doy;
+    });
 
     return {
       date: d,
@@ -32,18 +46,56 @@ function fillEmptyDates(range, activity) {
 }
 
 function weeks(activity) {
-  var dateByWeek = _.groupBy(activity, item => item.date.week());
+  var dateByWeek = _.groupBy(activity, function (item) {
+    return item.date.week();
+  });
 
   var unorderedWeeks = _.map(dateByWeek, function(items, key) {
     return {
       number: Number(key),
-      items: _.sortBy(items, item => item.date.day())
+      items: _.sortBy(items, function (item) {
+        return item.date.day();
+      })
     };
   });
 
   return _.sortBy(unorderedWeeks, 'number');
 }
 
+function update(posts, activity) {
+  if (posts.total === activity.total) {
+    return activity;
+  }
+
+  var toIndex = posts.items.filter(function (post) {
+    return !_.contains(activity.indexed, post.id);
+  });
+
+  var itemsByDate = _.groupBy(toIndex, function (post) {
+    return moment(post.date).format('YYYY-MM-DD');
+  });
+
+  var items = _.map(itemsByDate, function (values, date) {
+    return {
+      date: date,
+      news: values.length
+    };
+  });
+
+  return new Activity({
+    total: posts.total,
+    indexed: activity.indexed.concat(toIndex.map(function (post) { return post.id; })),
+    items: activity.items.concat(items)
+  });
+}
+
 exports.makeDateRange = makeDateRange;
 exports.fillEmptyDates = fillEmptyDates;
 exports.weeks = weeks;
+exports.update = update;
+
+exports.empty = new Activity({
+  total: 0,
+  indexed: [],
+  items: []
+});

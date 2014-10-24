@@ -2,7 +2,6 @@ require('app/styles/activity-card.styl');
 
 var React = require('react');
 var _ = require('underscore');
-var Color = require('color');
 var curry = require('curry');
 var Activity = require('app/models/activity');
 
@@ -13,16 +12,15 @@ module.exports = React.createClass({
 
   getDefaultProps: function() {
     return {
-      size: 18,
-      margin: 1,
-      defaultColor: '#F5F5F5'
+      size: 16,
+      margin: 2
     };
   },
 
   render: function() {
-    var dateRange = Activity.makeDateRange(new Date(), 185);
-    var activity = Activity.fillEmptyDates(dateRange, this.props.activity);
-    var achart = this.makeActivityChart(this.props.size, this.props.margin, activity, this.props.defaultColor);
+    var dateRange = Activity.makeDateRange(new Date(), { weeks: 33 });
+    var activity = Activity.fillEmptyDates(dateRange, this.props.activity.items);
+    var achart = this.makeActivityChart(this.props.size, this.props.margin, activity);
 
     var name = dom.a()
       .key('name')
@@ -36,10 +34,10 @@ module.exports = React.createClass({
       .make();
   },
 
-  makeActivityChart: function(size, margin, activity, defaultColor) {
+  makeActivityChart: function(size, margin, activity) {
     var weeks = Activity.weeks(activity);
     var maxNewsCount = Math.max.apply(null, _.pluck(activity, 'news'));
-    var items = weeks.map(this.makeWeek(maxNewsCount, size, margin, defaultColor));
+    var items = weeks.map(this.makeWeek(maxNewsCount, size, margin));
 
     var body = dom.svg()
       .attr('width', (size + margin) * weeks.length)
@@ -52,14 +50,14 @@ module.exports = React.createClass({
       .append(body);
   },
 
-  makeWeek: curry(function(maxValue, size, margin, defaultColor, week, i) {
+  makeWeek: curry(function(maxValue, size, margin, week, i) {
     var items = week.items.map(function(item, i) {
       return dom.rect()
         .key(i)
         .attr('width', size)
         .attr('height', size)
         .attr('y', i * (size + margin))
-        .attr('fill', item.news > 0 ? makeFillColor(item.news, maxValue) : defaultColor);
+        .attr('className', makeFillColor(item.news));
     });
 
     return dom.g()
@@ -69,6 +67,24 @@ module.exports = React.createClass({
   })
 });
 
-function makeFillColor(count, maxValue) {
-  return Color('#3366CC').lighten(1 - count / maxValue).rgbString();
+function makeFillColor(count) {
+  var base = 'activity-item-';
+
+  if (count === 0) {
+    return base + '0';
+  }
+
+  if (count > 0 && count <= 3) {
+    return base + '1';
+  }
+
+  if (count > 3 && count <= 5) {
+    return base + '2';
+  }
+
+  if (count > 5 && count <= 15) {
+    return base + '3';
+  }
+
+  return base + '4';
 }
