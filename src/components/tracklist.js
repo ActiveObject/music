@@ -5,40 +5,34 @@ var _ = require('underscore');
 var debug = require('debug')('app:tracklist');
 var dom = require('app/core/dom');
 var Track = require('app/components/track');
-var TrackModel = require('app/models/track');
-
-function print(shouldUpdate) {
-  debug('should update: %s', shouldUpdate);
-  return shouldUpdate;
-}
 
 module.exports = React.createClass({
   displayName: 'Tracklist',
 
-  getInitialState: function () {
-    return {
-      visible: [0, 200]
-    };
+  propTypes: {
+    activeTrack: React.PropTypes.object.isRequired,
+    tracks: React.PropTypes.array.isRequired,
+    itemHeight: React.PropTypes.number.isRequired
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    return print(nextProps.tracks !== this.props.tracks || !_.isEqual(nextState, this.state) || nextProps.activeTrack !== this.props.activeTrack);
+    return nextProps.tracks !== this.props.tracks ||
+      nextProps.itemHeight !== this.props.itemHeight ||
+      nextProps.activeTrack !== this.props.activeTrack;
   },
 
   render: function() {
-    var tracks = this.props.tracks
-      .slice(this.state.visible[0], this.state.visible[1])
-      .filter(_.negate(TrackModel.isEmpty))
-      .map(function (track) {
-        return new Track({
-          key: track.id,
-          track: track,
-          activeTrack: this.props.activeTrack
-        });
-      }, this)
-      .toJS();
+    var tracks = this.props.tracks.map(function (track) {
+      return new Track({
+        key: track.value.id,
+        track: track.value,
+        y: track.yOffset,
+        activeTrack: this.props.activeTrack
+      });
+    }, this);
 
     return dom.div()
+      .attr('style', { height: this.props.totalTracks * this.props.itemHeight })
       .append(tracks)
       .make();
   }
