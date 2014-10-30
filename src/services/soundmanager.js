@@ -22,6 +22,13 @@ function getSound(track, send) {
 
     whileplaying: _.throttle(function () {
       send('sound-manager:whileplaying', this.position);
+    }, 500),
+
+    whileloading: _.throttle(function () {
+      send('sound-manager:whileloading', {
+        bytesLoaded: this.bytesLoaded,
+        bytesTotal: this.bytesTotal
+      });
     }, 500)
   });
 }
@@ -63,8 +70,15 @@ module.exports = function (dbStream, receive, send, watch) {
     var activeTrack = appstate.get('activeTrack');
 
     if (!activeTrack.seeking) {
-      return appstate.set('activeTrack', Track.updatePosition(appstate.get('activeTrack'), position));
+      return appstate.set('activeTrack', Track.updatePosition(activeTrack, position));
     }
+  });
+
+  receive('sound-manager:whileloading', function (appstate, options) {
+    return appstate.set('activeTrack', Track.updateLoaded(appstate.get('activeTrack'), {
+      bytesLoaded: options.bytesLoaded,
+      bytesTotal: options.bytesTotal
+    }));
   });
 
   receive('audio:seek', function (appstate, position) {

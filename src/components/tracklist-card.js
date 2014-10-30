@@ -74,6 +74,7 @@ module.exports = React.createClass({
     });
 
     var activeTrack = new ActiveTrack({
+      key: 'active-track',
       track: this.props.activeTrack
     });
 
@@ -85,6 +86,7 @@ module.exports = React.createClass({
     var list = dom.div()
       .className('scroll-wrapper')
       .attr('ref', 'view')
+      .key('tracklist-wrapper')
       .append(tracklistEl)
       .make();
 

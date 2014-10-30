@@ -9,6 +9,8 @@ function EmptyTrack() {
   this.position = 0;
   this.duration = 0;
   this.seeking = false;
+  this.bytesLoaded = 0;
+  this.bytesTotal = 0;
 }
 
 function VkTrack(data) {
@@ -28,6 +30,8 @@ function VkTrack(data) {
   this.isPlaying = _.has(data, 'isPlaying') ? data.isPlaying : false;
   this.position = _.has(data, 'position') ? data.position : 0;
   this.seeking = _.has(data, 'seeking') ? data.seeking : false;
+  this.bytesLoaded = _.has(data, 'bytesLoaded') ? data.bytesLoaded : 0;
+  this.bytesTotal = _.has(data, 'bytesTotal') ? data.bytesTotal : 0;
 }
 
 VkTrack.Empty = EmptyTrack;
@@ -57,7 +61,7 @@ VkTrack.relativePosition = function (track) {
     return 0;
   }
 
-  return track.position / track.duration / 10;
+  return track.position / track.duration / 1000;
 };
 
 VkTrack.updatePosition = function (track, value) {
@@ -76,6 +80,21 @@ VkTrack.stopSeeking = function (track) {
   return VkTrack.modify(track, {
     seeking: false
   });
+};
+
+VkTrack.updateLoaded = function (track, options) {
+  return VkTrack.modify(track, {
+    bytesLoaded: options.bytesLoaded,
+    bytesTotal: options.bytesTotal
+  });
+};
+
+VkTrack.relativeLoaded = function (track) {
+  if (track.bytesTotal === 0) {
+    return 0;
+  }
+
+  return track.bytesLoaded / track.bytesTotal;
 };
 
 module.exports = VkTrack;

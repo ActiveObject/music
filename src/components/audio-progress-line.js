@@ -26,6 +26,9 @@ var AudioProgressLine = React.createClass({
   render: function () {
     var bgLine = dom.div().className('apl-bg-line');
 
+    var loadLine = dom.div().className('apl-load-line')
+      .attr('style', { width: this.trackLoaded() + '%' });
+
     var fgLine = dom.div().className('apl-fg-line')
       .attr('style', { width: this.trackProgress() + '%' });
 
@@ -38,7 +41,7 @@ var AudioProgressLine = React.createClass({
     return dom.div()
       .className('apl')
       .className('apl-seek-active', this.props.track.seeking)
-      .append(bgLine, fgLine, seek)
+      .append(bgLine, loadLine, fgLine, seek)
       .attr('ref', 'progressLine')
       .attr('onMouseOver', this.showSeekIndicator)
       .attr('onMouseOut', this.hideSeekIndicator)
@@ -101,7 +104,11 @@ var AudioProgressLine = React.createClass({
   },
 
   trackProgress: function () {
-    return Track.relativePosition(this.props.track);
+    return Track.relativePosition(this.props.track) * 100;
+  },
+
+  trackLoaded: function () {
+    return Track.relativeLoaded(this.props.track) * 100;
   },
 
   lineWidth: function () {
