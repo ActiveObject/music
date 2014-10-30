@@ -123,6 +123,18 @@ exports.togglePlay = function (track) {
   });
 };
 
+exports.seekAudio = function (position) {
+  scheduleEvent('audio:seek', position);
+};
+
+exports.seekAudioApply = function () {
+  scheduleEvent('audio:seek-apply');
+};
+
+exports.startSeeking = function () {
+  scheduleEvent('audio:seek-start');
+};
+
 exports.renderTo = function (el) {
   target = el;
 };

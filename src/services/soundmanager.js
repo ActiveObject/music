@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var curry = require('curry');
 var sm = require('sound-manager');
+var Track = require('app/models/track');
 
 function getSound(track, send) {
   var sound = sm.getSoundById(track.id);
@@ -17,7 +18,11 @@ function getSound(track, send) {
     volume: 100,
     onfinish: function () {
       send('sound-manager:finish', track);
-    }
+    },
+
+    whileplaying: _.throttle(function () {
+      send('sound-manager:whileplaying', this.position);
+    }, 500)
   });
 }
 
@@ -52,5 +57,33 @@ module.exports = function (dbStream, receive, send, watch) {
 
   receive('sound-manager:is-ready', function () {
     watch('activeTrack', modifyTrackState(send));
+  });
+
+  receive('sound-manager:whileplaying', function (appstate, position) {
+    var activeTrack = appstate.get('activeTrack');
+
+    if (!activeTrack.seeking) {
+      return appstate.set('activeTrack', Track.updatePosition(appstate.get('activeTrack'), position));
+    }
+  });
+
+  receive('audio:seek', function (appstate, position) {
+    var activeTrack = appstate.get('activeTrack');
+    return appstate.set('activeTrack', Track.updatePosition(activeTrack, activeTrack.duration * position * 1000));
+  });
+
+  receive('audio:seek-apply', function (appstate) {
+    var activeTrack = appstate.get('activeTrack');
+    var sound = sm.getSoundById(activeTrack.id);
+
+    if (sound) {
+      sound.setPosition(activeTrack.position);
+    }
+
+    return appstate.set('activeTrack', Track.stopSeeking(activeTrack));
+  });
+
+  receive('audio:seek-start', function (appstate) {
+    return appstate.set('activeTrack', Track.startSeeking(appstate.get('activeTrack')));
   });
 };

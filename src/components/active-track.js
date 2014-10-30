@@ -4,9 +4,18 @@ var React = require('react');
 var moment = require('moment');
 var app = require('app/core/app');
 var PlayBtn = require('app/components/play-btn');
+var AudioProgressLine = require('app/components/audio-progress-line');
 var dom = require('app/core/dom');
 
 require('moment-duration-format');
+
+function pad(n) {
+  return n < 10 ? '0' + n : String(n);
+}
+
+function formatDuration(d) {
+  return pad(d.minutes()) + ':' + pad(d.seconds());
+}
 
 module.exports = React.createClass({
   displayName: 'ActiveTrack',
@@ -15,7 +24,8 @@ module.exports = React.createClass({
     var track = {
       title: this.props.track.title,
       artist: this.props.track.artist,
-      duration: moment.duration(this.props.track.duration, 's').format('mm:ss')
+      duration: formatDuration(moment.duration(this.props.track.duration, 's')),
+      position: formatDuration(moment.duration(this.props.track.position, 'ms'))
     };
 
     var playBtn = new PlayBtn({
@@ -40,6 +50,16 @@ module.exports = React.createClass({
       .className('active-track-duration')
       .append(track.duration);
 
+    var position = dom.span()
+      .key('position')
+      .className('active-track-position')
+      .append(track.position);
+
+    var time = dom.span()
+      .key('track-time')
+      .className('active-track-time')
+      .append(position, '/', duration);
+
     var separator = dom.span()
       .key('separator')
       .className('active-track-separator')
@@ -48,12 +68,17 @@ module.exports = React.createClass({
     var desc = dom.div()
       .key('track')
       .className('active-track-desc')
-      .attr('title', [track.artist, track.title].join(' - '))
+      .attr('title', [track.artist, track.title].join(' – '))
       .append(artist, separator, title);
+
+    var progress = dom.div()
+      .key('active-track-progress')
+      .className('active-track-progress')
+      .append(new AudioProgressLine({ track: this.props.track }));
 
     return dom.div()
       .className('active-track')
-      .append(playBtn, desc, duration)
+      .append(playBtn, desc, time, progress)
       .make();
   },
 

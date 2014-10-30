@@ -45,7 +45,7 @@ module.exports = React.createClass({
     var desc = dom.div()
       .key('desc')
       .className('tracklist-item-desc')
-      .attr('title', [this.props.track.artist, this.props.track.title].join(' - '))
+      .attr('title', [this.props.track.artist, this.props.track.title].join(' – '))
       .append(artist, title);
 
     return dom.div()
