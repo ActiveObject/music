@@ -21,7 +21,9 @@ function getSound(track, send) {
     },
 
     whileplaying: _.throttle(function () {
-      send('sound-manager:whileplaying', this.position);
+      if (this.readyState !== 0) {
+        send('sound-manager:whileplaying', this.position);
+      }
     }, 500),
 
     whileloading: _.throttle(function () {

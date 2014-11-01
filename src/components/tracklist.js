@@ -15,12 +15,6 @@ module.exports = React.createClass({
     itemHeight: React.PropTypes.number.isRequired
   },
 
-  shouldComponentUpdate: function (nextProps, nextState) {
-    return nextProps.tracks !== this.props.tracks ||
-      nextProps.itemHeight !== this.props.itemHeight ||
-      nextProps.activeTrack !== this.props.activeTrack;
-  },
-
   render: function() {
     var tracks = this.props.tracks.map(function (track) {
       return new Track({
