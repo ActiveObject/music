@@ -40,3 +40,4 @@ nw/
 _public/
 
 .vagrant
+.env
