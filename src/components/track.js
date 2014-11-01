@@ -50,7 +50,7 @@ module.exports = React.createClass({
 
     return dom.div()
       .className('tracklist-item')
-      .attr('style', { top: this.props.y })
+      .attr('style', { transform: 'translate(0,' + this.props.y + 'px)' })
       .append(playBtn, desc, duration)
       .make();
   },

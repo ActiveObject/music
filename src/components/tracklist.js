@@ -26,6 +26,7 @@ module.exports = React.createClass({
     }, this);
 
     return dom.div()
+      .className('tracklist-body')
       .attr('style', { height: this.props.totalTracks * this.props.itemHeight })
       .append(tracks)
       .make();

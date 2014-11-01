@@ -7,6 +7,20 @@ var Tracklist = require('app/components/tracklist');
 var ActiveTrack = require('app/components/active-track');
 var TrackModel = require('app/models/track');
 
+function range(page, pageSize, direction) {
+  if (direction === 0) {
+    return [(page - 3) * pageSize, (page + 3) * pageSize];
+  }
+
+  if (direction < 0) {
+    return [(page - 3) * pageSize, (page + 5) * pageSize];
+  }
+
+  if (direction > 0) {
+    return [(page - 5) * pageSize, (page + 4) * pageSize];
+  }
+}
+
 module.exports = React.createClass({
   displayName: 'TracklistCard',
 
@@ -17,12 +31,13 @@ module.exports = React.createClass({
   },
 
   getInitialState: function () {
-    return { y: 0 };
+    return { y: 0, direction: 0 };
   },
 
   getDefaultProps: function () {
     return {
-      itemHeight: 40 + 20
+      itemHeight: 40 + 20,
+      pageSize: 10
     };
   },
 
@@ -36,7 +51,7 @@ module.exports = React.createClass({
     });
 
     this.scroll.on('scroll', _.throttle(function () {
-      component.setState({ y: this.y });
+      component.setState({ y: this.y, direction: this.y - component.state.y  });
     }), 1000);
   },
 
@@ -98,11 +113,26 @@ module.exports = React.createClass({
   },
 
   getVisibleRange: function () {
+    var pageSize = this.props.pageSize,
+        direction = this.state.direction;
+
     if (this.state.y >= 0) {
-      return [0, 20];
+      return [0, pageSize * 4];
     }
 
-    var s = (-this.state.y / this.props.itemHeight) | 0;
-    return [s, s + 100];
+    var itemA = (-this.state.y / this.props.itemHeight) | 0,
+        page = itemA / pageSize | 0,
+        itemR = itemA % pageSize,
+        r = range(page, pageSize, direction);
+
+    if (r[0] < 0) {
+      return [0, r[1]];
+    }
+
+    if (r[1] > this.props.tracks.count()) {
+      return [r[0], this.props.tracks.count()];
+    }
+
+    return r;
   }
 });
