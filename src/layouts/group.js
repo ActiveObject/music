@@ -6,6 +6,8 @@ var Sidebar = require('app/components/sidebar');
 var GroupProfile = require('app/components/group-profile');
 var TracklistCard = require('app/components/tracklist-card');
 var Group = require('app/models/group');
+var Track = require('app/models/track');
+var Q = require('app/query');
 
 module.exports = function layoutGroupWithId(id) {
   return function layoutGroupView(appstate) {
@@ -14,8 +16,8 @@ module.exports = function layoutGroupWithId(id) {
 
     var tracklistCard = new TracklistCard({
       name: appstate.get('playqueue').source.name,
-      activeTrack: appstate.get('activeTrack'),
-      tracks: appstate.get('playqueue').items
+      activeTrack: Q.getActiveTrack(appstate),
+      tracks: Q.getPlayqueueItems(appstate)
     });
 
     var profile = new GroupProfile({

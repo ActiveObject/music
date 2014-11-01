@@ -21,15 +21,13 @@ app.renderTo(document.getElementById('app'));
 app.start(Immutable.Map.from({
   activity: require('app/fixtures/activity'),
 
-  activeTrack: new Track.Empty(),
+  activeTrack: Track.Empty(),
 
   playqueue: {
     source: {
       path: 'tracks',
       name: 'Аудіозаписи'
-    },
-
-    items: Immutable.Vector.from([])
+    }
   },
 
   groups: {
