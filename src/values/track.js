@@ -93,7 +93,7 @@ function EmptyTrack() {
 }
 
 EmptyTrack.prototype = Object.create(Track.prototype, {
-  constructor: { value: EmptyTrack }
+  constructor: { value: EmptyTrack, enumerable: false }
 });
 
 EmptyTrack.prototype.isEmpty = function () {
@@ -102,6 +102,3 @@ EmptyTrack.prototype.isEmpty = function () {
 
 module.exports = Track;
 module.exports.Empty = EmptyTrack;
-module.exports.isEmpty = function (x) {
-  return x.isEmpty();
-};

@@ -5,12 +5,12 @@ var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
 var GroupProfile = require('app/components/group-profile');
 var TracklistCard = require('app/components/tracklist-card');
-var Group = require('app/values/group');
+var isEmpty = require('app/utils').isEmpty;
 var Q = require('app/query');
 
 module.exports = function layoutGroupWithId(id) {
   return function layoutGroupView(appstate) {
-    var groups = appstate.get('groups').items.filter(_.negate(Group.isEmpty));
+    var groups = appstate.get('groups').items.filter(_.negate(isEmpty));
     var group = groups.find(group => group.id === id);
 
     var tracklistCard = new TracklistCard({

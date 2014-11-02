@@ -28,3 +28,11 @@ exports.isValue = function isValue(x) {
 exports.getOrDefault = function (obj, key, defaultValue) {
   return _.has(obj, key) ? obj[key] : defaultValue;
 };
+
+exports.isEmpty = function (x) {
+  if (!_.isFunction(x.isEmpty)) {
+    throw new TypeError('isEmpty: argument should be an object with .isEmpty method');
+  }
+
+  return x.isEmpty();
+};

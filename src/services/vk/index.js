@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Url = require('url');
 var { Vector } = require('immutable');
 var Promise = require('when').Promise;
@@ -6,8 +7,8 @@ var accounts = require('app/accounts');
 var User = require('app/values/user');
 var Group = require('app/values/group');
 var Track = require('app/values/track');
+var isEmpty = require('app/utils').isEmpty;
 var VkApi = require('./vk-api') ;
-var _ = require('underscore');
 
 function fetchGroups(vk, user, offset, count, callback) {
   vk.groups.get({
@@ -155,7 +156,7 @@ function Vk(dbStream, receive, send, watch) {
     var groupsToLoadActivity = appstate
       .get('groups')
       .items
-      .filter(_.negate(Group.isEmpty))
+      .filter(_.negate(isEmpty))
       .filter(group => group.activity.total <= (group.postsTotal > 300 ? 300 : group.postsTotal))
       .filter(group => !loadingActivities.has(group.id));
 
@@ -165,7 +166,7 @@ function Vk(dbStream, receive, send, watch) {
           return console.log(err);
         }
 
-        send('vk:group-activity:fetched', Group.updateWall(res.response, group));
+        send('vk:group-activity:fetched', group.updateWall(res.response));
       });
     });
 

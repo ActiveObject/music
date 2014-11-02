@@ -2,20 +2,21 @@ var _ = require('underscore');
 var getOrDefault = require('app/utils').getOrDefault;
 var Activity = require('app/values/activity');
 
-function EmptyGroup() {
-  if (!(this instanceof EmptyGroup)) {
-    return new EmptyGroup();
+function Post(options) {
+  if (!(this instanceof Post)) {
+    return new Post(options);
   }
 
-  this.postsTotal = 0;
-  this.posts = [];
-
-  this.activity = Activity.empty;
+  this.id = options.id;
+  this.from = options.from_id;
+  this.owner = options.owner_id;
+  this.date = new Date(options.date * 1000);
+  this.likes = options.likes;
 }
 
-function VkGroup(data) {
-  if (!(this instanceof VkGroup)) {
-    return new VkGroup(data);
+function Group(data) {
+  if (!(this instanceof Group)) {
+    return new Group(data);
   }
 
   this.id = data.id;
@@ -35,39 +36,45 @@ function VkGroup(data) {
   this.activity = getOrDefault(data, 'activity', Activity.empty);
 }
 
-function Post(options) {
-  if (!(this instanceof Post)) {
-    return new Post(options);
-  }
-
-  this.id = options.id;
-  this.from = options.from_id;
-  this.owner = options.owner_id;
-  this.date = new Date(options.date * 1000);
-  this.likes = options.likes;
-}
-
-VkGroup.isEmpty = function (x) {
-  return x instanceof EmptyGroup;
+Group.prototype.isEmpty = function () {
+  return false;
 };
 
-VkGroup.modify = function (group, attrs) {
-  return new VkGroup(_.extend({}, group, attrs));
+Group.prototype.modify = function (attrs) {
+  return new Group(_.extend({}, this, attrs));
 };
 
-VkGroup.updateWall = function (wall, group) {
+Group.prototype.updateWall = function (wall) {
   var posts = wall.items.map(Post);
 
-  return VkGroup.modify(group, {
+  return this.modify({
     postsTotal: wall.count,
     posts: posts,
     activity: Activity.update({
       total: wall.count,
       items: posts,
-    }, group.activity)
+    }, this.activity)
   });
 };
 
-VkGroup.Empty = EmptyGroup;
+function EmptyGroup() {
+  if (!(this instanceof EmptyGroup)) {
+    return new EmptyGroup();
+  }
 
-module.exports = VkGroup;
+  this.postsTotal = 0;
+  this.posts = [];
+
+  this.activity = Activity.empty;
+}
+
+EmptyGroup.prototype = Object.create(Group.prototype, {
+  constructor: { value: EmptyGroup, enumerable: false }
+});
+
+EmptyGroup.prototype.isEmpty = function () {
+  return true;
+};
+
+module.exports = Group;
+module.exports.Empty = EmptyGroup;

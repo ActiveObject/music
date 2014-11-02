@@ -2,7 +2,7 @@ var _ = require('underscore');
 var React = require('react');
 var IScroll = require('iscroll');
 var ActivityCard = require('app/components/activity-card');
-var Group = require('app/values/group');
+var isEmpty = require('app/utils').isEmpty;
 var dom = React.DOM;
 
 module.exports = React.createClass({
@@ -46,7 +46,7 @@ module.exports = React.createClass({
   groupActivities: function () {
     return this.props.groups
       .slice(0, 3)
-      .filter(_.negate(Group.isEmpty))
+      .filter(_.negate(isEmpty))
       .map(function(group) {
         return new ActivityCard({
           key: group.id,
