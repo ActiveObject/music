@@ -14,7 +14,7 @@ module.exports = function layoutMainView(appstate) {
   var main = new Main({
     key: 'main',
     activity: appstate.get('activity'),
-    groups: appstate.get('groups').items
+    groups: Q.getGroups(appstate)
   });
 
   var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
