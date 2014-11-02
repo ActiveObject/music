@@ -140,9 +140,9 @@ function Vk(dbStream, receive, send, watch) {
       });
     }
 
-    if (type === 'groups:load') {
-      return loadGroups(vk, appstate, data, 100);
-    }
+    // if (type === 'groups:load') {
+    //   return loadGroups(vk, appstate, data, 100);
+    // }
 
     if (type === 'tracks:load') {
       return loadTracks(vk, appstate, data, 1000);

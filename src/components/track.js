@@ -10,9 +10,16 @@ require('moment-duration-format');
 module.exports = React.createClass({
   displayName: 'Track',
 
+  propTypes: {
+    activeTrack: React.PropTypes.object.isRequired,
+    track: React.PropTypes.object.isRequired,
+    y: React.PropTypes.number.isRequired
+  },
+
   shouldComponentUpdate: function (nextProps) {
     return nextProps.track !== this.props.track ||
-      nextProps.activeTrack !== this.props.activeTrack ||
+      nextProps.activeTrack.id !== this.props.activeTrack.id ||
+      nextProps.activeTrack.isPlaying !== this.props.activeTrack.isPlaying ||
       nextProps.y !== this.props.y;
   },
 

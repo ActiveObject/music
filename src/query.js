@@ -3,7 +3,7 @@ var isEmpty = require('app/utils').isEmpty;
 
 function getActiveTrack(db) {
   if (db.get('activeTrack').isEmpty()) {
-    var queue = getPlayqueueItems(db);
+    var queue = getPlayqueueItems(db).filter(_.negate(isEmpty));
 
     if (queue.count() > 0) {
       return queue.first();
@@ -14,7 +14,7 @@ function getActiveTrack(db) {
 }
 
 function getPlayqueueItems(db) {
-  return db.get(db.get('playqueue').source.path).items.filter(_.negate(isEmpty));
+  return db.get(db.get('playqueue').source.path).items;
 }
 
 function getGroups(db) {

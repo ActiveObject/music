@@ -46,3 +46,5 @@ app.start(Immutable.Map.from({
 
   layout: layouts.empty
 }));
+
+window.Perf = require('react/addons').addons.Perf;

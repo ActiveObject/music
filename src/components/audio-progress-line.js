@@ -5,6 +5,8 @@ var dom = require('app/core/dom');
 var app = require('app/core/app');
 
 var AudioProgressLine = React.createClass({
+  displayName: 'AudioProgressLine',
+
   getInitialState: function () {
     return {
       seekStart: 0,
