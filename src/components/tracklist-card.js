@@ -5,21 +5,8 @@ var debug = require('debug')('app:tracklist-card');
 var dom = require('app/core/dom');
 var Tracklist = require('app/components/tracklist');
 var ActiveTrack = require('app/components/active-track');
+var Cursor = require('app/values/cursor');
 var isEmpty = require('app/utils').isEmpty;
-
-function range(page, pageSize, direction) {
-  if (direction === 0) {
-    return [(page - 3) * pageSize, (page + 3) * pageSize];
-  }
-
-  if (direction < 0) {
-    return [(page - 3) * pageSize, (page + 5) * pageSize];
-  }
-
-  if (direction > 0) {
-    return [(page - 5) * pageSize, (page + 4) * pageSize];
-  }
-}
 
 module.exports = React.createClass({
   displayName: 'TracklistCard',
@@ -31,7 +18,14 @@ module.exports = React.createClass({
   },
 
   getInitialState: function () {
-    return { y: 0, direction: 0 };
+    var items = this.props.tracks.filter(_.negate(isEmpty)).toJS();
+
+    return {
+      cursor: new Cursor(items, {
+        itemHeight: this.props.itemHeight,
+        pageSize: this.props.pageSize
+      })
+    };
   },
 
   getDefaultProps: function () {
@@ -51,7 +45,7 @@ module.exports = React.createClass({
     });
 
     this.scroll.on('scroll', _.throttle(function () {
-      component.setState({ y: this.y, direction: this.y - component.state.y  });
+      component.setState({ cursor: component.state.cursor.updatePosition(this.y) });
     }), 1000);
   },
 
@@ -61,30 +55,23 @@ module.exports = React.createClass({
     }
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    this.setState({
+      cursor: this.state.cursor.updateItems(nextProps.tracks.filter(_.negate(isEmpty)).toJS())
+    });
+  },
+
   render: function() {
     var name = dom.div()
       .key('section')
       .className('tracklist-section-name')
       .append(this.props.name + ' (1243)');
 
-    var visibleRange = this.getVisibleRange();
-
-    var tracks = this.props.tracks
-      .slice(visibleRange[0], visibleRange[1])
-      .filter(_.negate(isEmpty))
-      .toJS()
-      .map(function (track, i) {
-        return {
-          yOffset: (i + visibleRange[0]) * this.props.itemHeight,
-          value: track
-        };
-      }, this);
-
     var tracklist = new Tracklist({
       key: 'tracklist',
       activeTrack: this.props.activeTrack,
       itemHeight: this.props.itemHeight,
-      tracks: tracks,
+      tracks: this.state.cursor.selection(),
       totalTracks: this.props.tracks.count()
     });
 
@@ -110,29 +97,5 @@ module.exports = React.createClass({
       .append(list)
       .append(activeTrack)
       .make();
-  },
-
-  getVisibleRange: function () {
-    var pageSize = this.props.pageSize,
-        direction = this.state.direction;
-
-    if (this.state.y >= 0) {
-      return [0, pageSize * 4];
-    }
-
-    var itemA = (-this.state.y / this.props.itemHeight) | 0,
-        page = itemA / pageSize | 0,
-        itemR = itemA % pageSize,
-        r = range(page, pageSize, direction);
-
-    if (r[0] < 0) {
-      return [0, r[1]];
-    }
-
-    if (r[1] > this.props.tracks.count()) {
-      return [r[0], this.props.tracks.count()];
-    }
-
-    return r;
   }
 });
