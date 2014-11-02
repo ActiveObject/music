@@ -5,7 +5,7 @@ var debug = require('debug')('app:tracklist-card');
 var dom = require('app/core/dom');
 var Tracklist = require('app/components/tracklist');
 var ActiveTrack = require('app/components/active-track');
-var TrackModel = require('app/values/track');
+var Track = require('app/values/track');
 
 function range(page, pageSize, direction) {
   if (direction === 0) {
@@ -71,7 +71,7 @@ module.exports = React.createClass({
 
     var tracks = this.props.tracks
       .slice(visibleRange[0], visibleRange[1])
-      .filter(_.negate(TrackModel.isEmpty))
+      .filter(_.negate(Track.isEmpty))
       .toJS()
       .map(function (track, i) {
         return {

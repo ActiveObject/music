@@ -72,12 +72,12 @@ module.exports = function (dbStream, receive, send, watch) {
     var activeTrack = appstate.get('activeTrack');
 
     if (!activeTrack.seeking) {
-      return appstate.set('activeTrack', Track.updatePosition(activeTrack, position));
+      return appstate.set('activeTrack', activeTrack.updatePosition(position));
     }
   });
 
   receive('sound-manager:whileloading', function (appstate, options) {
-    return appstate.set('activeTrack', Track.updateLoaded(appstate.get('activeTrack'), {
+    return appstate.set('activeTrack', appstate.get('activeTrack').updateLoaded({
       bytesLoaded: options.bytesLoaded,
       bytesTotal: options.bytesTotal
     }));
@@ -85,7 +85,7 @@ module.exports = function (dbStream, receive, send, watch) {
 
   receive('audio:seek', function (appstate, position) {
     var activeTrack = appstate.get('activeTrack');
-    return appstate.set('activeTrack', Track.updatePosition(activeTrack, activeTrack.duration * position * 1000));
+    return appstate.set('activeTrack', activeTrack.updatePosition(activeTrack.duration * position * 1000));
   });
 
   receive('audio:seek-apply', function (appstate) {
@@ -96,10 +96,10 @@ module.exports = function (dbStream, receive, send, watch) {
       sound.setPosition(activeTrack.position);
     }
 
-    return appstate.set('activeTrack', Track.stopSeeking(activeTrack));
+    return appstate.set('activeTrack', activeTrack.stopSeeking());
   });
 
   receive('audio:seek-start', function (appstate) {
-    return appstate.set('activeTrack', Track.startSeeking(appstate.get('activeTrack')));
+    return appstate.set('activeTrack', appstate.get('activeTrack').startSeeking());
   });
 };

@@ -2,7 +2,7 @@ var _ = require('underscore');
 var Track = require('app/values/track');
 
 function getActiveTrack(db) {
-  if (Track.isEmpty(db.get('activeTrack'))) {
+  if (db.get('activeTrack').isEmpty()) {
     var queue = getPlayqueueItems(db);
 
     if (queue.count() > 0) {

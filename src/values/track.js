@@ -1,21 +1,8 @@
 var _ = require('underscore');
 
-function EmptyTrack() {
-  if (!(this instanceof EmptyTrack)) {
-    return new EmptyTrack();
-  }
-
-  this.isPlaying = false;
-  this.position = 0;
-  this.duration = 0;
-  this.seeking = false;
-  this.bytesLoaded = 0;
-  this.bytesTotal = 0;
-}
-
-function VkTrack(data) {
-  if (!(this instanceof VkTrack)) {
-    return new VkTrack(data);
+function Track(data) {
+  if (!(this instanceof Track)) {
+    return new Track(data);
   }
 
   this.id = data.id;
@@ -34,67 +21,87 @@ function VkTrack(data) {
   this.bytesTotal = _.has(data, 'bytesTotal') ? data.bytesTotal : 0;
 }
 
-VkTrack.Empty = EmptyTrack;
-
-VkTrack.isEmpty = function (x) {
-  return x instanceof EmptyTrack;
+Track.prototype.isEmpty = function (x) {
+  return false;
 };
 
-VkTrack.modify = function (track, opts) {
-  return new VkTrack(_.extend({}, track, opts));
+Track.prototype.modify = function (opts) {
+  return new Track(_.extend({}, this, opts));
 };
 
-VkTrack.play = function (track) {
-  return VkTrack.modify(track, { isPlaying: true });
+Track.prototype.play = function () {
+  return this.modify({ isPlaying: true });
 };
 
-VkTrack.pause = function (track) {
-  return VkTrack.modify(track, { isPlaying: false });
+Track.prototype.pause = function () {
+  return this.modify({ isPlaying: false });
 };
 
-VkTrack.togglePlay = function (track) {
-  return VkTrack.modify(track, { isPlaying: !track.isPlaying });
+Track.prototype.togglePlay = function () {
+  return this.modify({ isPlaying: !this.isPlaying });
 };
 
-VkTrack.relativePosition = function (track) {
-  if (track.duration === 0) {
+Track.prototype.relativePosition = function () {
+  if (this.duration === 0) {
     return 0;
   }
 
-  return track.position / track.duration / 1000;
+  return this.position / this.duration / 1000;
 };
 
-VkTrack.updatePosition = function (track, value) {
-  return VkTrack.modify(track, {
-    position: value
-  });
+Track.prototype.updatePosition = function (value) {
+  return this.modify({ position: value });
 };
 
-VkTrack.startSeeking = function (track) {
-  return VkTrack.modify(track, {
+Track.prototype.startSeeking = function () {
+  return this.modify({
     seeking: true
   });
 };
 
-VkTrack.stopSeeking = function (track) {
-  return VkTrack.modify(track, {
-    seeking: false
-  });
+Track.prototype.stopSeeking = function () {
+  return this.modify({ seeking: false });
 };
 
-VkTrack.updateLoaded = function (track, options) {
-  return VkTrack.modify(track, {
+Track.prototype.updateLoaded = function (options) {
+  return this.modify({
     bytesLoaded: options.bytesLoaded,
     bytesTotal: options.bytesTotal
   });
 };
 
-VkTrack.relativeLoaded = function (track) {
-  if (track.bytesTotal === 0) {
+Track.prototype.relativeLoaded = function () {
+  if (this.bytesTotal === 0) {
     return 0;
   }
 
-  return track.bytesLoaded / track.bytesTotal;
+  return this.bytesLoaded / this.bytesTotal;
 };
 
-module.exports = VkTrack;
+
+function EmptyTrack() {
+  if (!(this instanceof EmptyTrack)) {
+    return new EmptyTrack();
+  }
+
+  this.isPlaying = false;
+  this.position = 0;
+  this.duration = 0;
+  this.seeking = false;
+  this.bytesLoaded = 0;
+  this.bytesTotal = 0;
+}
+
+EmptyTrack.prototype = Object.create(Track.prototype, {
+  constructor: { value: EmptyTrack }
+});
+
+EmptyTrack.prototype.isEmpty = function () {
+  return true;
+};
+
+module.exports = Track;
+module.exports.Empty = EmptyTrack;
+module.exports.isEmpty = function (x) {
+  return x.isEmpty();
+};

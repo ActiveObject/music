@@ -3,7 +3,6 @@ require('app/styles/audio-progress-line.styl');
 var React = require('react');
 var dom = require('app/core/dom');
 var app = require('app/core/app');
-var Track = require('app/values/track');
 
 var AudioProgressLine = React.createClass({
   getInitialState: function () {
@@ -104,11 +103,11 @@ var AudioProgressLine = React.createClass({
   },
 
   trackProgress: function () {
-    return Track.relativePosition(this.props.track) * 100;
+    return this.props.track.relativePosition() * 100;
   },
 
   trackLoaded: function () {
-    return Track.relativeLoaded(this.props.track) * 100;
+    return this.props.track.relativeLoaded() * 100;
   },
 
   lineWidth: function () {

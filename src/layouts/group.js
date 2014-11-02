@@ -6,7 +6,6 @@ var Sidebar = require('app/components/sidebar');
 var GroupProfile = require('app/components/group-profile');
 var TracklistCard = require('app/components/tracklist-card');
 var Group = require('app/values/group');
-var Track = require('app/values/track');
 var Q = require('app/query');
 
 module.exports = function layoutGroupWithId(id) {
