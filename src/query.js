@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var Track = require('app/models/track');
+var Track = require('app/values/track');
 
 function getActiveTrack(db) {
   if (Track.isEmpty(db.get('activeTrack'))) {

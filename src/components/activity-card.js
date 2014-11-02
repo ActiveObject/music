@@ -3,7 +3,7 @@ require('app/styles/activity-card.styl');
 var React = require('react');
 var _ = require('underscore');
 var curry = require('curry');
-var Activity = require('app/models/activity');
+var Activity = require('app/values/activity');
 
 var dom = require('app/core/dom');
 

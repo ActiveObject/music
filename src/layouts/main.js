@@ -2,7 +2,7 @@ var App = require('app/components/app');
 var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
 var TracklistCard = require('app/components/tracklist-card');
-var Track = require('app/models/track');
+var Track = require('app/values/track');
 var Q = require('app/query');
 
 module.exports = function layoutMainView(appstate) {

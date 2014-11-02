@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var curry = require('curry');
 var sm = require('sound-manager');
-var Track = require('app/models/track');
+var Track = require('app/values/track');
 
 function getSound(track, send) {
   var sound = sm.getSoundById(track.id);

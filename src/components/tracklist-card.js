@@ -5,7 +5,7 @@ var debug = require('debug')('app:tracklist-card');
 var dom = require('app/core/dom');
 var Tracklist = require('app/components/tracklist');
 var ActiveTrack = require('app/components/active-track');
-var TrackModel = require('app/models/track');
+var TrackModel = require('app/values/track');
 
 function range(page, pageSize, direction) {
   if (direction === 0) {

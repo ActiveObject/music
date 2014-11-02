@@ -3,7 +3,7 @@ require('app/styles/audio-progress-line.styl');
 var React = require('react');
 var dom = require('app/core/dom');
 var app = require('app/core/app');
-var Track = require('app/models/track');
+var Track = require('app/values/track');
 
 var AudioProgressLine = React.createClass({
   getInitialState: function () {

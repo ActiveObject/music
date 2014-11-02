@@ -3,9 +3,9 @@ var { Vector } = require('immutable');
 var Promise = require('when').Promise;
 var app = require('app/core/app');
 var accounts = require('app/accounts');
-var User = require('app/models/user');
-var Group = require('app/models/group');
-var Track = require('app/models/track');
+var User = require('app/values/user');
+var Group = require('app/values/group');
+var Track = require('app/values/track');
 var VkApi = require('./vk-api') ;
 var _ = require('underscore');
 

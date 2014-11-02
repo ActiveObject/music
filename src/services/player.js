@@ -1,4 +1,4 @@
-var Track = require('app/models/track');
+var Track = require('app/values/track');
 var Q = require('app/query');
 
 module.exports = function(dbStream, receive, send) {

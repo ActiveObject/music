@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var getOrDefault = require('app/utils').getOrDefault;
-var Activity = require('app/models/activity');
+var Activity = require('app/values/activity');
 
 function EmptyGroup() {
   if (!(this instanceof EmptyGroup)) {

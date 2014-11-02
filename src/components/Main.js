@@ -2,7 +2,7 @@ var _ = require('underscore');
 var React = require('react');
 var IScroll = require('iscroll');
 var ActivityCard = require('app/components/activity-card');
-var Group = require('app/models/group');
+var Group = require('app/values/group');
 var dom = React.DOM;
 
 module.exports = React.createClass({

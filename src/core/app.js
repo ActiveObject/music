@@ -106,7 +106,11 @@ function dispatch(type, payload) {
 
 function render(appstate) {
   var layout = appstate.get('layout');
+
+  debug('layout started');
   var root = layout(appstate);
+  debug('layout finished');
+
   React.renderComponent(root, target);
 }
 

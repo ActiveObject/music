@@ -1,7 +1,7 @@
 var Immutable = require('immutable');
 var app = require('app/core/app');
 var Auth = require('app/core/auth');
-var Track = require('app/models/track');
+var Track = require('app/values/track');
 var layouts = require('app/layouts');
 
 if (Auth.hasToken(location.hash)) {
