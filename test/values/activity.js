@@ -1,5 +1,5 @@
 var expect = require('chai').expect,
-    Activity = require('app/models/activity');
+    Activity = require('app/values/activity');
 
 describe('Activity model', function () {
   describe('#update', function () {
