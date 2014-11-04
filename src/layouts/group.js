@@ -9,14 +9,14 @@ var isEmpty = require('app/utils').isEmpty;
 var Q = require('app/query');
 
 module.exports = function layoutGroupWithId(id) {
-  return function layoutGroupView(appstate) {
+  return function layoutGroupView(appstate, send) {
     var groups = appstate.get('groups').items.filter(_.negate(isEmpty));
     var group = groups.find(group => group.id === id);
 
     var tracklistCard = new TracklistCard({
-      name: appstate.get('playqueue').source.name,
-      activeTrack: Q.getActiveTrack(appstate),
-      tracks: Q.getPlayqueueItems(appstate)
+      queue: appstate.get('playqueue'),
+      activeTrack: appstate.get('activeTrack'),
+      send: send
     });
 
     var profile = new GroupProfile({
