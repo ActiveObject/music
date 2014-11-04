@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var Url = require('url');
-var { Vector } = require('immutable');
+var List = require('immutable').List;
 var Promise = require('when').Promise;
 var app = require('app/core/app');
 var accounts = require('app/accounts');
@@ -50,8 +50,8 @@ function fetchInitialData(vk, appstate) {
   var tracks = _.range(0, 10).map(Track.Empty);
 
   return appstate
-    .set('groups', { count: 10, items: Vector.from(groups) })
-    .set('tracks', { count: 10, items: Vector.from(tracks) });
+    .set('groups', { count: 10, items: List(groups) })
+    .set('tracks', { count: 10, items: List(tracks) });
 }
 
 function loadGroups(vk, appstate, data, batchCount) {

@@ -1,6 +1,5 @@
 var React = require('react');
 var moment = require('moment');
-var Immutable = require('immutable');
 var PlayBtn = require('app/components/play-btn');
 var dom = require('app/core/dom');
 var app = require('app/core/app');

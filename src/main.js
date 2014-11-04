@@ -18,7 +18,7 @@ app.use(require('app/router'));
 
 app.renderTo(document.getElementById('app'));
 
-app.start(Immutable.Map.from({
+app.start(Immutable.Map({
   activity: require('app/fixtures/activity'),
 
   activeTrack: Track.Empty(),
@@ -32,15 +32,15 @@ app.start(Immutable.Map.from({
 
   groups: {
     count: 0,
-    items: Immutable.Vector.from([])
+    items: Immutable.List()
   },
 
   tracks: {
     count: 0,
-    items: Immutable.Vector.from([])
+    items: Immutable.List()
   },
 
-  loadingActivities: new Immutable.Set(),
+  loadingActivities: Immutable.Set(),
 
   user: Auth.readFromLs(),
 
