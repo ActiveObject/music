@@ -108,7 +108,7 @@ function render(appstate) {
   var layout = appstate.get('layout');
 
   debug('layout started');
-  var root = layout(appstate);
+  var root = layout(appstate, scheduleEvent);
   debug('layout finished');
 
   React.renderComponent(root, target);

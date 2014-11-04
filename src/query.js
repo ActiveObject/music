@@ -1,16 +1,14 @@
 var _ = require('underscore');
 var isEmpty = require('app/utils').isEmpty;
 
-function getActiveTrack(db) {
-  if (db.get('activeTrack').isEmpty()) {
-    var queue = getPlayqueueItems(db).filter(_.negate(isEmpty));
-
-    if (queue.count() > 0) {
-      return queue.first();
+function getActiveTrack(activeTrack, queue) {
+  if (activeTrack.isEmpty()) {
+    if (queue.tracks.count() > 0) {
+      return queue.tracks.first();
     }
   }
 
-  return db.get('activeTrack');
+  return activeTrack;
 }
 
 function getPlayqueueItems(db) {

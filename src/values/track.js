@@ -102,3 +102,4 @@ EmptyTrack.prototype.isEmpty = function () {
 
 module.exports = Track;
 module.exports.Empty = EmptyTrack;
+module.exports.empty = new EmptyTrack();
