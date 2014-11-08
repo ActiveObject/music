@@ -17,16 +17,13 @@ module.exports = function(receive, send, watch) {
   });
 
   receive('sound-manager:finish', function (appstate, track) {
-    var tracks = appstate.get('playqueue').tracks;
-    var activeIndex = tracks.findIndex(function (t) {
-      return t.id === track.id;
-    });
+    var queue = appstate.get('playqueue');
 
-    if (activeIndex === tracks.count()) {
+    if (queue.isLastTrack(track)) {
       return send('playqueue:finish');
     }
 
-    return appstate.set('activeTrack', tracks.get(activeIndex + 1).play());
+    return appstate.set('activeTrack', queue.nextAfter(track).play());
   });
 
   receive('app:start', function (appstate) {
