@@ -1,6 +1,5 @@
 var _ = require('underscore');
 var List = require('immutable').List;
-var Set = require('immutable').Set;
 var VkChunk = require('app/values/vk-chunk');
 var getOrDefault = require('app/utils').getOrDefault;
 
