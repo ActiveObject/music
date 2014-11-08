@@ -1,8 +1,3 @@
-var _ = require('underscore'),
-    Q = require('app/query'),
-    RemoteResource = require('app/values/remote-resource'),
-    isEmpty = require('app/utils').isEmpty;
-
 module.exports = function(receive, send, watch) {
   receive('toggle:play', function (appstate, data) {
     var activeTrack = appstate.get('activeTrack');
