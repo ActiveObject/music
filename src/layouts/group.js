@@ -10,13 +10,11 @@ var Q = require('app/query');
 
 module.exports = function layoutGroupWithId(id) {
   return function layoutGroupView(appstate, send) {
-    var groups = appstate.get('groups').items.filter(_.negate(isEmpty));
-    var group = groups.find(group => group.id === id);
+    var group = appstate.get('groups').findById(id);
 
     var tracklistCard = new TracklistCard({
       queue: appstate.get('playqueue'),
-      activeTrack: appstate.get('activeTrack'),
-      send: send
+      activeTrack: appstate.get('activeTrack')
     });
 
     var profile = new GroupProfile({

@@ -43,7 +43,7 @@ module.exports = React.createClass({
   },
 
   groupActivities: function () {
-    return this.props.groups.map(function(group) {
+    return this.props.groups.take(10).map(function(group) {
       return new ActivityCard({
         key: group.id,
         id: group.id,

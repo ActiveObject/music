@@ -18,6 +18,7 @@ app.use(require('app/services/player'));
 app.use(require('app/services/soundmanager'));
 app.use(require('app/services/layout'));
 app.use(require('app/services/tracks'));
+app.use(require('app/services/groups'));
 app.use(require('app/router'));
 
 app.renderTo(document.getElementById('app'));
@@ -26,8 +27,8 @@ app.start(Immutable.Map({
   activity: require('app/fixtures/activity'),
   activeTrack: Track.empty,
   playqueue: Playqueue.empty,
-  groups: Groups.empty,
-  tracks: new Tracks(0, Immutable.List(), app.send),
+  groups: Groups.empty.modify({ send: app.send }),
+  tracks: Tracks.empty.modify({ send: app.send }),
   user: Auth.readFromLs(),
   layout: layouts.empty
 }));

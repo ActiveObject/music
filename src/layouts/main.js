@@ -7,15 +7,13 @@ var Q = require('app/query');
 module.exports = function layoutMainView(appstate, send) {
   var tracklistCard = new TracklistCard({
     queue: appstate.get('playqueue'),
-    activeTrack: appstate.get('activeTrack'),
-    send: send
+    activeTrack: appstate.get('activeTrack')
   });
 
   var main = new Main({
     key: 'main',
     activity: appstate.get('activity'),
-    groups: Q.getGroups(appstate),
-    send: send
+    groups: appstate.get('groups')
   });
 
   var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);

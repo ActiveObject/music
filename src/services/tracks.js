@@ -1,8 +1,3 @@
-var List = require('immutable').List;
-var RemoteResource = require('app/values/remote-resource');
-var Track = require('app/values/track');
-var Tracks = require('app/values/tracks');
-
 module.exports = function (receive, send) {
   receive('tracks:update', function (db, tracks) {
     if (tracks.isLoading()) {
