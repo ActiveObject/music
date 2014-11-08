@@ -1,7 +1,7 @@
 var layouts = require('app/layouts');
 var Vk = require('app/services/vk');
 
-module.exports = function (dbStream, receive, send) {
+module.exports = function (receive, send) {
   return function (appstate, type, data, next) {
     if (!Vk.isAuthenticated(appstate.get('user')) && !appstate.get('userLoading')) {
       send('layout:change', layouts.auth);

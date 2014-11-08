@@ -3,7 +3,7 @@ var Url = require('url');
 var User = require('app/values/user');
 var VkApi = require('./vk-api') ;
 
-function Vk(dbStream, receive, send, watch) {
+function Vk() {
   return function (appstate, type, data) {
     if (!Vk.isAuthenticated(appstate.get('user'))) {
       return appstate;

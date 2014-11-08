@@ -14,17 +14,13 @@ module.exports = React.createClass({
     queue: React.PropTypes.object.isRequired
   },
 
-  componentDidMount: function () {
-    this.props.send('tracks:load:all');
-  },
-
   render: function() {
     var activeTrack = Q.getActiveTrack(this.props.activeTrack, this.props.queue);
 
     var tracklist = new Tracklist({
       key: 'tracklist',
       activeTrack: activeTrack,
-      tracks: this.props.queue.tracks
+      tracks: this.props.queue.getAll()
     });
 
     var activeTrackView = new ActiveTrack({

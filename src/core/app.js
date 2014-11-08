@@ -54,7 +54,7 @@ function addWatch(dbStream) {
 
 function use(handler) {
   var receivers = [];
-  var onDbChange = handler(dbStream, makeReceiver(receivers), scheduleEvent, addWatch(dbStream));
+  var onDbChange = handler(makeReceiver(receivers), scheduleEvent, addWatch(dbStream));
 
   handlers.push.apply(handlers, receivers);
 

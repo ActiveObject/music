@@ -1,7 +1,7 @@
 var page = require('page');
 var layouts = require('app/layouts');
 
-module.exports = function (dbStream, receive, send) {
+module.exports = function (receive, send) {
   page('/', function () {
     send('layout:change', layouts.main);
   });

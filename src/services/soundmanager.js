@@ -52,7 +52,7 @@ var modifyTrackState = curry(function modifyTrackState(send, prevTrack, nextTrac
   }
 });
 
-module.exports = function (dbStream, receive, send, watch) {
+module.exports = function (receive, send, watch) {
   receive('app:start', function () {
     sm.setup({
       url: 'swf',
@@ -83,11 +83,6 @@ module.exports = function (dbStream, receive, send, watch) {
     }));
   });
 
-  receive('audio:seek', function (appstate, position) {
-    var activeTrack = appstate.get('activeTrack');
-    return appstate.set('activeTrack', activeTrack.updatePosition(activeTrack.duration * position * 1000));
-  });
-
   receive('audio:seek-apply', function (appstate) {
     var activeTrack = appstate.get('activeTrack');
     var sound = sm.getSoundById(activeTrack.id);
@@ -97,9 +92,5 @@ module.exports = function (dbStream, receive, send, watch) {
     }
 
     return appstate.set('activeTrack', activeTrack.stopSeeking());
-  });
-
-  receive('audio:seek-start', function (appstate) {
-    return appstate.set('activeTrack', appstate.get('activeTrack').startSeeking());
   });
 };
