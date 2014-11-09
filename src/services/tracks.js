@@ -1,7 +1,7 @@
 var VkChunk = require('app/values/vk-chunk');
 
 module.exports = function (receive, send) {
-  receive('tracks:index:update', function (db, index) {
+  receive('tracks:vk-index:update', function (db, index) {
     var tracks = db.get('tracks');
 
     if (VkChunk.is(index.chunkToLoad)) {
@@ -15,13 +15,27 @@ module.exports = function (receive, send) {
           return console.log(err);
         }
 
-        send('tracks:index:update', index.fromVkResponse(result.response));
+        send('tracks:vk-index:update', index.fromVkResponse(result.response));
       });
 
-      return send('tracks:update', tracks.setIndex(index));
+      return send('tracks:update', tracks.modify({ vkIndex: index }));
     }
 
-    send('tracks:update', tracks.setIndex(index));
+    send('tracks:update', tracks.modify({ vkIndex: index }));
+  });
+
+  receive('tracks:local-index:update', function (db, index) {
+    var tracks = db.get('tracks');
+
+    index.db.allDocs({ include_docs: true }, function (err, response) {
+      if (err) {
+        return console.log(err);
+      }
+
+      send('tracks:update', tracks.modify({ localIndex: index.fromResponse(response) }));
+    });
+
+    send('tracks:update', tracks.modify({ localIndex: index }));
   });
 
   receive('tracks:update', function (db, tracks) {
