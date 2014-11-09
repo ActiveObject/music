@@ -2,7 +2,6 @@ var App = require('app/components/app');
 var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
 var TracklistCard = require('app/components/tracklist-card');
-var Q = require('app/query');
 
 module.exports = function layoutMainView(appstate, send) {
   var tracklistCard = new TracklistCard({

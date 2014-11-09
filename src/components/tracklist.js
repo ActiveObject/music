@@ -7,7 +7,6 @@ var IScroll = require('iscroll/build/iscroll-probe');
 var dom = require('app/core/dom');
 var Track = require('app/components/track');
 var Cursor = require('app/values/cursor');
-var isEmpty = require('app/utils').isEmpty;
 
 module.exports = React.createClass({
   displayName: 'Tracklist',
@@ -27,7 +26,7 @@ module.exports = React.createClass({
   },
 
   getInitialState: function () {
-    var items = this.props.tracks.filter(_.negate(isEmpty)).toJS();
+    var items = this.props.tracks.toJS();
 
     return {
       cursor: new Cursor(items, {
@@ -67,7 +66,7 @@ module.exports = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     if (this.props.tracks !== nextProps.tracks) {
       this.setState({
-        cursor: this.state.cursor.updateItems(nextProps.tracks.filter(_.negate(isEmpty)).toJS())
+        cursor: this.state.cursor.updateItems(nextProps.tracks.toJS())
       });
     }
   },

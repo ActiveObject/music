@@ -1,3 +1,5 @@
+var ActiveTrack = require('app/values/active-track');
+
 module.exports = function(receive, send, watch) {
   receive('toggle:play', function (appstate, data) {
     var activeTrack = appstate.get('activeTrack');
@@ -28,6 +30,12 @@ module.exports = function(receive, send, watch) {
   });
 
   receive('playqueue:update', function (appstate, queue) {
+    if (appstate.get('activeTrack') === ActiveTrack.empty && queue.tracks.size() > 0) {
+      return appstate.set('playqueue', queue).set('activeTrack', ActiveTrack.empty.modify({
+        track: queue.tracks.first()
+      }));
+    }
+
     return appstate.set('playqueue', queue);
   });
 

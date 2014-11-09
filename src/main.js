@@ -5,6 +5,7 @@ var app = require('app/core/app');
 var Auth = require('app/core/auth');
 var Track = require('app/values/track');
 var Track = require('app/values/track');
+var ActiveTrack = require('app/values/active-track');
 var Tracks = require('app/values/tracks');
 var Group = require('app/values/group');
 var Groups = require('app/values/groups');
@@ -33,7 +34,7 @@ app.renderTo(document.getElementById('app'));
 
 app.start(Immutable.Map({
   activity: require('app/fixtures/activity'),
-  activeTrack: Track.empty,
+  activeTrack: ActiveTrack.empty,
   playqueue: Playqueue.empty,
   groups: new Groups(VkIndex.empty.modify({ itemConstructor: Group }), app.send),
   tracks: new Tracks(VkIndex.empty.modify({ itemConstructor: Track }), new PouchIndex(localDb, false, Immutable.List(), Track, false), app.send),
