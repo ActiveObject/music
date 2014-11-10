@@ -32,7 +32,7 @@ module.exports = function(receive, send, watch) {
   receive('playqueue:update', function (appstate, queue) {
     if (appstate.get('activeTrack') === ActiveTrack.empty && queue.tracks.size() > 0) {
       return appstate.set('playqueue', queue).set('activeTrack', ActiveTrack.empty.modify({
-        track: queue.tracks.first()
+        track: queue.tracks.all.first()
       }));
     }
 

@@ -1,10 +1,7 @@
 var Immutable = require('immutable');
-var PouchDb = require('pouchdb');
 
 var app = require('app/core/app');
 var Auth = require('app/core/auth');
-var Track = require('app/values/track');
-var Track = require('app/values/track');
 var ActiveTrack = require('app/values/active-track');
 var Tracks = require('app/values/tracks');
 var Group = require('app/values/group');
@@ -13,8 +10,6 @@ var Playqueue = require('app/values/playqueue');
 var VkIndex = require('app/values/vk-index');
 var PouchIndex = require('app/values/pouch-index');
 var layouts = require('app/layouts');
-
-var localDb = new PouchDb('music');
 
 if (Auth.hasToken(location.hash)) {
   Auth.storeToLs(location.hash);
@@ -36,8 +31,13 @@ app.start(Immutable.Map({
   activity: require('app/fixtures/activity'),
   activeTrack: ActiveTrack.empty,
   playqueue: Playqueue.empty,
-  groups: new Groups(VkIndex.empty.modify({ itemConstructor: Group }), app.send),
-  tracks: new Tracks(VkIndex.empty.modify({ itemConstructor: Track }), new PouchIndex(localDb, false, Immutable.List(), Track, false), app.send),
+  groups: Groups.empty.modify({ send: app.send }),
+
+  tracks: Tracks.empty.modify({
+    localIndex: PouchIndex.empty.fromDb('/music/tracks'),
+    send: app.send
+  }),
+
   user: Auth.readFromLs(),
   layout: layouts.empty
 }));

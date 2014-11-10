@@ -5,17 +5,12 @@ module.exports = function (receive, send) {
     var tracks = db.get('tracks');
 
     if (VkChunk.is(index.chunkToLoad)) {
-      db.get('vk').audio.get({
-        owner_id: db.get('user').id,
-        offset: index.chunkToLoad.offset,
-        count: index.chunkToLoad.count,
-        v: '5.25'
-      }, function (err, result) {
+      index.load(db.get('vk'), db.get('user'), function (err, newIndex) {
         if (err) {
           return console.log(err);
         }
 
-        send('tracks:vk-index:update', index.fromVkResponse(result.response));
+        send('tracks:vk-index:update', newIndex);
       });
 
       return send('tracks:update', tracks.modify({ vkIndex: index }));
@@ -27,12 +22,12 @@ module.exports = function (receive, send) {
   receive('tracks:local-index:update', function (db, index) {
     var tracks = db.get('tracks');
 
-    index.db.allDocs({ include_docs: true }, function (err, response) {
+    index.fetch(function (err, newIndex) {
       if (err) {
         return console.log(err);
       }
 
-      send('tracks:update', tracks.modify({ localIndex: index.fromResponse(response) }));
+      send('tracks:update', tracks.modify({ localIndex: newIndex }));
     });
 
     send('tracks:update', tracks.modify({ localIndex: index }));

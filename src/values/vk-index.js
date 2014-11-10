@@ -1,27 +1,34 @@
+var _ = require('underscore');
 var List = require('immutable').List;
 var VkChunk = require('app/values/vk-chunk');
-var getOrDefault = require('app/utils').getOrDefault;
 
-function Index(isBuilt, items, chunkToLoad, itemConstructor) {
+function VkIndex(attrs) {
   this.createdAt = new Date();
-  this.isBuilt = isBuilt;
-  this.items = items;
-  this.chunkToLoad = chunkToLoad;
-  this.itemConstructor = itemConstructor;
+  this.isBuilt = attrs.isBuilt;
+  this.items = attrs.items;
+  this.chunkToLoad = attrs.chunkToLoad;
+  this.chunkSize = attrs.chunkSize;
+  this.transformFn = attrs.transformFn;
 }
 
-Index.prototype.build = function () {
-  return this.modify({ chunkToLoad: new VkChunk(0, 1000) });
+VkIndex.prototype.build = function () {
+  return this.modify({ chunkToLoad: new VkChunk(0, this.chunkSize) });
 };
 
-Index.prototype.isBuilding = function () {
+VkIndex.prototype.isBuilding = function () {
   return VkChunk.is(this.chunkToLoad);
 };
 
-Index.prototype.fromVkResponse = function (res) {
-  var items = this.items.concat(res.items.map(this.itemConstructor));
+VkIndex.prototype.fromVkResponse = function (res) {
+  var offset = this.chunkToLoad.offset,
 
-  if (res.count > 0 && res.count === items.count()) {
+      newDatoms = res.items.map(function (item, i) {
+        return this.transformFn(item, offset + i);
+      }, this),
+
+      items = this.items.concat(_.flatten(newDatoms, true));
+
+  if (res.count > 0 && this.chunkToLoad.offset + this.chunkToLoad.count >= res.count) {
     return this.modify({
       items: items,
       isBuilt: true,
@@ -31,18 +38,29 @@ Index.prototype.fromVkResponse = function (res) {
 
   return this.modify({
     items: items,
-    chunkToLoad: this.chunkToLoad.next(1000)
+    chunkToLoad: this.chunkToLoad.next(this.chunkSize)
   });
 };
 
-Index.prototype.modify = function (attrs) {
-  var isBuilt = getOrDefault(attrs, 'isBuilt', this.isBuilt),
-      items = getOrDefault(attrs, 'items', this.items),
-      chunkToLoad = getOrDefault(attrs, 'chunkToLoad', this.chunkToLoad),
-      itemConstructor = getOrDefault(attrs, 'itemConstructor', this.itemConstructor);
+VkIndex.prototype.load = function (vk, user, callback) {
+  var index = this;
 
-  return new Index(isBuilt, items, chunkToLoad, itemConstructor);
+  vk.audio.get({
+    owner_id: user.id,
+    offset: index.chunkToLoad.offset,
+    count: index.chunkToLoad.count,
+    v: '5.25'
+  }, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    callback(null, index.fromVkResponse(result.response));
+  });
 };
 
-module.exports = Index;
-module.exports.empty = new Index(false, List());
+VkIndex.prototype.modify = function (attrs) {
+  return new VkIndex(_.extend({}, this, attrs));
+};
+
+module.exports = VkIndex;

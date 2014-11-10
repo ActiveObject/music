@@ -3,14 +3,14 @@ var Url = require('url');
 var User = require('app/values/user');
 var VkApi = require('./vk-api') ;
 
-function Vk() {
+function Vk(receive, send) {
   return function (appstate, type, data) {
     if (!Vk.isAuthenticated(appstate.get('user'))) {
       return appstate;
     }
 
     if (!appstate.has('vk')) {
-      return appstate.set('vk', new VkApi({
+      var vk = new VkApi({
         auth: {
           type: 'oauth',
           user: appstate.get('user').id,
@@ -18,7 +18,11 @@ function Vk() {
         },
 
         rateLimit: 1
-      }));
+      });
+
+      send('vk:ready', vk);
+
+      return appstate.set('vk', vk);
     }
 
     return appstate;
