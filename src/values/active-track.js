@@ -1,5 +1,4 @@
 var _ = require('underscore');
-var Track = require('app/values/track');
 
 function ActiveTrack(attrs) {
   if (!(this instanceof ActiveTrack)) {

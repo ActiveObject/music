@@ -92,13 +92,14 @@ function dispatch(type, payload) {
 
   debug('%s - dispatch finished', type);
 
-  if (nextState !== appstate) {
+  if (nextState !== appstate && !document.hidden) {
     window.requestAnimationFrame(function () {
       render(appstate);
     });
   }
 
   appstate = nextState;
+
   dbStream.push(nextState);
 
   appEventStream.resume();
@@ -118,6 +119,13 @@ function start(initState) {
   appstate = initState;
   dbStream.push(appstate);
   appEventStream.resume();
+
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) {
+      render(appstate);
+    }
+  }, false);
+
   dispatch('app:start');
 }
 
