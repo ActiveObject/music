@@ -2,39 +2,43 @@ var List = require('immutable').List;
 var merge = require('app/utils').merge;
 var Track = require('app/values/track');
 var VkIndex = require('app/values/vk-index');
+var Database = require('app/core/database');
 
 function Tracks(attrs) {
-  this.createdAt = new Date();
-  this.vkIndex = attrs.vkIndex;
-  this.datoms = this.vkIndex.items;
-
-  this.eavt = this.datoms.groupBy(function (datom) {
-    return datom[0];
-  });
-
-  this.all = List(this.eavt.map(Track.fromDatoms).values()).sortBy(function (track) {
-    return track.index;
-  });
+  this.db = attrs.db;
+  this.cache = {};
 }
 
-Tracks.empty = new Tracks({
-  vkIndex: VkIndex.empty
-});
+Tracks.empty = new Tracks({ db: Database.empty });
 
 Tracks.prototype.size = function () {
-  return this.all.size;
+  return this.getAll().size;
 };
 
 Tracks.prototype.first = function () {
-  return this.all.first();
+  return this.getAll().first();
+};
+
+Tracks.prototype.getAll = function () {
+  return this.query('getAll', function () {
+    return List(this.db.entities.map(Track.fromEntity).values()).sortBy(function (track) {
+      return track.index;
+    });
+  });
 };
 
 Tracks.prototype.modify = function (attrs) {
   return new Tracks(merge(this, attrs));
 };
 
-Tracks.prototype.getAll = function () {
-  return this.all;
+Tracks.prototype.query = function (key, fn) {
+  console.time('query[' + key + ']');
+  if (!this.cache[key]) {
+    this.cache[key] = fn.call(this);
+  }
+
+  console.timeEnd('query[' + key + ']');
+  return this.cache[key];
 };
 
 module.exports = Tracks;

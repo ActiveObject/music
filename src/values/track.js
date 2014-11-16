@@ -17,21 +17,15 @@ function Track(attrs) {
   this.url = attrs.url;
 }
 
-Track.fromDatoms = function (datoms) {
-  if (datoms.size === 0) {
-    return Track({ });
-  }
-
-  var attrs = _.object(datoms.map(function (datom) { return [datom[1], datom[2]]; }).toArray());
-
+Track.fromEntity = function (entity) {
   return new Track({
-    id: attrs[':track/vkid'],
-    artist: attrs[':track/artist'],
-    title: attrs[':track/title'],
-    duration: attrs[':track/duration'],
-    owner_id: attrs[':track/owner_id'],
-    url: attrs[':track/url'],
-    index: attrs[':track/vk-index']
+    id: entity[':track/vkid'],
+    artist: entity[':track/artist'],
+    title: entity[':track/title'],
+    duration: entity[':track/duration'],
+    owner_id: entity[':track/owner_id'],
+    url: entity[':track/url'],
+    index: entity[':track/vk-index']
   });
 };
 

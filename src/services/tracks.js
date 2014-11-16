@@ -1,5 +1,6 @@
 var VkIndex = require('app/values/vk-index');
 var db = require('app/core/db');
+var Database = require('app/core/database');
 
 var vkIndex = new VkIndex({
   chunkSize: 1000,
@@ -30,7 +31,7 @@ var vkIndex = new VkIndex({
 
 vkIndex.on('load', function (index) {
   db.swap(db.value.update('tracks', function (tracks) {
-    return tracks.modify({ vkIndex: index });
+    return tracks.modify({ db: new Database(index.items) });
   }));
 });
 
