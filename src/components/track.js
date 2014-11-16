@@ -1,8 +1,8 @@
 var React = require('react');
 var moment = require('moment');
-var PlayBtn = require('app/components/play-btn');
 var dom = require('app/core/dom');
-var app = require('app/core/app');
+var eventBus = require('app/core/event-bus');
+var PlayBtn = require('app/components/play-btn');
 
 require('moment-duration-format');
 
@@ -62,6 +62,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    app.togglePlay(this.props.track);
+    eventBus.togglePlay(this.props.track);
   }
 });

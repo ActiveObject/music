@@ -1,19 +1,14 @@
 var _ = require('underscore');
 var debug = require('debug')('app:core:app');
 var React = require('react');
-var Bacon = require('baconjs');
-var when = require('when');
-var curry = require('curry');
 var BufferedEventStream = require('app/core/buffered-event-stream');
 var { isValue } = require('app/utils');
-
+var appstate = require('app/core/db');
+var eventBus = require('app/core/event-bus');
 
 var handlers = [];
-var appstate = null;
 var target = document.body;
-var dbStream = new Bacon.Bus();
-
-var appEventStream = new BufferedEventStream(function (event) {
+var appEventStream = new BufferedEventStream(eventBus, function (event) {
   dispatch(event.type, event.payload);
 });
 
@@ -39,32 +34,25 @@ function receiveEvent(eventType, payload) {
   };
 }
 
-function addWatch(dbStream) {
+function addWatch(db) {
   return function watch(key, callback) {
-    var x = dbStream
-      .map(db => db.get(key))
-      .slidingWindow(2, 2)
-      .filter(values => values[0] !== values[1]);
-
-    return x.onValues(function (prev, next) {
-      callback(prev, next, appstate);
-    });
+    return db.watchIn(key, callback);
   };
+}
+
+function scheduleEvent(type, payload) {
+  eventBus.push({ type: type, payload: payload });
 }
 
 function use(handler) {
   var receivers = [];
-  var onDbChange = handler(makeReceiver(receivers), scheduleEvent, addWatch(dbStream));
+  var onDbChange = handler(makeReceiver(receivers), scheduleEvent, addWatch(appstate));
 
   handlers.push.apply(handlers, receivers);
 
   if (_.isFunction(onDbChange)) {
     handlers.push(onDbChange);
   }
-}
-
-function scheduleEvent(type, payload) {
-  appEventStream.push({ type: type, payload: payload });
 }
 
 function dispatch(type, payload) {
@@ -88,19 +76,13 @@ function dispatch(type, payload) {
     return next(handler(state, type, payload), handlers.slice(1));
   }
 
-  var nextState = next(appstate, handlers);
+  var nextState = next(appstate.value, handlers);
 
   debug('%s - dispatch finished', type);
 
-  if (nextState !== appstate && !document.hidden) {
-    window.requestAnimationFrame(function () {
-      render(appstate);
-    });
+  if (nextState !== appstate.value) {
+    appstate.swap(nextState);
   }
-
-  appstate = nextState;
-
-  dbStream.push(nextState);
 
   appEventStream.resume();
 }
@@ -115,37 +97,25 @@ function render(appstate) {
   React.renderComponent(root, target);
 }
 
-function start(initState) {
-  appstate = initState;
-  dbStream.push(appstate);
+function start() {
   appEventStream.resume();
 
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) {
-      render(appstate);
+      render(appstate.value);
     }
   }, false);
 
+  appstate.on('change', function (value) {
+    if (!document.hidden) {
+      window.requestAnimationFrame(function () {
+        render(value);
+      });
+    }
+  });
+
   dispatch('app:start');
 }
-
-exports.togglePlay = function (track) {
-  scheduleEvent('toggle:play', {
-    track: track
-  });
-};
-
-exports.seekAudio = function (position) {
-  scheduleEvent('audio:seek', position);
-};
-
-exports.seekAudioApply = function () {
-  scheduleEvent('audio:seek-apply');
-};
-
-exports.startSeeking = function () {
-  scheduleEvent('audio:seek-start');
-};
 
 exports.renderTo = function (el) {
   target = el;
@@ -153,4 +123,3 @@ exports.renderTo = function (el) {
 
 exports.use = use;
 exports.start = start;
-exports.send = scheduleEvent;

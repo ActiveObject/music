@@ -1,6 +1,12 @@
 var VkChunk = require('app/values/vk-chunk');
 
 module.exports = function (receive, send) {
+  receive('app:start', function (db) {
+    return db.update('groups', function (groups) {
+      return groups.modify({ send: send });
+    });
+  });
+
   receive('groups:index:update', function (db, index) {
     var groups = db.get('groups');
 

@@ -1,4 +1,5 @@
 var ActiveTrack = require('app/values/active-track');
+var db = require('app/core/db');
 
 module.exports = function(receive, send, watch) {
   receive('toggle:play', function (appstate, data) {
@@ -48,7 +49,7 @@ module.exports = function(receive, send, watch) {
     return appstate.set('activeTrack', appstate.get('activeTrack').startSeeking());
   });
 
-  receive('tracks:update', function (appstate, tracks) {
-    send('playqueue:update', appstate.get('playqueue').setSource(tracks));
+  watch('tracks', function (tracks) {
+    send('playqueue:update', db.value.get('playqueue').setSource(tracks));
   });
 };

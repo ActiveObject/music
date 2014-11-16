@@ -2,7 +2,7 @@ require('app/styles/audio-progress-line.styl');
 
 var React = require('react');
 var dom = require('app/core/dom');
-var app = require('app/core/app');
+var eventBus = require('app/core/event-bus');
 
 var AudioProgressLine = React.createClass({
   displayName: 'AudioProgressLine',
@@ -65,19 +65,19 @@ var AudioProgressLine = React.createClass({
 
   dragStart: function (e) {
     this.setState({ seekStart: e.clientX });
-    app.startSeeking();
+    eventBus.startSeeking();
   },
 
   dragEnd: function (e) {
     if (this.props.track.seeking) {
-      app.seekAudioApply();
+      eventBus.seekAudioApply();
       this.setState({ seekStart: 0 });
     }
   },
 
   moveSeekIndicator: function (e) {
     if (this.props.track.seeking) {
-      app.seekAudio(this.seekPosition(e.clientX) / 100);
+      eventBus.seekAudio(this.seekPosition(e.clientX) / 100);
     }
   },
 
@@ -100,8 +100,8 @@ var AudioProgressLine = React.createClass({
   },
 
   seekToPosition: function (e) {
-    app.seekAudio(this.seekPosition(e.clientX) / 100);
-    app.seekAudioApply();
+    eventBus.seekAudio(this.seekPosition(e.clientX) / 100);
+    eventBus.seekAudioApply();
   },
 
   trackProgress: function () {

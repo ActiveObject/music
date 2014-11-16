@@ -1,13 +1,13 @@
 var _ = require('underscore');
 var List = require('immutable').List;
 var Track = require('app/values/track');
+var eventBus = require('app/core/event-bus');
 var VkIndex = require('app/values/vk-index');
 var PouchIndex = require('app/values/pouch-index');
 
 function Tracks(attrs) {
   this.createdAt = new Date();
   this.vkIndex = attrs.vkIndex;
-  this.send = attrs.send;
   this.datoms = this.vkIndex.items;
   this.localIndex = attrs.localIndex.push(this.datoms);
 
@@ -58,11 +58,7 @@ Tracks.prototype.modify = function (attrs) {
 
 Tracks.prototype.getAll = function () {
   if (!this.vkIndex.isBuilt && !this.vkIndex.isBuilding()) {
-    this.send('tracks:vk-index:update', this.vkIndex.build());
-  }
-
-  if (!this.localIndex.isBuilt && !this.localIndex.isBuilding()) {
-    this.send('tracks:local-index:update', this.localIndex.build());
+    eventBus.send('tracks:vk-index:update', this.vkIndex.build());
   }
 
   return this.all;

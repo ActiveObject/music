@@ -35,7 +35,7 @@ function getSound(track, send) {
   });
 }
 
-var modifyTrackState = curry(function modifyTrackState(send, prevTrack, nextTrack) {
+var modifyTrackState = curry(function modifyTrackState(send, nextTrack, prevTrack) {
   if (nextTrack.id !== prevTrack.id && nextTrack.isPlaying) {
     sm.stop(prevTrack.id);
     sm.unload(prevTrack.id);

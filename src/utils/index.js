@@ -36,3 +36,9 @@ exports.isEmpty = function (x) {
 
   return x.isEmpty();
 };
+
+exports.merge = function () {
+  var objs = Array.prototype.slice.call(arguments, 0);
+  objs.unshift({});
+  return _.extend.apply(_, objs);
+};

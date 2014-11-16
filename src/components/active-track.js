@@ -2,10 +2,10 @@ require('app/styles/active-track.styl');
 
 var React = require('react');
 var moment = require('moment');
-var app = require('app/core/app');
+var dom = require('app/core/dom');
+var eventBus = require('app/core/event-bus');
 var PlayBtn = require('app/components/play-btn');
 var AudioProgressLine = require('app/components/audio-progress-line');
-var dom = require('app/core/dom');
 
 require('moment-duration-format');
 
@@ -83,6 +83,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    app.togglePlay(this.props.track);
+    eventBus.togglePlay(this.props.track);
   }
 });

@@ -1,9 +1,17 @@
 var EventEmitter = require('events').EventEmitter;
 
-function BufferedEventStream(onEvent) {
+function BufferedEventStream(source, onEvent) {
   this._events = [];
   this._paused = true;
   this._onEvent = onEvent;
+
+  source.onValue(function (event) {
+    this._events.push(event);
+
+    if (!this._paused) {
+      this.emit('event');
+    }
+  }.bind(this));
 
   this.on('event', this._process.bind(this));
 }
@@ -11,14 +19,6 @@ function BufferedEventStream(onEvent) {
 BufferedEventStream.prototype = Object.create(EventEmitter.prototype, {
   constructor: { value: BufferedEventStream, enumerable: false }
 });
-
-BufferedEventStream.prototype.push = function (event) {
-  this._events.push(event);
-
-  if (!this._paused) {
-    this.emit('event');
-  }
-};
 
 BufferedEventStream.prototype.pause = function () {
   this._paused = true;
