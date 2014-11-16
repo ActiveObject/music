@@ -1,30 +1,35 @@
+var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
 var List = require('immutable').List;
-var VkChunk = require('app/values/vk-chunk');
+var merge = require('app/utils').merge;
 
-function VkIndex(attrs) {
+function Page(offset, count) {
+  this.offset = offset;
+  this.count = count;
+}
+
+Page.prototype.next = function (amount) {
+  return new Page(this.offset + this.count, amount);
+};
+
+function VkIndexValue(attrs) {
   this.createdAt = new Date();
   this.isBuilt = attrs.isBuilt;
   this.items = attrs.items;
   this.chunkToLoad = attrs.chunkToLoad;
   this.chunkSize = attrs.chunkSize;
-  this.transformFn = attrs.transformFn;
 }
 
-VkIndex.prototype.build = function () {
-  return this.modify({ chunkToLoad: new VkChunk(0, this.chunkSize) });
+VkIndexValue.prototype.modify = function (attrs) {
+  return new VkIndexValue(merge(this, attrs));
 };
 
-VkIndex.prototype.isBuilding = function () {
-  return VkChunk.is(this.chunkToLoad);
-};
-
-VkIndex.prototype.fromVkResponse = function (res) {
+VkIndexValue.prototype.fromVkResponse = function (res, transformFn) {
   var offset = this.chunkToLoad.offset,
 
       newDatoms = res.items.map(function (item, i) {
-        return this.transformFn(item, offset + i);
-      }, this),
+        return transformFn(item, offset + i);
+      }),
 
       items = this.items.concat(_.flatten(newDatoms, true));
 
@@ -42,25 +47,44 @@ VkIndex.prototype.fromVkResponse = function (res) {
   });
 };
 
-VkIndex.prototype.load = function (vk, user, callback) {
-  var index = this;
 
-  vk.audio.get({
-    owner_id: user.id,
-    offset: index.chunkToLoad.offset,
-    count: index.chunkToLoad.count,
-    v: '5.25'
-  }, function (err, result) {
-    if (err) {
-      return callback(err);
-    }
-
-    callback(null, index.fromVkResponse(result.response));
+function VkIndex(attrs) {
+  this.value = new VkIndexValue({
+    isBuilt: false,
+    items: List(),
+    chunkToLoad: new Page(0, attrs.chunkSize),
+    chunkSize: attrs.chunkSize
   });
-};
 
-VkIndex.prototype.modify = function (attrs) {
-  return new VkIndex(_.extend({}, this, attrs));
+  this.transformFn = attrs.transformFn;
+  this.loadFn = attrs.loadFn;
+}
+
+VkIndex.empty = new VkIndexValue({
+  isBuilt: false,
+  items: List(),
+  chunkToLoad: new Page(0, 100),
+  chunkSize: 100
+});
+
+VkIndex.prototype = Object.create(EventEmitter.prototype, {
+  constructor: { value: VkIndex, enumerable: false }
+});
+
+VkIndex.prototype.build = function (vk, user) {
+  var index = this.value;
+
+  if (!index.isBuilt) {
+    this.loadFn(vk, user, this.value.chunkToLoad, function (err, result) {
+      if (err) {
+        return console.log(err);
+      }
+
+      this.value = this.value.fromVkResponse(result.response, this.transformFn);
+      this.emit('load', this.value);
+      this.build(vk, user);
+    }.bind(this));
+  }
 };
 
 module.exports = VkIndex;

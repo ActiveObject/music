@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var getOrDefault = require('app/utils').getOrDefault;
+var merge = require('app/utils').merge;
 var Activity = require('app/values/activity');
 
 function Post(options) {
@@ -14,34 +15,30 @@ function Post(options) {
   this.likes = options.likes;
 }
 
-function Group(data) {
+function Group(attrs) {
   if (!(this instanceof Group)) {
-    return new Group(data);
+    return new Group(attrs);
   }
 
-  this.id = data.id;
-  this.isAdmin = data.is_admin === 1;
-  this.isClosed = data.is_closed === 1;
-  this.isMember = data.is_member === 1;
-  this.name = data.name;
-  this.photo_50 = data.photo_50;
-  this.photo_100 = data.photo_100;
-  this.photo_200 = data.photo_200;
-  this.screenName = data.screen_name;
-  this.type = data.type;
+  this.id = attrs.id;
+  this.isAdmin = attrs.isAdmin;
+  this.isClosed = attrs.isClosed;
+  this.isMember = attrs.isMember;
+  this.name = attrs.name;
+  this.photo_50 = attrs.photo_50;
+  this.photo_100 = attrs.photo_100;
+  this.photo_200 = attrs.photo_200;
+  this.screenName = attrs.screenName;
+  this.type = attrs.type;
 
-  this.postsTotal = getOrDefault(data, 'postsTotal', 0);
-  this.posts = getOrDefault(data, 'posts', []);
+  this.postsTotal = getOrDefault(attrs, 'postsTotal', 0);
+  this.posts = getOrDefault(attrs, 'posts', []);
 
-  this.activity = getOrDefault(data, 'activity', Activity.empty);
+  this.activity = getOrDefault(attrs, 'activity', Activity.empty);
 }
 
-Group.prototype.isEmpty = function () {
-  return false;
-};
-
 Group.prototype.modify = function (attrs) {
-  return new Group(_.extend({}, this, attrs));
+  return new Group(merge(this, attrs));
 };
 
 Group.prototype.updateWall = function (wall) {
@@ -57,24 +54,27 @@ Group.prototype.updateWall = function (wall) {
   });
 };
 
-function EmptyGroup() {
-  if (!(this instanceof EmptyGroup)) {
-    return new EmptyGroup();
+Group.fromDatoms = function (datoms) {
+  if (datoms.size === 0) {
+    return Group({ });
   }
 
-  this.postsTotal = 0;
-  this.posts = [];
+  var attrs = _.object(datoms.map(function (datom) { return [datom[1], datom[2]]; }).toArray());
 
-  this.activity = Activity.empty;
-}
-
-EmptyGroup.prototype = Object.create(Group.prototype, {
-  constructor: { value: EmptyGroup, enumerable: false }
-});
-
-EmptyGroup.prototype.isEmpty = function () {
-  return true;
+  return new Group({
+    type: attrs[':group/type'],
+    name: attrs[':group/name'],
+    screenName: attrs[':group/screen_name'],
+    photo_50: attrs[':group/photo_50'],
+    photo_100: attrs[':group/photo_100'],
+    photo_200: attrs[':group/photo_200'],
+    isClosed: attrs[':group/is_closed'],
+    isAdmin: attrs[':group/is_admin'],
+    isMember: attrs[':group/is_member'],
+    id: attrs[':group/vkid'],
+    index: attrs[':group/vk-index']
+  });
 };
 
+
 module.exports = Group;
-module.exports.Empty = EmptyGroup;

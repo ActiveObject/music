@@ -1,15 +1,12 @@
-var _ = require('underscore');
 var List = require('immutable').List;
+var merge = require('app/utils').merge;
 var Track = require('app/values/track');
-var eventBus = require('app/core/event-bus');
 var VkIndex = require('app/values/vk-index');
-var PouchIndex = require('app/values/pouch-index');
 
 function Tracks(attrs) {
   this.createdAt = new Date();
   this.vkIndex = attrs.vkIndex;
   this.datoms = this.vkIndex.items;
-  this.localIndex = attrs.localIndex.push(this.datoms);
 
   this.eavt = this.datoms.groupBy(function (datom) {
     return datom[0];
@@ -21,27 +18,7 @@ function Tracks(attrs) {
 }
 
 Tracks.empty = new Tracks({
-  vkIndex: new VkIndex({
-    isBuilt: false,
-    items: List(),
-    chunkSize: 1000,
-    transformFn: function (item, i) {
-      var id = 'tracks/' + item.id;
-
-      return [
-        [id, ':track/artist', item.artist],
-        [id, ':track/title', item.title],
-        [id, ':track/duration', item.duration],
-        [id, ':track/url', item.url],
-        [id, ':track/lyrics_id', item.lyrics_id],
-        [id, ':track/owner_id', item.owner_id],
-        [id, ':track/vkid', item.id],
-        [id, ':track/vk-index', i]
-      ];
-    }
-  }),
-
-  localIndex: PouchIndex.empty
+  vkIndex: VkIndex.empty
 });
 
 Tracks.prototype.size = function () {
@@ -53,14 +30,10 @@ Tracks.prototype.first = function () {
 };
 
 Tracks.prototype.modify = function (attrs) {
-  return new Tracks(_.extend({}, this, attrs));
+  return new Tracks(merge(this, attrs));
 };
 
 Tracks.prototype.getAll = function () {
-  if (!this.vkIndex.isBuilt && !this.vkIndex.isBuilding()) {
-    eventBus.send('tracks:vk-index:update', this.vkIndex.build());
-  }
-
   return this.all;
 };
 
