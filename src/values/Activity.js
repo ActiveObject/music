@@ -51,8 +51,11 @@ function weeks(activity) {
   });
 
   var unorderedWeeks = _.map(dateByWeek, function(items, key) {
+    var n = Number(key);
+
     return {
-      number: Number(key),
+      number: n,
+      month: moment().week(n).month(),
       items: _.sortBy(items, function (item) {
         return item.date.day();
       })
@@ -60,6 +63,25 @@ function weeks(activity) {
   });
 
   return _.sortBy(unorderedWeeks, 'number');
+}
+
+function months(activity) {
+  var dateByMonth = _.groupBy(activity, function (item) {
+    return item.date.month();
+  });
+
+  var months = _.map(dateByMonth, function (days, key) {
+    return {
+      number: Number(key),
+      days: days
+    };
+  });
+
+  return months.map(function (item, i) {
+    return _.extend(item, {
+      weeksN: i > 0 ? Math.floor(item.days.length / 7) : Math.ceil(item.days.length / 7)
+    });
+  });
 }
 
 function update(posts, activity) {
@@ -92,6 +114,7 @@ function update(posts, activity) {
 exports.makeDateRange = makeDateRange;
 exports.fillEmptyDates = fillEmptyDates;
 exports.weeks = weeks;
+exports.months = months;
 exports.update = update;
 
 exports.empty = new Activity({
