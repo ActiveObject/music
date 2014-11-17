@@ -2,6 +2,11 @@ var _ = require('underscore');
 var React = require('react');
 var _  = require('underscore');
 
+var _style = document.createElement('div').style;
+var _transformCssKey = _.find(['transform', 'WebkitTransform', 'MozTransform', 'OTransform', 'msTransform'], function(key) {
+  return key in _style;
+});
+
 function Element(tagName, constructor, attrs, body) {
   this.tagName = tagName;
   this.constructor = constructor;
@@ -40,6 +45,12 @@ Element.prototype.className = function (name, predicate) {
 
 Element.prototype.key = function (key) {
   return this.attr('key', key);
+};
+
+Element.prototype.translate = function(x, y) {
+  var style = {};
+  style[_transformCssKey] = 'translate(' + x + 'px,' + y + 'px)';
+  return this.attr('style', style);
 };
 
 Element.prototype.append = function (items) {
