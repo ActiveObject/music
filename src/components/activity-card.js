@@ -71,7 +71,7 @@ module.exports = React.createClass({
       return dom.div()
         .className('activity-card-month')
         .attr('style', { width: m.weeksN * (this.props.size + this.props.margin) })
-        .append(moment.monthsShort(m.number))
+        .append(moment.monthsShort(m.number));
     }, this);
 
     return dom.div()

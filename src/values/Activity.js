@@ -70,14 +70,14 @@ function months(activity) {
     return item.date.month();
   });
 
-  var months = _.map(dateByMonth, function (days, key) {
+  var ms = _.map(dateByMonth, function (days, key) {
     return {
       number: Number(key),
       days: days
     };
   });
 
-  return months.map(function (item, i) {
+  return ms.map(function (item, i) {
     return _.extend(item, {
       weeksN: i > 0 ? Math.floor(item.days.length / 7) : Math.ceil(item.days.length / 7)
     });
