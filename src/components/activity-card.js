@@ -30,14 +30,10 @@ module.exports = React.createClass({
       .attr('href', '/groups/' + this.props.id )
       .append(this.props.name);
 
-    var tu = this.makeWeekday(1);
-    var th = this.makeWeekday(3);
-    var sa = this.makeWeekday(5);
-
     var weekdays = dom.div()
       .className('activity-card-weekdays')
       .attr('style', { left: -(this.props.size + this.props.margin), width: this.props.size })
-      .append(tu, th, sa);
+      .append([1, 3, 5].map(this.makeWeekday));
 
     var content = dom.div()
       .className('activity-chart-content')
