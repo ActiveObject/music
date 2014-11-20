@@ -5,7 +5,7 @@ var Player = require('app/values/player');
 var Tracks = require('app/values/tracks');
 var Group = require('app/values/group');
 var Groups = require('app/values/groups');
-var Playqueue = require('app/values/playqueue');
+var Playlist = require('app/values/playlist');
 var VkIndex = require('app/values/vk-index');
 var PouchIndex = require('app/values/pouch-index');
 var layouts = require('app/layouts');
@@ -18,7 +18,7 @@ if (Auth.hasToken(location.hash)) {
 var initialState = Immutable.Map({
   activity: require('app/fixtures/activity'),
   player: Player.empty,
-  playqueue: Playqueue.empty,
+  playlist: Playlist.empty,
   groups: Groups.empty,
   tracks: Tracks.empty.modify({
     localIndex: PouchIndex.empty.fromDb('/music/tracks'),

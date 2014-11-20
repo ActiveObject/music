@@ -15,29 +15,29 @@ module.exports = function(receive, send, watch) {
   });
 
   receive('sound-manager:finish', function (appstate, track) {
-    var queue = appstate.get('playqueue');
+    var playlist = appstate.get('playlist');
 
-    if (queue.isLastTrack(track)) {
-      return send('playqueue:finish');
+    if (playlist.isLastTrack(track)) {
+      return send('playlist:finish');
     }
 
-    return appstate.set('player', queue.nextAfter(track).play());
+    return appstate.set('player', playlist.nextAfter(track).play());
   });
 
   receive('app:start', function (appstate) {
-    return appstate.update('playqueue', function (queue) {
-      return queue.setSource(appstate.get('tracks'));
+    return appstate.update('playlist', function (playlist) {
+      return playlist.setSource(appstate.get('tracks'));
     });
   });
 
-  receive('playqueue:update', function (appstate, queue) {
-    if (appstate.get('player') === Player.empty && queue.tracks.size() > 0) {
-      return appstate.set('playqueue', queue).set('player', Player.empty.modify({
-        track: queue.tracks.first()
+  receive('playlist:update', function (appstate, playlist) {
+    if (appstate.get('player') === Player.empty && playlist.tracks.size() > 0) {
+      return appstate.set('playlist', playlist).set('player', Player.empty.modify({
+        track: playlist.tracks.first()
       }));
     }
 
-    return appstate.set('playqueue', queue);
+    return appstate.set('playlist', playlist);
   });
 
   receive('audio:seek', function (appstate, position) {
@@ -50,6 +50,6 @@ module.exports = function(receive, send, watch) {
   });
 
   watch('tracks', function (tracks) {
-    send('playqueue:update', db.value.get('playqueue').setSource(tracks));
+    send('playlist:update', db.value.get('playlist').setSource(tracks));
   });
 };

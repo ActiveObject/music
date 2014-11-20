@@ -9,14 +9,14 @@ module.exports = React.createClass({
 
   propTypes: {
     player: React.PropTypes.object.isRequired,
-    queue: React.PropTypes.object.isRequired
+    playlist: React.PropTypes.object.isRequired
   },
 
   render: function() {
     var tracklist = new Tracklist({
       key: 'tracklist',
       player: this.props.player,
-      tracks: this.props.queue.getAll()
+      tracks: this.props.playlist.getAll()
     });
 
     var playerView = new Player({

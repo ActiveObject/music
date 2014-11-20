@@ -9,7 +9,7 @@ module.exports = function layoutGroupWithId(id) {
     var group = appstate.get('groups').findById(id);
 
     var tracklistCard = new TracklistCard({
-      queue: appstate.get('playqueue'),
+      playlist: appstate.get('playlist'),
       player: appstate.get('player')
     });
 

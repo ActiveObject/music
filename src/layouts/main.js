@@ -5,7 +5,7 @@ var TracklistCard = require('app/components/tracklist-card');
 
 module.exports = function layoutMainView(appstate, send) {
   var tracklistCard = new TracklistCard({
-    queue: appstate.get('playqueue'),
+    playlist: appstate.get('playlist'),
     player: appstate.get('player')
   });
 
