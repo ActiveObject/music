@@ -1,7 +1,6 @@
 var _ = require('underscore');
 var curry = require('curry');
 var sm = require('sound-manager');
-var Track = require('app/values/track');
 
 function getSound(track, send) {
   var sound = sm.getSoundById(track.id);
@@ -68,21 +67,6 @@ module.exports = function (receive, send, watch) {
     watch('player', modifyTrackState(send));
   });
 
-  receive('sound-manager:whileplaying', function (appstate, position) {
-    var player = appstate.get('player');
-
-    if (!player.seeking) {
-      return appstate.set('player', player.updatePosition(position));
-    }
-  });
-
-  receive('sound-manager:whileloading', function (appstate, options) {
-    return appstate.set('player', appstate.get('player').updateLoaded({
-      bytesLoaded: options.bytesLoaded,
-      bytesTotal: options.bytesTotal
-    }));
-  });
-
   receive('audio:seek-apply', function (appstate) {
     var player = appstate.get('player');
     var sound = sm.getSoundById(player.track.id);
@@ -90,7 +74,5 @@ module.exports = function (receive, send, watch) {
     if (sound) {
       sound.setPosition(player.position);
     }
-
-    return appstate.set('player', player.stopSeeking());
   });
 };

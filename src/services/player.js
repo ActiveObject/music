@@ -20,6 +20,21 @@ module.exports = function(receive, send, watch) {
     return player.next();
   }));
 
+  receive('sound-manager:whileloading', update('player', function (player, data) {
+    return player.updateLoaded({
+      bytesLoaded: data.bytesLoaded,
+      bytesTotal: data.bytesTotal
+    });
+  }));
+
+  receive('sound-manager:whileplaying', function (appstate, position) {
+    var player = appstate.get('player');
+
+    if (!player.seeking) {
+      return appstate.set('player', player.updatePosition(position));
+    }
+  });
+
   receive('playlist:update', update('player', function (player) {
     return player.setPlaylist(this.get('tracks'));
   }));
@@ -30,6 +45,10 @@ module.exports = function(receive, send, watch) {
 
   receive('audio:seek-start', update('player', function (player) {
     return player.startSeeking();
+  }));
+
+  receive('audio:seek-apply', update('player', function (player) {
+    return player.stopSeeking();
   }));
 
   watch('tracks', function (tracks) {
