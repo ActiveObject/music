@@ -1,55 +1,38 @@
 var Player = require('app/values/player');
 var db = require('app/core/db');
 
+function update(path, updater) {
+  return function(appstate) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return appstate.update(path, function(value) {
+      args.unshift(value);
+      return updater.apply(appstate, args);
+    });
+  };
+}
+
 module.exports = function(receive, send, watch) {
-  receive('toggle:play', function (appstate, data) {
-    var player = appstate.get('player');
+  receive('toggle:play', update('player', function (player, data) {
+    return player.togglePlay(data.track);
+  }));
 
-    if (data.track.id !== player.id) {
-      return appstate.set('player', data.track.play());
-    }
+  receive('sound-manager:finish', update('player', function (player) {
+    return player.next();
+  }));
 
-    return appstate.update('player', function (track) {
-      return track.togglePlay();
-    });
-  });
+  receive('playlist:update', update('player', function (player) {
+    return player.setPlaylist(this.get('tracks'));
+  }));
 
-  receive('sound-manager:finish', function (appstate, track) {
-    var playlist = appstate.get('playlist');
+  receive('audio:seek', update('player', function (player, position) {
+    return player.seek(position);
+  }));
 
-    if (playlist.isLastTrack(track)) {
-      return send('playlist:finish');
-    }
-
-    return appstate.set('player', playlist.nextAfter(track).play());
-  });
-
-  receive('app:start', function (appstate) {
-    return appstate.update('playlist', function (playlist) {
-      return playlist.setSource(appstate.get('tracks'));
-    });
-  });
-
-  receive('playlist:update', function (appstate, playlist) {
-    if (appstate.get('player') === Player.empty && playlist.tracks.size() > 0) {
-      return appstate.set('playlist', playlist).set('player', Player.empty.modify({
-        track: playlist.tracks.first()
-      }));
-    }
-
-    return appstate.set('playlist', playlist);
-  });
-
-  receive('audio:seek', function (appstate, position) {
-    var player = appstate.get('player');
-    return appstate.set('player', player.updatePosition(player.duration * position * 1000));
-  });
-
-  receive('audio:seek-start', function (appstate) {
-    return appstate.set('player', appstate.get('player').startSeeking());
-  });
+  receive('audio:seek-start', update('player', function (player) {
+    return player.startSeeking();
+  }));
 
   watch('tracks', function (tracks) {
-    send('playlist:update', db.value.get('playlist').setSource(tracks));
+    send('playlist:update');
   });
 };

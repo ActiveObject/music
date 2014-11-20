@@ -41,7 +41,7 @@ var AudioProgressLine = React.createClass({
 
     return dom.div()
       .className('apl')
-      .className('apl-seek-active', this.props.track.seeking)
+      .className('apl-seek-active', this.props.player.seeking)
       .append(bgLine, loadLine, fgLine, seek)
       .attr('ref', 'progressLine')
       .attr('onMouseOver', this.showSeekIndicator)
@@ -58,7 +58,7 @@ var AudioProgressLine = React.createClass({
 
   hideSeekIndicator: function (e) {
     e.stopPropagation();
-    if (!this.props.track.seeking) {
+    if (!this.props.player.seeking) {
       this.setState({ seekIsVisible: false });
     }
   },
@@ -69,14 +69,14 @@ var AudioProgressLine = React.createClass({
   },
 
   dragEnd: function (e) {
-    if (this.props.track.seeking) {
+    if (this.props.player.seeking) {
       eventBus.seekAudioApply();
       this.setState({ seekStart: 0 });
     }
   },
 
   moveSeekIndicator: function (e) {
-    if (this.props.track.seeking) {
+    if (this.props.player.seeking) {
       eventBus.seekAudio(this.seekPosition(e.clientX) / 100);
     }
   },
@@ -105,11 +105,11 @@ var AudioProgressLine = React.createClass({
   },
 
   trackProgress: function () {
-    return this.props.track.relativePosition() * 100;
+    return this.props.player.relativePosition() * 100;
   },
 
   trackLoaded: function () {
-    return this.props.track.relativeLoaded() * 100;
+    return this.props.player.relativeLoaded() * 100;
   },
 
   lineWidth: function () {

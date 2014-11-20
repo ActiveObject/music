@@ -35,20 +35,20 @@ function getSound(track, send) {
   });
 }
 
-var modifyTrackState = curry(function modifyTrackState(send, nextTrack, prevTrack) {
-  if (nextTrack.id !== prevTrack.id && nextTrack.isPlaying) {
-    sm.stop(prevTrack.id);
-    sm.unload(prevTrack.id);
+var modifyTrackState = curry(function modifyTrackState(send, nextPlayer, prevPlayer) {
+  if (nextPlayer.track.id !== prevPlayer.track.id && nextPlayer.isPlaying) {
+    sm.stop(prevPlayer.track.id);
+    sm.unload(prevPlayer.track.id);
 
-    return getSound(nextTrack, send).play();
+    return getSound(nextPlayer.track, send).play();
   }
 
-  if (nextTrack.isPlaying && !prevTrack.isPlaying) {
-    return getSound(nextTrack, send).play();
+  if (nextPlayer.isPlaying && !prevPlayer.isPlaying) {
+    return getSound(nextPlayer.track, send).play();
   }
 
-  if (!nextTrack.isPlaying && prevTrack.isPlaying) {
-    return getSound(nextTrack, send).pause();
+  if (!nextPlayer.isPlaying && prevPlayer.isPlaying) {
+    return getSound(nextPlayer.track, send).pause();
   }
 });
 
@@ -85,7 +85,7 @@ module.exports = function (receive, send, watch) {
 
   receive('audio:seek-apply', function (appstate) {
     var player = appstate.get('player');
-    var sound = sm.getSoundById(player.id);
+    var sound = sm.getSoundById(player.track.id);
 
     if (sound) {
       sound.setPosition(player.position);

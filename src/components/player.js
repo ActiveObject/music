@@ -22,15 +22,15 @@ module.exports = React.createClass({
 
   render: function() {
     var track = {
-      title: this.props.track.title,
-      artist: this.props.track.artist,
-      duration: formatDuration(moment.duration(this.props.track.duration, 's')),
-      position: formatDuration(moment.duration(this.props.track.position, 'ms'))
+      title: this.props.player.track.title,
+      artist: this.props.player.track.artist,
+      duration: formatDuration(moment.duration(this.props.player.track.duration, 's')),
+      position: formatDuration(moment.duration(this.props.player.position, 'ms'))
     };
 
     var playBtn = new PlayBtn({
       key: 'play-btn',
-      isPlaying: this.props.track.isPlaying,
+      isPlaying: this.props.player.isPlaying,
       isActive: true,
       onClick: this.togglePlay
     });
@@ -74,7 +74,7 @@ module.exports = React.createClass({
     var progress = dom.div()
       .key('active-track-progress')
       .className('active-track-progress')
-      .append(new AudioProgressLine({ track: this.props.track }));
+      .append(new AudioProgressLine({ player: this.props.player }));
 
     return dom.div()
       .className('active-track')
@@ -83,6 +83,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    eventBus.togglePlay(this.props.track);
+    eventBus.togglePlay(this.props.player.track);
   }
 });

@@ -19,7 +19,7 @@ module.exports = React.createClass({
 
   shouldComponentUpdate: function (nextProps, nextState) {
     return nextState.cursor !== this.state.cursor ||
-      nextProps.player.id !== this.props.player.id ||
+      nextProps.player.track.id !== this.props.player.track.id ||
       nextProps.player.isPlaying !== this.props.player.isPlaying ||
       nextProps.tracks !== this.props.tracks ||
       nextProps.itemHeight !== this.props.itemHeight;

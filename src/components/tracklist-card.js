@@ -8,20 +8,19 @@ module.exports = React.createClass({
   displayName: 'TracklistCard',
 
   propTypes: {
-    player: React.PropTypes.object.isRequired,
-    playlist: React.PropTypes.object.isRequired
+    player: React.PropTypes.object.isRequired
   },
 
   render: function() {
     var tracklist = new Tracklist({
       key: 'tracklist',
       player: this.props.player,
-      tracks: this.props.playlist.getAll()
+      tracks: this.props.player.playlist.getAll()
     });
 
     var playerView = new Player({
       key: 'player',
-      track: this.props.player
+      player: this.props.player
     });
 
     return dom.div()

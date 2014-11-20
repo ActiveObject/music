@@ -18,7 +18,6 @@ if (Auth.hasToken(location.hash)) {
 var initialState = Immutable.Map({
   activity: require('app/fixtures/activity'),
   player: Player.empty,
-  playlist: Playlist.empty,
   groups: Groups.empty,
   tracks: Tracks.empty.modify({
     localIndex: PouchIndex.empty.fromDb('/music/tracks'),

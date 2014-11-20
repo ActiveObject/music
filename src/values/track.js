@@ -1,5 +1,4 @@
 var _ = require('underscore');
-var Player = require('app/values/player');
 
 function Track(attrs) {
   if (!(this instanceof Track)) {
@@ -31,13 +30,6 @@ Track.fromEntity = function (entity) {
 
 Track.prototype.modify = function (attrs) {
   return new Track(_.extend({}, this, attrs));
-};
-
-Track.prototype.play = function () {
-  return Player.empty.modify({
-    track: this,
-    isPlaying: true
-  });
 };
 
 Track.prototype.toDatoms = function () {

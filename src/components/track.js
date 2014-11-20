@@ -17,13 +17,13 @@ module.exports = React.createClass({
 
   shouldComponentUpdate: function (nextProps) {
     return nextProps.track !== this.props.track ||
-      nextProps.player.id !== this.props.player.id ||
+      nextProps.player.track.id !== this.props.player.track.id ||
       nextProps.player.isPlaying !== this.props.player.isPlaying ||
       nextProps.y !== this.props.y;
   },
 
   render: function() {
-    var isActive = this.props.track.id === this.props.player.id;
+    var isActive = this.props.track.id === this.props.player.track.id;
     var isPlaying = isActive && this.props.player.isPlaying;
 
     var playBtn = new PlayBtn({
