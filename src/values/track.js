@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var ActiveTrack = require('app/values/active-track');
+var Player = require('app/values/player');
 
 function Track(attrs) {
   if (!(this instanceof Track)) {
@@ -34,7 +34,7 @@ Track.prototype.modify = function (attrs) {
 };
 
 Track.prototype.play = function () {
-  return ActiveTrack.empty.modify({
+  return Player.empty.modify({
     track: this,
     isPlaying: true
   });

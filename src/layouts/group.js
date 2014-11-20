@@ -10,7 +10,7 @@ module.exports = function layoutGroupWithId(id) {
 
     var tracklistCard = new TracklistCard({
       queue: appstate.get('playqueue'),
-      activeTrack: appstate.get('activeTrack')
+      player: appstate.get('player')
     });
 
     var profile = new GroupProfile({

@@ -10,21 +10,21 @@ module.exports = React.createClass({
   displayName: 'Track',
 
   propTypes: {
-    activeTrack: React.PropTypes.object.isRequired,
+    player: React.PropTypes.object.isRequired,
     track: React.PropTypes.object.isRequired,
     y: React.PropTypes.number.isRequired
   },
 
   shouldComponentUpdate: function (nextProps) {
     return nextProps.track !== this.props.track ||
-      nextProps.activeTrack.id !== this.props.activeTrack.id ||
-      nextProps.activeTrack.isPlaying !== this.props.activeTrack.isPlaying ||
+      nextProps.player.id !== this.props.player.id ||
+      nextProps.player.isPlaying !== this.props.player.isPlaying ||
       nextProps.y !== this.props.y;
   },
 
   render: function() {
-    var isActive = this.props.track.id === this.props.activeTrack.id;
-    var isPlaying = isActive && this.props.activeTrack.isPlaying;
+    var isActive = this.props.track.id === this.props.player.id;
+    var isPlaying = isActive && this.props.player.isPlaying;
 
     var playBtn = new PlayBtn({
       key: 'play-btn',

@@ -1,7 +1,7 @@
 var Immutable = require('immutable');
 var SmartRef = require('app/core/smart-ref');
 var Auth = require('app/core/auth');
-var ActiveTrack = require('app/values/active-track');
+var Player = require('app/values/player');
 var Tracks = require('app/values/tracks');
 var Group = require('app/values/group');
 var Groups = require('app/values/groups');
@@ -17,7 +17,7 @@ if (Auth.hasToken(location.hash)) {
 
 var initialState = Immutable.Map({
   activity: require('app/fixtures/activity'),
-  activeTrack: ActiveTrack.empty,
+  player: Player.empty,
   playqueue: Playqueue.empty,
   groups: Groups.empty,
   tracks: Tracks.empty.modify({

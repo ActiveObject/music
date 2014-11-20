@@ -1,15 +1,15 @@
-var ActiveTrack = require('app/values/active-track');
+var Player = require('app/values/player');
 var db = require('app/core/db');
 
 module.exports = function(receive, send, watch) {
   receive('toggle:play', function (appstate, data) {
-    var activeTrack = appstate.get('activeTrack');
+    var player = appstate.get('player');
 
-    if (data.track.id !== activeTrack.id) {
-      return appstate.set('activeTrack', data.track.play());
+    if (data.track.id !== player.id) {
+      return appstate.set('player', data.track.play());
     }
 
-    return appstate.update('activeTrack', function (track) {
+    return appstate.update('player', function (track) {
       return track.togglePlay();
     });
   });
@@ -21,7 +21,7 @@ module.exports = function(receive, send, watch) {
       return send('playqueue:finish');
     }
 
-    return appstate.set('activeTrack', queue.nextAfter(track).play());
+    return appstate.set('player', queue.nextAfter(track).play());
   });
 
   receive('app:start', function (appstate) {
@@ -31,8 +31,8 @@ module.exports = function(receive, send, watch) {
   });
 
   receive('playqueue:update', function (appstate, queue) {
-    if (appstate.get('activeTrack') === ActiveTrack.empty && queue.tracks.size() > 0) {
-      return appstate.set('playqueue', queue).set('activeTrack', ActiveTrack.empty.modify({
+    if (appstate.get('player') === Player.empty && queue.tracks.size() > 0) {
+      return appstate.set('playqueue', queue).set('player', Player.empty.modify({
         track: queue.tracks.first()
       }));
     }
@@ -41,12 +41,12 @@ module.exports = function(receive, send, watch) {
   });
 
   receive('audio:seek', function (appstate, position) {
-    var activeTrack = appstate.get('activeTrack');
-    return appstate.set('activeTrack', activeTrack.updatePosition(activeTrack.duration * position * 1000));
+    var player = appstate.get('player');
+    return appstate.set('player', player.updatePosition(player.duration * position * 1000));
   });
 
   receive('audio:seek-start', function (appstate) {
-    return appstate.set('activeTrack', appstate.get('activeTrack').startSeeking());
+    return appstate.set('player', appstate.get('player').startSeeking());
   });
 
   watch('tracks', function (tracks) {

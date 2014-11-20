@@ -12,15 +12,15 @@ module.exports = React.createClass({
   displayName: 'Tracklist',
 
   propTypes: {
-    activeTrack: React.PropTypes.object.isRequired,
+    player: React.PropTypes.object.isRequired,
     tracks: React.PropTypes.object.isRequired,
     itemHeight: React.PropTypes.number.isRequired
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
     return nextState.cursor !== this.state.cursor ||
-      nextProps.activeTrack.id !== this.props.activeTrack.id ||
-      nextProps.activeTrack.isPlaying !== this.props.activeTrack.isPlaying ||
+      nextProps.player.id !== this.props.player.id ||
+      nextProps.player.isPlaying !== this.props.player.isPlaying ||
       nextProps.tracks !== this.props.tracks ||
       nextProps.itemHeight !== this.props.itemHeight;
   },
@@ -77,7 +77,7 @@ module.exports = React.createClass({
         key: track.value.id,
         track: track.value,
         y: track.yOffset,
-        activeTrack: this.props.activeTrack
+        player: this.props.player
       });
     }, this);
 

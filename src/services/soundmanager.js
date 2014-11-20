@@ -65,32 +65,32 @@ module.exports = function (receive, send, watch) {
   });
 
   receive('sound-manager:is-ready', function () {
-    watch('activeTrack', modifyTrackState(send));
+    watch('player', modifyTrackState(send));
   });
 
   receive('sound-manager:whileplaying', function (appstate, position) {
-    var activeTrack = appstate.get('activeTrack');
+    var player = appstate.get('player');
 
-    if (!activeTrack.seeking) {
-      return appstate.set('activeTrack', activeTrack.updatePosition(position));
+    if (!player.seeking) {
+      return appstate.set('player', player.updatePosition(position));
     }
   });
 
   receive('sound-manager:whileloading', function (appstate, options) {
-    return appstate.set('activeTrack', appstate.get('activeTrack').updateLoaded({
+    return appstate.set('player', appstate.get('player').updateLoaded({
       bytesLoaded: options.bytesLoaded,
       bytesTotal: options.bytesTotal
     }));
   });
 
   receive('audio:seek-apply', function (appstate) {
-    var activeTrack = appstate.get('activeTrack');
-    var sound = sm.getSoundById(activeTrack.id);
+    var player = appstate.get('player');
+    var sound = sm.getSoundById(player.id);
 
     if (sound) {
-      sound.setPosition(activeTrack.position);
+      sound.setPosition(player.position);
     }
 
-    return appstate.set('activeTrack', activeTrack.stopSeeking());
+    return appstate.set('player', player.stopSeeking());
   });
 };
