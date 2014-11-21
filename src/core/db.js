@@ -27,3 +27,11 @@ var initialState = Immutable.Map({
 });
 
 module.exports = new SmartRef(initialState);
+
+module.exports.update = function update(key, updater) {
+  return function updateDb(db) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    args.unshift(db.get(key));
+    return db.set(key, updater.apply(db, args));
+  };
+};

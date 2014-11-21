@@ -1,15 +1,4 @@
-var Player = require('app/values/player');
-var db = require('app/core/db');
-
-function update(path, updater) {
-  return function(appstate) {
-    var args = Array.prototype.slice.call(arguments, 1);
-    return appstate.update(path, function(value) {
-      args.unshift(value);
-      return updater.apply(appstate, args);
-    });
-  };
-}
+var update = require('app/core/db').update;
 
 module.exports = function(receive, send, watch) {
   receive('toggle:play', update('player', function (player, data) {
