@@ -1,3 +1,6 @@
+require('app/styles/track.styl');
+require('app/styles/element.styl');
+
 var React = require('react');
 var moment = require('moment');
 var dom = require('app/core/dom');
@@ -35,12 +38,13 @@ module.exports = React.createClass({
 
     var title = dom.div()
       .key('title')
-      .className('tracklist-item-title')
+      .className('track-title')
       .append(this.props.track.title);
 
-    var artist = dom.div()
+    var artist = dom.a()
       .key('artist')
-      .className('tracklist-item-artist')
+      .className('element-link track-artist')
+      .attr('href', '/artist/' + this.props.track.artist)
       .append(this.props.track.artist);
 
     var duration = dom.span()
@@ -50,12 +54,12 @@ module.exports = React.createClass({
 
     var desc = dom.div()
       .key('desc')
-      .className('tracklist-item-desc')
+      .className('track-desc')
       .attr('title', [this.props.track.artist, this.props.track.title].join(' – '))
       .append(artist, title);
 
     return dom.div()
-      .className('tracklist-item')
+      .className('track')
       .translate(0, this.props.y)
       .append(playBtn, desc, duration)
       .make();

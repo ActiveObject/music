@@ -1,4 +1,5 @@
 require('app/styles/activity-card.styl');
+require('app/styles/element.styl');
 
 var React = require('react');
 var _ = require('underscore');
@@ -26,7 +27,7 @@ module.exports = React.createClass({
 
     var name = dom.a()
       .key('name')
-      .className('activity-name')
+      .className('element-link activity-name')
       .attr('href', '/groups/' + this.props.id )
       .append(this.props.name);
 

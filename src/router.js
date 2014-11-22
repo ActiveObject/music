@@ -10,5 +10,9 @@ module.exports = function (receive, send) {
     send('layout:change', layouts.group(parseInt(ctx.params.id, 10)));
   });
 
+  page('/artist/:name', function (ctx) {
+    send('layout:change', layouts.artist(ctx.params.name));
+  });
+
   receive('app:start', page);
 };

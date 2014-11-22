@@ -6,6 +6,7 @@ var accounts = require('app/accounts');
 
 exports.main = require('./main');
 exports.group = require('./group');
+exports.artist = require('./artist');
 
 exports.auth = function (appstate) {
   return new AuthView({

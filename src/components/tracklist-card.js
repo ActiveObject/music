@@ -1,7 +1,10 @@
+require('app/styles/tracklist.styl');
+require('app/styles/tracklist-card.styl');
+
 var React = require('react');
 var debug = require('debug')('app:tracklist-card');
 var dom = require('app/core/dom');
-var Tracklist = require('app/components/tracklist');
+var LazyTracklist = require('app/components/lazy-tracklist');
 var Player = require('app/components/player');
 
 module.exports = React.createClass({
@@ -12,7 +15,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var tracklist = new Tracklist({
+    var tracklist = new LazyTracklist({
       key: 'tracklist',
       player: this.props.player,
       tracks: this.props.player.playlist.getAll()

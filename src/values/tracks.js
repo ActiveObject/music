@@ -27,6 +27,14 @@ Tracks.prototype.getAll = function () {
   });
 };
 
+Tracks.prototype.findByArtist = function (artist) {
+  return this.query('findByArtist:' + artist, function () {
+    return this.getAll().filter(function (track) {
+      return track.artist === artist;
+    });
+  });
+};
+
 Tracks.prototype.modify = function (attrs) {
   return new Tracks(merge(this, attrs));
 };

@@ -3,6 +3,7 @@ var Tracks = require('app/values/tracks');
 var merge = require('app/utils').merge;
 
 function Playlist(attrs) {
+  this.id = attrs.id;
   this.name = attrs.name;
   this.isShuffled = attrs.isShuffled;
   this.isRepeated = attrs.isRepeated;
