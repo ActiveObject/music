@@ -1,11 +1,10 @@
-var _ = require('underscore');
+var merge = require('app/utils').merge;
 var Playlist = require('app/values/playlist');
 
 function Player(attrs) {
   if (!(this instanceof Player)) {
     return new Player(attrs);
   }
-
 
   this.track = attrs.track;
   this.playlist = attrs.playlist;
@@ -15,14 +14,14 @@ function Player(attrs) {
   this.bytesLoaded = attrs.bytesLoaded;
   this.bytesTotal = attrs.bytesTotal;
 
-  if (Object.keys(this.track).length === 0 && this.playlist.tracks.size() > 0) {
+  if (Object.keys(this.track).length === 0 && this.playlist.tracks.size > 0) {
     this.track = this.playlist.tracks.first();
   }
 }
 
 Player.empty = new Player({
   track: {},
-  playlist: Playlist.empty,
+  playlist: Playlist.all,
   isPlaying: false,
   position: 0,
   seeking: false,
@@ -31,7 +30,7 @@ Player.empty = new Player({
 });
 
 Player.prototype.modify = function (attrs) {
-  return new Player(_.extend({}, this, attrs));
+  return new Player(merge(this, attrs));
 };
 
 Player.prototype.play = function() {
@@ -102,9 +101,15 @@ Player.prototype.next = function() {
   return this;
 };
 
-Player.prototype.setPlaylist = function(tracks) {
+Player.prototype.changePlaylist = function(newPlaylist) {
   return this.modify({
-    playlist: this.playlist.setSource(tracks)
+    playlist: newPlaylist
+  });
+};
+
+Player.prototype.updatePlaylist = function (library) {
+  return this.modify({
+    playlist: this.playlist.update(library)
   });
 };
 

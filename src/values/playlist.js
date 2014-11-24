@@ -7,33 +7,40 @@ function Playlist(attrs) {
   this.name = attrs.name;
   this.isShuffled = attrs.isShuffled;
   this.isRepeated = attrs.isRepeated;
-  this.tracks = attrs.tracks;
+  this.selectTracks = attrs.selectTracks;
+  this.tracks = this.selectTracks(attrs.library);
 }
 
-Playlist.prototype.setSource = function (source) {
-  return this.modify({ tracks: source });
-};
+Playlist.all = new Playlist({
+  id: 'all',
+  name: 'All tracks',
+  isShuffled: false,
+  isRepeated: false,
+  selectTracks: function (library) {
+    return library.getAll();
+  },
 
-Playlist.prototype.getAll = function () {
-  return this.tracks.getAll();
+  library: Tracks.empty
+});
+
+Playlist.prototype.update = function (library) {
+  return this.modify({ library: library });
 };
 
 Playlist.prototype.isLastTrack = function (track) {
-  var tracks = this.getAll();
-  var activeIndex = tracks.findIndex(function (t) {
+  var activeIndex = this.tracks.findIndex(function (t) {
     return t.id === track.id;
   });
 
-  return activeIndex === tracks.count();
+  return activeIndex === this.tracks.count();
 };
 
 Playlist.prototype.nextAfter = function (track) {
-  var tracks = this.getAll();
-  var activeIndex = tracks.findIndex(function (t) {
+  var activeIndex = this.tracks.findIndex(function (t) {
     return t.id === track.id;
   });
 
-  return tracks.get(activeIndex + 1);
+  return this.tracks.get(activeIndex + 1);
 };
 
 Playlist.prototype.modify = function(attrs) {
@@ -41,6 +48,3 @@ Playlist.prototype.modify = function(attrs) {
 };
 
 module.exports = Playlist;
-module.exports.empty = new Playlist({
-  tracks: Tracks.empty
-});

@@ -25,7 +25,7 @@ module.exports = function(receive, send, watch) {
   });
 
   receive('playlist:update', update('player', function (player) {
-    return player.setPlaylist(this.get('tracks'));
+    return player.updatePlaylist(this.get('tracks'));
   }));
 
   receive('audio:seek', update('player', function (player, position) {
