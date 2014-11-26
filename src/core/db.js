@@ -19,9 +19,7 @@ var initialState = Immutable.Map({
   activity: require('app/fixtures/activity'),
   player: Player.empty,
   groups: Groups.empty,
-  tracks: Tracks.empty.modify({
-    localIndex: PouchIndex.empty.fromDb('/music/tracks'),
-  }),
+  tracks: Tracks.empty,
   user: Auth.readFromLs(),
   layout: layouts.empty
 });
