@@ -1,19 +1,20 @@
-var React = require('react');
-var curry = require('curry');
-var Vk = require('app/services/vk');
-var AuthView = require('app/components/auth');
-var accounts = require('app/accounts');
+var EmptyLayout = require('./empty');
+var AuthLayout = require('./auth');
+var MainLayout = require('./main');
+var GroupLayout = require('./group');
+var ArtistLayout = require('./artist');
 
-exports.main = require('./main');
-exports.group = require('./group');
-exports.artist = require('./artist');
+exports.empty = new EmptyLayout();
+exports.main = new MainLayout();
 
-exports.auth = function (appstate) {
-  return new AuthView({
-    url: Vk.makeAuthUrl(accounts.vk)
-  });
+exports.auth = function (vkAccount) {
+  return new AuthLayout(vkAccount);
 };
 
-exports.empty = function (appstate) {
-  return React.DOM.div();
+exports.group = function(id) {
+  return new GroupLayout({ id: id });
+};
+
+exports.artist = function (name) {
+  return new ArtistLayout({ name: name });
 };

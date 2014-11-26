@@ -8,7 +8,7 @@ var Groups = require('app/values/groups');
 var Playlist = require('app/values/playlist');
 var VkIndex = require('app/values/vk-index');
 var PouchIndex = require('app/values/pouch-index');
-var layouts = require('app/layouts');
+var Layout = require('app/layouts');
 
 if (Auth.hasToken(location.hash)) {
   Auth.storeToLs(location.hash);
@@ -20,8 +20,8 @@ var initialState = Immutable.Map({
   player: Player.empty,
   groups: Groups.empty,
   tracks: Tracks.empty,
-  user: Auth.readFromLs(),
-  layout: layouts.empty
+  layout: Layout.empty,
+  user: Auth.readFromLs()
 });
 
 module.exports = new SmartRef(initialState);

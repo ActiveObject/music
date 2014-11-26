@@ -3,21 +3,25 @@ var Sidebar = require('app/components/sidebar');
 var ArtistProfile = require('app/components/artist-profile');
 var TracklistCard = require('app/components/tracklist-card');
 
-module.exports = function layoutArtistWithId(name) {
-  return function layoutArtistView(appstate, send) {
-    var tracklistCard = new TracklistCard({
-      player: appstate.get('player')
-    });
+function ArtistLayout(attrs) {
+  this.name = attrs.name;
+}
 
-    var profile = new ArtistProfile({
-      key: 'profile',
-      artist: name,
-      player: appstate.get('player'),
-      library: appstate.get('tracks')
-    });
+ArtistLayout.prototype.render = function (appstate) {
+  var tracklistCard = new TracklistCard({
+    player: appstate.get('player')
+  });
 
-    var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
+  var profile = new ArtistProfile({
+    key: 'profile',
+    artist: this.name,
+    player: appstate.get('player'),
+    library: appstate.get('tracks')
+  });
 
-    return new App(null, [profile, sidebar]);
-  };
+  var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
+
+  return new App(null, [profile, sidebar]);
 };
+
+module.exports = ArtistLayout;

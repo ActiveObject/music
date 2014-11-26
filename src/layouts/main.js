@@ -3,7 +3,11 @@ var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
 var TracklistCard = require('app/components/tracklist-card');
 
-module.exports = function layoutMainView(appstate, send) {
+function MainLayout() {
+
+}
+
+MainLayout.prototype.render = function(appstate, send) {
   var tracklistCard = new TracklistCard({
     player: appstate.get('player')
   });
@@ -18,3 +22,5 @@ module.exports = function layoutMainView(appstate, send) {
 
   return new App(null, [main, sidebar]);
 };
+
+module.exports = MainLayout;

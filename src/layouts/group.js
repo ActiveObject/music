@@ -4,21 +4,25 @@ var Sidebar = require('app/components/sidebar');
 var GroupProfile = require('app/components/group-profile');
 var TracklistCard = require('app/components/tracklist-card');
 
-module.exports = function layoutGroupWithId(id) {
-  return function layoutGroupView(appstate, send) {
-    var group = appstate.get('groups').findById(id);
+function GroupLayout(attrs) {
+  this.id = parseInt(attrs.id);
+}
 
-    var tracklistCard = new TracklistCard({
-      player: appstate.get('player')
-    });
+GroupLayout.prototype.render = function (appstate) {
+  var group = appstate.get('groups').findById(this.id);
 
-    var profile = new GroupProfile({
-      key: 'profile',
-      group: group
-    });
+  var tracklistCard = new TracklistCard({
+    player: appstate.get('player')
+  });
 
-    var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
+  var profile = new GroupProfile({
+    key: 'profile',
+    group: group
+  });
 
-    return new App(null, [profile, sidebar]);
-  };
+  var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
+
+  return new App(null, [profile, sidebar]);
 };
+
+module.exports = GroupLayout;
