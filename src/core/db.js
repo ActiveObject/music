@@ -3,11 +3,7 @@ var SmartRef = require('app/core/smart-ref');
 var Auth = require('app/core/auth');
 var Player = require('app/values/player');
 var Tracks = require('app/values/tracks');
-var Group = require('app/values/group');
 var Groups = require('app/values/groups');
-var Playlist = require('app/values/playlist');
-var VkIndex = require('app/values/vk-index');
-var PouchIndex = require('app/values/pouch-index');
 var Layout = require('app/layouts');
 
 if (Auth.hasToken(location.hash)) {
