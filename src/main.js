@@ -1,7 +1,7 @@
 var app = require('app/core/app');
 
 app.use(require('app/services/auth'));
-app.use(require('app/services/vk'));
+app.use(require('app/vk/service'));
 app.use(require('app/services/player'));
 app.use(require('app/services/soundmanager'));
 app.use(require('app/services/layout'));
@@ -13,3 +13,5 @@ app.renderTo(document.getElementById('app'));
 app.start();
 
 window.Perf = require('react/addons').addons.Perf;
+window.app = app;
+window.db = require('app/core/db');

@@ -15,6 +15,7 @@ Page.prototype.next = function (amount) {
 function VkIndexValue(attrs) {
   this.createdAt = new Date();
   this.isBuilt = attrs.isBuilt;
+  this.isBuilding = attrs.isBuilding;
   this.items = attrs.items;
   this.chunkToLoad = attrs.chunkToLoad;
   this.chunkSize = attrs.chunkSize;
@@ -37,6 +38,7 @@ VkIndexValue.prototype.fromVkResponse = function (res, transformFn) {
     return this.modify({
       items: items,
       isBuilt: true,
+      isBuilding: false,
       chunkToLoad: null
     });
   }
@@ -51,6 +53,7 @@ VkIndexValue.prototype.fromVkResponse = function (res, transformFn) {
 function VkIndex(attrs) {
   this.value = new VkIndexValue({
     isBuilt: false,
+    isBuilding: false,
     items: List(),
     chunkToLoad: new Page(0, attrs.chunkSize),
     chunkSize: attrs.chunkSize
@@ -62,6 +65,7 @@ function VkIndex(attrs) {
 
 VkIndex.empty = new VkIndexValue({
   isBuilt: false,
+  isBuilding: false,
   items: List(),
   chunkToLoad: new Page(0, 100),
   chunkSize: 100
@@ -71,18 +75,19 @@ VkIndex.prototype = Object.create(EventEmitter.prototype, {
   constructor: { value: VkIndex, enumerable: false }
 });
 
-VkIndex.prototype.build = function (vk, user) {
+VkIndex.prototype.build = function (user) {
   var index = this.value;
 
   if (!index.isBuilt) {
-    this.loadFn(vk, user, this.value.chunkToLoad, function (err, result) {
+    this.value.isBuilding = true;
+    this.loadFn(user, this.value.chunkToLoad, function (err, result) {
       if (err) {
         return console.log(err);
       }
 
       this.value = this.value.fromVkResponse(result.response, this.transformFn);
       this.emit('load', this.value);
-      this.build(vk, user);
+      this.build(user);
     }.bind(this));
   }
 };

@@ -13,9 +13,17 @@ function AuthenticatedUser(options) {
   this.accessToken = options.accessToken;
 }
 
+AuthenticatedUser.prototype.isAuthenticated = function () {
+  return true;
+};
+
 function UnauthenticatedUser() {
 
 }
+
+UnauthenticatedUser.prototype.isAuthenticated = function () {
+  return false;
+};
 
 exports.Authenticated = AuthenticatedUser;
 exports.Unauthenticated = UnauthenticatedUser;

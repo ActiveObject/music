@@ -1,6 +1,7 @@
 var VkIndex = require('app/values/vk-index');
 var db = require('app/core/db');
 var Database = require('app/core/database');
+var vk = require('app/vk');
 
 var vkIndex = new VkIndex({
   chunkSize: 1000,
@@ -19,12 +20,11 @@ var vkIndex = new VkIndex({
     ];
   },
 
-  loadFn: function (vk, user, chunkToLoad, callback) {
+  loadFn: function (user, chunkToLoad, callback) {
     vk.audio.get({
       owner_id: user.id,
       offset: chunkToLoad.offset,
-      count: chunkToLoad.count,
-      v: '5.25'
+      count: chunkToLoad.count
     }, callback);
   }
 });
@@ -36,7 +36,11 @@ vkIndex.on('load', function (index) {
 });
 
 module.exports = function (receive, send) {
-  receive('vk:ready', function () {
-    vkIndex.build(db.value.get('vk'), db.value.get('user'));
-  });
+  return function tracksService(appstate) {
+    if (appstate.get('user').isAuthenticated() && !vkIndex.value.isBuilt && !vkIndex.value.isBuilding) {
+      vkIndex.build(appstate.get('user'));
+    }
+
+    return appstate;
+  };
 };

@@ -1,5 +1,6 @@
 var VkIndex = require('app/values/vk-index');
 var db = require('app/core/db');
+var vk = require('app/vk');
 
 var vkIndex = new VkIndex({
   chunkSize: 100,
@@ -21,13 +22,12 @@ var vkIndex = new VkIndex({
     ];
   },
 
-  loadFn: function (vk, user, chunkToLoad, callback) {
+  loadFn: function (user, chunkToLoad, callback) {
     vk.groups.get({
       user_id: user.id,
       offset: chunkToLoad.offset,
       count: chunkToLoad.count,
-      extended: 1,
-      v: '5.25'
+      extended: 1
     }, callback);
   }
 });
@@ -39,7 +39,11 @@ vkIndex.on('load', function (index) {
 });
 
 module.exports = function (receive, send) {
-  receive('vk:ready', function () {
-    vkIndex.build(db.value.get('vk'), db.value.get('user'));
-  });
+  return function groupsService(appstate) {
+    if (appstate.get('user').isAuthenticated() && !vkIndex.value.isBuilt && !vkIndex.value.isBuilding) {
+      vkIndex.build(appstate.get('user'));
+    }
+
+    return appstate;
+  };
 };
