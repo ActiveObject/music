@@ -2,7 +2,7 @@ var update = require('app/core/db').update;
 
 module.exports = function(receive, send, watch) {
   receive('toggle:play', update('player', function (player, data) {
-    return player.togglePlay(data.track);
+    return player.togglePlay(data.track, data.playlist);
   }));
 
   receive('sound-manager:finish', update('player', function (player) {

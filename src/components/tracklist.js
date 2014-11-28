@@ -9,21 +9,22 @@ module.exports = React.createClass({
 
   propTypes: {
     player: React.PropTypes.object.isRequired,
-    tracks: React.PropTypes.object.isRequired
+    playlist: React.PropTypes.object.isRequired
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
     return nextProps.player.track.id !== this.props.player.track.id ||
       nextProps.player.isPlaying !== this.props.player.isPlaying ||
-      nextProps.tracks !== this.props.tracks;
+      nextProps.playlist !== this.props.playlist;
   },
 
   render: function() {
-    var tracks = this.props.tracks.map(function (track) {
+    var tracks = this.props.playlist.tracks.toJS().map(function (track) {
       return new Track({
         key: track.id,
         track: track,
         player: this.props.player,
+        playlist: this.props.playlist,
         y: 0
       });
     }, this);

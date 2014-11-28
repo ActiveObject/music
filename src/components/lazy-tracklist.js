@@ -12,7 +12,7 @@ module.exports = React.createClass({
 
   propTypes: {
     player: React.PropTypes.object.isRequired,
-    tracks: React.PropTypes.object.isRequired,
+    playlist: React.PropTypes.object.isRequired,
     itemHeight: React.PropTypes.number.isRequired
   },
 
@@ -20,12 +20,12 @@ module.exports = React.createClass({
     return nextState.cursor !== this.state.cursor ||
       nextProps.player.track.id !== this.props.player.track.id ||
       nextProps.player.isPlaying !== this.props.player.isPlaying ||
-      nextProps.tracks !== this.props.tracks ||
+      nextProps.playlist !== this.props.playlist ||
       nextProps.itemHeight !== this.props.itemHeight;
   },
 
   getInitialState: function () {
-    var items = this.props.tracks.toJS();
+    var items = this.props.playlist.tracks.toJS();
 
     return {
       cursor: new Cursor(items, {
@@ -57,15 +57,15 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function (prevProps) {
-    if (this.props.tracks !== prevProps.tracks) {
+    if (this.props.playlist !== prevProps.playlist) {
       this.scroll.refresh();
     }
   },
 
   componentWillReceiveProps: function(nextProps) {
-    if (this.props.tracks !== nextProps.tracks) {
+    if (this.props.playlist !== nextProps.playlist) {
       this.setState({
-        cursor: this.state.cursor.updateItems(nextProps.tracks.toJS())
+        cursor: this.state.cursor.updateItems(nextProps.playlist.tracks.toJS())
       });
     }
   },
@@ -76,13 +76,14 @@ module.exports = React.createClass({
         key: track.value.id,
         track: track.value,
         y: track.yOffset,
-        player: this.props.player
+        player: this.props.player,
+        playlist: this.props.playlist
       });
     }, this);
 
     var body = dom.div()
       .className('tracklist-body')
-      .attr('style', { height: this.props.tracks.count() * this.props.itemHeight })
+      .attr('style', { height: this.props.playlist.tracks.count() * this.props.itemHeight })
       .append(tracks)
       .make();
 

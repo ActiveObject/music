@@ -9,10 +9,13 @@ eventBus.send = function (type, payload) {
   });
 };
 
-eventBus.togglePlay = function (track) {
+eventBus.togglePlay = function (track, playlist) {
   eventBus.push({
     type: 'toggle:play',
-    payload: { track: track }
+    payload: {
+      track: track,
+      playlist: playlist
+    }
   });
 };
 

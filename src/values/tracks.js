@@ -1,6 +1,7 @@
 var List = require('immutable').List;
 var merge = require('app/utils').merge;
 var Track = require('app/values/track');
+var ArtistPlaylist = require('app/values/playlist/artist');
 var VkIndex = require('app/values/vk-index');
 var Database = require('app/core/database');
 
@@ -33,6 +34,10 @@ Tracks.prototype.findByArtist = function (artist) {
       return track.artist === artist;
     });
   });
+};
+
+Tracks.prototype.playlistForArtist = function(artist) {
+  return new ArtistPlaylist({ artist: artist, library: this });
 };
 
 Tracks.prototype.modify = function (attrs) {

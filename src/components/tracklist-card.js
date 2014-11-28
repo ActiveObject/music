@@ -18,7 +18,7 @@ module.exports = React.createClass({
     var tracklist = new LazyTracklist({
       key: 'tracklist',
       player: this.props.player,
-      tracks: this.props.player.playlist.tracks
+      playlist: this.props.player.visiblePlaylist()
     });
 
     var playerView = new Player({

@@ -1,10 +1,14 @@
+var _ = require('underscore');
 var merge = require('app/utils').merge;
-var Playlist = require('app/values/playlist');
+var LibraryPlaylist = require('app/values/playlist/library');
+var Tracks = require('app/values/tracks');
 
 function Player(attrs) {
   if (!(this instanceof Player)) {
     return new Player(attrs);
   }
+
+  var isPlaylistChanged = attrs.playlist !== this.playlist;
 
   this.track = attrs.track;
   this.playlist = attrs.playlist;
@@ -13,21 +17,12 @@ function Player(attrs) {
   this.seeking = attrs.seeking;
   this.bytesLoaded = attrs.bytesLoaded;
   this.bytesTotal = attrs.bytesTotal;
+  this.recentPlaylists = this.makeRecent(attrs.recentPlaylists, attrs.playlist, isPlaylistChanged);
 
   if (Object.keys(this.track).length === 0 && this.playlist.tracks.size > 0) {
     this.track = this.playlist.tracks.first();
   }
 }
-
-Player.empty = new Player({
-  track: {},
-  playlist: Playlist.all,
-  isPlaying: false,
-  position: 0,
-  seeking: false,
-  bytesTotal: 0,
-  bytesLoaded: 0
-});
 
 Player.prototype.modify = function (attrs) {
   return new Player(merge(this, attrs));
@@ -41,15 +36,19 @@ Player.prototype.pause = function () {
   return this.modify({ isPlaying: false });
 };
 
-Player.prototype.togglePlay = function (track) {
+Player.prototype.togglePlay = function (track, playlist) {
   if (track.id !== this.track.id) {
     return this.modify({
       track: track,
+      playlist: playlist,
       isPlaying: true
     });
   }
 
-  return this.modify({ isPlaying: !this.isPlaying });
+  return this.modify({
+    playlist: playlist,
+    isPlaying: !this.isPlaying
+  });
 };
 
 Player.prototype.relativePosition = function () {
@@ -112,5 +111,64 @@ Player.prototype.updatePlaylist = function (library) {
     playlist: this.playlist.update(library)
   });
 };
+
+Player.prototype.visiblePlaylist = function() {
+  var recentItem = _.findWhere(this.recentPlaylists, { visible: true });
+
+  if (!recentItem) {
+    return this.playlist;
+  }
+
+  return recentItem.playlist;
+};
+
+Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChanged) {
+  if (prevRecent.length === 0) {
+    return prevRecent.concat({
+      visible: true,
+      type: this.playlist.type,
+      playlist: this.playlist
+    });
+  }
+
+  if (isPlaylistChanged && _.contains(_.pluck(prevRecent, 'type'), prevPlaylist.type)) {
+    var recentItem = _.find(prevRecent, function(playlist) {
+      return playlist.type === prevPlaylist.type;
+    });
+
+    var recentItems = this.recentPlaylists = prevRecent.filter(function(playlist) {
+      return playlist.type !== prevPlaylist.type;
+    });
+
+    return recentItems.concat({
+      visible: recentItem.visible,
+      type: prevPlaylist.type,
+      playlist: prevPlaylist
+    });
+  }
+
+  return prevRecent.concat({
+    visible: false,
+    type: prevPlaylist.type,
+    playlist: prevPlaylist
+  });
+};
+
+
+Player.empty = new Player({
+  track: {},
+  playlist: new LibraryPlaylist({
+    library: Tracks.empty,
+    isShuffled: false,
+    isRepeated: false
+  }),
+  isPlaying: false,
+  position: 0,
+  seeking: false,
+  bytesTotal: 0,
+  bytesLoaded: 0,
+  recentPlaylists: []
+});
+
 
 module.exports = Player;

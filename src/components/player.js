@@ -83,6 +83,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    eventBus.togglePlay(this.props.player.track);
+    eventBus.togglePlay(this.props.player.track, this.props.player.playlist);
   }
 });
