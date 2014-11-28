@@ -19,6 +19,10 @@ LibraryPlaylist.prototype.update = function(library) {
   });
 };
 
+LibraryPlaylist.prototype.recentTag = function () {
+  return this.type;
+};
+
 LibraryPlaylist.prototype.modify = function(attrs) {
   return new LibraryPlaylist(merge(this, attrs));
 };

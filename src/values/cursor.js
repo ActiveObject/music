@@ -36,7 +36,9 @@ Cursor.prototype.updatePosition = function (pos) {
 };
 
 Cursor.prototype.updateItems = function (newItems) {
-  return this.modify(newItems);
+  return this.modify(newItems, {
+    position: newItems.length * this.itemHeight > Math.abs(this.position) ? this.position : 0
+  });
 };
 
 Cursor.prototype.selection = function () {

@@ -1,4 +1,7 @@
+var uuid = require('uuid');
+
 function BasePlaylist(attrs) {
+  this.id = uuid.v4();
   this.isShuffled = attrs.isShuffled;
   this.isRepeated = attrs.isRepeated;
 }

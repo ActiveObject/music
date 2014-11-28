@@ -126,34 +126,43 @@ Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChang
   if (prevRecent.length === 0) {
     return prevRecent.concat({
       visible: true,
-      type: this.playlist.type,
+      type: this.playlist.recentTag(),
       playlist: this.playlist
     });
   }
 
-  if (isPlaylistChanged && _.contains(_.pluck(prevRecent, 'type'), prevPlaylist.type)) {
-    var recentItem = _.find(prevRecent, function(playlist) {
-      return playlist.type === prevPlaylist.type;
+  if (isPlaylistChanged && _.contains(_.pluck(prevRecent, 'type'), prevPlaylist.recentTag())) {
+    var recentItem = _.find(prevRecent, function(item) {
+      return item.playlist.recentTag() === prevPlaylist.recentTag();
     });
 
-    var recentItems = this.recentPlaylists = prevRecent.filter(function(playlist) {
-      return playlist.type !== prevPlaylist.type;
+    var recentItems = this.recentPlaylists = prevRecent.filter(function(item) {
+      return item.playlist.recentTag() !== prevPlaylist.recentTag();
     });
 
     return recentItems.concat({
       visible: recentItem.visible,
-      type: prevPlaylist.type,
+      type: prevPlaylist.recentTag(),
       playlist: prevPlaylist
     });
   }
 
   return prevRecent.concat({
     visible: false,
-    type: prevPlaylist.type,
+    type: prevPlaylist.recentTag(),
     playlist: prevPlaylist
   });
 };
 
+Player.prototype.switchPlaylist = function (id) {
+  return this.modify({
+    recentPlaylists: this.recentPlaylists.map(function (item) {
+      return _.extend(item, {
+        visible: item.playlist.id === id
+      });
+    })
+  });
+};
 
 Player.empty = new Player({
   track: {},

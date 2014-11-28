@@ -40,6 +40,10 @@ module.exports = function(receive, send, watch) {
     return player.stopSeeking();
   }));
 
+  receive('player:switch-playlist', update('player', function (player, id) {
+    return player.switchPlaylist(id);
+  }));
+
   watch('tracks', function (tracks) {
     send('playlist:update');
   });

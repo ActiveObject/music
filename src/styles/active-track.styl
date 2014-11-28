@@ -5,15 +5,20 @@
   position: absolute
   left: 0
   top: 0
+  width: 100%
+  background-color: rgba(255, 255, 255, 0.95)
+
+.player-body
+  position: relative
   display: flex
   align-items: center
-  width: 100%
+
+  padding: 0 10px
   height: 90px
+
+  font-size: 12px
   font-family: 'Roboto', sans-serif
   font-weight: 300
-  background-color: rgba(255, 255, 255, 0.95)
-  font-size: 12px
-  padding: 0 10px
 
 .active-track-artist
   font-weight: 500
@@ -38,3 +43,15 @@
   left: 84px
   right: 25px
   top: 51px
+
+.player-playlist-tabs
+  position: relative
+  width: 100%
+  height: 0
+  margin-top: -15px
+  line-height: 25px
+  transition: height 0.2s ease-in-out
+  overflow: hidden
+
+.player-playlist-tabs-active
+  height: 25px

@@ -38,4 +38,11 @@ eventBus.startSeeking = function () {
   });
 };
 
+eventBus.switchPlaylist = function (id) {
+  eventBus.push({
+    type: 'player:switch-playlist',
+    payload: id
+  });
+};
+
 module.exports = eventBus;
