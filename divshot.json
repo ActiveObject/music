@@ -2,5 +2,9 @@
   "name": "ac-music",
   "root": "_public",
   "clean_urls": true,
-  "error_page": "error.html"
+  "error_page": "error.html",
+  "routes": {
+    "/artist/*": "index.html",
+    "/groups/*": "index.html"
+  }
 }
