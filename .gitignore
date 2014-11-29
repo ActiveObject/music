@@ -41,3 +41,5 @@ _public/
 
 .vagrant
 .env
+
+test/app.js

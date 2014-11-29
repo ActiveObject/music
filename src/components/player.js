@@ -80,7 +80,7 @@ module.exports = React.createClass({
     var body = dom.div()
       .key('body')
       .className('player-body')
-      .append(playBtn, desc, time, progress)
+      .append(playBtn, desc, time, progress);
 
     var tabs = dom.div()
       .key('tabs')

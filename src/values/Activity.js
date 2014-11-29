@@ -66,9 +66,7 @@ function weeks(activity) {
 }
 
 function months(activity) {
-  var dateByMonth = _.groupBy(activity, function (item) {
-    return item.date.month();
-  });
+  var dateByMonth = _.groupBy(activity, item => item.date.month());
 
   var ms = _.map(dateByMonth, function (days, key) {
     return {

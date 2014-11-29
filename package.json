@@ -48,7 +48,9 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "mocha -R spec --recursive test/",
+    "test": "npm run build:test && mocha test/app.js",
+    "test-server": "mocha -w test/app.js",
+    "test-build-server": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js --watch",
     "clean:build": "rm -rf build",
     "clean:public": "rm -rf _public",
     "copy:assets": "cp -R src/assets ./_public",
@@ -59,6 +61,7 @@
     "build:prepare": "npm run lint && npm run clean:build && npm run clean:public && npm run copy:assets",
     "build:dev": "npm run build:prepare && npm run copy:vendor:dev && grunt build && npm run clean:build",
     "build:nw": "npm run build:prepare && npm run copy:vendor:prod && grunt build && webpack -p --progress --targe node-webkit && npm run nwbuild",
+    "build:test": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js",
     "build": "npm run build:prepare && npm run copy:vendor:prod && grunt build && webpack -p --progress && npm run clean:build",
     "dev": "npm run build:dev && webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool source-map --output-pathinfo",
     "heroku-build": "git clean -x -d -f && slc build",
