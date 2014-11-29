@@ -8,7 +8,7 @@ exports.empty = new EmptyLayout();
 exports.main = new MainLayout();
 
 exports.auth = function (vkAccount) {
-  return new AuthLayout(vkAccount);
+  return new AuthLayout({ vkAccount: vkAccount });
 };
 
 exports.group = function(id) {
