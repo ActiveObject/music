@@ -1,0 +1,6 @@
+{
+  "name": "ac-music",
+  "root": "_public",
+  "clean_urls": true,
+  "error_page": "error.html"
+}

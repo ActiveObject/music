@@ -43,3 +43,4 @@ _public/
 .env
 
 test/app.js
+.divshot-cache/
