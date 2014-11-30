@@ -8,29 +8,27 @@ var eventBus = require('app/core/event-bus');
 
 var handlers = [];
 var target = document.body;
-var appEventStream = new BufferedEventStream(eventBus, function (event) {
-  dispatch(event.type, event.payload);
+var appEventStream = new BufferedEventStream(eventBus, function (v) {
+  if (Array.isArray(v)) {
+    return v.filter(isDatom).forEach(dispatch);
+  }
+
+  if (isDatom(v)) {
+    return dispatch(v);
+  }
 });
 
 function makeReceiver(receivers) {
-  return function createReceiverForEvent(expectedType, fn) {
-    receivers.push(function (db, receivedType, payload) {
+  return function createReceiverForEvent(expectedAttr, fn) {
+    receivers.push(function (db, datom) {
       var result;
 
-      if (expectedType === receivedType) {
-        result = fn(db, payload);
+      if (expectedAttr === datom.a) {
+        result = fn(db, datom.v, datom);
       }
 
       return isValue(result) ? result : db;
     });
-  };
-}
-
-function receiveEvent(eventType, payload) {
-  return function receive(expectedType, fn) {
-    if (expectedType === eventType) {
-      fn(payload);
-    }
   };
 }
 
@@ -40,8 +38,16 @@ function addWatch(db) {
   };
 }
 
-function scheduleEvent(type, payload) {
-  eventBus.push({ type: type, payload: payload });
+function isDatom(v) {
+  return _.isObject(v) && _.every(['e', 'a', 'v'], function (key) {
+    return _.has(v, key);
+  });
+}
+
+function scheduleEvent(v) {
+  if (isDatom(v)) {
+    eventBus.push(v);
+  }
 }
 
 function use(handler) {
@@ -55,10 +61,10 @@ function use(handler) {
   }
 }
 
-function dispatch(type, payload) {
+function dispatch(datom) {
   appEventStream.pause();
 
-  debug('%s - dispatching', type);
+  debug('[%s %s %s] dispatch started', datom.e, datom.a, datom.v);
 
   function next(state, handlers) {
     if (handlers.length === 0) {
@@ -67,18 +73,18 @@ function dispatch(type, payload) {
 
     var handler = handlers[0];
 
-    if (handler.length === 4) {
-      return handler(state, type, payload, function (appstate) {
+    if (handler.length === 3) {
+      return handler(state, datom, function (appstate) {
         return next(appstate, handlers.slice(1));
       });
     }
 
-    return next(handler(state, type, payload), handlers.slice(1));
+    return next(handler(state, datom), handlers.slice(1));
   }
 
   var nextState = next(appstate.value, handlers);
 
-  debug('%s - dispatch finished', type);
+  debug('[%s %s %s] dispatch finished', datom.e, datom.a, datom.v);
 
   if (nextState !== appstate.value) {
     appstate.swap(nextState);
@@ -114,7 +120,7 @@ function start() {
     }
   });
 
-  dispatch('app:start');
+  dispatch({ e: 'app', a: ':app/started', v: true });
 }
 
 exports.renderTo = function (el) {

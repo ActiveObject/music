@@ -16,20 +16,18 @@ function getSound(track, send) {
     autoPlay: false,
     volume: 100,
     onfinish: function () {
-      send('sound-manager:finish', track);
+      send({ e: 'app/soundmanager', a: ':soundmanager/finish', v: track });
     },
 
     whileplaying: _.throttle(function () {
       if (this.readyState !== 0) {
-        send('sound-manager:whileplaying', this.position);
+        send({ e: 'app/soundmanager', a: ':soundmanager/position', v: this.position });
       }
     }, 500),
 
     whileloading: _.throttle(function () {
-      send('sound-manager:whileloading', {
-        bytesLoaded: this.bytesLoaded,
-        bytesTotal: this.bytesTotal
-      });
+      send({ e: 'app/soundmanager', a: ':soundmanager/bytes-loaded', v: this.bytesLoaded });
+      send({ e: 'app/soundmanager', a: ':soundmanager/bytes-total', v: this.bytesTotal });
     }, 500)
   });
 }
@@ -52,27 +50,27 @@ var modifyTrackState = curry(function modifyTrackState(send, nextPlayer, prevPla
 });
 
 module.exports = function (receive, send, watch) {
-  receive('app:start', function () {
+  receive(':app/started', function () {
     sm.setup({
       url: 'swf',
       flashVersion: 9,
       preferFlash: false,
       onready: function() {
-        send('sound-manager:is-ready');
+        send({ e: 'app/soundmanager', a: ':soundmanager/is-ready', v: true });
       }
     });
   });
 
-  receive('sound-manager:is-ready', function () {
+  receive(':soundmanager/is-ready', function () {
     watch('player', modifyTrackState(send));
   });
 
-  receive('audio:seek-apply', function (appstate) {
+  receive(':player/position', function (appstate, v) {
     var player = appstate.get('player');
     var sound = sm.getSoundById(player.track.id);
 
     if (sound) {
-      sound.setPosition(player.position);
+      sound.setPosition(v);
     }
   });
 };

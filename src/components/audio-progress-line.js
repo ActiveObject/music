@@ -65,47 +65,50 @@ var AudioProgressLine = React.createClass({
 
   dragStart: function (e) {
     this.setState({ seekStart: e.clientX });
-    eventBus.startSeeking();
+    eventBus.push(this.props.player.startSeeking());
   },
 
   dragEnd: function (e) {
     if (this.props.player.seeking) {
-      eventBus.seekAudioApply();
       this.setState({ seekStart: 0 });
+      eventBus.push(this.props.player.stopSeeking());
     }
   },
 
   moveSeekIndicator: function (e) {
     if (this.props.player.seeking) {
-      eventBus.seekAudio(this.seekPosition(e.clientX) / 100);
+      eventBus.push(this.props.player.seek(this.seekPosition(e.clientX)));
     }
   },
 
   seekPosition: function (seekCurrent) {
     var offset = seekCurrent - this.state.seekStart,
         lw = this.lineWidth(),
-        trp = (this.state.seekStart - this.leftX()) / lw * 100,
-        poffset = offset / lw * 100,
+        trp = (this.state.seekStart - this.leftX()) / lw,
+        poffset = offset / lw,
         p = (trp + poffset);
 
     if (p < 0) {
       return 0;
     }
 
-    if (p > 100) {
-      return 100;
+    if (p > 1) {
+      return 1;
     }
 
     return p;
   },
 
   seekToPosition: function (e) {
-    eventBus.seekAudio(this.seekPosition(e.clientX) / 100);
-    eventBus.seekAudioApply();
+    eventBus.push(this.props.player.seekTo(this.seekPosition(e.clientX)));
   },
 
   trackProgress: function () {
-    return this.props.player.relativePosition() * 100;
+    if (this.props.player.seeking) {
+      return this.props.player.relativeSeekPosition() * 100;
+    } else {
+      return this.props.player.relativePosition() * 100;
+    }
   },
 
   trackLoaded: function () {

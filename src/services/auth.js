@@ -2,9 +2,9 @@ var accounts = require('app/accounts');
 var Layout = require('app/layouts');
 
 module.exports = function (receive, send) {
-  return function authService(appstate, type, data, next) {
+  return function authService(appstate, datom, next) {
     if (!appstate.get('user').isAuthenticated() && !appstate.get('userLoading')) {
-      send('layout:change', Layout.auth(accounts.vk));
+      send({ e: 'app/layout', a: ':layout', v: Layout.auth(accounts.vk) });
       return appstate.set('userLoading', true);
     }
 

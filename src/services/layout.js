@@ -1,5 +1,5 @@
 module.exports = function (receive) {
-  receive('layout:change', function (appstate, layout) {
+  receive(':layout', function (appstate, layout) {
     return appstate.set('layout', layout);
   });
 };

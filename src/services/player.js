@@ -1,50 +1,51 @@
 var update = require('app/core/db').update;
 
 module.exports = function(receive, send, watch) {
-  receive('toggle:play', update('player', function (player, data) {
-    return player.togglePlay(data.track, data.playlist);
-  }));
-
-  receive('sound-manager:finish', update('player', function (player) {
+  receive(':soundmanager/finish', update('player', function (player) {
     return player.next();
   }));
 
-  receive('sound-manager:whileloading', update('player', function (player, data) {
-    return player.updateLoaded({
-      bytesLoaded: data.bytesLoaded,
-      bytesTotal: data.bytesTotal
+  receive(':soundmanager/bytes-loaded', update('player', function (player, v) {
+    return player.modify({ bytesLoaded: v });
+  }));
+
+  receive(':soundmanager/bytes-total', update('player', function (player, v) {
+    return player.modify({ bytesTotal: v });
+  }));
+
+  receive(':soundmanager/position', update('player', function (player, v) {
+    return player.modify({ position: v });
+  }));
+
+  receive(':player/is-playing', update('player', function (player, v) {
+    return player.modify({ isPlaying: v });
+  }));
+
+  receive(':player/position', update('player', function (player, v) {
+    return player.modify({ position: v });
+  }));
+
+  receive(':player/seek-position', update('player', function (player, v) {
+    return player.modify({ seekPosition: v });
+  }));
+
+  receive(':player/seeking', update('player', function (player, v) {
+    return player.modify({ seeking: v });
+  }));
+
+  receive(':player/playlist', update('player', function (player, v) {
+    return player.modify({ playlist: v });
+  }));
+
+  receive(':player/track', update('player', function (player, v) {
+    return player.modify({ track: v });
+  }));
+
+  watch('tracks', function (tracks, prev, appstate) {
+    send({
+      e: 'app/player',
+      a: ':player/playlist',
+      v: appstate.get('player').playlist.update(tracks)
     });
-  }));
-
-  receive('sound-manager:whileplaying', function (appstate, position) {
-    var player = appstate.get('player');
-
-    if (!player.seeking) {
-      return appstate.set('player', player.updatePosition(position));
-    }
-  });
-
-  receive('playlist:update', update('player', function (player) {
-    return player.updatePlaylist(this.get('tracks'));
-  }));
-
-  receive('audio:seek', update('player', function (player, position) {
-    return player.seek(position);
-  }));
-
-  receive('audio:seek-start', update('player', function (player) {
-    return player.startSeeking();
-  }));
-
-  receive('audio:seek-apply', update('player', function (player) {
-    return player.stopSeeking();
-  }));
-
-  receive('player:switch-playlist', update('player', function (player, id) {
-    return player.switchPlaylist(id);
-  }));
-
-  watch('tracks', function (tracks) {
-    send('playlist:update');
   });
 };

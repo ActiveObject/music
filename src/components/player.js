@@ -100,10 +100,10 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    eventBus.togglePlay(this.props.player.track, this.props.player.playlist);
+    eventBus.push(this.props.player.togglePlay());
   },
 
   changePlaylist: function (id) {
-    eventBus.switchPlaylist(id);
+    eventBus.push(this.props.player.switchPlaylist(id));
   }
 });

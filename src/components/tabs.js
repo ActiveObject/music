@@ -5,6 +5,8 @@ var React = require('react');
 var dom = require('app/core/dom');
 
 var Tabs = React.createClass({
+  displayName: 'Tabs',
+
   render: function () {
     var items = this.props.items.map(function (item) {
       return dom.span()

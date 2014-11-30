@@ -14,9 +14,11 @@ function Player(attrs) {
   this.playlist = attrs.playlist;
   this.isPlaying = attrs.isPlaying;
   this.position = attrs.position;
-  this.seeking = attrs.seeking;
   this.bytesLoaded = attrs.bytesLoaded;
   this.bytesTotal = attrs.bytesTotal;
+  this.seeking = attrs.seeking;
+  this.seekPosition = attrs.seekPosition;
+
   this.recentPlaylists = this.makeRecent(attrs.recentPlaylists, attrs.playlist, isPlaylistChanged);
 
   if (Object.keys(this.track).length === 0 && this.playlist.tracks.size > 0) {
@@ -37,18 +39,30 @@ Player.prototype.pause = function () {
 };
 
 Player.prototype.togglePlay = function (track, playlist) {
-  if (track.id !== this.track.id) {
-    return this.modify({
-      track: track,
-      playlist: playlist,
-      isPlaying: true
-    });
+  if (arguments.length === 0) {
+    return {
+      e: 'app/player',
+      a: ':player/is-playing',
+      v: !this.isPlaying
+    };
   }
 
-  return this.modify({
-    playlist: playlist,
-    isPlaying: !this.isPlaying
-  });
+  var datoms = [];
+
+  if (track.id !== this.track.id) {
+    datoms.push({ e: 'app/player', a: ':player/track', v: track });
+    datoms.push({ e: 'app/player', a: ':player/is-playing', v: true });
+  }
+
+  if (track.id === this.track.id) {
+    datoms.push({ e: 'app/player', a: ':player/is-playing', v: !this.isPlaying });
+  }
+
+  if (playlist.id !== this.playlist.id) {
+    datoms.push({ e: 'app/player', a: ':player/playlist', v: playlist });
+  }
+
+  return datoms;
 };
 
 Player.prototype.relativePosition = function () {
@@ -59,27 +73,42 @@ Player.prototype.relativePosition = function () {
   return this.position / this.track.duration / 1000;
 };
 
-Player.prototype.updatePosition = function (value) {
-  return this.modify({ position: value });
+Player.prototype.relativeSeekPosition = function () {
+  if (this.track.duration === 0) {
+    return 0;
+  }
+
+  return this.seekPosition / this.track.duration / 1000;
 };
 
-Player.prototype.seek = function(position) {
-  return this.updatePosition(this.track.duration * position * 1000);
+Player.prototype.seek = function (position) {
+  return {
+    e: 'app/player',
+    a: ':player/seek-position',
+    v: this.track.duration * position * 1000
+  };
 };
 
-Player.prototype.startSeeking = function () {
-  return this.modify({ seeking: true });
+Player.prototype.seekTo = function (position) {
+  return {
+    e: 'app/player',
+    a: ':player/position',
+    v: this.track.duration * position * 1000
+  };
+};
+
+Player.prototype.startSeeking = function (v) {
+  return [
+    { e: 'app/player', a: ':player/seek-position', v: this.position },
+    { e: 'app/player', a: ':player/seeking', v: true }
+  ];
 };
 
 Player.prototype.stopSeeking = function () {
-  return this.modify({ seeking: false });
-};
-
-Player.prototype.updateLoaded = function (options) {
-  return this.modify({
-    bytesLoaded: options.bytesLoaded,
-    bytesTotal: options.bytesTotal
-  });
+  return [
+    { e: 'app/player', a: ':player/position', v: this.seekPosition },
+    { e: 'app/player', a: ':player/seeking', v: false }
+  ];
 };
 
 Player.prototype.relativeLoaded = function () {
@@ -103,12 +132,6 @@ Player.prototype.next = function() {
 Player.prototype.changePlaylist = function(newPlaylist) {
   return this.modify({
     playlist: newPlaylist
-  });
-};
-
-Player.prototype.updatePlaylist = function (library) {
-  return this.modify({
-    playlist: this.playlist.update(library)
   });
 };
 
@@ -155,13 +178,17 @@ Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChang
 };
 
 Player.prototype.switchPlaylist = function (id) {
-  return this.modify({
-    recentPlaylists: this.recentPlaylists.map(function (item) {
-      return _.extend(item, {
-        visible: item.playlist.id === id
-      });
-    })
+  var recent = this.recentPlaylists.map(function (item) {
+    return _.extend(item, {
+      visible: item.playlist.id === id
+    });
   });
+
+  return {
+    e: 'app/player',
+    a: ':player/recent-playlists',
+    v: recent
+  };
 };
 
 Player.empty = new Player({
@@ -173,6 +200,7 @@ Player.empty = new Player({
   }),
   isPlaying: false,
   position: 0,
+  seekPosition: 0,
   seeking: false,
   bytesTotal: 0,
   bytesLoaded: 0,
