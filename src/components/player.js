@@ -104,6 +104,6 @@ module.exports = React.createClass({
   },
 
   changePlaylist: function (id) {
-    eventBus.push(this.props.player.switchPlaylist(id));
+    eventBus.push(this.props.player.switchToPlaylist(id));
   }
 });

@@ -105,17 +105,11 @@ Player.prototype.nextTrack = function() {
   }
 };
 
-Player.prototype.switchPlaylist = function (id) {
-  var recent = this.recentPlaylists.map(function (item) {
-    return _.extend(item, {
-      visible: item.playlist.id === id
-    });
-  });
-
+Player.prototype.switchToPlaylist = function (id) {
   return {
     e: 'app/player',
-    a: ':player/recent-playlists',
-    v: recent
+    a: ':player/visible-playlist',
+    v: id
   };
 };
 
@@ -151,6 +145,18 @@ Player.prototype.visiblePlaylist = function() {
   }
 
   return recentItem.playlist;
+};
+
+Player.prototype.setVisiblePlaylist = function (id) {
+  var recent = this.recentPlaylists.map(function (item) {
+    return _.extend(item, {
+      visible: item.playlist.id === id
+    });
+  });
+
+  return this.modify({
+    recentPlaylists: recent
+  });
 };
 
 Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChanged) {

@@ -37,6 +37,10 @@ module.exports = function(receive, send, watch) {
     return player.modify({ track: v });
   }));
 
+  receive(':player/visible-playlist', update('player', function (player, v) {
+    return player.setVisiblePlaylist(v);
+  }));
+
   receive(':soundmanager/finish', function (appstate) {
     send(appstate.get('player').nextTrack());
   });
