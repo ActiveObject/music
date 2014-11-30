@@ -1,10 +1,6 @@
 var update = require('app/core/db').update;
 
 module.exports = function(receive, send, watch) {
-  receive(':soundmanager/finish', update('player', function (player) {
-    return player.next();
-  }));
-
   receive(':soundmanager/bytes-loaded', update('player', function (player, v) {
     return player.modify({ bytesLoaded: v });
   }));
@@ -40,6 +36,10 @@ module.exports = function(receive, send, watch) {
   receive(':player/track', update('player', function (player, v) {
     return player.modify({ track: v });
   }));
+
+  receive(':soundmanager/finish', function (appstate) {
+    send(appstate.get('player').nextTrack());
+  });
 
   watch('tracks', function (tracks, prev, appstate) {
     send({

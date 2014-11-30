@@ -31,11 +31,11 @@ Player.prototype.modify = function (attrs) {
 };
 
 Player.prototype.play = function() {
-  return this.modify({ isPlaying: true });
+  return { e: 'app/player', a: 'is-playing', v: true };
 };
 
 Player.prototype.pause = function () {
-  return this.modify({ isPlaying: false });
+  return { e: 'app/player', a: 'is-playing', v: false };
 };
 
 Player.prototype.togglePlay = function (track, playlist) {
@@ -63,22 +63,6 @@ Player.prototype.togglePlay = function (track, playlist) {
   }
 
   return datoms;
-};
-
-Player.prototype.relativePosition = function () {
-  if (this.track.duration === 0) {
-    return 0;
-  }
-
-  return this.position / this.track.duration / 1000;
-};
-
-Player.prototype.relativeSeekPosition = function () {
-  if (this.track.duration === 0) {
-    return 0;
-  }
-
-  return this.seekPosition / this.track.duration / 1000;
 };
 
 Player.prototype.seek = function (position) {
@@ -111,28 +95,52 @@ Player.prototype.stopSeeking = function () {
   ];
 };
 
+Player.prototype.nextTrack = function() {
+  if (!this.playlist.isLastTrack(this.track)) {
+    return {
+      e: 'app/player',
+      a: ':player/track',
+      v: this.playlist.nextAfter(this.track)
+    };
+  }
+};
+
+Player.prototype.switchPlaylist = function (id) {
+  var recent = this.recentPlaylists.map(function (item) {
+    return _.extend(item, {
+      visible: item.playlist.id === id
+    });
+  });
+
+  return {
+    e: 'app/player',
+    a: ':player/recent-playlists',
+    v: recent
+  };
+};
+
+Player.prototype.relativePosition = function () {
+  if (this.track.duration === 0) {
+    return 0;
+  }
+
+  return this.position / this.track.duration / 1000;
+};
+
+Player.prototype.relativeSeekPosition = function () {
+  if (this.track.duration === 0) {
+    return 0;
+  }
+
+  return this.seekPosition / this.track.duration / 1000;
+};
+
 Player.prototype.relativeLoaded = function () {
   if (this.bytesTotal === 0) {
     return 0;
   }
 
   return this.bytesLoaded / this.bytesTotal;
-};
-
-Player.prototype.next = function() {
-  if (!this.playlist.isLastTrack(this.track)) {
-    return this.modify({
-      track: this.playlist.nextAfter(this.track)
-    });
-  }
-
-  return this;
-};
-
-Player.prototype.changePlaylist = function(newPlaylist) {
-  return this.modify({
-    playlist: newPlaylist
-  });
 };
 
 Player.prototype.visiblePlaylist = function() {
@@ -175,20 +183,6 @@ Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChang
     type: prevPlaylist.recentTag(),
     playlist: prevPlaylist
   });
-};
-
-Player.prototype.switchPlaylist = function (id) {
-  var recent = this.recentPlaylists.map(function (item) {
-    return _.extend(item, {
-      visible: item.playlist.id === id
-    });
-  });
-
-  return {
-    e: 'app/player',
-    a: ':player/recent-playlists',
-    v: recent
-  };
 };
 
 Player.empty = new Player({
