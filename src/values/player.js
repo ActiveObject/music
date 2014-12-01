@@ -27,11 +27,11 @@ Player.prototype.modify = function (attrs) {
 };
 
 Player.prototype.play = function() {
-  return { e: 'app/player', a: 'is-playing', v: true };
+  return { e: 'app/player', a: ':player/is-playing', v: true };
 };
 
 Player.prototype.pause = function () {
-  return { e: 'app/player', a: 'is-playing', v: false };
+  return { e: 'app/player', a: ':player/is-playing', v: false };
 };
 
 Player.prototype.togglePlay = function (track, playlist) {
