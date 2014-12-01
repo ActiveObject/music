@@ -8,8 +8,8 @@ app.use(require('app/services/layout'));
 app.use(require('app/services/tracks'));
 app.use(require('app/services/groups'));
 app.use(require('app/router'));
+app.use(require('app/renderer')(document.getElementById('app')));
 
-app.renderTo(document.getElementById('app'));
 app.start();
 
 window.Perf = require('react/addons').addons.Perf;

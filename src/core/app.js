@@ -1,13 +1,11 @@
 var _ = require('underscore');
-var debug = require('debug')('app:core:app');
-var React = require('react');
-var BufferedEventStream = require('app/core/buffered-event-stream');
+var debug = require('debug')('app:core:dispatcher');
 var { isValue } = require('app/utils');
 var appstate = require('app/core/db');
 var eventBus = require('app/core/event-bus');
+var BufferedEventStream = require('app/core/buffered-event-stream');
 
 var handlers = [];
-var target = document.body;
 var appEventStream = new BufferedEventStream(eventBus, function (v) {
   if (Array.isArray(v)) {
     return v.filter(isDatom).forEach(dispatch);
@@ -45,9 +43,7 @@ function isDatom(v) {
 }
 
 function scheduleEvent(v) {
-  if (isDatom(v)) {
-    eventBus.push(v);
-  }
+  eventBus.push(v);
 }
 
 function use(handler) {
@@ -64,7 +60,7 @@ function use(handler) {
 function dispatch(datom) {
   appEventStream.pause();
 
-  debug('[%s %s %s] dispatch started', datom.e, datom.a, datom.v);
+  debug('[%s %s %s] (s)', datom.e, datom.a, datom.v);
 
   function next(state, handlers) {
     if (handlers.length === 0) {
@@ -84,7 +80,7 @@ function dispatch(datom) {
 
   var nextState = next(appstate.value, handlers);
 
-  debug('[%s %s %s] dispatch finished', datom.e, datom.a, datom.v);
+  debug('[%s %s %s] (f)', datom.e, datom.a, datom.v);
 
   if (nextState !== appstate.value) {
     appstate.swap(nextState);
@@ -93,39 +89,10 @@ function dispatch(datom) {
   appEventStream.resume();
 }
 
-function render(appstate) {
-  var layout = appstate.get('layout');
-
-  debug('layout started');
-  var root = layout.render(appstate, scheduleEvent);
-  debug('layout finished');
-
-  React.renderComponent(root, target);
-}
-
 function start() {
   appEventStream.resume();
-
-  document.addEventListener('visibilitychange', function () {
-    if (!document.hidden) {
-      render(appstate.value);
-    }
-  }, false);
-
-  appstate.on('change', function (value) {
-    if (!document.hidden) {
-      window.requestAnimationFrame(function () {
-        render(value);
-      });
-    }
-  });
-
   dispatch({ e: 'app', a: ':app/started', v: true });
 }
-
-exports.renderTo = function (el) {
-  target = el;
-};
 
 exports.use = use;
 exports.start = start;
