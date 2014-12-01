@@ -30,6 +30,10 @@ module.exports = function(receive, send, watch) {
   }));
 
   receive(':player/playlist', update('player', function (player, v) {
+    if (Object.keys(player.track).length === 0 && v.tracks.size > 0) {
+      send(player.useTrack(v.tracks.first()));
+    }
+
     return player.modify({ playlist: v });
   }));
 
@@ -46,10 +50,12 @@ module.exports = function(receive, send, watch) {
   });
 
   watch('tracks', function (tracks, prev, appstate) {
+    var player = appstate.get('player');
+
     send({
       e: 'app/player',
       a: ':player/playlist',
-      v: appstate.get('player').playlist.update(tracks)
+      v: player.playlist.update(tracks)
     });
   });
 };

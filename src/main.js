@@ -2,8 +2,8 @@ var app = require('app/core/app');
 
 app.use(require('app/services/auth'));
 app.use(require('app/vk/service'));
+app.use(require('app/soundmanager/service'));
 app.use(require('app/services/player'));
-app.use(require('app/services/soundmanager'));
 app.use(require('app/services/layout'));
 app.use(require('app/services/tracks'));
 app.use(require('app/services/groups'));

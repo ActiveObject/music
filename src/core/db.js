@@ -6,6 +6,7 @@ var Tracks = require('app/values/tracks');
 var Groups = require('app/values/groups');
 var Layout = require('app/layouts');
 var vk = require('app/vk');
+var sm = require('app/soundmanager');
 
 if (Auth.hasToken(location.hash)) {
   Auth.storeToLs(location.hash);
@@ -19,6 +20,7 @@ var initialState = Immutable.Map({
   tracks: Tracks.empty,
   layout: Layout.empty,
   vk: vk.state,
+  soundmanager: sm.state,
   user: Auth.readFromLs()
 });
 

@@ -20,10 +20,6 @@ function Player(attrs) {
   this.seekPosition = attrs.seekPosition;
 
   this.recentPlaylists = this.makeRecent(attrs.recentPlaylists, attrs.playlist, isPlaylistChanged);
-
-  if (Object.keys(this.track).length === 0 && this.playlist.tracks.size > 0) {
-    this.track = this.playlist.tracks.first();
-  }
 }
 
 Player.prototype.modify = function (attrs) {
@@ -40,29 +36,29 @@ Player.prototype.pause = function () {
 
 Player.prototype.togglePlay = function (track, playlist) {
   if (arguments.length === 0) {
-    return {
-      e: 'app/player',
-      a: ':player/is-playing',
-      v: !this.isPlaying
-    };
+    return this.togglePlayState();
   }
 
   var datoms = [];
 
   if (track.id !== this.track.id) {
-    datoms.push({ e: 'app/player', a: ':player/track', v: track });
-    datoms.push({ e: 'app/player', a: ':player/is-playing', v: true });
+    datoms.push(this.useTrack(track));
+    datoms.push(this.play());
   }
 
   if (track.id === this.track.id) {
-    datoms.push({ e: 'app/player', a: ':player/is-playing', v: !this.isPlaying });
+    datoms.push(this.togglePlayState());
   }
 
   if (playlist.id !== this.playlist.id) {
-    datoms.push({ e: 'app/player', a: ':player/playlist', v: playlist });
+    datoms.push(this.usePlaylist(playlist));
   }
 
   return datoms;
+};
+
+Player.prototype.togglePlayState = function () {
+  return { e: 'app/player', a: ':player/is-playing', v: !this.isPlaying };
 };
 
 Player.prototype.seek = function (position) {
@@ -97,20 +93,20 @@ Player.prototype.stopSeeking = function () {
 
 Player.prototype.nextTrack = function() {
   if (!this.playlist.isLastTrack(this.track)) {
-    return {
-      e: 'app/player',
-      a: ':player/track',
-      v: this.playlist.nextAfter(this.track)
-    };
+    return this.useTrack(this.playlist.nextAfter(this.track));
   }
 };
 
 Player.prototype.switchToPlaylist = function (id) {
-  return {
-    e: 'app/player',
-    a: ':player/visible-playlist',
-    v: id
-  };
+  return { e: 'app/player', a: ':player/visible-playlist', v: id };
+};
+
+Player.prototype.useTrack = function (track) {
+  return { e: 'app/player', a: ':player/track', v: track };
+};
+
+Player.prototype.usePlaylist = function (playlist) {
+  return { e: 'app/player', a: ':player/playlist', v: playlist };
 };
 
 Player.prototype.relativePosition = function () {
