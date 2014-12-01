@@ -136,7 +136,7 @@ PausedState.prototype.pause = function () {
 };
 
 PausedState.prototype.setPosition = function (v) {
-  this.sound.setPosition(pos);
+  this.sound.setPosition(v);
   return this;
 };
 

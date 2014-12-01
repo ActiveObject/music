@@ -57,8 +57,8 @@
     "clean:public": "rm -rf _public",
 
     "copy:assets": "cp -R src/assets ./_public",
-    "copy:vendor:dev": "cp vendor/soundmanager2.js _public/soundmanager2.js && cp vendor/pouchdb-3.0.6.min.js _public/pouchdb.js",
-    "copy:vendor:prod": "cp vendor/soundmanager2-nodebug-jsmin.js _public/soundmanager2.js && cp vendor/pouchdb-3.0.6.min.js _public/pouchdb.js",
+    "copy:vendor:dev": "cp vendor/soundmanager2.js _public/soundmanager2.js && cp vendor/pouchdb-3.0.6.min.js _public/pouchdb.js && cp vendor/firebase-2.0.5.js _public/firebase.js",
+    "copy:vendor:prod": "cp vendor/soundmanager2-nodebug-jsmin.js _public/soundmanager2.js && cp vendor/pouchdb-3.0.6.min.js _public/pouchdb.js && cp vendor/firebase-2.0.5.js _public/firebase.js",
 
     "nwbuild": "nwbuild -p mac -o nw _public",
     "build:prepare": "npm run lint && npm run clean:build && npm run clean:public && npm run copy:assets",

@@ -27,7 +27,8 @@ module.exports = {
   },
   externals: {
     'sound-manager': 'soundManager',
-    'pouchdb': 'PouchDB'
+    'pouchdb': 'PouchDB',
+    'firebase': 'Firebase'
   },
   watchDelay: 200,
   plugins: [

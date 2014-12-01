@@ -11,7 +11,6 @@ function Track(attrs) {
   this.duration = attrs.duration;
   this.index = attrs.index;
 
-  this.lyrics_id = attrs.lyrics_id;
   this.owner_id = attrs.owner_id;
   this.url = attrs.url;
 }
