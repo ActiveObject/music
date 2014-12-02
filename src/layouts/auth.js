@@ -1,9 +1,8 @@
-var vk = require('app/vk');
 var AuthView = require('app/components/auth');
 
 function AuthLayout(attrs) {
   this.vkAccount = attrs.vkAccount;
-  this.url = vk.makeAuthUrl(this.vkAccount);
+  this.url = this.vkAccount.url;
 }
 
 AuthLayout.prototype.render = function(appstate) {
