@@ -26,6 +26,12 @@ var initialState = Immutable.Map({
 
 module.exports = new SmartRef(initialState);
 
+module.exports.toJSON = function() {
+  return this.value.filterNot(function(val, key) {
+    return key === 'soundmanager';
+  }).toJSON();
+};
+
 module.exports.update = function update(key, updater) {
   return function updateDb(db) {
     var args = Array.prototype.slice.call(arguments, 1);
