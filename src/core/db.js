@@ -3,7 +3,7 @@ var SmartRef = require('app/core/smart-ref');
 var Auth = require('app/core/auth');
 var Player = require('app/values/player');
 var tracks = require('app/values/tracks');
-var Groups = require('app/values/groups');
+var groups = require('app/values/groups');
 var Layout = require('app/layouts');
 var vk = require('app/vk');
 var sm = require('app/soundmanager');
@@ -16,7 +16,7 @@ if (Auth.hasToken(location.hash)) {
 var initialState = Immutable.Map({
   activity: require('app/fixtures/activity'),
   player: Player.empty,
-  groups: Groups.empty,
+  groups: groups,
   tracks: tracks,
   layout: Layout.empty,
   vk: vk.state,
