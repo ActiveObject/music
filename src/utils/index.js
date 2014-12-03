@@ -42,3 +42,9 @@ exports.merge = function () {
   objs.unshift({});
   return _.extend.apply(_, objs);
 };
+
+exports.attrEquals = function attrEquals (x, y) {
+  return function(attr) {
+    return x[attr] === y[attr];
+  };
+};

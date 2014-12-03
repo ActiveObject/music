@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var getOrDefault = require('app/utils').getOrDefault;
 var merge = require('app/utils').merge;
+var attrEquals = require('app/utils').attrEquals;
 var Activity = require('app/values/activity');
 
 function Post(options) {
@@ -36,6 +37,23 @@ function Group(attrs) {
 
   this.activity = getOrDefault(attrs, 'activity', Activity.empty);
 }
+
+Group.prototype.toString = function() {
+  return 'Group #' + this.id;
+};
+
+Group.prototype.hashCode = function() {
+  return this.id;
+};
+
+Group.prototype.equals = function(other) {
+  return [
+    'id', 'isAdmin', 'isClosed', 'isMember', 'name',
+    'photo_50', 'photo_100', 'photo_200',
+    'screenName', 'type'
+  ].every(attrEquals(this, other));
+};
+
 
 Group.prototype.modify = function (attrs) {
   return new Group(merge(this, attrs));

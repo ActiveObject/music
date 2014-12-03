@@ -1,10 +1,5 @@
 var _ = require('underscore');
-
-function attrEquals (x, y) {
-  return function(attr) {
-    return x[attr] === y[attr];
-  };
-}
+var attrEquals = require('app/utils').attrEquals;
 
 function Track(attrs) {
   if (!(this instanceof Track)) {
