@@ -25,12 +25,13 @@ html, body, #app
   width: 60%
   position: relative
   overflow: hidden
-  transition: background-color 0.3s
+  transition: background-color 0.3s, width 0.3s linear
 
 .sidebar-view
   width: 40%
   height: 100%
   border-left: 1px solid #E2E2E2
+  transition: width 0.3s linear
 
 .main-container
   width: 600px
@@ -53,6 +54,9 @@ html, body, #app
 .icon
   display: inline-block
 
+.player-body
+  transition: margin-top 0.5s ease-in-out
+
 @media screen and (min-width: 1100px)
   .main-view
     width: calc(100% - 520px)
@@ -60,9 +64,19 @@ html, body, #app
   .sidebar-view
     width: 520px
 
-@media screen and (min-width: 1500px)
+@media screen and (min-width: 1400px)
   .main-view
-    width: calc(100% - 600px)
+    width: 50%
 
   .sidebar-view
-    width: 600px
+    width: 50%
+
+  .player-body
+    margin-top: 40px
+
+  .tracklist-card .tracklist
+    padding-top: 140px
+
+  .sidebar-view .tracklist-card
+    width: 640px
+    margin: 0 auto
