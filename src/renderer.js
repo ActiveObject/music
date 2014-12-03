@@ -1,6 +1,6 @@
 var React = require('react');
 var debug = require('debug')('app:renderer');
-var appstate = require('app/core/db');
+var appstate = require('app/core/appstate');
 
 module.exports = function (mountNode) {
   return function (receive, send) {

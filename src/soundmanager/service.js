@@ -1,4 +1,3 @@
-var db = require('app/core/db');
 var eventBus = require('app/core/event-bus');
 var sm = require('app/soundmanager');
 

@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var debug = require('debug')('app:core:dispatcher');
 var { isValue } = require('app/utils');
-var appstate = require('app/core/db');
+var appstate = require('app/core/appstate');
 var eventBus = require('app/core/event-bus');
 var BufferedEventStream = require('app/core/buffered-event-stream');
 
@@ -18,21 +18,21 @@ var appEventStream = new BufferedEventStream(eventBus, function (v) {
 
 function makeReceiver(receivers) {
   return function createReceiverForEvent(expectedAttr, fn) {
-    receivers.push(function (db, datom) {
+    receivers.push(function (appstate, datom) {
       var result;
 
       if (expectedAttr === datom.a) {
-        result = fn(db, datom.v, datom);
+        result = fn(appstate, datom.v, datom);
       }
 
-      return isValue(result) ? result : db;
+      return isValue(result) ? result : appstate;
     });
   };
 }
 
-function addWatch(db) {
+function addWatch(appstate) {
   return function watch(key, callback) {
-    return db.watchIn(key, callback);
+    return appstate.watchIn(key, callback);
   };
 }
 

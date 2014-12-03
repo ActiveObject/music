@@ -1,4 +1,3 @@
-var db = require('app/core/db');
 var vk = require('app/vk');
 var tracks = require('app/values/tracks');
 var merge = require('app/utils').merge;

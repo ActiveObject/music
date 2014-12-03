@@ -16,4 +16,4 @@ app.start();
 
 window.Perf = require('react/addons').addons.Perf;
 window.app = app;
-window.db = require('app/core/db');
+window.appstate = require('app/core/appstate');

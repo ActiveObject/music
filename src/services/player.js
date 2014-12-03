@@ -1,4 +1,4 @@
-var update = require('app/core/db').update;
+var update = require('app/core/appstate').update;
 
 module.exports = function(receive, send, watch) {
   receive(':soundmanager/bytes-loaded', update('player', function (player, v) {
