@@ -187,7 +187,7 @@ Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChang
   });
 };
 
-Player.empty = new Player({
+module.exports = new Player({
   track: {},
   playlist: new LibraryPlaylist({
     library: tracks,
@@ -202,6 +202,3 @@ Player.empty = new Player({
   bytesLoaded: 0,
   recentPlaylists: []
 });
-
-
-module.exports = Player;
