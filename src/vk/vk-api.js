@@ -118,8 +118,7 @@ VkApi.prototype.nextTick = function() {
 };
 
 VkApi.prototype.authorize = function(user, token) {
-  this.state = this.state.authorize(user, token);
-  this.emit('change');
+  this.changeState(this.state.authorize(user, token));
 };
 
 VkApi.prototype.request = function (method, options, done) {
@@ -133,11 +132,10 @@ VkApi.prototype.request = function (method, options, done) {
     callback: done
   });
 
-  this.state = this.state.modify({
+  this.changeState(this.state.modify({
     pending: this.state.pending.concat(req)
-  });
+  }));
 
-  this.emit('change');
   this.resume();
 };
 
@@ -150,18 +148,16 @@ VkApi.prototype.process = function() {
 
   req.send(function(err, data) {
     var res = new Response(err, data);
-    this.state = this.state.takeResult(req, res);
     res.send(req.callback);
-    this.emit('change');
+    this.changeState(this.state.takeResult(req, res));
   }.bind(this));
 
   this.emit('process');
 
-  this.state = this.state.modify({
+  this.changeState(this.state.modify({
     pending: this.state.pending.slice(1)
-  });
+  }));
 
-  this.emit('change');
   this.nextTick();
 };
 
@@ -174,6 +170,15 @@ VkApi.prototype.resume = function() {
   clearTimeout(this.timer);
   this.emit('resume');
   this.nextTick();
+};
+
+VkApi.prototype.changeState = function(newState) {
+  if (newState !== this.state) {
+    this.state = newState;
+    this.emit('change', newState);
+  }
+
+  return this;
 };
 
 function setupHelpers(apiObj) {
