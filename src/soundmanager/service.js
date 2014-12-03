@@ -1,24 +1,23 @@
-var eventBus = require('app/core/event-bus');
 var sm = require('app/soundmanager');
 
-sm.on('change', function (newState) {
-  eventBus.push({ e: 'app/soundmanager', a: ':soundmanager/value', v: newState });
-});
+module.exports = function (receive, send) {
+  sm.on('change', function (newState) {
+    send({ e: 'app/soundmanager', a: ':soundmanager/value', v: newState });
+  });
 
-sm.on('finish', function (track) {
-  eventBus.push({ e: 'app/soundmanager', a: ':soundmanager/finish', v: track });
-});
+  sm.on('finish', function (track) {
+    send({ e: 'app/soundmanager', a: ':soundmanager/finish', v: track });
+  });
 
-sm.on('whileplaying', function (position) {
-  eventBus.push({ e: 'app/soundmanager', a: ':soundmanager/position', v: position });
-});
+  sm.on('whileplaying', function (position) {
+    send({ e: 'app/soundmanager', a: ':soundmanager/position', v: position });
+  });
 
-sm.on('whileloading', function (bytesLoaded, bytesTotal) {
-  eventBus.push({ e: 'app/soundmanager', a: ':soundmanager/bytes-loaded', v: bytesLoaded });
-  eventBus.push({ e: 'app/soundmanager', a: ':soundmanager/bytes-total', v: bytesTotal });
-});
+  sm.on('whileloading', function (bytesLoaded, bytesTotal) {
+    send({ e: 'app/soundmanager', a: ':soundmanager/bytes-loaded', v: bytesLoaded });
+    send({ e: 'app/soundmanager', a: ':soundmanager/bytes-total', v: bytesTotal });
+  });
 
-module.exports = function (receive) {
   receive(':app/started', function (appstate) {
     sm.setup({
       url: 'swf',
