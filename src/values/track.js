@@ -1,11 +1,17 @@
 var _ = require('underscore');
 
+function attrEquals (x, y) {
+  return function(attr) {
+    return x[attr] === y[attr];
+  };
+}
+
 function Track(attrs) {
   if (!(this instanceof Track)) {
     return new Track(attrs);
   }
 
-  this.id = attrs.id;
+  this.id = Number(attrs.id);
   this.artist = attrs.artist;
   this.title = attrs.title;
   this.duration = attrs.duration;
@@ -25,6 +31,20 @@ Track.fromEntity = function (entity) {
     url: entity[':track/url'],
     index: entity[':track/vk-index']
   });
+};
+
+Track.prototype.toString = function() {
+  return 'Track #' + this.id;
+};
+
+Track.prototype.hashCode = function() {
+  return this.id;
+};
+
+Track.prototype.equals = function(other) {
+  return [
+    'id', 'artist', 'title', 'duration', 'index', 'owner_id', 'url'
+  ].every(attrEquals(this, other));
 };
 
 Track.prototype.modify = function (attrs) {

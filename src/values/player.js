@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var merge = require('app/utils').merge;
 var LibraryPlaylist = require('app/values/playlist/library');
-var Tracks = require('app/values/tracks');
+var tracks = require('app/values/tracks');
 
 function Player(attrs) {
   if (!(this instanceof Player)) {
@@ -190,7 +190,7 @@ Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChang
 Player.empty = new Player({
   track: {},
   playlist: new LibraryPlaylist({
-    library: Tracks.empty,
+    library: tracks,
     isShuffled: false,
     isRepeated: false
   }),

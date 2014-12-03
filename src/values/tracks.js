@@ -1,31 +1,53 @@
 var List = require('immutable').List;
+var ISet = require('immutable').Set;
 var merge = require('app/utils').merge;
 var Track = require('app/values/track');
 var ArtistPlaylist = require('app/values/playlist/artist');
-var VkIndex = require('app/values/vk-index');
-var Database = require('app/core/database');
 
 function Tracks(attrs) {
-  this.db = attrs.db;
+  this.items = attrs.items;
+
+  this.sortedByVk = this.items.toList().sortBy(function(track) {
+    return track.index;
+  });
+
   this.cache = {};
 }
 
-Tracks.empty = new Tracks({ db: Database.empty });
+Tracks.prototype.diff = function(otherTracks) {
+  return [];
+};
+
+Tracks.prototype.merge = function(otherTracks) {
+  return new Tracks({
+    items: this.items.union(otherTracks.items)
+  });
+};
+
+Tracks.prototype.applyDiff = function(txData) {
+  return this;
+};
+
+Tracks.prototype.fromVkResponse = function(res) {
+  var tracks = res.items.map(function(vkData, i) {
+    return new Track(merge(vkData, { index: res.offset + i }));
+  });
+
+  return new Tracks({
+    items: new ISet(tracks)
+  });
+};
 
 Tracks.prototype.size = function () {
-  return this.getAll().size;
+  return this.items.size;
 };
 
 Tracks.prototype.first = function () {
-  return this.getAll().first();
+  return this.sortedByVk.first();
 };
 
 Tracks.prototype.getAll = function () {
-  return this.query('getAll', function () {
-    return List(this.db.entities.map(Track.fromEntity).values()).sortBy(function (track) {
-      return track.index;
-    });
-  });
+  return this.sortedByVk;
 };
 
 Tracks.prototype.findByArtist = function (artist) {
@@ -46,6 +68,7 @@ Tracks.prototype.modify = function (attrs) {
 
 Tracks.prototype.query = function (key, fn) {
   console.time('query[' + key + ']');
+
   if (!this.cache[key]) {
     this.cache[key] = fn.call(this);
   }
@@ -54,4 +77,6 @@ Tracks.prototype.query = function (key, fn) {
   return this.cache[key];
 };
 
-module.exports = Tracks;
+module.exports = new Tracks({
+  items: new ISet()
+});

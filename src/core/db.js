@@ -2,7 +2,7 @@ var Immutable = require('immutable');
 var SmartRef = require('app/core/smart-ref');
 var Auth = require('app/core/auth');
 var Player = require('app/values/player');
-var Tracks = require('app/values/tracks');
+var tracks = require('app/values/tracks');
 var Groups = require('app/values/groups');
 var Layout = require('app/layouts');
 var vk = require('app/vk');
@@ -17,7 +17,7 @@ var initialState = Immutable.Map({
   activity: require('app/fixtures/activity'),
   player: Player.empty,
   groups: Groups.empty,
-  tracks: Tracks.empty,
+  tracks: tracks,
   layout: Layout.empty,
   vk: vk.state,
   soundmanager: sm.state,

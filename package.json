@@ -50,7 +50,7 @@
     "start": "node server.js",
 
     "test": "npm run build:test && mocha test/app.js",
-    "test-server": "mocha -w test/app.js",
+    "test-server": "mocha -w test/app.js -R dot",
     "test-build-server": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js --watch",
 
     "clean:build": "rm -rf build",
