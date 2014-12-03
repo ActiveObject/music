@@ -36,6 +36,7 @@ Groups.prototype.merge = function(otherGroups) {
 Groups.prototype.modify = function (attrs) {
   return new Groups(merge(this, attrs));
 };
+
 module.exports = new Groups({
   items: new ISet()
 });

@@ -1,3 +1,4 @@
+var omit = require('underscore').omit;
 var List = require('immutable').List;
 var ISet = require('immutable').Set;
 var merge = require('app/utils').merge;
@@ -13,6 +14,10 @@ function Tracks(attrs) {
 
   this.cache = {};
 }
+
+Tracks.prototype.toJSON = function() {
+  return omit(this, ['cache', 'sortedByVk']);
+};
 
 Tracks.prototype.diff = function(otherTracks) {
   return [];
