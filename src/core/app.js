@@ -17,7 +17,7 @@ var appEventStream = new BufferedEventStream(eventBus, function (v) {
 });
 
 function makeReceiver(receivers) {
-  return function createReceiverForEvent(expectedAttr, fn) {
+  return function receive(expectedAttr, fn) {
     receivers.push(function (appstate, datom) {
       var result;
 
@@ -30,10 +30,12 @@ function makeReceiver(receivers) {
   };
 }
 
-function addWatch(appstate) {
-  return function watch(key, callback) {
-    return appstate.watchIn(key, callback);
-  };
+function watch(key, callback) {
+  return appstate.watchIn(key, callback);
+}
+
+function send(v) {
+  eventBus.push(v);
 }
 
 function isDatom(v) {
@@ -42,13 +44,9 @@ function isDatom(v) {
   });
 }
 
-function scheduleEvent(v) {
-  eventBus.push(v);
-}
-
 function use(handler) {
   var receivers = [];
-  var onDbChange = handler(makeReceiver(receivers), scheduleEvent, addWatch(appstate));
+  var onDbChange = handler(makeReceiver(receivers), send, watch);
 
   handlers.push.apply(handlers, receivers);
 
