@@ -1,17 +1,22 @@
+var Auth = require('app/core/auth');
 var accounts = require('app/accounts');
 var layout = require('app/layout');
 
 module.exports = function (receive, send) {
-  return function authService(appstate, datom, next) {
-    if (!appstate.get('user').isAuthenticated() && !appstate.get('userLoading')) {
+  if (Auth.hasToken(location.hash)) {
+    Auth.storeToLs(location.hash);
+    location.hash = '';
+  }
+
+  receive(':app/started', function() {
+    send({ e: 'app', a: ':app/user', v: Auth.readFromLs() });
+  });
+
+  receive(':app/user', function(appstate, user) {
+    if (!user.isAuthenticated()) {
       layout.auth(accounts.vk);
-      return appstate.set('userLoading', true);
     }
 
-    if (appstate.get('user').isAuthenticated() && appstate.get('userLoading')) {
-      return next(appstate.set('userLoading', false));
-    }
-
-    return next(appstate);
-  };
+    return appstate.set('user', user);
+  });
 };

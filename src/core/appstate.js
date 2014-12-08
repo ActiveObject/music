@@ -1,17 +1,11 @@
 var Immutable = require('immutable');
 var SmartRef = require('app/core/smart-ref');
-var Auth = require('app/core/auth');
 var player = require('app/values/player');
 var tracks = require('app/values/tracks');
 var groups = require('app/values/groups');
 var layout = require('app/layout');
 var vk = require('app/vk');
 var sm = require('app/soundmanager');
-
-if (Auth.hasToken(location.hash)) {
-  Auth.storeToLs(location.hash);
-  location.hash = '';
-}
 
 var initialState = Immutable.Map({
   activity: require('app/fixtures/activity'),
@@ -20,8 +14,7 @@ var initialState = Immutable.Map({
   tracks: tracks,
   layout: layout.state,
   vk: vk.state,
-  soundmanager: sm.state,
-  user: Auth.readFromLs()
+  soundmanager: sm.state
 });
 
 module.exports = new SmartRef(initialState);

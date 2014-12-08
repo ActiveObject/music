@@ -24,9 +24,9 @@ function loadGroups(user, offset, count, callback) {
 }
 
 module.exports = function (receive, send) {
-  receive(':app/started', function(appstate) {
-    if (appstate.get('user').isAuthenticated()) {
-      loadGroups(appstate.get('user'), 0, 1000, function(err, chunk) {
+  receive(':app/user', function(appstate, user) {
+    if (user.isAuthenticated()) {
+      loadGroups(user, 0, 1000, function(err, chunk) {
         if (err) {
           return console.log(err);
         }
