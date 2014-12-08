@@ -1,4 +1,5 @@
 var update = require('app/core/appstate').update;
+var player = require('app/values/player');
 
 module.exports = function(receive, send, watch) {
   receive(':soundmanager/bytes-loaded', update('player', function (player, v) {
@@ -57,5 +58,9 @@ module.exports = function(receive, send, watch) {
       a: ':player/playlist',
       v: player.playlist.update(tracks)
     });
+  });
+
+  receive(':app/started', function(appstate) {
+    return appstate.set('player', player);
   });
 };

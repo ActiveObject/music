@@ -41,4 +41,8 @@ module.exports = function (receive, send) {
       return groups.merge(v);
     });
   });
+
+  receive(':app/started', function(appstate) {
+    return appstate.set('groups', groups);
+  });
 };

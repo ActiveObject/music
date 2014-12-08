@@ -19,4 +19,8 @@ module.exports = function (receive, send) {
   });
 
   receive(':app/started', page);
+
+  receive(':app/started', function(appstate) {
+    return appstate.set('layout', layout.state);
+  });
 };

@@ -24,6 +24,8 @@ module.exports = function (receive, send) {
       flashVersion: 9,
       preferFlash: false
     });
+
+    return appstate.set('soundmanager', sm.state);
   });
 
   receive(':app/soundmanager', function (appstate, v) {

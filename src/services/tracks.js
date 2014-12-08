@@ -40,4 +40,8 @@ module.exports = function (receive, send) {
       return tracks.merge(v);
     });
   });
+
+  receive(':app/started', function(appstate) {
+    return appstate.set('tracks', tracks);
+  });
 };

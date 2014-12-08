@@ -9,6 +9,10 @@ module.exports = function VkService(receive, send) {
     return appstate.set('vk', v);
   });
 
+  receive(':app/started', function(appstate) {
+    return appstate.set('vk', vk.state);
+  });
+
   receive(':app/user', function(appstate, user) {
     if (user.isAuthenticated() && !appstate.get('vk').isAuthorized) {
       vk.authorize(user.id, user.accessToken);

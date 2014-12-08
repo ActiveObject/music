@@ -7,17 +7,7 @@ var layout = require('app/layout');
 var vk = require('app/vk');
 var sm = require('app/soundmanager');
 
-var initialState = Immutable.Map({
-  activity: require('app/fixtures/activity'),
-  player: player,
-  groups: groups,
-  tracks: tracks,
-  layout: layout.state,
-  vk: vk.state,
-  soundmanager: sm.state
-});
-
-module.exports = new SmartRef(initialState);
+module.exports = new SmartRef(Immutable.Map());
 
 module.exports.toJSON = function() {
   return this.value.filterNot(function(val, key) {
