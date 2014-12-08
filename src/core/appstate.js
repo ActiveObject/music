@@ -4,7 +4,7 @@ var Auth = require('app/core/auth');
 var player = require('app/values/player');
 var tracks = require('app/values/tracks');
 var groups = require('app/values/groups');
-var Layout = require('app/layouts');
+var layout = require('app/layout');
 var vk = require('app/vk');
 var sm = require('app/soundmanager');
 
@@ -18,7 +18,7 @@ var initialState = Immutable.Map({
   player: player,
   groups: groups,
   tracks: tracks,
-  layout: Layout.empty,
+  layout: layout.state,
   vk: vk.state,
   soundmanager: sm.state,
   user: Auth.readFromLs()

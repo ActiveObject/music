@@ -1,17 +1,21 @@
 var page = require('page');
-var Layout = require('app/layouts');
+var layout = require('app/layout');
 
 module.exports = function (receive, send) {
+  layout.on('change', function (v) {
+    send({ e: 'app', a: ':app/layout', v: v });
+  });
+
   page('/', function () {
-    send({ e: 'app', a: ':app/layout', v: Layout.main });
+    layout.main();
   });
 
   page('/groups/:id', function (ctx) {
-    send({ e: 'app', a: ':app/layout', v: Layout.group(ctx.params.id) });
+    layout.group(ctx.params.id);
   });
 
   page('/artist/:name', function (ctx) {
-    send({ e: 'app', a: ':app/layout', v: Layout.artist(ctx.params.name) });
+    layout.artist(ctx.params.name);
   });
 
   receive(':app/started', page);
