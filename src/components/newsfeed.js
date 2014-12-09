@@ -11,8 +11,13 @@ var Newsfeed = React.createClass({
   },
 
   render: function() {
+    var player = this.props.player;
+
     var posts = this.props.newsfeed.posts.toJS().map(function(post) {
-      return new Post({ post: post });
+      return new Post({
+        post: post,
+        player: player
+      });
     });
 
     return dom.div()

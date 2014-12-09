@@ -9,6 +9,7 @@ var GroupProfile = require('app/components/group-profile');
 var ArtistProfile = require('app/components/artist-profile');
 var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
+var ScrollArea = require('app/components/scroll-area');
 
 function EmptyLayout() {
 
@@ -143,7 +144,8 @@ GroupLayout.prototype.render = function (appstate) {
 
   var newsfeed = new Newsfeed({
     key: 'newsfeed',
-    newsfeed: group.wall
+    newsfeed: group.wall,
+    player: appstate.get('player')
   });
 
   var profile = new GroupProfile({
@@ -151,7 +153,9 @@ GroupLayout.prototype.render = function (appstate) {
     group: group
   });
 
-  var sidebar = new Sidebar({ key: 'sidebar' }, [player, newsfeed]);
+  var container = new ScrollArea({}, newsfeed);
+
+  var sidebar = new Sidebar({ key: 'sidebar' }, [container, player]);
 
   return new App(null, [profile, sidebar]);
 };

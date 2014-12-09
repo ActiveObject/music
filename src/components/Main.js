@@ -43,7 +43,9 @@ module.exports = React.createClass({
   },
 
   groupActivities: function () {
-    return this.props.groups.take(4).map(function(group) {
+    return this.props.groups.items.filter(function(group) {
+      return [41293763, 32211876, 34110702, 43426041].indexOf(group.id) !== -1;
+    }).map(function(group) {
       return new ActivityCard({
         key: group.id,
         id: group.id,
