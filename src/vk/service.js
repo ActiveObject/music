@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var vk = require('./vk-api');
 
 module.exports = function VkService(receive, send) {
@@ -17,5 +18,19 @@ module.exports = function VkService(receive, send) {
     if (user.isAuthenticated() && !appstate.get('vk').isAuthorized) {
       vk.authorize(user.id, user.accessToken);
     }
+  });
+
+  receive(':vk/wall-request', function(appstate, request) {
+    vk.wall.get({
+      owner_id: request.owner,
+      offset: request.offset,
+      count: request.count
+    }, function(err, res) {
+      if (err) {
+        return send({ e: 'vk', a: ':vk/error', v: err });
+      }
+
+      send({ e: 'vk', a: ':vk/wall', v: _.extend(res.response, { owner: request.owner }) });
+    });
   });
 };

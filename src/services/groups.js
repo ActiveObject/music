@@ -1,6 +1,8 @@
 var vk = require('app/vk');
 var merge = require('app/utils').merge;
+var update = require('app/core/appstate').update;
 var groups = require('app/values/groups');
+var newsfeed = require('app/values/newsfeed');
 
 function loadGroups(user, offset, count, callback) {
   vk.groups.get({
@@ -31,18 +33,26 @@ module.exports = function (receive, send) {
           return console.log(err);
         }
 
-        send({ e: 'app', a: ':app/groups', v: groups.fromVkResponse(chunk) });
+        var newGroups = groups.fromVkResponse(chunk);
+
+        send({ e: 'app', a: ':app/groups', v: appstate.get('groups').merge(newGroups) });
       });
     }
   });
 
   receive(':app/groups', function(appstate, v) {
-    return appstate.update('groups', function(groups) {
-      return groups.merge(v);
-    });
+    return appstate.set('groups', v);
   });
 
   receive(':app/started', function(appstate) {
     return appstate.set('groups', groups);
+  });
+
+  receive(':vk/wall', function(appstate, data) {
+    send({ e: 'app', a: ':app/newsfeed', v: newsfeed.fromVkResponse(data) });
+  });
+
+  receive(':app/newsfeed', function(appstate, newsfeed) {
+    send({ e: 'app', a: ':app/groups', v: appstate.get('groups').withNewsfeed(newsfeed) });
   });
 };

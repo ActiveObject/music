@@ -60,6 +60,9 @@ MainLayout.prototype.auth = function (attrs) {
   return new AuthLayout(attrs);
 };
 
+MainLayout.prototype.main = function() {
+  return this;
+};
 
 
 function ArtistLayout(attrs) {

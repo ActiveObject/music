@@ -19,6 +19,14 @@ module.exports = React.createClass({
     };
   },
 
+  shouldComponentUpdate: function(nextProps) {
+    return nextProps.id !== this.props.id ||
+      nextProps.size !== this.props.size ||
+      nextProps.margin !== this.props.margin ||
+      nextProps.name !== this.props.name ||
+      nextProps.activity !== this.props.activity;
+  },
+
   render: function() {
     var dateRange = Activity.makeDateRange(new Date(), { weeks: 33 });
     var activity = Activity.fillEmptyDates(dateRange, this.props.activity.items);

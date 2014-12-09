@@ -5,10 +5,6 @@ var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
 
 function Group(attrs) {
-  if (!(this instanceof Group)) {
-    return new Group(attrs);
-  }
-
   this.id = attrs.id;
   this.isAdmin = attrs.is_admin;
   this.isClosed = attrs.is_closed;
@@ -20,7 +16,7 @@ function Group(attrs) {
   this.screenName = attrs.screen_name;
   this.type = attrs.type;
 
-  this.wall = attrs.wall;
+  this.wall = attrs.wall.modify({ owner: -this.id });
   this.activity = attrs.activity;
 }
 

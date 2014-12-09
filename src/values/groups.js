@@ -37,6 +37,18 @@ Groups.prototype.modify = function (attrs) {
   return new Groups(merge(this, attrs));
 };
 
+Groups.prototype.withNewsfeed = function(nf) {
+  var items = this.items.map(function(group) {
+    if (nf.owner === -group.id) {
+      return group.modify({ wall: nf });
+    }
+
+    return group;
+  });
+
+  return this.modify({ items: items });
+};
+
 module.exports = new Groups({
   items: new ISet()
 });
