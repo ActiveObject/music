@@ -3,13 +3,14 @@ var React = require('react');
 var App = require('app/components/app');
 var Main = require('app/components/main');
 var Sidebar = require('app/components/sidebar');
-var TracklistCard = require('app/components/tracklist-card');
 var AuthView = require('app/components/auth');
 var GroupProfile = require('app/components/group-profile');
 var ArtistProfile = require('app/components/artist-profile');
 var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
 var ScrollArea = require('app/components/scroll-area');
+var LazyTracklist = require('app/components/lazy-tracklist');
+var Layer = require('app/components/layer');
 
 function EmptyLayout() {
 
@@ -34,17 +35,24 @@ function MainLayout() {
 }
 
 MainLayout.prototype.render = function(appstate, send) {
-  var tracklistCard = new TracklistCard({
+  var tracklist = new LazyTracklist({
+    player: appstate.get('player'),
+    playlist: appstate.get('player').visiblePlaylist()
+  });
+
+  var player = new Player({
     player: appstate.get('player')
   });
+
+  var layer1 = new Layer({ className: 'pane-body tracklist-card', key: 'layer1' }, tracklist);
+  var layer2 = new Layer({ className: 'pane-body', key: 'layer2' }, player);
+  var sidebar = new Sidebar({ key: 'sidebar' }, [layer1, layer2]);
 
   var main = new Main({
     key: 'main',
     activity: appstate.get('activity'),
     groups: appstate.get('groups')
   });
-
-  var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
 
   return new App(null, [main, sidebar]);
 };
@@ -71,7 +79,7 @@ function ArtistLayout(attrs) {
 }
 
 ArtistLayout.prototype.render = function (appstate) {
-  var tracklistCard = new TracklistCard({
+  var tracklist = new LazyTracklist({
     player: appstate.get('player')
   });
 
@@ -82,7 +90,7 @@ ArtistLayout.prototype.render = function (appstate) {
     library: appstate.get('tracks')
   });
 
-  var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
+  var sidebar = new Sidebar({ key: 'sidebar' }, tracklist);
 
   return new App(null, [profile, sidebar]);
 };
@@ -148,14 +156,17 @@ GroupLayout.prototype.render = function (appstate) {
     player: appstate.get('player')
   });
 
+  var container = new ScrollArea({}, newsfeed);
+
+  var layer1 = new Layer({ className: 'pane-body group-sidebar', key: 'layer1' }, container);
+  var layer2 = new Layer({ className: 'pane-body', key: 'layer2' }, player);
+
   var profile = new GroupProfile({
     key: 'profile',
     group: group
   });
 
-  var container = new ScrollArea({}, newsfeed);
-
-  var sidebar = new Sidebar({ key: 'sidebar' }, [container, player]);
+  var sidebar = new Sidebar({ key: 'sidebar' }, [layer1, layer2]);
 
   return new App(null, [profile, sidebar]);
 };

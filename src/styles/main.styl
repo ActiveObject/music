@@ -58,6 +58,19 @@ html, body, #app
 .player-body
   transition: margin-top 0.5s ease-in-out
 
+.tracklist-card
+  height: 100%
+
+.tracklist-card .track
+  position: absolute
+  padding: 0 10px
+
+.tracklist-card .tracklist
+  padding: 90px 0 40px 0
+
+.group-sidebar
+  height: 100%
+
 @media screen and (min-width: 1100px)
   .main-view
     width: calc(100% - 520px)
@@ -78,6 +91,5 @@ html, body, #app
   .tracklist-card .tracklist
     padding-top: 140px
 
-  .sidebar-view .tracklist-card
-    width: 640px
-    margin: 0 auto
+  .tracklist-card .track
+    padding: 0
