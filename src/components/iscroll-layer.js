@@ -1,8 +1,8 @@
 var React = require('react');
 var IScroll = require('iscroll/build/iscroll');
 
-var ScrollArea = React.createClass({
-  displayName: 'ScrollArea',
+var IScrollLayer = React.createClass({
+  displayName: 'IScrollLayer',
 
   componentDidMount: function() {
     this.scroll = new IScroll(this.refs.view.getDOMNode(), {
@@ -21,4 +21,4 @@ var ScrollArea = React.createClass({
   }
 });
 
-module.exports = ScrollArea;
+module.exports = IScrollLayer;

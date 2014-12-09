@@ -8,7 +8,7 @@ var GroupProfile = require('app/components/group-profile');
 var ArtistProfile = require('app/components/artist-profile');
 var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
-var ScrollArea = require('app/components/scroll-area');
+var IScrollLayer = require('app/components/iscroll-layer');
 var LazyTracklist = require('app/components/lazy-tracklist');
 var Layer = require('app/components/layer');
 
@@ -156,7 +156,7 @@ GroupLayout.prototype.render = function (appstate) {
     player: appstate.get('player')
   });
 
-  var container = new ScrollArea({}, newsfeed);
+  var container = new IScrollLayer({}, newsfeed);
 
   var layer1 = new Layer({ className: 'pane-body group-sidebar', key: 'layer1' }, container);
   var layer2 = new Layer({ className: 'pane-body', key: 'layer2' }, player);
