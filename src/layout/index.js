@@ -7,6 +7,8 @@ var TracklistCard = require('app/components/tracklist-card');
 var AuthView = require('app/components/auth');
 var GroupProfile = require('app/components/group-profile');
 var ArtistProfile = require('app/components/artist-profile');
+var Newsfeed = require('app/components/newsfeed');
+var Player = require('app/components/player');
 
 function EmptyLayout() {
 
@@ -131,8 +133,14 @@ function GroupLayout(attrs) {
 GroupLayout.prototype.render = function (appstate) {
   var group = appstate.get('groups').findById(this.id);
 
-  var tracklistCard = new TracklistCard({
+  var player = new Player({
+    key: 'player',
     player: appstate.get('player')
+  });
+
+  var newsfeed = new Newsfeed({
+    key: 'newsfeed',
+    newsfeed: group.wall
   });
 
   var profile = new GroupProfile({
@@ -140,7 +148,7 @@ GroupLayout.prototype.render = function (appstate) {
     group: group
   });
 
-  var sidebar = new Sidebar({ key: 'sidebar' }, tracklistCard);
+  var sidebar = new Sidebar({ key: 'sidebar' }, [player, newsfeed]);
 
   return new App(null, [profile, sidebar]);
 };
