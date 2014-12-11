@@ -4,7 +4,7 @@ var Sidebar = React.createFactory(require('app/components/sidebar'));
 var GroupProfile = React.createFactory(require('app/components/group-profile'));
 var Newsfeed = React.createFactory(require('app/components/newsfeed'));
 var Player = React.createFactory(require('app/components/player'));
-var IScrollLayer = React.createFactory(require('app/components/iscroll-layer'));
+var IScrollLayer = React.createFactory(require('app/components/iscroll-layer.jsx'));
 var Layer = React.createFactory(require('app/components/layer'));
 
 var MainLayout = require('app/layout/main-layout');
