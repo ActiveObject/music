@@ -39,7 +39,7 @@ GroupLayout.prototype.main = function () {
 };
 
 GroupLayout.prototype.group = function (attrs) {
-  return GroupLayout.create(attrs);
+  return new GroupLayout(attrs);
 };
 
 GroupLayout.prototype.artist = function (attrs) {
