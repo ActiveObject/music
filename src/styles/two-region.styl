@@ -12,21 +12,39 @@
   width: 600px
   margin: 0 auto
 
-.two-region .rb-bounding-box,
-.two-region .active-track
-  width: 520px
-
-.two-region .rb-bounding-box,
-.two-region .active-track
-  border-left: 1px solid #E2E2E2
-
-.two-region .active-track
-  padding: 0 10px
-
-.two-region .active-track
+.two-region .rc-bounding-box
   position: absolute
   right: 0
   top: 0
 
+.two-region .rb-bounding-box,
+.two-region .rc-bounding-box
+  width: 520px
+
+.two-region .rb-bounding-box,
+.two-region .rc-bounding-box
+  border-left: 1px solid #E2E2E2
+
+.two-region .rc-bounding-box
+  padding: 0 10px
+
 .two-region .rb-bounding-box
-  padding: 90px 10px 0 10px
+  padding: 110px 10px 0 10px
+
+@media screen and (min-width: 1400px)
+  .two-region .ra-bounding-box,
+  .two-region .rb-bounding-box,
+  .two-region .rc-bounding-box
+    width: 50%
+
+  .two-region .ra-content-box,
+  .two-region .rb-content-box,
+  .two-region .rc-content-box
+    width: 600px
+    margin: 0 auto
+
+  .two-region .rc-bounding-box
+    margin-top: 40px
+
+  .two-region .rb-bounding-box
+    padding-top: 150px

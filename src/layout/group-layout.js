@@ -25,12 +25,13 @@ GroupLayout.prototype.render = function (appstate) {
     player: appstate.get('player')
   });
 
-  var regionA = new Box({ prefix: 'ra-' }, profile);
-  var regionB = new Box({ prefix: 'rb-' }, new IScrollLayer(null, newsfeed));
-
   var player = new Player({ player: appstate.get('player') });
 
-  return new App({ layout: ['two-region', 'group-layout'] }, [regionA, regionB, player]);
+  var regionA = new Box({ prefix: 'ra-' }, profile);
+  var regionB = new Box({ prefix: 'rb-' }, new IScrollLayer(null, newsfeed));
+  var regionC = new Box({ prefix: 'rc-' }, player);
+
+  return new App({ layout: ['two-region', 'group-layout'] }, [regionA, regionB, regionC]);
 };
 
 GroupLayout.prototype.main = function () {
