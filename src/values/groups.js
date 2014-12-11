@@ -1,7 +1,7 @@
 var List = require('immutable').List;
 var ISet = require('immutable').Set;
 var merge = require('app/utils').merge;
-var Group = require('app/values/group');
+var group = require('app/values/group');
 
 function Groups(attrs) {
   this.items = attrs.items;
@@ -19,7 +19,7 @@ Groups.prototype.findById = function (id) {
 
 Groups.prototype.fromVkResponse = function(res) {
   var groups = res.items.map(function(vkData) {
-    return new Group(vkData);
+    return group.modify(vkData);
   });
 
   return new Groups({
@@ -35,6 +35,18 @@ Groups.prototype.merge = function(otherGroups) {
 
 Groups.prototype.modify = function (attrs) {
   return new Groups(merge(this, attrs));
+};
+
+Groups.prototype.withNewsfeed = function(nf) {
+  var items = this.items.map(function(group) {
+    if (nf.owner === -group.id) {
+      return group.modify({ wall: nf });
+    }
+
+    return group;
+  });
+
+  return this.modify({ items: items });
 };
 
 module.exports = new Groups({

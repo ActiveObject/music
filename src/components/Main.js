@@ -1,7 +1,7 @@
-var _ = require('underscore');
 var React = require('react');
-var IScroll = require('iscroll');
 var ActivityCard = require('app/components/activity-card');
+var IScrollLayer = require('app/components/iscroll-layer');
+var Layer = require('app/components/layer');
 var dom = React.DOM;
 
 module.exports = React.createClass({
@@ -9,17 +9,6 @@ module.exports = React.createClass({
 
   shouldComponentUpdate: function (nextProps) {
     return nextProps.groups !== this.props.groups;
-  },
-
-  componentDidMount: function() {
-    this.scroll = new IScroll(this.refs.view.getDOMNode(), {
-      mouseWheel: true,
-      scrollX: false
-    });
-  },
-
-  componentDidUpdate: function () {
-    this.scroll.refresh();
   },
 
   render: function() {
@@ -38,12 +27,16 @@ module.exports = React.createClass({
     //   dom.div({ key: 'cards', className: 'main-user-activity' }, userActivity )
     // ]);
 
-    return dom.div({ key: 'main', className: 'main-view scroll-wrapper', ref: 'view' },
-      dom.div({ className: 'main-container' }, [groups]));
+    var scrollContainer = new IScrollLayer({}, groups);
+    var body = new Layer({ className: 'pane-body main-view-container' }, scrollContainer);
+
+    return dom.div({ className: 'main-view' }, body);
   },
 
   groupActivities: function () {
-    return this.props.groups.take(4).map(function(group) {
+    return this.props.groups.items.filter(function(group) {
+      return [41293763, 32211876, 34110702, 43426041].indexOf(group.id) !== -1;
+    }).map(function(group) {
       return new ActivityCard({
         key: group.id,
         id: group.id,

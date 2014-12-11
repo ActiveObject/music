@@ -48,3 +48,8 @@ exports.attrEquals = function attrEquals (x, y) {
     return x[attr] === y[attr];
   };
 };
+
+exports.print = function print(v) {
+  console.log(v);
+  return v;
+};
