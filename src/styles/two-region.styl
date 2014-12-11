@@ -1,5 +1,8 @@
+@import 'nib'
+
 .two-region .ra-bounding-box
   width: calc(100% - 520px)
+  transition: background-color 0.2s ease-in-out
 
 .two-region .ra-bounding-box,
 .two-region .ra-content-box,
@@ -33,7 +36,7 @@
   padding: 0 10px
 
 .two-region .rb-content-box .tracklist-body
-  padding: 110px 0 30px 0
+  padding: 100px 0 30px 0
 
 @media screen and (min-width: 1400px)
   .two-region .ra-bounding-box,
@@ -50,5 +53,5 @@
   .two-region .rc-bounding-box
     padding-top: 40px
 
-  .two-region .rc-bounding-box .tracklist-body
-    padding-top: 150px
+  .two-region .rb-content-box .tracklist-body
+    padding-top: 140px

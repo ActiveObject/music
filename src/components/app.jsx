@@ -15,7 +15,8 @@ module.exports = React.createClass({
       'app-container': true,
       'two-region': _.contains(this.props.layout, 'two-region'),
       'main-layout': _.contains(this.props.layout, 'main-layout'),
-      'group-layout': _.contains(this.props.layout, 'group-layout')
+      'group-layout': _.contains(this.props.layout, 'group-layout'),
+      'artist-layout': _.contains(this.props.layout, 'artist-layout')
     });
 
     return <div className={classes}>{this.props.children}</div>;
