@@ -1,4 +1,5 @@
-var AuthView = require('app/components/auth');
+var React = require('react');
+var AuthView = React.createFactory(require('app/components/auth'));
 
 function AuthLayout(attrs) {
   this.vkAccount = attrs.vkAccount;

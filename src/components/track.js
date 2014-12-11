@@ -5,7 +5,7 @@ var React = require('react');
 var moment = require('moment');
 var dom = require('app/core/dom');
 var eventBus = require('app/core/event-bus');
-var PlayBtn = require('app/components/play-btn');
+var PlayBtn = React.createFactory(require('app/components/play-btn'));
 
 require('moment-duration-format');
 

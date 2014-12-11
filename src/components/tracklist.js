@@ -2,7 +2,7 @@ require('app/styles/tracklist.styl');
 
 var React = require('react');
 var dom = require('app/core/dom');
-var Track = require('app/components/track');
+var Track = React.createFactory(require('app/components/track'));
 
 module.exports = React.createClass({
   displayName: 'Tracklist',

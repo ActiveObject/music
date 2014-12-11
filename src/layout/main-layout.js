@@ -1,9 +1,11 @@
-var App = require('app/components/app');
-var Main = require('app/components/main');
-var Sidebar = require('app/components/sidebar');
-var Player = require('app/components/player');
-var LazyTracklist = require('app/components/lazy-tracklist');
-var Layer = require('app/components/layer');
+var React = require('react');
+var App = React.createFactory(require('app/components/app'));
+var Main = React.createFactory(require('app/components/main'));
+var Sidebar = React.createFactory(require('app/components/sidebar'));
+var Player = React.createFactory(require('app/components/player'));
+var LazyTracklist = React.createFactory(require('app/components/lazy-tracklist'));
+var Layer = React.createFactory(require('app/components/layer'));
+
 var GroupLayout = require('app/layout/group-layout');
 var ArtistLayout = require('app/layout/artist-layout');
 var AuthLayout = require('app/layout/auth-layout');

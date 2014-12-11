@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = require('app/core/dom');
-var Tracklist = require('app/components/tracklist');
+var Tracklist = React.createFactory(require('app/components/tracklist'));
 
 var Post = React.createClass({
   displayName: 'Post',

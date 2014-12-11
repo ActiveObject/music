@@ -10,7 +10,7 @@ module.exports = function (mountNode) {
       var root = appstate.get('layout').render(appstate, send);
       debug('layout finished');
 
-      React.renderComponent(root, mountNode);
+      React.render(root, mountNode);
 
       return appstate;
     }

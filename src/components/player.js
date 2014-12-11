@@ -3,10 +3,10 @@ require('app/styles/active-track.styl');
 var React = require('react');
 var moment = require('moment');
 var dom = require('app/core/dom');
-var eventBus = require('app/core/event-bus');
-var PlayBtn = require('app/components/play-btn');
-var AudioProgressLine = require('app/components/audio-progress-line');
-var Tabs = require('app/components/tabs');
+var eventBus = React.createFactory(require('app/core/event-bus'));
+var PlayBtn = React.createFactory(require('app/components/play-btn'));
+var AudioProgressLine = React.createFactory(require('app/components/audio-progress-line'));
+var Tabs = React.createFactory(require('app/components/tabs'));
 
 require('moment-duration-format');
 

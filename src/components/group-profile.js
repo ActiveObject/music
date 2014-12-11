@@ -1,7 +1,7 @@
 require('app/styles/group-profile.styl');
 
 var React = require('react');
-var ActivityCard = require('app/components/activity-card');
+var ActivityCard = React.createFactory(require('app/components/activity-card'));
 var dom = React.DOM;
 
 module.exports = React.createClass({

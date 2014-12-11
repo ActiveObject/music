@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = require('app/core/dom');
-var Post = require('app/components/post');
+var Post = React.createFactory(require('app/components/post'));
 var eventBus = require('app/core/event-bus');
 
 var Newsfeed = React.createClass({

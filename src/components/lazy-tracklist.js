@@ -4,7 +4,7 @@ var React = require('react');
 var _ = require('underscore');
 var IScroll = require('iscroll/build/iscroll-probe');
 var dom = require('app/core/dom');
-var Track = require('app/components/track');
+var Track = React.createFactory(require('app/components/track'));
 var Cursor = require('app/values/cursor');
 
 module.exports = React.createClass({

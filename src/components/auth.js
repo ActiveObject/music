@@ -3,7 +3,7 @@ require('app/styles/element.styl');
 
 var React = require('react');
 var dom = require('app/core/dom');
-var Icon = require('app/components/icon');
+var Icon = React.createFactory(require('app/components/icon'));
 
 module.exports = React.createClass({
   displayName: 'Auth',

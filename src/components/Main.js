@@ -1,7 +1,7 @@
 var React = require('react');
-var ActivityCard = require('app/components/activity-card');
-var IScrollLayer = require('app/components/iscroll-layer');
-var Layer = require('app/components/layer');
+var ActivityCard = React.createFactory(require('app/components/activity-card'));
+var IScrollLayer = React.createFactory(require('app/components/iscroll-layer'));
+var Layer = React.createFactory(require('app/components/layer'));
 var dom = React.DOM;
 
 module.exports = React.createClass({
