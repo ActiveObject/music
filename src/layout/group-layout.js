@@ -1,11 +1,10 @@
 var React = require('react');
-var App = React.createFactory(require('app/components/app'));
-var Sidebar = React.createFactory(require('app/components/sidebar'));
+var App = React.createFactory(require('app/components/app.jsx'));
 var GroupProfile = React.createFactory(require('app/components/group-profile'));
 var Newsfeed = React.createFactory(require('app/components/newsfeed'));
 var Player = React.createFactory(require('app/components/player'));
 var IScrollLayer = React.createFactory(require('app/components/iscroll-layer.jsx'));
-var Layer = React.createFactory(require('app/components/layer'));
+var Box = React.createFactory(require('app/components/box.jsx'));
 
 var MainLayout = require('app/layout/main-layout');
 var ArtistLayout = require('app/layout/artist-layout');
@@ -19,30 +18,19 @@ function GroupLayout(attrs) {
 GroupLayout.prototype.render = function (appstate) {
   var group = appstate.get('groups').findById(this.id);
 
-  var player = new Player({
-    key: 'player',
-    player: appstate.get('player')
-  });
+  var profile = new GroupProfile({ group: group });
 
   var newsfeed = new Newsfeed({
-    key: 'newsfeed',
     newsfeed: group.wall,
     player: appstate.get('player')
   });
 
-  var container = new IScrollLayer({}, newsfeed);
+  var regionA = new Box({ prefix: 'ra-' }, profile);
+  var regionB = new Box({ prefix: 'rb-' }, new IScrollLayer(null, newsfeed));
 
-  var layer1 = new Layer({ className: 'pane-body group-sidebar', key: 'layer1' }, container);
-  var layer2 = new Layer({ className: 'pane-body', key: 'layer2' }, player);
+  var player = new Player({ player: appstate.get('player') });
 
-  var profile = new GroupProfile({
-    key: 'profile',
-    group: group
-  });
-
-  var sidebar = new Sidebar({ key: 'sidebar' }, [layer1, layer2]);
-
-  return new App(null, [profile, sidebar]);
+  return new App({ layout: ['two-region', 'group-layout'] }, [regionA, regionB, player]);
 };
 
 GroupLayout.prototype.main = function () {

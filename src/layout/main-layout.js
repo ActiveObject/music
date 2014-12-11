@@ -1,10 +1,9 @@
 var React = require('react');
-var App = React.createFactory(require('app/components/app'));
-var Main = React.createFactory(require('app/components/main'));
-var Sidebar = React.createFactory(require('app/components/sidebar'));
+var App = React.createFactory(require('app/components/app.jsx'));
+var Main = React.createFactory(require('app/components/main.jsx'));
 var Player = React.createFactory(require('app/components/player'));
 var LazyTracklist = React.createFactory(require('app/components/lazy-tracklist'));
-var Layer = React.createFactory(require('app/components/layer'));
+var Box = React.createFactory(require('app/components/box.jsx'));
 
 var GroupLayout = require('app/layout/group-layout');
 var ArtistLayout = require('app/layout/artist-layout');
@@ -15,26 +14,22 @@ function MainLayout() {
 }
 
 MainLayout.prototype.render = function(appstate, send) {
+  var main = new Main({
+    activity: appstate.get('activity'),
+    groups: appstate.get('groups')
+  });
+
   var tracklist = new LazyTracklist({
     player: appstate.get('player'),
     playlist: appstate.get('player').visiblePlaylist()
   });
 
-  var player = new Player({
-    player: appstate.get('player')
-  });
+  var player = new Player({ player: appstate.get('player') });
 
-  var layer1 = new Layer({ className: 'pane-body tracklist-card', key: 'layer1' }, tracklist);
-  var layer2 = new Layer({ className: 'pane-body', key: 'layer2' }, player);
-  var sidebar = new Sidebar({ key: 'sidebar' }, [layer1, layer2]);
+  var regionA = new Box({ prefix: 'ra-' }, main);
+  var regionB = new Box({ prefix: 'rb-' }, tracklist);
 
-  var main = new Main({
-    key: 'main',
-    activity: appstate.get('activity'),
-    groups: appstate.get('groups')
-  });
-
-  return new App(null, [main, sidebar]);
+  return new App({ layout: ['two-region', 'main-layout'] }, [regionA, regionB, player]);
 };
 
 MainLayout.prototype.group = function (attrs) {

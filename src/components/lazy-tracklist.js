@@ -1,4 +1,5 @@
 require('app/styles/tracklist.styl');
+require('app/styles/lazy-tracklist.styl');
 
 var React = require('react');
 var _ = require('underscore');
@@ -88,7 +89,7 @@ module.exports = React.createClass({
       .make();
 
     return dom.div()
-      .className('tracklist scroll-wrapper')
+      .className('tracklist scroll-wrapper lazy-tracklist')
       .attr('ref', 'view')
       .key('tracklist-wrapper')
       .append(body)

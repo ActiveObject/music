@@ -17,8 +17,8 @@ var IScrollLayer = React.createClass({
 
   render: function() {
     return (
-      <div class='scroll-wrapper' ref='view'>
-        <div class='scroll-body'>{this.props.children}</div>
+      <div className='scroll-wrapper' ref='view'>
+        <div className='scroll-body'>{this.props.children}</div>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 var React = require('react');
-var App = React.createFactory(require('app/components/app'));
+var App = React.createFactory(require('app/components/app.jsx'));
 var Sidebar = React.createFactory(require('app/components/sidebar'));
 var ArtistProfile = React.createFactory(require('app/components/artist-profile'));
 var LazyTracklist = React.createFactory(require('app/components/lazy-tracklist'));

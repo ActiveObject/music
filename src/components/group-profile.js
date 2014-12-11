@@ -29,7 +29,7 @@ module.exports = React.createClass({
     });
 
     return dom.div({
-      className: 'main-view group-profile',
+      className: 'group-profile',
     }, [profile, activity]);
   }
 });

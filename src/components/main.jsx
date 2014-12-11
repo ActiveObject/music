@@ -1,8 +1,6 @@
 var React = require('react');
 var ActivityCard = React.createFactory(require('app/components/activity-card'));
 var IScrollLayer = React.createFactory(require('app/components/iscroll-layer.jsx'));
-var Layer = React.createFactory(require('app/components/layer'));
-var dom = React.DOM;
 
 module.exports = React.createClass({
   displayName: 'Main',
@@ -17,20 +15,23 @@ module.exports = React.createClass({
     //   activity: this.props.activity
     // });
 
-    var groups = dom.div({ key: 'groups', className: 'main-section' }, [
-      dom.span({ key: 'title', className: 'main-section-title' }, 'Спільноти'),
-      dom.div({ key: 'cards' }, this.groupActivities())
-    ]);
-
     // var user = dom.div({ key: 'user', className: 'main-section' }, [
     //   dom.span({ key: 'title' , className: 'main-section-title' }, 'Активність'),
     //   dom.div({ key: 'cards', className: 'main-user-activity' }, userActivity )
     // ]);
 
-    var scrollContainer = new IScrollLayer({}, groups);
-    var body = new Layer({ className: 'pane-body main-view-container' }, scrollContainer);
-
-    return dom.div({ className: 'main-view' }, body);
+    return (
+      <div className='main-view'>
+        <div className='main-view-container'>
+          <IScrollLayer>
+            <div className='main-section'>
+              <span className='main-section-title'>Спільноти</span>
+              <div className='cards'>{this.groupActivities()}</div>
+            </div>
+          </IScrollLayer>
+        </div>
+      </div>
+    );
   },
 
   groupActivities: function () {
