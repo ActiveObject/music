@@ -11,7 +11,7 @@ BasePlaylist.prototype.isLastTrack = function (track) {
     return t.id === track.id;
   });
 
-  return activeIndex === this.tracks.count();
+  return (activeIndex + 1) === this.tracks.size;
 };
 
 BasePlaylist.prototype.nextAfter = function (track) {

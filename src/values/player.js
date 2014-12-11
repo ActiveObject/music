@@ -34,6 +34,10 @@ Player.prototype.pause = function () {
   return { e: 'app/player', a: ':player/is-playing', v: false };
 };
 
+Player.prototype.stop = function () {
+  return [this.pause(), this.seek(0)];
+};
+
 Player.prototype.togglePlay = function (track, playlist) {
   if (arguments.length === 0) {
     return this.togglePlayState();
@@ -92,9 +96,11 @@ Player.prototype.stopSeeking = function () {
 };
 
 Player.prototype.nextTrack = function() {
-  if (!this.playlist.isLastTrack(this.track)) {
-    return this.useTrack(this.playlist.nextAfter(this.track));
+  if (this.playlist.isLastTrack(this.track)) {
+    return this.stop();
   }
+
+  return this.useTrack(this.playlist.nextAfter(this.track));
 };
 
 Player.prototype.switchToPlaylist = function (id) {
