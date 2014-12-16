@@ -15,9 +15,7 @@ module.exports = function VkService(receive, send) {
   });
 
   receive(':app/user', function(appstate, user) {
-    if (user.isAuthenticated() && !appstate.get('vk').isAuthorized) {
-      vk.authorize(user.id, user.accessToken);
-    }
+    vk.authorize(user);
   });
 
   receive(':vk/wall-request', function(appstate, request) {

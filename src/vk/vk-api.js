@@ -16,10 +16,10 @@ function UnathorizedApiState(attrs) {
   this.isAuthorized = false;
 }
 
-UnathorizedApiState.prototype.authorize = function (user, token) {
+UnathorizedApiState.prototype.authorize = function (user) {
   return new ProcessingApiState({
-    user: user,
-    token: token,
+    user: user.id,
+    token: user.accessToken,
     entryPoint: this.entryPoint,
     pending: this.pending,
     version: this.version
@@ -43,7 +43,7 @@ function ProcessingApiState(attrs) {
   this.isAuthorized = true;
 }
 
-ProcessingApiState.prototype.authorize = function(user, token) {
+ProcessingApiState.prototype.authorize = function (user) {
   return this;
 };
 
@@ -87,7 +87,7 @@ function LimitedAccessApiState(attrs) {
   this.isAuthorized = true;
 }
 
-LimitedAccessApiState.prototype.authorize = function(user, token) {
+LimitedAccessApiState.prototype.authorize = function (user) {
   return this;
 };
 
@@ -117,8 +117,10 @@ VkApi.prototype.nextTick = function() {
   this.timer = setTimeout(this.process.bind(this), this.interval);
 };
 
-VkApi.prototype.authorize = function(user, token) {
-  this.changeState(this.state.authorize(user, token));
+VkApi.prototype.authorize = function(user) {
+  if (user.isAuthenticated()) {
+    this.changeState(this.state.authorize(user));
+  }
 };
 
 VkApi.prototype.request = function (method, options, done) {
