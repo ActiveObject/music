@@ -30,7 +30,6 @@ module.exports = function (receive, send, watch, mount) {
     return appstate.set('soundmanager', sm.state);
   });
 
-
   receive(':player/is-playing', function (appstate, isPlaying) {
     if (isPlaying) {
       sm.play();

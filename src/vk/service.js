@@ -1,13 +1,11 @@
 var _ = require('underscore');
 var vk = require('./vk-api');
 
-module.exports = function VkService(receive, send) {
-  vk.atom.on('change', function(value) {
-    send({ e: 'app', a: ':app/vk', v: value });
-  });
-
-  receive(':app/vk', function(appstate, v) {
-    return appstate.set('vk', v);
+module.exports = function VkService(receive, send, watch, mount) {
+  mount(vk, {
+    mountPoint: 'vk',
+    e: 'app',
+    a: ':app/vk'
   });
 
   receive(':app/started', function(appstate) {
