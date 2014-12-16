@@ -105,6 +105,7 @@ LimitedAccessApiState.prototype.modify = function (attrs) {
 function VkApi(attrs) {
   this.interval = 1000 / attrs.rateLimit;
   this.atom = attrs.atom;
+  this.mountPoint = attrs.mountPoint;
 
   this.nextTick();
   setupHelpers(this);
@@ -203,6 +204,7 @@ function isGlobal(method) {
 }
 
 module.exports = new VkApi({
+  mountPoint: 'vk',
   rateLimit: 2,
   atom: new Atom(new UnathorizedApiState({
     version: '5.25',

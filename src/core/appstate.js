@@ -1,4 +1,5 @@
 var Immutable = require('immutable');
+var isString = require('underscore').isString;
 var Atom = require('app/core/atom');
 var player = require('app/values/player');
 var tracks = require('app/values/tracks');
@@ -23,24 +24,27 @@ module.exports.update = function update(key, updater) {
   };
 };
 
-module.exports.mount = function(receive, send, v, options) {
-  if (!Atom.isAtomable(v)) {
-    throw new TypeError('')
+module.exports.mount = function(receive, send, service) {
+  if (!Atom.isAtomable(service)) {
+    throw new TypeError('Mount target should implement atomable protocol');
   }
 
-  var e = options.e,
-      a = options.a,
-      mountPoint = options.mountPoint;
+  if (!isString(service.mountPoint)) {
+    throw new TypeError('Mount target should have a mountPoint as string but given ' + service.mountPoint);
+  }
 
-  v.atom.on('change', function (newState) {
+  var e = 'app',
+      a = ':app/' + service.mountPoint;
+
+  service.atom.on('change', function (newState) {
     send({ e: e, a: a, v: newState });
   });
 
   receive(a, function (appstate, v) {
-    return appstate.set(mountPoint, v);
+    return appstate.set(service.mountPoint, v);
   });
 
   receive(':app/started', function(appstate) {
-    return appstate.set(mountPoint, v.atom.value);
+    return appstate.set(service.mountPoint, service.atom.value);
   });
 };

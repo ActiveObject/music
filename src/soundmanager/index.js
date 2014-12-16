@@ -143,6 +143,7 @@ PausedState.prototype.setPosition = function (v) {
 
 
 function Soundmanager(attrs) {
+  this.mountPoint = attrs.mountPoint;
   this.atom = attrs.atom;
 }
 
@@ -203,5 +204,6 @@ Soundmanager.prototype.setPosition = function (position) {
 };
 
 module.exports = new Soundmanager({
+  mountPoint: 'soundmanager',
   atom: new Atom(new UninitializedState())
 });

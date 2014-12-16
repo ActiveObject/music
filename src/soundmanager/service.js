@@ -1,11 +1,7 @@
 var sm = require('app/soundmanager');
 
 module.exports = function (receive, send, watch, mount) {
-  mount(sm, {
-    mountPoint: 'soundmanager',
-    e: 'app',
-    a: ':app/soundmanager'
-  });
+  mount(sm);
 
   sm.on('finish', function (track) {
     send({ e: 'app/soundmanager', a: ':soundmanager/finish', v: track });

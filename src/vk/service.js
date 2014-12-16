@@ -2,11 +2,7 @@ var _ = require('underscore');
 var vk = require('./vk-api');
 
 module.exports = function VkService(receive, send, watch, mount) {
-  mount(vk, {
-    mountPoint: 'vk',
-    e: 'app',
-    a: ':app/vk'
-  });
+  mount(vk);
 
   receive(':app/user', function(appstate, user) {
     vk.authorize(user);
