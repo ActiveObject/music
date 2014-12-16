@@ -3,6 +3,7 @@ var _ = require('underscore');
 var curry = require('curry');
 var sm = require('sound-manager');
 var merge = require('app/utils').merge;
+var Atom = require('app/core/atom');
 
 function UninitializedState() {
 
@@ -141,8 +142,8 @@ PausedState.prototype.setPosition = function (v) {
 };
 
 
-function Soundmanager(state) {
-  this.state = state;
+function Soundmanager(attrs) {
+  this.atom = attrs.atom;
 }
 
 Soundmanager.prototype = Object.create(EventEmitter.prototype, {
@@ -152,21 +153,21 @@ Soundmanager.prototype = Object.create(EventEmitter.prototype, {
 Soundmanager.prototype.setup = function (options) {
   sm.setup(merge(options, {
     onready: function () {
-      this.changeState(new ReadyState({}));
+      this.atom.swap(new ReadyState({}));
     }.bind(this),
 
     ontimeout: function () {
-      this.changeState(new UninitializedState());
+      this.atom.swap(new UninitializedState());
     }.bind(this)
   }));
 };
 
 Soundmanager.prototype.play = function () {
-  return this.changeState(this.state.play());
+  this.atom.update(state => state.play());
 };
 
 Soundmanager.prototype.pause = function () {
-  return this.changeState(this.state.pause());
+  this.atom.update(state => state.pause());
 };
 
 Soundmanager.prototype.useTrack = function (track) {
@@ -194,20 +195,13 @@ Soundmanager.prototype.useTrack = function (track) {
     }, 500)
   });
 
-  return this.changeState(this.state.useTrack(track, sound));
+  this.atom.update(state => state.useTrack(track, sound));
 };
 
 Soundmanager.prototype.setPosition = function (position) {
-  return this.changeState(this.state.setPosition(position));
+  this.atom.update(state => state.setPosition(position));
 };
 
-Soundmanager.prototype.changeState = function (newState) {
-  if (this.state !== newState) {
-    this.state = newState;
-    this.emit('change', this.state);
-  }
-
-  return this;
-};
-
-module.exports = new Soundmanager(new UninitializedState());
+module.exports = new Soundmanager({
+  atom: new Atom(new UninitializedState())
+});

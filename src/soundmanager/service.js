@@ -1,7 +1,7 @@
 var sm = require('app/soundmanager');
 
 module.exports = function (receive, send) {
-  sm.on('change', function (newState) {
+  sm.atom.on('change', function (newState) {
     send({ e: 'app', a: ':app/soundmanager', v: newState });
   });
 
