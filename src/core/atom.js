@@ -11,13 +11,16 @@ Atom.prototype = Object.create(EventEmitter.prototype, {
 });
 
 Atom.prototype.update = function (updater) {
-  this.value = updater(this.value);
-  this.emit('change', this.value);
+  return this.swap(updater(this.value));
 };
 
 Atom.prototype.swap = function (newValue) {
-  this.value = newValue;
-  this.emit('change', this.value);
+  if (this.value !== newValue) {
+    this.value = newValue;
+    this.emit('change', this.value);
+  }
+
+  return this;
 };
 
 Atom.prototype.watchIn = function (key, callback) {
