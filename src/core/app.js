@@ -31,7 +31,7 @@ function makeReceiver(receivers) {
 }
 
 function watch(key, callback) {
-  return appstate.watchIn(key, callback);
+  return appstate.atom.watchIn(key, callback);
 }
 
 function makeMounter(receive, send) {
@@ -82,14 +82,9 @@ function dispatch(datom) {
     return next(handler(state, datom), handlers.slice(1));
   }
 
-  var nextState = next(appstate.value, handlers);
-
+  var nextState = next(appstate.atom.value, handlers);
   debug('[%s %s %s] (f)', datom.e, datom.a, datom.v);
-
-  if (nextState !== appstate.value) {
-    appstate.swap(nextState);
-  }
-
+  appstate.atom.swap(nextState);
   appEventStream.resume();
 }
 

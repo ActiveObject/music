@@ -15,7 +15,7 @@ module.exports = function (mountNode) {
       return appstate;
     }
 
-    appstate.on('change', function (value) {
+    appstate.atom.on('change', function (value) {
       if (!document.hidden) {
         window.requestAnimationFrame(function () {
           render(value);
@@ -26,7 +26,7 @@ module.exports = function (mountNode) {
     receive(':app/started', function () {
       document.addEventListener('visibilitychange', function () {
         if (!document.hidden) {
-          render(appstate.value);
+          render(appstate.atom.value);
         }
       }, false);
     });
