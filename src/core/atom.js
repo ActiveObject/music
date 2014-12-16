@@ -1,26 +1,26 @@
 var EventEmitter = require('events').EventEmitter;
 var Bacon = require('baconjs');
 
-function SmartRef(initialValue) {
+function Atom(initialValue) {
   this.value = initialValue;
   this.changes = Bacon.fromEventTarget(this, 'change');
 }
 
-SmartRef.prototype = Object.create(EventEmitter.prototype, {
-  constructor: { value: SmartRef, enumerable: false }
+Atom.prototype = Object.create(EventEmitter.prototype, {
+  constructor: { value: Atom, enumerable: false }
 });
 
-SmartRef.prototype.update = function (updater) {
+Atom.prototype.update = function (updater) {
   this.value = updater(this.value);
   this.emit('change', this.value);
 };
 
-SmartRef.prototype.swap = function (newValue) {
+Atom.prototype.swap = function (newValue) {
   this.value = newValue;
   this.emit('change', this.value);
 };
 
-SmartRef.prototype.watchIn = function (key, callback) {
+Atom.prototype.watchIn = function (key, callback) {
   var x = this.changes
     .map(db => db.get(key))
     .slidingWindow(2, 2)
@@ -33,4 +33,4 @@ SmartRef.prototype.watchIn = function (key, callback) {
   });
 };
 
-module.exports = SmartRef;
+module.exports = Atom;

@@ -1,5 +1,5 @@
 var Immutable = require('immutable');
-var SmartRef = require('app/core/smart-ref');
+var Atom = require('app/core/atom');
 var player = require('app/values/player');
 var tracks = require('app/values/tracks');
 var groups = require('app/values/groups');
@@ -7,7 +7,7 @@ var layout = require('app/layout');
 var vk = require('app/vk');
 var sm = require('app/soundmanager');
 
-module.exports = new SmartRef(Immutable.Map());
+module.exports = new Atom(Immutable.Map());
 
 module.exports.toJSON = function() {
   return this.value.filterNot(function(val, key) {
