@@ -22,3 +22,21 @@ module.exports.update = function update(key, updater) {
     return db.set(key, updater.apply(db, args));
   };
 };
+
+module.exports.mount = function(receive, send, v, options) {
+  if (!Atom.isAtomable(v)) {
+    throw new TypeError('')
+  }
+
+  var e = options.e,
+      a = options.a,
+      mountPoint = options.mountPoint;
+
+  v.atom.on('change', function (newState) {
+    send({ e: e, a: a, v: newState });
+  });
+
+  receive(a, function (appstate, v) {
+    return appstate.set(mountPoint, v);
+  });
+};

@@ -1,10 +1,21 @@
 var EventEmitter = require('events').EventEmitter;
+var isObject = require('underscore').isObject;
 var Bacon = require('baconjs');
 
 function Atom(initialValue) {
   this.value = initialValue;
   this.changes = Bacon.fromEventTarget(this, 'change');
 }
+
+Atom.isAtomable = function(v) {
+  return isObject(v) && Atom.isAtom(v.atom);
+};
+
+Atom.isAtom = function(v) {
+  return EventEmitter.prototype.isPrototypeOf(v) &&
+    typeof v.swap === 'function' &&
+    typeof v.update === 'function';
+};
 
 Atom.prototype = Object.create(EventEmitter.prototype, {
   constructor: { value: Atom, enumerable: false }

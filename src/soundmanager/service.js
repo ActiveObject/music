@@ -1,8 +1,10 @@
 var sm = require('app/soundmanager');
 
-module.exports = function (receive, send) {
-  sm.atom.on('change', function (newState) {
-    send({ e: 'app', a: ':app/soundmanager', v: newState });
+module.exports = function (receive, send, watch, mount) {
+  mount(sm, {
+    mountPoint: 'soundmanager',
+    e: 'app',
+    a: ':app/soundmanager'
   });
 
   sm.on('finish', function (track) {
@@ -28,9 +30,6 @@ module.exports = function (receive, send) {
     return appstate.set('soundmanager', sm.state);
   });
 
-  receive(':app/soundmanager', function (appstate, v) {
-    return appstate.set('soundmanager', v);
-  });
 
   receive(':player/is-playing', function (appstate, isPlaying) {
     if (isPlaying) {
