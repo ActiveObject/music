@@ -3,6 +3,7 @@ var _ = require('underscore');
 var not = require('app/utils').not;
 var Request = require('./request');
 var Response = require('./response');
+var Atom = require('app/core/atom');
 
 var methods = require('./methods').methods.map(function (m) {
   return m.split('.');
@@ -102,8 +103,8 @@ LimitedAccessApiState.prototype.modify = function (attrs) {
 
 
 function VkApi(attrs) {
-  this.state = attrs.state;
   this.interval = 1000 / attrs.rateLimit;
+  this.atom = attrs.atom;
 
   this.nextTick();
   setupHelpers(this);
@@ -119,47 +120,40 @@ VkApi.prototype.nextTick = function() {
 
 VkApi.prototype.authorize = function(user) {
   if (user.isAuthenticated()) {
-    this.changeState(this.state.authorize(user));
+    this.atom.update(state => state.authorize(user));
   }
 };
 
 VkApi.prototype.request = function (method, options, done) {
   var req = new Request({
-    entryPoint: this.state.entryPoint,
-    token: this.state.token,
-    version: this.state.version,
+    entryPoint: this.atom.value.entryPoint,
+    token: this.atom.value.token,
+    version: this.atom.value.version,
     method: method,
     params: options,
     attempt: 0,
     callback: done
   });
 
-  this.changeState(this.state.modify({
-    pending: this.state.pending.concat(req)
-  }));
-
+  this.atom.update(state => state.modify({ pending: state.pending.concat(req) }));
   this.resume();
 };
 
 VkApi.prototype.process = function() {
-  if (this.state.pending.length === 0) {
+  if (this.atom.value.pending.length === 0) {
     return this.idle();
   }
 
-  var req = this.state.pending[0];
+  var req = this.atom.value.pending[0];
 
   req.send(function(err, data) {
     var res = new Response(err, data);
     res.send(req.callback);
-    this.changeState(this.state.takeResult(req, res));
+    this.atom.update(state => state.takeResult(req, res));
   }.bind(this));
 
   this.emit('process');
-
-  this.changeState(this.state.modify({
-    pending: this.state.pending.slice(1)
-  }));
-
+  this.atom.update(state => state.modify({ pending: state.pending.slice(1) }));
   this.nextTick();
 };
 
@@ -172,15 +166,6 @@ VkApi.prototype.resume = function() {
   clearTimeout(this.timer);
   this.emit('resume');
   this.nextTick();
-};
-
-VkApi.prototype.changeState = function(newState) {
-  if (newState !== this.state) {
-    this.state = newState;
-    this.emit('change', newState);
-  }
-
-  return this;
 };
 
 function setupHelpers(apiObj) {
@@ -219,9 +204,9 @@ function isGlobal(method) {
 
 module.exports = new VkApi({
   rateLimit: 2,
-  state: new UnathorizedApiState({
+  atom: new Atom(new UnathorizedApiState({
     version: '5.25',
     entryPoint: 'https://api.vk.com/method/',
     pending: []
-  })
+  }))
 });

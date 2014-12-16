@@ -2,7 +2,7 @@ var _ = require('underscore');
 var vk = require('./vk-api');
 
 module.exports = function VkService(receive, send) {
-  vk.on('change', function(value) {
+  vk.atom.on('change', function(value) {
     send({ e: 'app', a: ':app/vk', v: value });
   });
 
