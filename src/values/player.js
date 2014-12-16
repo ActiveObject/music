@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var List = require('immutable').List;
 var merge = require('app/utils').merge;
 var LibraryPlaylist = require('app/values/playlist/library');
 var tracks = require('app/values/tracks');
@@ -196,7 +197,7 @@ Player.prototype.makeRecent = function(prevRecent, prevPlaylist, isPlaylistChang
 module.exports = new Player({
   track: {},
   playlist: new LibraryPlaylist({
-    library: tracks,
+    tracks: List(),
     isShuffled: false,
     isRepeated: false
   }),

@@ -7,7 +7,7 @@ function ArtistPlaylist(attrs) {
   this.type = 'artist';
   this.name = attrs.artist;
   this.artist = attrs.artist;
-  this.tracks = attrs.library.findByArtist(attrs.artist);
+  this.tracks = attrs.tracks;
 }
 
 ArtistPlaylist.prototype = Object.create(BasePlaylist.prototype, {
@@ -15,9 +15,7 @@ ArtistPlaylist.prototype = Object.create(BasePlaylist.prototype, {
 });
 
 ArtistPlaylist.prototype.update = function (library) {
-  return this.modify({
-    library: library
-  });
+  return this.modify({ library: library.findByArtist(this.artist) });
 };
 
 ArtistPlaylist.prototype.recentTag = function () {

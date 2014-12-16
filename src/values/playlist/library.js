@@ -6,7 +6,7 @@ function LibraryPlaylist(attrs) {
 
   this.type = 'library';
   this.name = 'All tracks';
-  this.tracks = attrs.library.getAll();
+  this.tracks = attrs.tracks;
 }
 
 LibraryPlaylist.prototype = Object.create(BasePlaylist.prototype, {
@@ -14,9 +14,7 @@ LibraryPlaylist.prototype = Object.create(BasePlaylist.prototype, {
 });
 
 LibraryPlaylist.prototype.update = function(library) {
-  return this.modify({
-    library: library
-  });
+  return this.modify({ tracks: library.getAll() });
 };
 
 LibraryPlaylist.prototype.recentTag = function () {

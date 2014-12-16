@@ -23,6 +23,10 @@ function loadTracks(user, offset, count, callback) {
 }
 
 module.exports = function (receive, send) {
+  receive(':app/started', function(appstate) {
+    return appstate.set('tracks', tracks);
+  });
+
   receive(':app/user', function(appstate, user) {
     if (user.isAuthenticated()) {
       loadTracks(user, 0, 1000, function(err, chunk) {
@@ -47,7 +51,7 @@ module.exports = function (receive, send) {
     return appstate.set('tracks', v);
   });
 
-  receive(':app/started', function(appstate) {
-    return appstate.set('tracks', tracks);
+  receive(':app/tracks', function(appstate, tracks) {
+    send(tracks.updatePlayer(appstate.get('player')));
   });
 };

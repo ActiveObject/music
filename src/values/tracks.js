@@ -64,11 +64,24 @@ Tracks.prototype.findByArtist = function (artist) {
 };
 
 Tracks.prototype.playlistForArtist = function(artist) {
-  return new ArtistPlaylist({ artist: artist, library: this });
+  return new ArtistPlaylist({
+    artist: artist,
+    tracks: this.findByArtist(artist)
+  });
 };
 
 Tracks.prototype.modify = function (attrs) {
   return new Tracks(merge(this, attrs));
+};
+
+Tracks.prototype.updatePlayer = function(player) {
+  if (player.playlist.type === 'library') {
+    return player.usePlaylist(player.playlist.update(this));
+  }
+
+  if (player.playlist.type === 'artist') {
+    return player.usePlaylist(player.playlist.update(this));
+  }
 };
 
 Tracks.prototype.query = function (key, fn) {

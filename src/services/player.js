@@ -50,16 +50,6 @@ module.exports = function(receive, send, watch) {
     send(appstate.get('player').nextTrack());
   });
 
-  watch('tracks', function (tracks, prev, appstate) {
-    var player = appstate.get('player');
-
-    send({
-      e: 'app/player',
-      a: ':player/playlist',
-      v: player.playlist.update(tracks)
-    });
-  });
-
   receive(':app/started', function(appstate) {
     return appstate.set('player', player);
   });
