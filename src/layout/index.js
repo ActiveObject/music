@@ -24,6 +24,7 @@ var Atom = require('app/core/atom');
  * LayoutManager implements atom protocol.
  */
 function LayoutManager(attrs) {
+  this.mountPoint = attrs.mountPoint;
   this.atom = attrs.atom;
 }
 
@@ -48,5 +49,6 @@ LayoutManager.prototype.main = function () {
 };
 
 module.exports = new LayoutManager({
-  atom: new Atom(EmptyLayout.create())
+  mountPoint: 'layout',
+  atom: new Atom(EmptyLayout.create()),
 });

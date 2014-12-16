@@ -1,10 +1,8 @@
 var page = require('page');
 var layout = require('app/layout');
 
-module.exports = function (receive, send) {
-  layout.atom.on('change', function (v) {
-    send({ e: 'app', a: ':app/layout', v: v });
-  });
+module.exports = function (receive, send, watch, mount) {
+  mount(layout);
 
   page('/', function () {
     layout.main();
@@ -19,8 +17,4 @@ module.exports = function (receive, send) {
   });
 
   receive(':app/started', page);
-
-  receive(':app/started', function(appstate) {
-    return appstate.set('layout', layout.atom.value);
-  });
 };
