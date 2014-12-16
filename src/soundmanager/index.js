@@ -182,7 +182,7 @@ Soundmanager.prototype.useTrack = function (track) {
     volume: 100,
 
     onfinish: function () {
-      stm.emit('finish', stm.state.track);
+      stm.emit('finish', stm.atom.value.track);
     },
 
     whileplaying: _.throttle(function () {
