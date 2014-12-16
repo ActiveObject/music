@@ -18,38 +18,35 @@
 
 var EventEmitter = require('events').EventEmitter;
 var EmptyLayout = require('app/layout/empty-layout');
+var Atom = require('app/core/atom');
 
-function LayoutManager(state) {
-  this.state = state;
+/**
+ * LayoutManager implements atom protocol.
+ */
+function LayoutManager(attrs) {
+  this.atom = attrs.atom;
 }
 
 LayoutManager.prototype = Object.create(EventEmitter.prototype, {
   constructor: { value: LayoutManager, enumerable: false }
 });
 
-LayoutManager.prototype.changeState = function (newState) {
-  if (this.state !== newState) {
-    this.state = newState;
-    this.emit('change', newState);
-  }
-
-  return this;
-};
-
 LayoutManager.prototype.auth = function (vkAccount) {
-  return this.changeState(this.state.auth({ vkAccount: vkAccount }));
+  this.atom.update(state => state.auth({ vkAccount: vkAccount }));
 };
 
 LayoutManager.prototype.group = function (id) {
-  return this.changeState(this.state.group({ id: id }));
+  this.atom.update(state => state.group({ id: id }));
 };
 
 LayoutManager.prototype.artist = function (name) {
-  return this.changeState(this.state.artist({ name: name }));
+  this.atom.update(state => state.artist({ name: name }));
 };
 
 LayoutManager.prototype.main = function () {
-  return this.changeState(this.state.main());
+  this.atom.update(state => state.main());
 };
 
-module.exports = new LayoutManager(EmptyLayout.create());
+module.exports = new LayoutManager({
+  atom: new Atom(EmptyLayout.create())
+});
