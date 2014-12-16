@@ -1,7 +1,7 @@
 var update = require('app/core/appstate').update;
 var player = require('app/values/player');
 
-module.exports = function(receive, send, watch) {
+module.exports = function(receive, send) {
   receive(':soundmanager/bytes-loaded', update('player', function (player, v) {
     return player.modify({ bytesLoaded: v });
   }));
