@@ -8,10 +8,6 @@ module.exports = function VkService(receive, send, watch, mount) {
     a: ':app/vk'
   });
 
-  receive(':app/started', function(appstate) {
-    return appstate.set('vk', vk.state);
-  });
-
   receive(':app/user', function(appstate, user) {
     vk.authorize(user);
   });

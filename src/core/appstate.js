@@ -39,4 +39,8 @@ module.exports.mount = function(receive, send, v, options) {
   receive(a, function (appstate, v) {
     return appstate.set(mountPoint, v);
   });
+
+  receive(':app/started', function(appstate) {
+    return appstate.set(mountPoint, v.atom.value);
+  });
 };

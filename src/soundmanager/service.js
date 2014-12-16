@@ -26,8 +26,6 @@ module.exports = function (receive, send, watch, mount) {
       flashVersion: 9,
       preferFlash: false
     });
-
-    return appstate.set('soundmanager', sm.state);
   });
 
   receive(':player/is-playing', function (appstate, isPlaying) {
