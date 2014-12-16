@@ -86,8 +86,8 @@ module.exports = React.createClass({
       .key('tabs')
       .className('player-playlist-tabs player-playlist-tabs-active')
       .append(new Tabs({
-        items: this.props.player.recentPlaylists.map(function (item) {
-          return { text: item.playlist.name, isActive: item.visible, id: item.playlist.id };
+        items: this.props.player.recentTracklists.map(function (item) {
+          return { text: item.tracklist.name, isActive: item.visible, id: item.tracklist.id };
         }),
 
         onChange: this.changePlaylist
@@ -104,6 +104,6 @@ module.exports = React.createClass({
   },
 
   changePlaylist: function (id) {
-    eventBus.push(this.props.player.switchToPlaylist(id));
+    eventBus.push(this.props.player.switchToTracklist(id));
   }
 });

@@ -13,7 +13,7 @@ module.exports = React.createClass({
 
   propTypes: {
     player: React.PropTypes.object.isRequired,
-    playlist: React.PropTypes.object.isRequired,
+    tracklist: React.PropTypes.object.isRequired,
     itemHeight: React.PropTypes.number.isRequired
   },
 
@@ -21,12 +21,12 @@ module.exports = React.createClass({
     return nextState.cursor !== this.state.cursor ||
       nextProps.player.track.id !== this.props.player.track.id ||
       nextProps.player.isPlaying !== this.props.player.isPlaying ||
-      nextProps.playlist !== this.props.playlist ||
+      nextProps.tracklist !== this.props.tracklist ||
       nextProps.itemHeight !== this.props.itemHeight;
   },
 
   getInitialState: function () {
-    var items = this.props.playlist.tracks.toJS();
+    var items = this.props.tracklist.playlist.tracks.toJS();
 
     return {
       cursor: new Cursor(items, {
@@ -58,15 +58,15 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function (prevProps) {
-    if (this.props.playlist !== prevProps.playlist) {
+    if (this.props.tracklist !== prevProps.tracklist) {
       this.scroll.refresh();
     }
   },
 
   componentWillReceiveProps: function(nextProps) {
-    if (this.props.playlist !== nextProps.playlist) {
+    if (this.props.tracklist !== nextProps.tracklist) {
       this.setState({
-        cursor: this.state.cursor.updateItems(nextProps.playlist.tracks.toJS())
+        cursor: this.state.cursor.updateItems(nextProps.tracklist.playlist.tracks.toJS())
       });
     }
   },
@@ -78,13 +78,13 @@ module.exports = React.createClass({
         track: track.value,
         y: track.yOffset,
         player: this.props.player,
-        playlist: this.props.playlist
+        tracklist: this.props.tracklist
       });
     }, this);
 
     var body = dom.div()
       .className('tracklist-body')
-      .attr('style', { height: this.props.playlist.tracks.count() * this.props.itemHeight })
+      .attr('style', { height: this.props.tracklist.playlist.tracks.count() * this.props.itemHeight })
       .append(tracks)
       .make();
 

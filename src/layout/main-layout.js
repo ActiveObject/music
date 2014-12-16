@@ -21,7 +21,7 @@ MainLayout.prototype.render = function(appstate, send) {
 
   var tracklist = new LazyTracklist({
     player: appstate.get('player'),
-    playlist: appstate.get('player').visiblePlaylist()
+    tracklist: appstate.get('player').visibleTracklist()
   });
 
   var player = new Player({ player: appstate.get('player') });

@@ -10,7 +10,7 @@ var Post = React.createClass({
 
     var tracklist = new Tracklist({
       player: this.props.player,
-      playlist: this.props.post.playlist()
+      tracklist: this.props.post.tracklist()
     });
 
     return dom.div()

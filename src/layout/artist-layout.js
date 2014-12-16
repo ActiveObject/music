@@ -16,7 +16,7 @@ function ArtistLayout(attrs) {
 ArtistLayout.prototype.render = function (appstate) {
   var tracklist = new LazyTracklist({
     player: appstate.get('player'),
-    playlist: appstate.get('player').visiblePlaylist()
+    tracklist: appstate.get('player').visibleTracklist()
   });
 
   var profile = new ArtistProfile({

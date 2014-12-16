@@ -14,14 +14,14 @@ module.exports = React.createClass({
 
   propTypes: {
     player: React.PropTypes.object.isRequired,
-    playlist: React.PropTypes.object.isRequired,
+    tracklist: React.PropTypes.object.isRequired,
     track: React.PropTypes.object.isRequired,
     y: React.PropTypes.number.isRequired
   },
 
   shouldComponentUpdate: function (nextProps) {
     return nextProps.track !== this.props.track ||
-      nextProps.playlist !== this.props.playlist ||
+      nextProps.tracklist !== this.props.tracklist ||
       nextProps.player.track.id !== this.props.player.track.id ||
       nextProps.player.isPlaying !== this.props.player.isPlaying ||
       nextProps.y !== this.props.y;
@@ -68,6 +68,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    eventBus.push(this.props.player.togglePlay(this.props.track, this.props.playlist));
+    eventBus.push(this.props.player.togglePlay(this.props.track, this.props.tracklist));
   }
 });

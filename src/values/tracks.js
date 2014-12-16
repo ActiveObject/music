@@ -3,7 +3,8 @@ var List = require('immutable').List;
 var ISet = require('immutable').Set;
 var merge = require('app/utils').merge;
 var Track = require('app/values/track');
-var ArtistPlaylist = require('app/values/playlist/artist');
+var ArtistTracklist = require('app/values/tracklists/artist-tracklist');
+var Playlist = require('app/values/playlist');
 
 function Tracks(attrs) {
   this.items = attrs.items;
@@ -64,9 +65,11 @@ Tracks.prototype.findByArtist = function (artist) {
 };
 
 Tracks.prototype.playlistForArtist = function(artist) {
-  return new ArtistPlaylist({
+  return new ArtistTracklist({
     artist: artist,
-    tracks: this.findByArtist(artist)
+    playlist: new Playlist({
+      tracks: this.findByArtist(artist)
+    })
   });
 };
 
@@ -75,12 +78,12 @@ Tracks.prototype.modify = function (attrs) {
 };
 
 Tracks.prototype.updatePlayer = function(player) {
-  if (player.playlist.type === 'library') {
-    return player.usePlaylist(player.playlist.update(this));
+  if (player.tracklist.type === 'library') {
+    return player.useTracklist(player.tracklist.update(this));
   }
 
-  if (player.playlist.type === 'artist') {
-    return player.usePlaylist(player.playlist.update(this));
+  if (player.tracklist.type === 'artist') {
+    return player.useTracklist(player.tracklist.update(this));
   }
 };
 

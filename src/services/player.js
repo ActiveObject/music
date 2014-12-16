@@ -30,20 +30,20 @@ module.exports = function(receive, send, watch) {
     return player.modify({ seeking: v });
   }));
 
-  receive(':player/playlist', update('player', function (player, v) {
+  receive(':player/tracklist', update('player', function (player, v) {
     if (Object.keys(player.track).length === 0 && v.tracks.size > 0) {
       send(player.useTrack(v.tracks.first()));
     }
 
-    return player.modify({ playlist: v });
+    return player.modify({ tracklist: v });
   }));
 
   receive(':player/track', update('player', function (player, v) {
     return player.modify({ track: v });
   }));
 
-  receive(':player/visible-playlist', update('player', function (player, v) {
-    return player.setVisiblePlaylist(v);
+  receive(':player/visible-tracklist', update('player', function (player, v) {
+    return player.setVisibleTracklist(v);
   }));
 
   receive(':soundmanager/finish', function (appstate) {
