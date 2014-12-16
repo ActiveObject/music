@@ -30,15 +30,21 @@ module.exports = function (receive, send) {
           return console.log(err);
         }
 
-        send({ e: 'app', a: ':app/tracks', v: tracks.fromVkResponse(chunk) });
+        send({ e: 'vk', a: ':vk/tracks', v: chunk });
       });
     }
   });
 
-  receive(':app/tracks', function(appstate, v) {
-    return appstate.update('tracks', function(tracks) {
-      return tracks.merge(v);
+  receive(':vk/tracks', function(appstate, res) {
+    send({
+      e: 'app',
+      a: ':app/tracks',
+      v: appstate.get('tracks').merge(tracks.fromVkResponse(res))
     });
+  });
+
+  receive(':app/tracks', function(appstate, v) {
+    return appstate.set('tracks', v);
   });
 
   receive(':app/started', function(appstate) {
