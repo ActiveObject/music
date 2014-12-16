@@ -27,9 +27,9 @@ ArtistLayout.prototype.render = function (appstate) {
 
   var player = new Player({ player: appstate.get('player') });
 
-  var regionA = new Box({ prefix: 'ra-' }, profile);
-  var regionB = new Box({ prefix: 'rb-' }, tracklist);
-  var regionC = new Box({ prefix: 'rc-' }, player);
+  var regionA = new Box({ prefix: 'ra-', key: 'region-a' }, profile);
+  var regionB = new Box({ prefix: 'rb-', key: 'region-b' }, tracklist);
+  var regionC = new Box({ prefix: 'rc-', key: 'region-c' }, player);
 
   return new App({ layout: ['two-region', 'artist-layout'] }, [regionA, regionB, regionC]);
 };

@@ -40,11 +40,13 @@ module.exports = React.createClass({
       .append(this.props.name);
 
     var weekdays = dom.div()
+      .key('weekdays')
       .className('activity-card-weekdays')
       .attr('style', { left: -(this.props.size + this.props.margin), width: this.props.size })
       .append([1, 3, 5].map(this.makeWeekday));
 
     var content = dom.div()
+      .key('content')
       .className('activity-chart-content')
       .append(achart, weekdays, months);
 
@@ -74,12 +76,14 @@ module.exports = React.createClass({
   makeMonthLegend: function (activity) {
     var months = Activity.months(activity).map(function (m) {
       return dom.div()
+        .key(m.number)
         .className('activity-card-month')
         .attr('style', { width: m.weeksN * (this.props.size + this.props.margin) })
         .append(moment.monthsShort(m.number));
     }, this);
 
     return dom.div()
+      .key('months')
       .className('activity-card-months')
       .append(months);
   },
@@ -103,6 +107,7 @@ module.exports = React.createClass({
 
   makeWeekday: function (n) {
     return dom.div()
+      .key(n)
       .className('activity-card-weekday')
       .attr('style', {
         height: this.props.size,

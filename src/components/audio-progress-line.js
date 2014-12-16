@@ -25,15 +25,22 @@ var AudioProgressLine = React.createClass({
   },
 
   render: function () {
-    var bgLine = dom.div().className('apl-bg-line');
+    var bgLine = dom.div()
+      .key('apl-bg-line')
+      .className('apl-bg-line');
 
-    var loadLine = dom.div().className('apl-load-line')
+    var loadLine = dom.div()
+      .key('apl-load-line')
+      .className('apl-load-line')
       .attr('style', { width: this.trackLoaded() + '%' });
 
-    var fgLine = dom.div().className('apl-fg-line')
+    var fgLine = dom.div()
+      .key('apl-fg-line')
+      .className('apl-fg-line')
       .attr('style', { width: this.trackProgress() + '%' });
 
     var seek = dom.div()
+      .key('apl-seek')
       .className('apl-seek')
       .className('apl-seek-hidden', !this.state.seekIsVisible)
       .attr('onMouseDown', this.dragStart)

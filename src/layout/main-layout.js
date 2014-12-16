@@ -26,9 +26,9 @@ MainLayout.prototype.render = function(appstate, send) {
 
   var player = new Player({ player: appstate.get('player') });
 
-  var regionA = new Box({ prefix: 'ra-' }, main);
-  var regionB = new Box({ prefix: 'rb-' }, tracklist);
-  var regionC = new Box({ prefix: 'rc-' }, player);
+  var regionA = new Box({ prefix: 'ra-', key: 'region-a' }, main);
+  var regionB = new Box({ prefix: 'rb-', key: 'region-b' }, tracklist);
+  var regionC = new Box({ prefix: 'rc-', key: 'region-c' }, player);
 
   return new App({ layout: ['two-region', 'main-layout'] }, [regionA, regionB, regionC]);
 };
