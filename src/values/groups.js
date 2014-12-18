@@ -40,7 +40,7 @@ Groups.prototype.modify = function (attrs) {
 Groups.prototype.withNewsfeed = function(nf) {
   var items = this.items.map(function(group) {
     if (nf.owner === -group.id) {
-      return group.modify({ wall: nf });
+      return group.updateWall(nf);
     }
 
     return group;

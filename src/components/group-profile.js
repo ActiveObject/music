@@ -2,10 +2,15 @@ require('app/styles/group-profile.styl');
 
 var React = require('react');
 var ActivityCard = React.createFactory(require('app/components/activity-card'));
+var eventBus = require('app/core/event-bus');
 var dom = React.DOM;
 
 module.exports = React.createClass({
   displayName: 'GroupProfile',
+
+  componentDidMount: function() {
+    eventBus.push(this.props.group.wall.lastNWeeksActivity(33).load());
+  },
 
   render: function () {
     var avatar = dom.div({ key: 'avatar', className: 'group-profile-avatar' },
@@ -25,7 +30,7 @@ module.exports = React.createClass({
       defaultColor: '#3949AB',
       id: this.props.group.id,
       name: this.props.name,
-      activity: this.props.group.activity
+      activity: this.props.group.wall.lastNWeeksActivity(33).activity
     });
 
     return dom.div({

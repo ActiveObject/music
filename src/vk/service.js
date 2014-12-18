@@ -9,10 +9,22 @@ module.exports = function VkService(receive, send, watch, mount) {
   });
 
   receive(':vk/wall-request', function(appstate, request) {
+    if (request.count > 100) {
+      send({
+        e: 'vk',
+        a: ':vk/wall-request',
+        v: {
+          owner: request.owner,
+          offset: request.offset + 100,
+          count: request.count - 100
+        }
+      });
+    }
+
     vk.wall.get({
       owner_id: request.owner,
       offset: request.offset,
-      count: request.count
+      count: request.count < 100 ? request.count : 100
     }, function(err, res) {
       if (err) {
         return send({ e: 'vk', a: ':vk/error', v: err });

@@ -1,49 +1,50 @@
 var _ = require('underscore');
 var moment = require('moment');
 var curry = require('curry');
+var merge = require('app/utils').merge;
 
-function Activity(data) {
-  if (!(this instanceof Activity)) {
-    return new Activity(data);
-  }
-
-  this.total = data.total;
-  this.indexed = data.indexed;
-  this.items = data.items;
+function NewsfeedActivity(attrs) {
+  this.newsfeed = attrs.newsfeed;
+  this.activity = attrs.activity;
 }
 
-function makeDateRange(today, options) {
-  var weeks = options.weeks;
-  var amout = moment(today).day() + (weeks - 1) * 7 + 1;
-  var dates = [];
+NewsfeedActivity.prototype.load = function() {
+  return this.newsfeed.load(0, 800);
+};
 
-  for (var i = 0; i < amout; i++) {
-    dates.push(moment(today).subtract(i, 'days'));
-  }
+NewsfeedActivity.prototype.forPeriod = function(daterange) {
+  return this.modify({
+    activity: daterange.fillEmptyDates(this.activity)
+  });
+};
 
-  return dates;
+NewsfeedActivity.prototype.modify = function(attrs) {
+  return new NewsfeedActivity(merge(this, attrs));
+};
+
+function IndexedActivity(attrs) {
+  this.total = attrs.total;
+  this.indexed = attrs.indexed;
+  this.activity = attrs.activity;
 }
 
-function fillEmptyDates(range, activity) {
-  var activityDates = activity.map(function (item) {
-    return {
-      doy: moment(item.date).dayOfYear(),
-      news: item.news
-    };
+IndexedActivity.prototype.fromNewsfeed = function(nf) {
+  var itemsByDate = nf.posts.groupBy(function (post) {
+    return moment(post.date).format('YYYY-MM-DD');
   });
 
-  return range.map(function(d) {
-    var doy = d.dayOfYear();
-    var found = _.find(activityDates, function (item) {
-      return doy === item.doy;
-    });
-
+  var activity = itemsByDate.map(function (values, date) {
     return {
-      date: d,
-      news: found ? found.news : 0
+      date: date,
+      news: values.size
     };
+  }).toArray();
+
+  return new NewsfeedActivity({
+    newsfeed: nf,
+    activity: activity
   });
-}
+};
 
 function weeks(activity) {
   var dateByWeek = _.groupBy(activity, function (item) {
@@ -102,21 +103,20 @@ function update(posts, activity) {
     };
   });
 
-  return new Activity({
+  return new IndexedActivity({
     total: posts.total,
     indexed: activity.indexed.concat(toIndex.map(function (post) { return post.id; })),
-    items: activity.items.concat(items)
+    activity: activity.activity.concat(items)
   });
 }
 
-exports.makeDateRange = makeDateRange;
-exports.fillEmptyDates = fillEmptyDates;
-exports.weeks = weeks;
-exports.months = months;
-exports.update = update;
-
-exports.empty = new Activity({
+// exports.update = update;
+module.exports = new IndexedActivity({
   total: 0,
   indexed: [],
-  items: []
+  activity: []
 });
+
+module.exports.weeks = weeks;
+module.exports.months = months;
+

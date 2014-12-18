@@ -23,6 +23,13 @@ Post.prototype.modify = function(attrs) {
 };
 
 Post.prototype.tracklist = function() {
+  if (!this.attachments) {
+    return new PostTracklist({
+      post: this.id,
+      playlist: new Playlist({ tracks: List() })
+    });
+  }
+
   var audioItems = this.attachments.filter(function(item) {
     return item.type === 'audio';
   });

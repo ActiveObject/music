@@ -28,10 +28,8 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var dateRange = Activity.makeDateRange(new Date(), { weeks: 33 });
-    var activity = Activity.fillEmptyDates(dateRange, this.props.activity.items);
-    var achart = this.makeActivityChart(this.props.size, this.props.margin, activity);
-    var months = this.makeMonthLegend(activity);
+    var achart = this.makeActivityChart(this.props.size, this.props.margin, this.props.activity);
+    var months = this.makeMonthLegend(this.props.activity);
 
     var name = dom.a()
       .key('name')

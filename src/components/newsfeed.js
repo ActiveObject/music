@@ -10,10 +10,14 @@ var Newsfeed = React.createClass({
     eventBus.push(this.props.newsfeed.load(0, 10));
   },
 
+  componentShouldUpdate: function(nextProps) {
+    return nextProps.newsfeed !== this.props.newsfeed || nextProps.player !== this.props.player;
+  },
+
   render: function() {
     var player = this.props.player;
 
-    var posts = this.props.newsfeed.posts.toJS().map(function(post) {
+    var posts = this.props.newsfeed.posts.toJS().slice(0, 10).map(function(post) {
       return new Post({
         post: post,
         player: player

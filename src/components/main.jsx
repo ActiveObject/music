@@ -42,7 +42,7 @@ module.exports = React.createClass({
         key: group.id,
         id: group.id,
         name: group.name,
-        activity: group.activity
+        activity: group.wall.lastNWeeksActivity(33).activity
       });
     }).toJS();
   }

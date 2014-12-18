@@ -1,7 +1,6 @@
 var _ = require('underscore');
 var merge = require('app/utils').merge;
 var attrEquals = require('app/utils').attrEquals;
-var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
 
 function Group(attrs) {
@@ -17,7 +16,6 @@ function Group(attrs) {
   this.type = attrs.type;
 
   this.wall = attrs.wall.modify({ owner: -this.id });
-  this.activity = attrs.activity;
 }
 
 Group.prototype.toString = function() {
@@ -48,6 +46,5 @@ Group.prototype.updateWall = function (wall) {
 
 module.exports = new Group({
   id: -1,
-  wall: newsfeed,
-  activity: Activity.empty
+  wall: newsfeed
 });
