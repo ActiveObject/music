@@ -1,6 +1,6 @@
 var React = require('react');
 var App = React.createFactory(require('app/components/app.jsx'));
-var GroupProfile = React.createFactory(require('app/components/group-profile'));
+var GroupProfile = React.createFactory(require('app/components/group-profile.jsx'));
 var Newsfeed = React.createFactory(require('app/components/newsfeed'));
 var Player = React.createFactory(require('app/components/player'));
 var IScrollLayer = React.createFactory(require('app/components/iscroll-layer.jsx'));
