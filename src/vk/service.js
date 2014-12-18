@@ -1,5 +1,7 @@
 var _ = require('underscore');
 var groups = require('app/values/groups');
+var tracks = require('app/values/tracks');
+var newsfeed = require('app/values/newsfeed');
 var merge = require('app/utils').merge;
 var vk = require('./vk-api');
 
@@ -25,6 +27,46 @@ function loadGroups(user, offset, count, callback) {
   });
 }
 
+function loadTracks(user, offset, count, callback) {
+  vk.audio.get({
+    owner_id: user.id,
+    offset: offset,
+    count: count
+  }, function(err, res) {
+    if (err) {
+      return callback(err);
+    }
+
+    callback(null, merge(res.response, {
+      offset: offset
+    }));
+
+    if (res.response.count > 0 && res.response.count > offset + count) {
+      return loadTracks(user, offset + count, count, callback);
+    }
+  });
+}
+
+function loadWall(owner, offset, count, callback) {
+  vk.wall.get({
+    owner_id: owner,
+    offset: offset,
+    count: count < 100 ? count : 100
+  }, function(err, res) {
+    if (err) {
+      return callback(err);
+    }
+
+    callback(null, merge(res.response, {
+      offset: offset
+    }));
+
+    if (count - 100 > 0) {
+      return loadWall(owner, offset + 100, count - 100, callback);
+    }
+  });
+}
+
 module.exports = function VkService(receive, send, watch, mount) {
   mount(vk);
 
@@ -34,41 +76,63 @@ module.exports = function VkService(receive, send, watch, mount) {
 
   receive(':app/user', function(appstate, user) {
     if (user.isAuthenticated()) {
-      loadGroups(user, 0, 1000, function(err, chunk) {
-        if (err) {
-          return console.log(err);
-        }
-
-        var newGroups = groups.fromVkResponse(chunk);
-
-        send({ e: 'app', a: ':app/groups', v: appstate.get('groups').merge(newGroups) });
-      });
+      send({ e: 'vk', a: ':vk/groups-request', v: { user: user, offset: 0, count: 1000 } });
     }
   });
 
-  receive(':vk/wall-request', function(appstate, request) {
-    if (request.count > 100) {
-      send({
-        e: 'vk',
-        a: ':vk/wall-request',
-        v: {
-          owner: request.owner,
-          offset: request.offset + 100,
-          count: request.count - 100
-        }
-      });
+  receive(':app/user', function(appstate, user) {
+    if (user.isAuthenticated()) {
+      send({ e: 'vk', a: ':vk/audio-request', v: { user: user, offset: 0, count: 1000 } });
     }
+  });
 
-    vk.wall.get({
-      owner_id: request.owner,
-      offset: request.offset,
-      count: request.count < 100 ? request.count : 100
-    }, function(err, res) {
+  receive(':vk/groups', function (appstate, res) {
+    send({
+      e: 'app',
+      a: ':app/groups',
+      v: appstate.get('groups').merge(groups.fromVkResponse(res))
+    });
+  });
+
+  receive(':vk/tracks', function (appstate, res) {
+    send({
+      e: 'app',
+      a: ':app/tracks',
+      v: appstate.get('tracks').merge(tracks.fromVkResponse(res))
+    });
+  });
+
+  receive(':vk/wall', function(appstate, data) {
+    send({ e: 'app', a: ':app/newsfeed', v: newsfeed.fromVkResponse(data) });
+  });
+
+  receive(':vk/groups-request', function (appstate, request) {
+    loadGroups(request.user, request.offset, request.count, function(err, chunk) {
+      if (err) {
+        return send({ e: 'vk', a: ':vk/error', v: chunk });
+      }
+
+      send({ e: 'vk', a: ':vk/groups', v: chunk });
+    });
+  });
+
+  receive(':vk/audio-request', function (appstate, request) {
+    loadTracks(request.user, request.offset, request.count, function(err, chunk) {
+      if (err) {
+        return send({ e: 'vk', a: ':vk/error', v: chunk });
+      }
+
+      send({ e: 'vk', a: ':vk/tracks', v: chunk });
+    });
+  });
+
+  receive(':vk/wall-request', function(appstate, request) {
+    loadWall(request.owner, request.offset, request.count, function (err, chunk) {
       if (err) {
         return send({ e: 'vk', a: ':vk/error', v: err });
       }
 
-      send({ e: 'vk', a: ':vk/wall', v: _.extend(res.response, { owner: request.owner }) });
+      send({ e: 'vk', a: ':vk/wall', v: _.extend(chunk, { owner: request.owner }) });
     });
   });
 };
