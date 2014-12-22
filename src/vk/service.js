@@ -1,8 +1,9 @@
 var _ = require('underscore');
-var groups = require('app/values/groups');
+var ISet = require('immutable').Set;
 var tracks = require('app/values/tracks');
 var newsfeed = require('app/values/newsfeed');
 var activity = require('app/values/activity');
+var group = require('app/values/group');
 var merge = require('app/utils').merge;
 var vk = require('./vk-api');
 
@@ -87,10 +88,14 @@ module.exports = function VkService(receive, send, mount) {
   });
 
   receive(':vk/groups', function (appstate, res) {
+    var groups = res.items.map(function(vkData) {
+      return group.modify(vkData);
+    });
+
     send({
       e: 'app',
       a: ':app/groups',
-      v: appstate.get('groups').merge(groups.fromVkResponse(res))
+      v: ISet(groups)
     });
   });
 

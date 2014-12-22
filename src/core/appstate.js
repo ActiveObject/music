@@ -46,14 +46,14 @@ function Entity(v) {
 }
 
 Appstate.prototype.groupById = function(id) {
-  var e = new Entity(this.atom.value.get('groups').items.find(g => g.id === id));
+  var e = new Entity(this.atom.value.get('groups').find(g => g.id === id));
 
   e.atom.on('change', (v) => console.log(v.toJS()));
 
   app.use(function (receive) {
     receive(':app/groups', function(appstate, groups) {
       Atom.update(e, function(v) {
-        return appstate.get('groups').items.find(g => g.id === id);
+        return appstate.get('groups').find(g => g.id === id);
       });
     });
   });
@@ -94,12 +94,12 @@ Appstate.prototype.activityForGroup = function(id) {
 };
 
 Appstate.prototype.groups = function(ids) {
-  var saved = this.atom.value.get('groups').items.filter(g => ids.indexOf(g.id) !== -1);
+  var saved = this.atom.value.get('groups').filter(g => ids.indexOf(g.id) !== -1);
   var e = new Entity(saved);
 
   app.use(function (receive) {
     receive(':app/groups', function(appstate, groups) {
-      Atom.update(e, (v) => groups.items.filter(g => ids.indexOf(g.id) !== -1));
+      Atom.update(e, (v) => groups.filter(g => ids.indexOf(g.id) !== -1));
     });
   });
 
