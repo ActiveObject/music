@@ -3,7 +3,6 @@ var List = require('immutable').List;
 var merge = require('app/utils').merge;
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 var Playlist = require('app/values/playlist');
-var tracks = require('app/values/tracks');
 
 function Player(attrs) {
   if (!(this instanceof Player)) {

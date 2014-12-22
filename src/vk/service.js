@@ -1,9 +1,9 @@
 var _ = require('underscore');
 var ISet = require('immutable').Set;
-var tracks = require('app/values/tracks');
 var newsfeed = require('app/values/newsfeed');
 var activity = require('app/values/activity');
 var group = require('app/values/group');
+var Track = require('app/values/track');
 var merge = require('app/utils').merge;
 var vk = require('./vk-api');
 
@@ -92,19 +92,15 @@ module.exports = function VkService(receive, send, mount) {
       return group.modify(vkData);
     });
 
-    send({
-      e: 'app',
-      a: ':app/groups',
-      v: ISet(groups)
-    });
+    send({ e: 'app', a: ':app/groups', v: ISet(groups) });
   });
 
   receive(':vk/tracks', function (appstate, res) {
-    send({
-      e: 'app',
-      a: ':app/tracks',
-      v: appstate.get('tracks').merge(tracks.fromVkResponse(res))
+    var tracks = res.items.map(function(vkData, i) {
+      return new Track(merge(vkData, { index: res.offset + i }));
     });
+
+    send({ e: 'app', a: ':app/tracks', v: ISet(tracks) });
   });
 
   receive(':vk/wall', function(appstate, data) {

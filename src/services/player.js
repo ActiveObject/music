@@ -53,4 +53,17 @@ module.exports = function(receive, send) {
   receive(':app/started', function(appstate) {
     return appstate.set('player', player);
   });
+
+  receive(':app/tracks', function(appstate) {
+    var player = appstate.get('player');
+    var tracks = appstate.get('tracks');
+
+    if (player.tracklist.type === 'library') {
+      send(player.useTracklist(player.tracklist.update(tracks)));
+    }
+
+    if (player.tracklist.type === 'artist') {
+      send(player.useTracklist(player.tracklist.update(tracks)));
+    }
+  });
 };

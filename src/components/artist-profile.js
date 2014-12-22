@@ -20,7 +20,7 @@ module.exports = React.createClass({
   render: function () {
     var tracklist = new Tracklist({
       player: this.props.player,
-      tracklist: this.props.library.playlistForArtist(this.props.artist)
+      tracklist: this.props.tracklist
     });
 
     var container = dom.div()

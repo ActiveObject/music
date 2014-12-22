@@ -13,6 +13,10 @@ module.exports = function (receive) {
     return appstate.set('groups', ISet());
   });
 
+  receive(':app/started', function(appstate) {
+    return appstate.set('tracks', ISet());
+  });
+
   receive(':app/activity', function (appstate, activity) {
     return appstate.update('activities', (v) => v.add(activity));
   });
@@ -23,5 +27,9 @@ module.exports = function (receive) {
 
   receive(':app/groups', function (appstate, groups) {
     return appstate.update('groups', (v) => v.union(groups));
+  });
+
+  receive(':app/tracks', function(appstate, tracks) {
+    return appstate.update('tracks', (v) => v.union(tracks));
   });
 };
