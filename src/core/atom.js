@@ -1,27 +1,15 @@
+var assert = require('assert');
 var EventEmitter = require('events').EventEmitter;
 var isObject = require('underscore').isObject;
+var isFunction = require('underscore').isFunction;
 
 function Atom(initialValue) {
   this.value = initialValue;
 }
 
-Atom.isAtomable = function(v) {
-  return isObject(v) && Atom.isAtom(v.atom);
-};
-
-Atom.isAtom = function(v) {
-  return EventEmitter.prototype.isPrototypeOf(v) &&
-    typeof v.swap === 'function' &&
-    typeof v.update === 'function';
-};
-
 Atom.prototype = Object.create(EventEmitter.prototype, {
   constructor: { value: Atom, enumerable: false }
 });
-
-Atom.prototype.update = function (updater) {
-  return this.swap(updater(this.value));
-};
 
 Atom.prototype.swap = function (newValue) {
   if (this.value !== newValue) {
@@ -30,6 +18,24 @@ Atom.prototype.swap = function (newValue) {
   }
 
   return this;
+};
+
+Atom.isAtomable = function(v) {
+  return isObject(v) && Atom.isAtom(v.atom);
+};
+
+Atom.isAtom = function(v) {
+  return EventEmitter.prototype.isPrototypeOf(v) && isFunction(v.swap);
+};
+
+Atom.update = function(x, updater) {
+  assert(Atom.isAtomable(x), 'Atom.update: trying to update non-atomable object, given ' + x);
+  return x.atom.swap(updater(x.atom.value));
+};
+
+Atom.swap = function(x, newValue) {
+  assert(Atom.isAtomable(x), 'Atom.swap: trying to update non-atomable object, given ' + x);
+  return x.atom.swap(x, newValue);
 };
 
 module.exports = Atom;

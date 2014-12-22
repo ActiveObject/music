@@ -33,19 +33,19 @@ LayoutManager.prototype = Object.create(EventEmitter.prototype, {
 });
 
 LayoutManager.prototype.auth = function (vkAccount) {
-  this.atom.update(state => state.auth({ vkAccount: vkAccount }));
+  Atom.update(this, state => state.auth({ vkAccount: vkAccount }));
 };
 
 LayoutManager.prototype.group = function (id) {
-  this.atom.update(state => state.group({ id: id }));
+  Atom.update(this, state => state.group({ id: id }));
 };
 
 LayoutManager.prototype.artist = function (name) {
-  this.atom.update(state => state.artist({ name: name }));
+  Atom.update(this, state => state.artist({ name: name }));
 };
 
 LayoutManager.prototype.main = function () {
-  this.atom.update(state => state.main());
+  Atom.update(this, state => state.main());
 };
 
 module.exports = new LayoutManager({

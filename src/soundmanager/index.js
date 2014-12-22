@@ -32,11 +32,11 @@ Soundmanager.prototype.setup = function (options) {
 };
 
 Soundmanager.prototype.play = function () {
-  this.atom.update(state => state.play());
+  Atom.update(this, state => state.play());
 };
 
 Soundmanager.prototype.pause = function () {
-  this.atom.update(state => state.pause());
+  Atom.update(this, state => state.pause());
 };
 
 Soundmanager.prototype.useTrack = function (track) {
@@ -64,11 +64,11 @@ Soundmanager.prototype.useTrack = function (track) {
     }, 500)
   });
 
-  this.atom.update(state => state.useTrack(track, sound));
+  Atom.update(this, state => state.useTrack(track, sound));
 };
 
 Soundmanager.prototype.setPosition = function (position) {
-  this.atom.update(state => state.setPosition(position));
+  Atom.update(this, state => state.setPosition(position));
 };
 
 module.exports = new Soundmanager({

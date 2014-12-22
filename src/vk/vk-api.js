@@ -121,7 +121,7 @@ VkApi.prototype.nextTick = function() {
 
 VkApi.prototype.authorize = function(user) {
   if (user.isAuthenticated()) {
-    this.atom.update(state => state.authorize(user));
+    Atom.update(this, state => state.authorize(user));
   }
 };
 
@@ -136,7 +136,7 @@ VkApi.prototype.request = function (method, options, done) {
     callback: done
   });
 
-  this.atom.update(state => state.modify({ pending: state.pending.concat(req) }));
+  Atom.update(this, state => state.modify({ pending: state.pending.concat(req) }));
   this.resume();
 };
 
@@ -150,11 +150,11 @@ VkApi.prototype.process = function() {
   req.send(function(err, data) {
     var res = new Response(err, data);
     res.send(req.callback);
-    this.atom.update(state => state.takeResult(req, res));
+    Atom.update(this, state => state.takeResult(req, res));
   }.bind(this));
 
   this.emit('process');
-  this.atom.update(state => state.modify({ pending: state.pending.slice(1) }));
+  Atom.update(this, state => state.modify({ pending: state.pending.slice(1) }));
   this.nextTick();
 };
 
