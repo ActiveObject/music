@@ -2,7 +2,10 @@ var _ = require('underscore');
 var moment = require('moment');
 var curry = require('curry');
 var merge = require('app/utils').merge;
+var hashCode = require('app/utils').hashCode;
+var combineHash = require('app/utils').combineHash;
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
+var ActivityItem = require('app/values/activity-item');
 
 function Activity(attrs) {
   this.period = attrs.period;
@@ -10,19 +13,38 @@ function Activity(attrs) {
   this.owner = attrs.owner;
 }
 
+Activity.prototype.hashCode = function () {
+  return this.items.reduce(combineHash, 1);
+};
+
+Activity.prototype.equals = function (other) {
+  return this.period.equals(other.period) &&
+    this.owner === other.owner &&
+    this.items.every(function (item, i) {
+      return item.equals(other.items[i]);
+    });
+};
+
 Activity.prototype.fromNewsfeed = function(nf) {
   var itemsByDate = nf.posts.groupBy(function (post) {
     return moment(post.date).format('YYYY-MM-DD');
   });
 
   var activity = itemsByDate.map(function (values, date) {
-    return {
-      date: date,
-      news: values.size
-    };
-  }).toArray();
+    return new ActivityItem(date, values.size);
+  });
 
-  return this.modify({ items: activity });
+  return this.modify({ items: activity.toArray() });
+};
+
+Activity.prototype.merge = function (other) {
+  // return new Activity({
+  //   period: this.period,
+  //   items: this.items.concat(other.items),
+  //   owner: this.owner
+  // });
+
+  return other;
 };
 
 Activity.prototype.load = function (offset, count) {
@@ -78,9 +100,8 @@ Activity.prototype.modify = function (attrs) {
   return new Activity(merge(this, attrs));
 };
 
-// exports.update = update;
 module.exports = new Activity({
-  period: new LastNWeeksDRange(33),
+  period: new LastNWeeksDRange(33, new Date()),
   items: [],
   owner: 0
 });

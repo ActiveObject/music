@@ -13,5 +13,5 @@ app.use(require('app/renderer')(document.getElementById('app')));
 app.start();
 
 window.Perf = require('react/addons').addons.Perf;
-window.app = app;
+// window.app = app;
 window.appstate = require('app/core/appstate');

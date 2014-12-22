@@ -1,5 +1,7 @@
 var _ = require('underscore');
 var moment = require('moment');
+var hashCode = require('app/utils').hashCode;
+var ActivityItem = require('app/values/activity-item');
 
 function LastNWeeksDRange(n, today) {
   var amout = moment(today).day() + (n - 1) * 7 + 1;
@@ -28,11 +30,16 @@ LastNWeeksDRange.prototype.fillEmptyDates = function(activity) {
       return doy === item.doy;
     });
 
-    return {
-      date: d,
-      news: found ? found.news : 0
-    };
+    return new ActivityItem(d, found ? found.news : 0);
   });
+};
+
+LastNWeeksDRange.prototype.hashCode = function () {
+  return 31 * hashCode(this.n) + 31 * hashCode(this.date.valueOf());
+};
+
+LastNWeeksDRange.prototype.equals = function (other) {
+  return this.n === other.n && this.today.valueOf() === other.today.valueOf();
 };
 
 module.exports = LastNWeeksDRange;

@@ -10,7 +10,7 @@ function MainLayout() {
 }
 
 MainLayout.prototype.render = function(appstate) {
-  return new MainLayoutCmp({ player: appstate.get('player') });
+  return MainLayoutCmp({ player: appstate.get('player') });
 };
 
 MainLayout.prototype.group = function (attrs) {

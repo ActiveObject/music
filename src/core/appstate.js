@@ -72,7 +72,7 @@ Appstate.prototype.newsfeedForGroup = function(id) {
     });
   });
 
-  eventBus.push(nf.load());
+  eventBus.push(nf.load(0, 10));
 
   return e;
 };
@@ -84,11 +84,11 @@ Appstate.prototype.activityForGroup = function(id) {
 
   app.use(function (receive) {
     receive(':app/activity', function(appstate, activity) {
-      Atom.update(e, (v) => activity.owner === -id ? activity : v);
+      Atom.update(e, (v) => activity.owner === -id ? v.merge(activity) : v);
     });
   });
 
-  eventBus.push(a.load(0, 1000));
+  eventBus.push(a.load(0, 10));
 
   return e;
 };
@@ -107,22 +107,31 @@ Appstate.prototype.groups = function(ids) {
 };
 
 Appstate.prototype.activities = function(ids) {
-  var saved = ids.map(function(id) {
+  var saved = ids.reduce(function(result, id) {
     var a = this.atom.value.get('activities').find(a => a.owner === -id);
-    return a ? a : activity.modify({ owner: -id });
-  }, this);
+    return result.set(id, a ? a : activity.modify({ owner: -id }));
+  }.bind(this), new Immutable.Map());
 
-  var items = new Immutable.Set(saved);
-  var e = new Entity(items);
+  var e = new Entity(saved);
 
   app.use(function (receive) {
     receive(':app/activity', function(appstate, activity) {
-      Atom.update(e, (v) => ids.indexOf(-activity.owner) !== -1 ? v.add(activity) : v);
+      Atom.update(e, function (v) {
+        if (v.has(-activity.owner)) {
+          return v.set(-activity.owner, activity);
+        }
+
+        return v;
+      });
     });
   });
 
-  items.forEach(function(a) {
-    eventBus.push(a.load(0, 100));
+  e.atom.on('change', function (v) {
+    console.log(v.toJS());
+  })
+
+  saved.forEach(function(a) {
+    eventBus.push(a.load(0, 10));
   });
 
   return e;
