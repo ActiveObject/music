@@ -1,7 +1,7 @@
 var page = require('page');
 var layout = require('app/layout');
 
-module.exports = function (receive, send, watch, mount) {
+module.exports = function (receive, send, mount) {
   mount(layout);
 
   page('/', function () {

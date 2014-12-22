@@ -67,7 +67,7 @@ function loadWall(owner, offset, count, callback) {
   });
 }
 
-module.exports = function VkService(receive, send, watch, mount) {
+module.exports = function VkService(receive, send, mount) {
   mount(vk);
 
   receive(':app/user', function(appstate, user) {

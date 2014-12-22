@@ -30,10 +30,6 @@ function makeReceiver(receivers) {
   };
 }
 
-function watch(key, callback) {
-  return appstate.atom.watchIn(key, callback);
-}
-
 function makeMounter(receive, send) {
   return function mount(atomable, options) {
     return appstate.mount(receive, send, atomable, options);
@@ -52,7 +48,7 @@ function isDatom(v) {
 
 function use(handler) {
   var receivers = [];
-  var onDbChange = handler(makeReceiver(receivers), send, watch, makeMounter(makeReceiver(receivers), send));
+  var onDbChange = handler(makeReceiver(receivers), send, makeMounter(makeReceiver(receivers), send));
 
   handlers.push.apply(handlers, receivers);
 
