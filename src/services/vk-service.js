@@ -5,7 +5,7 @@ var activity = require('app/values/activity');
 var group = require('app/values/group');
 var Track = require('app/values/track');
 var merge = require('app/utils').merge;
-var vk = require('./vk-api');
+var vk = require('app/vk');
 
 function loadGroups(user, offset, count, callback) {
   vk.groups.get({
