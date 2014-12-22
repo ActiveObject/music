@@ -2,9 +2,9 @@ var _ = require('underscore');
 var groups = require('app/values/groups');
 var tracks = require('app/values/tracks');
 var newsfeed = require('app/values/newsfeed');
+var activity = require('app/values/activity');
 var merge = require('app/utils').merge;
 var vk = require('./vk-api');
-
 
 function loadGroups(user, offset, count, callback) {
   vk.groups.get({
@@ -76,7 +76,7 @@ module.exports = function VkService(receive, send, mount) {
 
   receive(':app/user', function(appstate, user) {
     if (user.isAuthenticated()) {
-      send({ e: 'vk', a: ':vk/groups-request', v: { user: user, offset: 0, count: 1000 } });
+      send({ e: 'vk', a: ':vk/groups-request', v: { user: user, offset: 0, count: 10 } });
     }
   });
 
@@ -106,6 +106,12 @@ module.exports = function VkService(receive, send, mount) {
     send({ e: 'app', a: ':app/newsfeed', v: newsfeed.fromVkResponse(data) });
   });
 
+  receive(':vk/activity', function(appstate, data) {
+    var nf = newsfeed.fromVkResponse(data);
+    var v = activity.fromNewsfeed(nf).modify({ owner: data.owner });
+    send({ e: 'app', a: ':app/activity', v: v });
+  });
+
   receive(':vk/groups-request', function (appstate, request) {
     loadGroups(request.user, request.offset, request.count, function(err, chunk) {
       if (err) {
@@ -133,6 +139,16 @@ module.exports = function VkService(receive, send, mount) {
       }
 
       send({ e: 'vk', a: ':vk/wall', v: _.extend(chunk, { owner: request.owner }) });
+    });
+  });
+
+  receive(':vk/activity-request', function(appstate, request) {
+    loadWall(request.owner, request.offset, request.count, function (err, chunk) {
+      if (err) {
+        return send({ e: 'vk', a: ':vk/error', v: err });
+      }
+
+      send({ e: 'vk', a: ':vk/activity', v: _.extend(chunk, { owner: request.owner }) });
     });
   });
 };

@@ -5,49 +5,11 @@ var post = require('app/values/post');
 var activity = require('app/values/activity');
 var moment = require('moment');
 
-function LastNWeeks(n, today) {
-  var amout = moment(today).day() + (n - 1) * 7 + 1;
-  var dates = [];
-
-  for (var i = 0; i < amout; i++) {
-    dates.push(moment(today).subtract(i, 'days'));
-  }
-
-  this.n = n;
-  this.today = today;
-  this.dates = dates;
-}
-
-LastNWeeks.prototype.fillEmptyDates = function(activity) {
-  var activityDates = activity.map(function (item) {
-    return {
-      doy: moment(item.date).dayOfYear(),
-      news: item.news
-    };
-  });
-
-  return this.dates.map(function(d) {
-    var doy = d.dayOfYear();
-    var found = _.find(activityDates, function (item) {
-      return doy === item.doy;
-    });
-
-    return {
-      date: d,
-      news: found ? found.news : 0
-    };
-  });
-};
-
 function Newsfeed(attrs) {
   this.owner = attrs.owner;
   this.posts = attrs.posts;
   this.total = attrs.total;
 }
-
-Newsfeed.prototype.lastNWeeksActivity = function(n) {
-  return activity.fromNewsfeed(this).forPeriod(new LastNWeeks(n, new Date()));
-};
 
 Newsfeed.prototype.modify = function(attrs) {
   return new Newsfeed(merge(this, attrs));

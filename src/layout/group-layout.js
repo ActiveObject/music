@@ -10,18 +10,24 @@ var MainLayout = require('app/layout/main-layout');
 var ArtistLayout = require('app/layout/artist-layout');
 var AuthLayout = require('app/layout/auth-layout');
 
+var appstate = require('app/core/appstate');
+
 
 function GroupLayout(attrs) {
   this.id = parseInt(attrs.id);
+  this.group = appstate.groupById(this.id);
+  this.newsfeed = appstate.newsfeedForGroup(this.id);
+  this.activity = appstate.activityForGroup(this.id);
 }
 
 GroupLayout.prototype.render = function (appstate) {
-  var group = appstate.get('groups').findById(this.id);
-
-  var profile = new GroupProfile({ group: group });
+  var profile = new GroupProfile({
+    group: this.group.atom.value,
+    activity: this.activity.atom.value
+  });
 
   var newsfeed = new Newsfeed({
-    newsfeed: group.wall,
+    newsfeed: this.newsfeed.atom.value,
     player: appstate.get('player')
   });
 

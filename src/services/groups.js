@@ -8,8 +8,4 @@ module.exports = function (receive, send) {
   receive(':app/started', function(appstate) {
     return appstate.set('groups', groups);
   });
-
-  receive(':app/newsfeed', function(appstate, newsfeed) {
-    send({ e: 'app', a: ':app/groups', v: appstate.get('groups').withNewsfeed(newsfeed) });
-  });
 };

@@ -14,12 +14,10 @@ function Group(attrs) {
   this.photo_200 = attrs.photo_200;
   this.screenName = attrs.screen_name;
   this.type = attrs.type;
-
-  this.wall = attrs.wall.modify({ owner: -this.id });
 }
 
 Group.prototype.toString = function() {
-  return 'Group #' + this.id;
+  return 'Group (' + this.name + ')';
 };
 
 Group.prototype.hashCode = function() {
@@ -36,12 +34,6 @@ Group.prototype.equals = function(other) {
 
 Group.prototype.modify = function (attrs) {
   return new Group(merge(this, attrs));
-};
-
-Group.prototype.updateWall = function (wall) {
-  return this.modify({
-    wall: this.wall.merge(wall)
-  });
 };
 
 module.exports = new Group({

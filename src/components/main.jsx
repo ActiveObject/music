@@ -1,6 +1,7 @@
 var React = require('react');
 var ActivityCard = React.createFactory(require('app/components/activity-card'));
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
+var activity = require('app/values/activity');
 
 module.exports = React.createClass({
   displayName: 'Main',
@@ -42,7 +43,7 @@ module.exports = React.createClass({
         key: group.id,
         id: group.id,
         name: group.name,
-        activity: group.wall.lastNWeeksActivity(33).activity
+        activity: activity
       });
     }).toJS();
   }

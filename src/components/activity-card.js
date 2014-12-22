@@ -55,10 +55,10 @@ module.exports = React.createClass({
   },
 
   makeActivityChart: function(size, margin, activity) {
-    var weeks = Activity.weeks(activity);
-    var maxNewsCount = Math.max.apply(null, _.pluck(activity, 'news'));
+    var weeks = activity.weeks();
+    var maxNewsCount = Math.max.apply(null, _.pluck(activity.items, 'news'));
     var items = weeks.map(this.makeWeek(maxNewsCount, size, margin));
-    var months = Activity.months(activity);
+    var months = activity.months();
 
     var body = dom.svg()
       .attr('width', (size + margin) * weeks.length)
@@ -72,7 +72,7 @@ module.exports = React.createClass({
   },
 
   makeMonthLegend: function (activity) {
-    var months = Activity.months(activity).map(function (m) {
+    var months = activity.months().map(function (m) {
       return dom.div()
         .key(m.number)
         .className('activity-card-month')
