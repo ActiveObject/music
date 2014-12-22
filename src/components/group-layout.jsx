@@ -22,7 +22,6 @@ var GroupLayout = React.createClass({
   },
 
   render: function() {
-    debugger
     return (
       <App layout={['two-region', 'group-layout']}>
         <Box prefix='ra-' key='region-a'>

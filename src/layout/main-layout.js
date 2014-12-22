@@ -1,9 +1,5 @@
 var React = require('react');
-var App = React.createFactory(require('app/components/app.jsx'));
-var Main = React.createFactory(require('app/components/main.jsx'));
-var Player = React.createFactory(require('app/components/player'));
-var LazyTracklist = React.createFactory(require('app/components/lazy-tracklist'));
-var Box = React.createFactory(require('app/components/box.jsx'));
+var MainLayoutCmp = React.createFactory(require('app/components/main-layout.jsx'));
 
 var GroupLayout = require('app/layout/group-layout');
 var ArtistLayout = require('app/layout/artist-layout');
@@ -13,24 +9,8 @@ function MainLayout() {
 
 }
 
-MainLayout.prototype.render = function(appstate, send) {
-  var main = new Main({
-    activity: appstate.get('activity'),
-    groups: appstate.get('groups')
-  });
-
-  var tracklist = new LazyTracklist({
-    player: appstate.get('player'),
-    tracklist: appstate.get('player').visibleTracklist()
-  });
-
-  var player = new Player({ player: appstate.get('player') });
-
-  var regionA = new Box({ prefix: 'ra-', key: 'region-a' }, main);
-  var regionB = new Box({ prefix: 'rb-', key: 'region-b' }, tracklist);
-  var regionC = new Box({ prefix: 'rc-', key: 'region-c' }, player);
-
-  return new App({ layout: ['two-region', 'main-layout'] }, [regionA, regionB, regionC]);
+MainLayout.prototype.render = function(appstate) {
+  return new MainLayoutCmp({ player: appstate.get('player') });
 };
 
 MainLayout.prototype.group = function (attrs) {

@@ -76,7 +76,7 @@ module.exports = function VkService(receive, send, mount) {
 
   receive(':app/user', function(appstate, user) {
     if (user.isAuthenticated()) {
-      send({ e: 'vk', a: ':vk/groups-request', v: { user: user, offset: 0, count: 10 } });
+      send({ e: 'vk', a: ':vk/groups-request', v: { user: user, offset: 0, count: 100 } });
     }
   });
 

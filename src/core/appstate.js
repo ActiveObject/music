@@ -93,6 +93,41 @@ Appstate.prototype.activityForGroup = function(id) {
   return e;
 };
 
+Appstate.prototype.groups = function(ids) {
+  var saved = this.atom.value.get('groups').items.filter(g => ids.indexOf(g.id) !== -1);
+  var e = new Entity(saved);
+
+  app.use(function (receive) {
+    receive(':app/groups', function(appstate, groups) {
+      Atom.update(e, (v) => groups.items.filter(g => ids.indexOf(g.id) !== -1));
+    });
+  });
+
+  return e;
+};
+
+Appstate.prototype.activities = function(ids) {
+  var saved = ids.map(function(id) {
+    var a = this.atom.value.get('activities').find(a => a.owner === -id);
+    return a ? a : activity.modify({ owner: -id });
+  }, this);
+
+  var items = new Immutable.Set(saved);
+  var e = new Entity(items);
+
+  app.use(function (receive) {
+    receive(':app/activity', function(appstate, activity) {
+      Atom.update(e, (v) => ids.indexOf(-activity.owner) !== -1 ? v.add(activity) : v);
+    });
+  });
+
+  items.forEach(function(a) {
+    eventBus.push(a.load(0, 100));
+  });
+
+  return e;
+};
+
 module.exports = new Appstate({
   atom: new Atom(Immutable.Map())
 });

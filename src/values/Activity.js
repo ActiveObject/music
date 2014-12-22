@@ -5,9 +5,9 @@ var merge = require('app/utils').merge;
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 function Activity(attrs) {
-  this.items = attrs.items;
-  this.owner = attrs.owner;
   this.period = attrs.period;
+  this.items = this.period.fillEmptyDates(attrs.items);
+  this.owner = attrs.owner;
 }
 
 Activity.prototype.fromNewsfeed = function(nf) {
@@ -22,10 +22,7 @@ Activity.prototype.fromNewsfeed = function(nf) {
     };
   }).toArray();
 
-  return new Activity({
-    owner: this.owner,
-    items: this.period.fillEmptyDates(activity)
-  });
+  return this.modify({ items: activity });
 };
 
 Activity.prototype.load = function (offset, count) {
