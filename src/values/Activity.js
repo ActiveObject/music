@@ -9,7 +9,7 @@ var ActivityItem = require('app/values/activity-item');
 
 function Activity(attrs) {
   this.period = attrs.period;
-  this.items = this.period.fillEmptyDates(attrs.items);
+  this.items = attrs.items;
   this.owner = attrs.owner;
 }
 
@@ -45,6 +45,12 @@ Activity.prototype.merge = function (other) {
   // });
 
   return other;
+};
+
+Activity.prototype.forPeriod = function(period) {
+  return this.modify({
+    items: period.fillEmptyDates(this.items)
+  });
 };
 
 Activity.prototype.load = function (offset, count) {

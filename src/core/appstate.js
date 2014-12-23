@@ -5,6 +5,7 @@ var app = require('app/core/app');
 var newsfeed = require('app/values/newsfeed');
 var activity = require('app/values/activity');
 var eventBus = require('app/core/event-bus');
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 function Appstate(attrs) {
   this.atom = attrs.atom;
@@ -112,9 +113,12 @@ Appstate.prototype.groups = function(ids) {
 };
 
 Appstate.prototype.activities = function(ids) {
+  var period = new LastNWeeksDRange(33);
   var saved = ids.reduce(function(result, id) {
-    var a = this.atom.value.get('activities').find(a => a.owner === -id);
-    return result.set(id, a ? a : activity.modify({ owner: -id }));
+    var saved = this.atom.value.get('activities').find(a => a.owner === -id);
+    var a = saved ? saved : activity.modify({ owner: -id });
+
+    return result.set(id, a.forPeriod(period));
   }.bind(this), new Immutable.Map());
 
   saved.forEach(function(a) {
@@ -125,7 +129,7 @@ Appstate.prototype.activities = function(ids) {
     receive(':app/activity', function(appstate, activity) {
       Atom.update(e, function (v) {
         if (v.has(-activity.owner)) {
-          return v.set(-activity.owner, activity);
+          return v.set(-activity.owner, activity.forPeriod(period));
         }
 
         return v;
