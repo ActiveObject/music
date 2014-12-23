@@ -18,7 +18,7 @@ var appEventStream = new BufferedEventStream(eventBus, function (v) {
 
 function makeReceiver(receivers) {
   return function receive(expectedAttr, fn) {
-    receivers.push(function (appstate, datom) {
+    var receiver = function (appstate, datom) {
       var result;
 
       if (expectedAttr === datom.a) {
@@ -26,7 +26,17 @@ function makeReceiver(receivers) {
       }
 
       return isValue(result) ? result : appstate;
-    });
+    };
+
+    receivers.push(receiver);
+
+    return function () {
+      for (var i = 0, l = handlers.length; i < l; i++) {
+        if (handlers[i] === receiver) {
+          handlers.splice(i, 1);
+        }
+      }
+    };
   };
 }
 

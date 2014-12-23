@@ -15,7 +15,8 @@ var MainLayout = React.createClass({
   },
 
   componentWillUnmount: function() {
-    // this.groups.release();
+    this.groups.release();
+    this.activities.release();
   },
 
   render: function() {

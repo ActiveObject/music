@@ -16,9 +16,9 @@ var GroupLayout = React.createClass({
   },
 
   componentWillUnmount: function() {
-    // this.group.release();
-    // this.activity.release();
-    // this.newsfeed.release();
+    this.group.release();
+    this.activity.release();
+    this.newsfeed.release();
   },
 
   render: function() {
