@@ -18,7 +18,7 @@ module.exports = function (receive) {
   });
 
   receive(':app/activity', function (appstate, activity) {
-    return appstate.update('activities', (v) => v.add(activity));
+    return appstate.update('activities', (v) => v.concat(activity));
   });
 
   receive(':app/newsfeed', function (appstate, nf) {

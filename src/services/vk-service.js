@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var ISet = require('immutable').Set;
+var moment = require('moment');
 var newsfeed = require('app/values/newsfeed');
 var activity = require('app/values/activity');
 var group = require('app/values/group');
@@ -68,6 +69,16 @@ function loadWall(owner, offset, count, callback) {
   });
 }
 
+function ActivityItem(attrs) {
+  this.id = attrs.id;
+  this.date = attrs.date;
+  this.owner = attrs.owner;
+}
+
+ActivityItem.prototype.valueOf = function () {
+  return this.id;
+};
+
 module.exports = function VkService(receive, send, mount) {
   mount(vk);
 
@@ -108,9 +119,15 @@ module.exports = function VkService(receive, send, mount) {
   });
 
   receive(':vk/activity', function(appstate, data) {
-    var nf = newsfeed.fromVkResponse(data);
-    var v = activity.fromNewsfeed(nf).modify({ owner: data.owner });
-    send({ e: 'app', a: ':app/activity', v: v });
+    var items = data.items.map(function (item) {
+      return new ActivityItem({
+        id: [data.owner, data.id].join(':'),
+        owner: data.owner,
+        date: moment(item.date * 1000).format('YYYY-MM-DD')
+      });
+    });
+
+    send({ e: 'app', a: ':app/activity', v: items });
   });
 
   receive(':vk/groups-request', function (appstate, request) {

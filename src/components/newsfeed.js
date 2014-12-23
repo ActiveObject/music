@@ -10,7 +10,7 @@ var Newsfeed = React.createClass({
     eventBus.push(this.props.newsfeed.load(0, 10));
   },
 
-  componentShouldUpdate: function(nextProps) {
+  shouldComponentUpdate: function(nextProps) {
     return nextProps.newsfeed !== this.props.newsfeed || nextProps.player !== this.props.player;
   },
 

@@ -66,6 +66,30 @@ function Entity(v, service) {
   };
 }
 
+function CompoundEntity(entities) {
+  var initial = Immutable.Map();
+
+  entities.forEach(function (e) {
+    initial = initial.set(-e.atom.value.owner, e.atom.value);
+  });
+
+  var atom = new Atom(initial);
+
+  entities.forEach(function (e) {
+    e.atom.on('change', function (ev) {
+      atom.swap(atom.value.set(-ev.owner, ev));
+    });
+  });
+
+  this.atom = atom;
+
+  this.release = function () {
+    entities.forEach(function (e) {
+      e.release();
+    });
+  };
+}
+
 Appstate.prototype.groupById = function(id) {
   var g = this.atom.value.get('groups').find(g => g.id === id);
 
@@ -90,18 +114,45 @@ Appstate.prototype.newsfeedForGroup = function(id) {
 };
 
 Appstate.prototype.activityForGroup = function(id) {
-  var saved = this.atom.value.get('activities').filter(a => a.owner === -id);
-  var a = saved.reduce(function (result, v) {
-    return result.merge(v);
-  }, activity.modify({ owner: -id }));
+  var feed = new Feed(0, 100);
+  var period = new LastNWeeksDRange(33);
 
-  eventBus.push(a.load(0, 100));
+  var saved = this.atom.value
+      .get('activities')
+      .filter(a => a.owner === -id)
+      .groupBy(a => a.date)
+      .map(v => v.size);
 
-  return new Entity(a, function (e, receive) {
-    receive(':app/activity', function(appstate, activity) {
-      Atom.update(e, (v) => activity.owner === -id ? v.merge(activity) : v);
+  var a = activity.modify({ owner: -id }).fromMap(saved);
+
+  eventBus.push(a.load(feed, period));
+
+  var e = new Entity(a, function (e, receive) {
+    receive(':app/activity', function(appstate) {
+      Atom.update(e, function (v) {
+        var items = appstate.get('activities')
+          .filter(a => a.owner === -id)
+          .groupBy(a => a.date)
+          .map(v => v.size);
+
+        return activity.modify({ owner: -id }).fromMap(items);
+      });
     });
   });
+
+  function onChange(v) {
+    var toLoad = v.load(feed, period);
+
+    if (!toLoad) {
+      return e.atom.removeListener('change', onChange);
+    }
+
+    eventBus.push(toLoad);
+  }
+
+  e.atom.on('change', onChange);
+
+  return e;
 };
 
 Appstate.prototype.groups = function(ids) {
@@ -137,40 +188,7 @@ Feed.prototype.next = function () {
 };
 
 Appstate.prototype.activities = function(ids) {
-  var feeds = {};
-
-  ids.forEach(function (id) {
-    feeds[id] = new Feed(0, 100);
-  });
-
-  var period = new LastNWeeksDRange(33);
-
-  var saved = ids.reduce(function(result, id) {
-    var saved = this.atom.value.get('activities').filter(a => a.owner === -id);
-    var a = saved.reduce(function (result, v) {
-      return result.merge(v);
-    }, activity.modify({ owner: -id }));
-
-    return result.set(id, a);
-  }.bind(this), new Immutable.Map());
-
-  saved.forEach(function(a) {
-    var feed = feeds[-a.owner];
-    eventBus.push(a.load(feed, period));
-  });
-
-  return new Entity(saved, function (e, receive) {
-    receive(':app/activity', function(appstate, activity) {
-      Atom.update(e, function (v) {
-        var val = v.get(-activity.owner);
-        var newVal = val.merge(activity);
-        var feed = feeds[-activity.owner];
-        eventBus.push(newVal.load(feed, period));
-        return v.set(-activity.owner, newVal);
-        // return v.update(-activity.owner, x => x.merge(activity));
-      });
-    });
-  });
+  return new CompoundEntity(ids.map(id => this.activityForGroup(id)));
 };
 
 module.exports = new Appstate({

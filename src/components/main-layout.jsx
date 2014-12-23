@@ -9,8 +9,8 @@ var appstate = require('app/core/appstate');
 
 var MainLayout = React.createClass({
   componentWillMount: function () {
-    this.groups = appstate.groups([41293763, 32211876, 34110702, 43426041]);
-    this.activities = appstate.activities([41293763, 32211876, 34110702, 43426041]);
+    this.groups = appstate.groups([41293763]);
+    this.activities = appstate.activities([41293763]);
   },
 
   componentWillUnmount: function() {

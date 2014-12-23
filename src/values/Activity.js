@@ -21,16 +21,10 @@ Activity.prototype.equals = function (other) {
   return this.owner === other.owner && this.items.equals(other.items);
 };
 
-Activity.prototype.fromNewsfeed = function(nf) {
-  var itemsByDate = nf.posts.groupBy(function (post) {
-    return moment(post.date).format('YYYY-MM-DD');
+Activity.prototype.fromMap = function (hashmap) {
+  return this.modify({
+    items: ISet(hashmap.map((v, k) => new ActivityItem(moment(k), v)).values())
   });
-
-  var activity = itemsByDate.map(function (values, date) {
-    return new ActivityItem(moment(date), values.size);
-  });
-
-  return this.modify({ items: ISet(activity.values()) });
 };
 
 Activity.prototype.merge = function (other) {
@@ -56,16 +50,17 @@ Activity.prototype.load = function (feed, period) {
 
   var oldest = this.items.sortBy(v => v.date.valueOf()).first().date;
 
-  debugger
-  if (period.startOf().isBefore(oldest)) {
-    return {
-      e: 'vk',
-      a: ':vk/activity-request',
-      v: merge({ owner: this.owner }, feed.next())
-    };
+  if (oldest.isBefore(period.startOf())) {
+    console.log('END', this.owner, oldest.format('YYYY-MM-DD'), period.startOf().format('YYYY-MM-DD'));
+    return;
   }
 
-  console.log('END');
+  console.log('LOAD', this.owner, oldest.format('YYYY-MM-DD'), period.startOf().format('YYYY-MM-DD'));
+  return {
+    e: 'vk',
+    a: ':vk/activity-request',
+    v: merge({ owner: this.owner }, feed.next())
+  };
 };
 
 Activity.prototype.weeks = function () {
@@ -85,7 +80,9 @@ Activity.prototype.weeks = function () {
 };
 
 Activity.prototype.months = function () {
-  var dateByMonth = this.items.groupBy(v => v.date.month());
+  var dateByMonth = this.items
+    .sortBy(v => v.date)
+    .groupBy(v => v.date.month());
 
   var ms = dateByMonth.map(function (days, key) {
     return {

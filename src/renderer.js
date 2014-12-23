@@ -17,9 +17,7 @@ module.exports = function (mountNode) {
 
     appstate.atom.on('change', function (value) {
       if (!document.hidden) {
-        window.requestAnimationFrame(function () {
-          render(value);
-        });
+        render(value);
       }
     });
 

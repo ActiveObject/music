@@ -6,7 +6,6 @@ var ActivityCard = require('app/components/activity-card.jsx');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 var MainView = React.createClass({
-
   shouldComponentUpdate: function (nextProps) {
     return this.props.groups !== nextProps.groups || this.props.activities !== nextProps.activities;
   },
