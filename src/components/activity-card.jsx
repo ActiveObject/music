@@ -50,8 +50,10 @@ var ActivityCard = React.createClass({
   },
 
   makeActivityChart: function(size, margin, activity) {
-    var weeks = activity.weeks();
-    var maxNewsCount = Math.max.apply(null, _.pluck(activity.items, 'news'));
+    var weeks = activity.weeks().toArray();
+    var maxNewsCount = activity.items.maxBy(function (v) {
+      return v.news;
+    });
 
     return (
       <div key='chart' className='activity-chart'>
@@ -74,11 +76,11 @@ var ActivityCard = React.createClass({
     return dom.div()
       .key('months')
       .className('activity-card-months')
-      .append(months);
+      .append(months.toArray());
   },
 
   makeWeek: curry(function(maxValue, size, margin, week, i) {
-    var items = week.items.map(function(item, i) {
+    var items = week.items.toList().map(function(item, i) {
       return dom.rect()
         .key(i)
         .attr('width', size)
@@ -91,7 +93,7 @@ var ActivityCard = React.createClass({
     return dom.g()
       .key(week.number)
       .attr('transform', 'translate(' + [(size + margin) * i, 0].join(',') + ')')
-      .append(items)
+      .append(items.toArray())
       .make();
   }),
 

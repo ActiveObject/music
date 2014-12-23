@@ -3,6 +3,8 @@ var React = require('react');
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var ActivityCard = require('app/components/activity-card.jsx');
 
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
+
 var MainView = React.createClass({
 
   shouldComponentUpdate: function (nextProps) {
@@ -10,11 +12,10 @@ var MainView = React.createClass({
   },
 
   render: function () {
-    var activities = this.props.groups.map(function(group) {
-      var activity = this.props.activities.find(function (a) {
-        return a.owner === -group.id
-      });
+    var period = new LastNWeeksDRange(33);
 
+    var activities = this.props.groups.map(function(group) {
+      var activity = this.props.activities.get(group.id).forPeriod(period);
       return <ActivityCard key={group.id} id={group.id} name= {group.name} activity={activity}></ActivityCard>;
     }, this).toJS();
 

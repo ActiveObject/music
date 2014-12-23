@@ -13,4 +13,8 @@ ActivityItem.prototype.equals = function (other) {
   return this.date === other.date && this.news === other.news;
 };
 
+ActivityItem.prototype.toString = function () {
+  return 'ActivityItem(' + this.date + ', ' + this.news + ')';
+};
+
 module.exports = ActivityItem;

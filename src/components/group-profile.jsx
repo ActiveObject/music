@@ -3,6 +3,8 @@ require('app/styles/group-profile.styl');
 var React = require('react');
 var ActivityCard = require('app/components/activity-card.jsx');
 
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
+
 module.exports = React.createClass({
   displayName: 'GroupProfile',
 
@@ -11,6 +13,8 @@ module.exports = React.createClass({
   },
 
   render: function () {
+    var period = new LastNWeeksDRange(33);
+
     return (
       <div className='group-profile'>
         <div key='profile' className='group-profile-info'>
@@ -25,7 +29,7 @@ module.exports = React.createClass({
           defaultColor='#3949AB'
           id={this.props.group.id}
           name={this.props.name}
-          activity={this.props.activity}></ActivityCard>
+          activity={this.props.activity.forPeriod(period)}></ActivityCard>
       </div>
     );
   }
