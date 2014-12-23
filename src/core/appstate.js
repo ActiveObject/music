@@ -92,7 +92,7 @@ Appstate.prototype.activityForGroup = function(id) {
   var saved = this.atom.value.get('activities').find(a => a.owner === -id);
   var a = saved ? saved : activity.modify({ owner: -id });
 
-  eventBus.push(a.load(0, 10));
+  eventBus.push(a.load(0, 100));
 
   return new Entity(a, function (e, receive) {
     receive(':app/activity', function(appstate, activity) {
@@ -118,7 +118,7 @@ Appstate.prototype.activities = function(ids) {
   }.bind(this), new Immutable.Map());
 
   saved.forEach(function(a) {
-    eventBus.push(a.load(0, 10));
+    eventBus.push(a.load(0, 100));
   });
 
   return new Entity(saved, function (e, receive) {
