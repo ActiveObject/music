@@ -3,8 +3,7 @@ var App = require('app/components/app.jsx');
 var Player = require('app/components/player');
 var LazyTracklist = require('app/components/lazy-tracklist');
 var Box = require('app/components/box.jsx');
-var IScrollLayer = require('app/components/iscroll-layer.jsx');
-var ActivityCard = require('app/components/activity-card');
+var MainView = require('app/components/main-view.jsx');
 
 var appstate = require('app/core/appstate');
 
@@ -23,16 +22,7 @@ var MainLayout = React.createClass({
     return (
       <App layout={['two-region', 'main-layout']}>
         <Box prefix='ra-' key='region-a'>
-          <div className='main-view'>
-            <div className='main-view-container'>
-              <IScrollLayer>
-                <div className='main-section'>
-                  <span className='main-section-title'>Спільноти</span>
-                  <div className='cards'>{this.groupActivities()}</div>
-                </div>
-              </IScrollLayer>
-            </div>
-          </div>
+          <MainView groups={this.groups.atom.value} activities={this.activities.atom.value}></MainView>
         </Box>
 
         <Box prefix='rb-' key='region-b'>
@@ -44,21 +34,6 @@ var MainLayout = React.createClass({
         </Box>
       </App>
     );
-  },
-
-  groupActivities: function () {
-    return this.groups.atom.value.map(function(group) {
-      var activity = this.activities.atom.value.find(function (a) {
-        return a.owner === -group.id
-      });
-
-      return new ActivityCard({
-        key: group.id,
-        id: group.id,
-        name: group.name,
-        activity: activity
-      });
-    }, this).toJS();
   }
 });
 
