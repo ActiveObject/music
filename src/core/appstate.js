@@ -114,7 +114,37 @@ Appstate.prototype.groups = function(ids) {
   });
 };
 
+function Feed(offset, count) {
+  this.atom = new Atom({
+    offset: offset,
+    count: count
+  });
+}
+
+Feed.prototype.next = function () {
+  var offset = this.atom.value.offset;
+  var count = this.atom.value.count;
+
+  this.atom.swap({
+    offset: offset + count,
+    count: count
+  });
+
+  return {
+    offset: offset,
+    count: count
+  };
+};
+
 Appstate.prototype.activities = function(ids) {
+  var feeds = {};
+
+  ids.forEach(function (id) {
+    feeds[id] = new Feed(0, 100);
+  });
+
+  var period = new LastNWeeksDRange(33);
+
   var saved = ids.reduce(function(result, id) {
     var saved = this.atom.value.get('activities').filter(a => a.owner === -id);
     var a = saved.reduce(function (result, v) {
@@ -125,13 +155,19 @@ Appstate.prototype.activities = function(ids) {
   }.bind(this), new Immutable.Map());
 
   saved.forEach(function(a) {
-    eventBus.push(a.load(0, 700));
+    var feed = feeds[-a.owner];
+    eventBus.push(a.load(feed, period));
   });
 
   return new Entity(saved, function (e, receive) {
     receive(':app/activity', function(appstate, activity) {
       Atom.update(e, function (v) {
-        return v.update(-activity.owner, x => x.merge(activity));
+        var val = v.get(-activity.owner);
+        var newVal = val.merge(activity);
+        var feed = feeds[-activity.owner];
+        eventBus.push(newVal.load(feed, period));
+        return v.set(-activity.owner, newVal);
+        // return v.update(-activity.owner, x => x.merge(activity));
       });
     });
   });

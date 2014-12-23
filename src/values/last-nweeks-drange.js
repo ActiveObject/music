@@ -35,6 +35,14 @@ LastNWeeksDRange.prototype.fillEmptyDates = function(activity) {
   return ISet(dates);
 };
 
+LastNWeeksDRange.prototype.startOf = function () {
+  return this.dates[this.dates.length - 1];
+};
+
+LastNWeeksDRange.prototype.endOf = function () {
+  return this.dates[0];
+};
+
 LastNWeeksDRange.prototype.hashCode = function () {
   return 31 * hashCode(this.n) + 31 * hashCode(this.date.valueOf());
 };

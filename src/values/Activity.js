@@ -45,16 +45,27 @@ Activity.prototype.forPeriod = function(period) {
   });
 };
 
-Activity.prototype.load = function (offset, count) {
-  return {
-    e: 'vk',
-    a: ':vk/activity-request',
-    v: {
-      owner: this.owner,
-      offset: offset,
-      count: count
-    }
-  };
+Activity.prototype.load = function (feed, period) {
+  if (this.items.size === 0) {
+    return {
+      e: 'vk',
+      a: ':vk/activity-request',
+      v: merge({ owner: this.owner }, feed.next())
+    };
+  }
+
+  var oldest = this.items.sortBy(v => v.date.valueOf()).first().date;
+
+  debugger
+  if (period.startOf().isBefore(oldest)) {
+    return {
+      e: 'vk',
+      a: ':vk/activity-request',
+      v: merge({ owner: this.owner }, feed.next())
+    };
+  }
+
+  console.log('END');
 };
 
 Activity.prototype.weeks = function () {
