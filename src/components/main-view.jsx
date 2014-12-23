@@ -1,7 +1,7 @@
 var React = require('react');
 
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
-var ActivityCard = require('app/components/activity-card');
+var ActivityCard = require('app/components/activity-card.jsx');
 
 var MainView = React.createClass({
 

@@ -9,9 +9,7 @@ var Activity = require('app/values/activity');
 
 var dom = require('app/core/dom');
 
-module.exports = React.createClass({
-  displayName: 'ActivityCard',
-
+var ActivityCard = React.createClass({
   getDefaultProps: function() {
     return {
       size: 16,
@@ -29,46 +27,39 @@ module.exports = React.createClass({
 
   render: function() {
     var achart = this.makeActivityChart(this.props.size, this.props.margin, this.props.activity);
-    var months = this.makeMonthLegend(this.props.activity);
-
-    var name = dom.a()
-      .key('name')
-      .className('element-link activity-name')
-      .attr('href', '/groups/' + this.props.id )
-      .append(this.props.name);
 
     var weekdays = dom.div()
       .key('weekdays')
       .className('activity-card-weekdays')
       .attr('style', { left: -(this.props.size + this.props.margin), width: this.props.size })
-      .append([1, 3, 5].map(this.makeWeekday));
-
-    var content = dom.div()
-      .key('content')
-      .className('activity-chart-content')
-      .append(achart, weekdays, months);
-
-    return dom.div()
-      .className('activity')
-      .append(name, content)
+      .append([1, 3, 5].map(this.makeWeekday))
       .make();
+
+    var months = this.makeMonthLegend(this.props.activity).make();
+
+    return (
+      <div className='activity'>
+        <a key='name' className='element-link activity-name' href={'/groups/' + this.props.id}>{this.props.name}</a>
+        <div key='content' className='activity-chart-content'>
+          {achart}
+          {weekdays}
+          {months}
+        </div>
+      </div>
+    );
   },
 
   makeActivityChart: function(size, margin, activity) {
     var weeks = activity.weeks();
     var maxNewsCount = Math.max.apply(null, _.pluck(activity.items, 'news'));
-    var items = weeks.map(this.makeWeek(maxNewsCount, size, margin));
-    var months = activity.months();
 
-    var body = dom.svg()
-      .attr('width', (size + margin) * weeks.length)
-      .attr('height', (size + margin) * 7)
-      .append(items);
-
-    return dom.div()
-      .key('chart')
-      .className('activity-chart')
-      .append(body);
+    return (
+      <div key='chart' className='activity-chart'>
+        <svg width={(size + margin) * weeks.length} height={(size + margin) * 7}>
+          {weeks.map(this.makeWeek(maxNewsCount, size, margin))}
+        </svg>
+      </div>
+    );
   },
 
   makeMonthLegend: function (activity) {
@@ -100,7 +91,8 @@ module.exports = React.createClass({
     return dom.g()
       .key(week.number)
       .attr('transform', 'translate(' + [(size + margin) * i, 0].join(',') + ')')
-      .append(items);
+      .append(items)
+      .make();
   }),
 
   makeWeekday: function (n) {
@@ -137,3 +129,5 @@ function makeFillColor(count) {
 
   return base + '4';
 }
+
+module.exports = ActivityCard;

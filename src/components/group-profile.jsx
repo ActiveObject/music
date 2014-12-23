@@ -1,7 +1,7 @@
 require('app/styles/group-profile.styl');
 
 var React = require('react');
-var ActivityCard = require('app/components/activity-card');
+var ActivityCard = require('app/components/activity-card.jsx');
 
 module.exports = React.createClass({
   displayName: 'GroupProfile',
