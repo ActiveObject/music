@@ -5,6 +5,7 @@ var isFunction = require('underscore').isFunction;
 
 function Atom(initialValue) {
   this.value = initialValue;
+  this.atom = this;
 }
 
 Atom.prototype = Object.create(EventEmitter.prototype, {
@@ -35,7 +36,7 @@ Atom.update = function(x, updater) {
 
 Atom.swap = function(x, newValue) {
   assert(Atom.isAtomable(x), 'Atom.swap: trying to update non-atomable object, given ' + x);
-  return x.atom.swap(x, newValue);
+  return x.atom.swap(newValue);
 };
 
 module.exports = Atom;

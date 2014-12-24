@@ -192,9 +192,7 @@ Appstate.prototype.activityForGroup = function(id) {
 
   return new Entity(a, function (e, receive) {
     receive(':app/activity', function(appstate) {
-      Atom.update(e, function (v) {
-        return new Activity(-id, period, appstate.get('activities'));
-      });
+      Atom.swap(e, new Activity(-id, period, appstate.get('activities')));
     });
   });
 };
