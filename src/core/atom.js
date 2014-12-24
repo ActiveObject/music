@@ -39,4 +39,9 @@ Atom.swap = function(x, newValue) {
   return x.atom.swap(newValue);
 };
 
+Atom.listen = function(x, onChange) {
+  assert(Atom.isAtomable(x), 'Atom.swap: trying to update non-atomable object, given ' + x);
+  return x.atom.on('change', onChange);
+};
+
 module.exports = Atom;

@@ -112,8 +112,9 @@ Appstate.prototype.newsfeedForGroup = function(id) {
 Appstate.prototype.activityForGroup = function(id) {
   var period = new LastNWeeksDRange(33, new Date());
   var a = new Activity(-id, period, this.atom.value.get('activities'));
+  var loader = new ActivityLoader(id, this.atom.value.get('activities'), period);
 
-  var loader = new ActivityLoader(id, this.atom.value.get('activities'), period, function (items) {
+  Atom.listen(loader, function(items) {
     eventBus.push({ e: 'app', a: ':app/activity', v: items });
   });
 

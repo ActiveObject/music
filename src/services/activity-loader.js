@@ -4,8 +4,9 @@ var vk = require('app/vk');
 var Atom = require('app/core/atom');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 
-function ActivityLoader(id, saved, period, onItems) {
+function ActivityLoader(id, saved, period) {
   var feed = new Feed(0, 100);
+  var atom = new Atom();
 
   function onData(err, data) {
     if (err) {
@@ -20,7 +21,7 @@ function ActivityLoader(id, saved, period, onItems) {
       });
     });
 
-    onItems(items);
+    atom.swap(items);
 
     var oldest = moment(_.last(items).date);
 
@@ -30,6 +31,8 @@ function ActivityLoader(id, saved, period, onItems) {
   }
 
   loadWall(-id, feed.next(), onData);
+
+  this.atom = atom;
 }
 
 function loadWall(owner, params, callback) {
