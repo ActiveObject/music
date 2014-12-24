@@ -70,18 +70,13 @@ function Entity(v, service) {
   };
 }
 
-function CompoundEntity(entities) {
-  var initial = Immutable.Map();
+function CompoundEntity(xs) {
+  var entities = Immutable.Map(xs);
+  var atom = new Atom(entities.map(e => e.atom.value));
 
-  entities.forEach(function (e) {
-    initial = initial.set(-e.atom.value.owner, e.atom.value);
-  });
-
-  var atom = new Atom(initial);
-
-  entities.forEach(function (e) {
+  entities.forEach(function (e, key) {
     e.atom.on('change', function (ev) {
-      atom.swap(atom.value.set(-ev.owner, ev));
+      Atom.update(atom, v => v.set(key, ev));
     });
   });
 
@@ -208,7 +203,7 @@ Appstate.prototype.groups = function(ids) {
 };
 
 Appstate.prototype.activities = function(ids) {
-  return new CompoundEntity(ids.map(id => this.activityForGroup(id)));
+  return new CompoundEntity(ids.map(id => [id, this.activityForGroup(id)]));
 };
 
 module.exports = new Appstate({
