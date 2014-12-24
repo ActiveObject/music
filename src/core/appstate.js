@@ -5,7 +5,7 @@ var moment = require('moment');
 var Atom = require('app/core/atom');
 var app = require('app/core/app');
 var newsfeed = require('app/values/newsfeed');
-var activity = require('app/values/activity');
+var Activity = require('app/values/activity');
 var eventBus = require('app/core/event-bus');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var vk = require('app/vk');
@@ -202,23 +202,13 @@ Feed.prototype.next = function () {
 };
 
 Appstate.prototype.activityForGroup = function(id) {
-  var saved = this.atom.value
-      .get('activities')
-      .filter(a => a.owner === -id)
-      .groupBy(a => a.date)
-      .map(v => v.size);
-
-  var a = activity.modify({ owner: -id }).fromMap(saved);
+  var period = new LastNWeeksDRange(33, new Date());
+  var a = new Activity(-id, period, this.atom.value.get('activities'));
 
   var e = new Entity(a, function (e, receive) {
     receive(':app/activity', function(appstate) {
       Atom.update(e, function (v) {
-        var items = appstate.get('activities')
-          .filter(a => a.owner === -id)
-          .groupBy(a => a.date)
-          .map(v => v.size);
-
-        return activity.modify({ owner: -id }).fromMap(items);
+        return new Activity(-id, period, appstate.get('activities'));
       });
     });
   });

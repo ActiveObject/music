@@ -11,10 +11,8 @@ var MainView = React.createClass({
   },
 
   render: function () {
-    var period = new LastNWeeksDRange(33);
-
     var activities = this.props.groups.map(function(group) {
-      var activity = this.props.activities.get(group.id).forPeriod(period);
+      var activity = this.props.activities.get(group.id);
       return <ActivityCard key={group.id} id={group.id} name= {group.name} activity={activity}></ActivityCard>;
     }, this).toJS();
 

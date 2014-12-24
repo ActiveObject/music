@@ -51,4 +51,8 @@ LastNWeeksDRange.prototype.equals = function (other) {
   return this.n === other.n && this.today.valueOf() === other.today.valueOf();
 };
 
+LastNWeeksDRange.prototype.toString = function() {
+  return 'LastNWeeksDRange(' + this.n + ', ' + this.today.toISOString() + ')';
+};
+
 module.exports = LastNWeeksDRange;

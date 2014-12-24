@@ -2,66 +2,23 @@ var _ = require('underscore');
 var moment = require('moment');
 var curry = require('curry');
 var ISet = require('immutable').Set;
+var IList = require('immutable').List;
 var merge = require('app/utils').merge;
 var hashCode = require('app/utils').hashCode;
 var combineHash = require('app/utils').combineHash;
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var ActivityItem = require('app/values/activity-item');
 
-function Activity(attrs) {
-  this.items = attrs.items;
-  this.owner = attrs.owner;
+function Activity(owner, period, activities) {
+  var items = activities
+    .filter(a => a.owner === owner)
+    .groupBy(a => a.date)
+    .map(v => v.size)
+    .map((v, k) => new ActivityItem(moment(k), v));
+
+  this.owner = owner;
+  this.items = IList(period.fillEmptyDates(items).sortBy(v => v.date).values());
 }
-
-Activity.prototype.hashCode = function () {
-  return this.items.hashCode();
-};
-
-Activity.prototype.equals = function (other) {
-  return this.owner === other.owner && this.items.equals(other.items);
-};
-
-Activity.prototype.fromMap = function (hashmap) {
-  return this.modify({
-    items: ISet(hashmap.map((v, k) => new ActivityItem(moment(k), v)).values())
-  });
-};
-
-Activity.prototype.merge = function (other) {
-  return this.modify({
-    items: this.items.union(other.items)
-  });
-};
-
-Activity.prototype.forPeriod = function(period) {
-  return this.modify({
-    items: period.fillEmptyDates(this.items)
-  });
-};
-
-Activity.prototype.load = function (feed, period) {
-  if (this.items.size === 0) {
-    return {
-      e: 'vk',
-      a: ':vk/activity-request',
-      v: merge({ owner: this.owner }, feed.next())
-    };
-  }
-
-  var oldest = this.items.sortBy(v => v.date.valueOf()).first().date;
-
-  if (oldest.isBefore(period.startOf())) {
-    console.log('END', this.owner, oldest.format('YYYY-MM-DD'), period.startOf().format('YYYY-MM-DD'));
-    return;
-  }
-
-  console.log('LOAD', this.owner, oldest.format('YYYY-MM-DD'), period.startOf().format('YYYY-MM-DD'));
-  return {
-    e: 'vk',
-    a: ':vk/activity-request',
-    v: merge({ owner: this.owner }, feed.next())
-  };
-};
 
 Activity.prototype.weeks = function () {
   var dateByWeek = this.items.groupBy(v => v.date.week());
@@ -80,9 +37,7 @@ Activity.prototype.weeks = function () {
 };
 
 Activity.prototype.months = function () {
-  var dateByMonth = this.items
-    .sortBy(v => v.date)
-    .groupBy(v => v.date.month());
+  var dateByMonth = this.items.groupBy(v => v.date.month());
 
   var ms = dateByMonth.map(function (days, key) {
     return {
@@ -98,12 +53,20 @@ Activity.prototype.months = function () {
   });
 };
 
+Activity.prototype.hashCode = function () {
+  return this.items.hashCode();
+};
+
+Activity.prototype.equals = function (other) {
+  return this.items.equals(other.items);
+};
+
+Activity.prototype.toString = function() {
+  return 'Activity(' + this.owner + ')';
+};
+
 Activity.prototype.modify = function (attrs) {
   return new Activity(merge(this, attrs));
 };
 
-module.exports = new Activity({
-  items: ISet(),
-  owner: 0
-});
-
+module.exports = Activity;
