@@ -9,8 +9,7 @@ var Activity = require('app/values/activity');
 var eventBus = require('app/core/event-bus');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var vk = require('app/vk');
-var merge = require('app/utils').merge;
-var hashCode = require('app/utils').hashCode;
+var NewsfeedActivity = require('app/values/newsfeed-activity');
 
 function Appstate(attrs) {
   this.atom = attrs.atom;
@@ -118,24 +117,6 @@ Appstate.prototype.newsfeedForGroup = function(id) {
   });
 };
 
-function ActivityItem(attrs) {
-  this.id = attrs.id;
-  this.date = attrs.date;
-  this.owner = attrs.owner;
-}
-
-ActivityItem.prototype.toString = function () {
-  return this.id;
-};
-
-ActivityItem.prototype.hashCode = function () {
-  return hashCode(this.id);
-};
-
-ActivityItem.prototype.equals = function (other) {
-  return this.id === other.id;
-};
-
 function ActivityLoader(id, saved, onItems) {
   var feed = new Feed(0, 100);
   var period = new LastNWeeksDRange(33);
@@ -146,7 +127,7 @@ function ActivityLoader(id, saved, onItems) {
     }
 
     var items = data.items.map(function (item) {
-      return new ActivityItem({
+      return new NewsfeedActivity({
         id: [item.owner_id, item.id].join(':'),
         owner: item.owner_id,
         date: moment(item.date * 1000).format('YYYY-MM-DD')
@@ -205,19 +186,17 @@ Appstate.prototype.activityForGroup = function(id) {
   var period = new LastNWeeksDRange(33, new Date());
   var a = new Activity(-id, period, this.atom.value.get('activities'));
 
-  var e = new Entity(a, function (e, receive) {
+  var loader = new ActivityLoader(id, this.atom.value.get('activities'), function (items) {
+    eventBus.push({ e: 'app', a: ':app/activity', v: items });
+  });
+
+  return new Entity(a, function (e, receive) {
     receive(':app/activity', function(appstate) {
       Atom.update(e, function (v) {
         return new Activity(-id, period, appstate.get('activities'));
       });
     });
   });
-
-  var loader = new ActivityLoader(id, this.atom.value.get('activities'), function (items) {
-    eventBus.push({ e: 'app', a: ':app/activity', v: items });
-  });
-
-  return e;
 };
 
 Appstate.prototype.groups = function(ids) {
