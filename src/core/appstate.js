@@ -1,15 +1,12 @@
-var _ = require('underscore');
 var Immutable = require('immutable');
 var isString = require('underscore').isString;
-var moment = require('moment');
 var Atom = require('app/core/atom');
 var app = require('app/core/app');
 var newsfeed = require('app/values/newsfeed');
 var Activity = require('app/values/activity');
 var eventBus = require('app/core/event-bus');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
-var vk = require('app/vk');
-var NewsfeedActivity = require('app/values/newsfeed-activity');
+var ActivityLoader = require('app/services/activity-loader');
 
 function Appstate(attrs) {
   this.atom = attrs.atom;
@@ -112,76 +109,11 @@ Appstate.prototype.newsfeedForGroup = function(id) {
   });
 };
 
-function ActivityLoader(id, saved, onItems) {
-  var feed = new Feed(0, 100);
-  var period = new LastNWeeksDRange(33);
-
-  function onData(err, data) {
-    if (err) {
-      return console.log(err);
-    }
-
-    var items = data.items.map(function (item) {
-      return new NewsfeedActivity({
-        id: [item.owner_id, item.id].join(':'),
-        owner: item.owner_id,
-        date: moment(item.date * 1000).format('YYYY-MM-DD')
-      });
-    });
-
-    onItems(items);
-
-    var oldest = moment(_.last(items).date);
-
-    if (oldest.isAfter(period.startOf())) {
-      loadWall(-id, feed.next(), onData);
-    }
-  }
-
-  loadWall(-id, feed.next(), onData);
-}
-
-function loadWall(owner, params, callback) {
-  vk.wall.get({
-    owner_id: owner,
-    offset: params.offset,
-    count: params.count
-  }, function(err, res) {
-    if (err) {
-      return callback(err);
-    }
-
-    callback(null, res.response);
-  });
-}
-
-function Feed(offset, count) {
-  this.atom = new Atom({
-    offset: offset,
-    count: count
-  });
-}
-
-Feed.prototype.next = function () {
-  var offset = this.atom.value.offset;
-  var count = this.atom.value.count;
-
-  this.atom.swap({
-    offset: offset + count,
-    count: count
-  });
-
-  return {
-    offset: offset,
-    count: count
-  };
-};
-
 Appstate.prototype.activityForGroup = function(id) {
   var period = new LastNWeeksDRange(33, new Date());
   var a = new Activity(-id, period, this.atom.value.get('activities'));
 
-  var loader = new ActivityLoader(id, this.atom.value.get('activities'), function (items) {
+  var loader = new ActivityLoader(id, this.atom.value.get('activities'), period, function (items) {
     eventBus.push({ e: 'app', a: ':app/activity', v: items });
   });
 
