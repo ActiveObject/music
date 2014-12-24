@@ -1,6 +1,6 @@
 var React = require('react');
 var dom = require('app/core/dom');
-var Post = React.createFactory(require('app/components/post'));
+var Post = React.createFactory(require('app/components/post.jsx'));
 var eventBus = require('app/core/event-bus');
 
 var Newsfeed = React.createClass({
@@ -16,10 +16,12 @@ var Newsfeed = React.createClass({
 
   render: function() {
     var player = this.props.player;
+    var owner = this.props.owner;
 
     var posts = this.props.newsfeed.posts.toJS().slice(0, 10).map(function(post) {
       return new Post({
         post: post,
+        owner: owner,
         player: player
       });
     });

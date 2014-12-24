@@ -10,7 +10,8 @@ var appstate = require('app/core/appstate');
 var MainLayout = React.createClass({
   getInitialState: function() {
     return {
-      visibleGroups: [41293763, 32211876, 34110702, 28152291, 27894770]
+      // visibleGroups: [41293763, 32211876, 34110702, 28152291, 27894770]
+      visibleGroups: [41293763, 32211876, 34110702, 28152291]
     };
   },
 

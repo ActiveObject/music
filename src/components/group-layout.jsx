@@ -30,7 +30,7 @@ var GroupLayout = React.createClass({
 
         <Box prefix='rb-' key='region-b'>
           <IScrollLayer>
-            <Newsfeed newsfeed={this.newsfeed.atom.value} player={this.props.player}></Newsfeed>
+            <Newsfeed newsfeed={this.newsfeed.atom.value} player={this.props.player} owner={this.group.atom.value}></Newsfeed>
           </IScrollLayer>
         </Box>
 

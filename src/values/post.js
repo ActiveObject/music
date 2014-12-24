@@ -44,4 +44,18 @@ Post.prototype.tracklist = function() {
   });
 };
 
+Post.prototype.primaryImage = function() {
+  if (!this.attachments) {
+    return null;
+  }
+
+  var photos = this.attachments.filter((v) => v.type === 'photo');
+
+  if (photos.length === 0) {
+    return null;
+  }
+
+  return photos[0].photo;
+};
+
 module.exports = new Post({});
