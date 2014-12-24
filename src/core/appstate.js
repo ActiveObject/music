@@ -1,11 +1,16 @@
+var _ = require('underscore');
 var Immutable = require('immutable');
 var isString = require('underscore').isString;
+var moment = require('moment');
 var Atom = require('app/core/atom');
 var app = require('app/core/app');
 var newsfeed = require('app/values/newsfeed');
 var activity = require('app/values/activity');
 var eventBus = require('app/core/event-bus');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
+var vk = require('app/vk');
+var merge = require('app/utils').merge;
+var hashCode = require('app/utils').hashCode;
 
 function Appstate(attrs) {
   this.atom = attrs.atom;
@@ -113,57 +118,66 @@ Appstate.prototype.newsfeedForGroup = function(id) {
   });
 };
 
-Appstate.prototype.activityForGroup = function(id) {
+function ActivityItem(attrs) {
+  this.id = attrs.id;
+  this.date = attrs.date;
+  this.owner = attrs.owner;
+}
+
+ActivityItem.prototype.toString = function () {
+  return this.id;
+};
+
+ActivityItem.prototype.hashCode = function () {
+  return hashCode(this.id);
+};
+
+ActivityItem.prototype.equals = function (other) {
+  return this.id === other.id;
+};
+
+function ActivityLoader(id, saved, onItems) {
   var feed = new Feed(0, 100);
   var period = new LastNWeeksDRange(33);
 
-  var saved = this.atom.value
-      .get('activities')
-      .filter(a => a.owner === -id)
-      .groupBy(a => a.date)
-      .map(v => v.size);
-
-  var a = activity.modify({ owner: -id }).fromMap(saved);
-
-  eventBus.push(a.load(feed, period));
-
-  var e = new Entity(a, function (e, receive) {
-    receive(':app/activity', function(appstate) {
-      Atom.update(e, function (v) {
-        var items = appstate.get('activities')
-          .filter(a => a.owner === -id)
-          .groupBy(a => a.date)
-          .map(v => v.size);
-
-        return activity.modify({ owner: -id }).fromMap(items);
-      });
-    });
-  });
-
-  function onChange(v) {
-    var toLoad = v.load(feed, period);
-
-    if (!toLoad) {
-      return e.atom.removeListener('change', onChange);
+  function onData(err, data) {
+    if (err) {
+      return console.log(err);
     }
 
-    eventBus.push(toLoad);
+    var items = data.items.map(function (item) {
+      return new ActivityItem({
+        id: [item.owner_id, item.id].join(':'),
+        owner: item.owner_id,
+        date: moment(item.date * 1000).format('YYYY-MM-DD')
+      });
+    });
+
+    onItems(items);
+
+    var oldest = moment(_.last(items).date);
+
+    if (oldest.isAfter(period.startOf())) {
+      loadWall(-id, feed.next(), onData);
+    }
   }
 
-  e.atom.on('change', onChange);
+  loadWall(-id, feed.next(), onData);
+}
 
-  return e;
-};
+function loadWall(owner, params, callback) {
+  vk.wall.get({
+    owner_id: owner,
+    offset: params.offset,
+    count: params.count
+  }, function(err, res) {
+    if (err) {
+      return callback(err);
+    }
 
-Appstate.prototype.groups = function(ids) {
-  var saved = this.atom.value.get('groups').filter(g => ids.indexOf(g.id) !== -1);
-
-  return new Entity(saved, function (e, receive) {
-    receive(':app/groups', function(appstate, groups) {
-      Atom.update(e, (v) => groups.filter(g => ids.indexOf(g.id) !== -1));
-    });
+    callback(null, res.response);
   });
-};
+}
 
 function Feed(offset, count) {
   this.atom = new Atom({
@@ -185,6 +199,45 @@ Feed.prototype.next = function () {
     offset: offset,
     count: count
   };
+};
+
+Appstate.prototype.activityForGroup = function(id) {
+  var saved = this.atom.value
+      .get('activities')
+      .filter(a => a.owner === -id)
+      .groupBy(a => a.date)
+      .map(v => v.size);
+
+  var a = activity.modify({ owner: -id }).fromMap(saved);
+
+  var e = new Entity(a, function (e, receive) {
+    receive(':app/activity', function(appstate) {
+      Atom.update(e, function (v) {
+        var items = appstate.get('activities')
+          .filter(a => a.owner === -id)
+          .groupBy(a => a.date)
+          .map(v => v.size);
+
+        return activity.modify({ owner: -id }).fromMap(items);
+      });
+    });
+  });
+
+  var loader = new ActivityLoader(id, this.atom.value.get('activities'), function (items) {
+    eventBus.push({ e: 'app', a: ':app/activity', v: items });
+  });
+
+  return e;
+};
+
+Appstate.prototype.groups = function(ids) {
+  var saved = this.atom.value.get('groups').filter(g => ids.indexOf(g.id) !== -1);
+
+  return new Entity(saved, function (e, receive) {
+    receive(':app/groups', function(appstate, groups) {
+      Atom.update(e, (v) => groups.filter(g => ids.indexOf(g.id) !== -1));
+    });
+  });
 };
 
 Appstate.prototype.activities = function(ids) {
