@@ -1,6 +1,6 @@
 var ISet = require('immutable').Set;
 
-module.exports = function (receive) {
+module.exports = function (receive, send) {
   receive(':app/started', function (appstate) {
     return appstate.set('newsfeeds', ISet());
   });
@@ -15,6 +15,14 @@ module.exports = function (receive) {
 
   receive(':app/started', function(appstate) {
     return appstate.set('tracks', ISet());
+  });
+
+  receive(':activity', function(appstate, activity) {
+    var changes = activity.subtract(appstate.get('activities')).toJS();
+
+    if (changes.length > 0) {
+      send({ e: 'app', a: ':app/activity', v: changes });
+    }
   });
 
   receive(':app/activity', function (appstate, activity) {

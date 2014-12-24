@@ -115,11 +115,7 @@ Appstate.prototype.activityForGroup = function(id) {
   var loader = new ActivityLoader(id, this.atom.value.get('activities'), period);
 
   Atom.listen(loader, function(items) {
-    var changes = Immutable.Set(items).subtract(appstate.atom.value.get('activities')).toJS();
-
-    if (changes.length > 0) {
-      eventBus.push({ e: 'app', a: ':app/activity', v: changes });
-    }
+    eventBus.push({ e: 'app', a: ':activity', v: Immutable.Set(items) });
   });
 
   return new Entity(a, function (e, receive) {
