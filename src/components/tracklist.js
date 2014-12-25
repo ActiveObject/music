@@ -1,39 +1,42 @@
 require('app/styles/tracklist.styl');
 
 var React = require('react');
-var _ = require('underscore');
-var debug = require('debug')('app:tracklist');
 var dom = require('app/core/dom');
-var Track = require('app/components/track');
+var Track = React.createFactory(require('app/components/track'));
 
 module.exports = React.createClass({
   displayName: 'Tracklist',
 
   propTypes: {
-    activeTrack: React.PropTypes.object.isRequired,
-    tracks: React.PropTypes.array.isRequired,
-    itemHeight: React.PropTypes.number.isRequired
+    player: React.PropTypes.object.isRequired,
+    tracklist: React.PropTypes.object.isRequired
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    return nextProps.tracks !== this.props.tracks ||
-      nextProps.itemHeight !== this.props.itemHeight ||
-      nextProps.activeTrack !== this.props.activeTrack;
+    return nextProps.player.track.id !== this.props.player.track.id ||
+      nextProps.player.isPlaying !== this.props.player.isPlaying ||
+      nextProps.tracklist !== this.props.tracklist;
   },
 
   render: function() {
-    var tracks = this.props.tracks.map(function (track) {
+    var tracks = this.props.tracklist.playlist.tracks.toJS().map(function (track) {
       return new Track({
-        key: track.value.id,
-        track: track.value,
-        y: track.yOffset,
-        activeTrack: this.props.activeTrack
+        key: track.id,
+        track: track,
+        player: this.props.player,
+        tracklist: this.props.tracklist,
+        y: 0
       });
     }, this);
 
-    return dom.div()
-      .attr('style', { height: this.props.totalTracks * this.props.itemHeight })
+    var body = dom.div()
+      .className('tracklist-body')
       .append(tracks)
+      .make();
+
+    return dom.div()
+      .className('tracklist')
+      .append(body)
       .make();
   }
 });

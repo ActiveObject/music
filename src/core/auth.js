@@ -1,5 +1,5 @@
 var QS = require('querystring');
-var User = require('app/models/user');
+var User = require('app/values/user');
 
 exports.readFromLs = function readFromLs() {
   if (localStorage.getItem('user_id') && localStorage.getItem('access_token')) {

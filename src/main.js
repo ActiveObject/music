@@ -1,50 +1,17 @@
-var Immutable = require('immutable');
 var app = require('app/core/app');
-var Auth = require('app/core/auth');
-var Track = require('app/models/track');
-var layouts = require('app/layouts');
 
-if (Auth.hasToken(location.hash)) {
-  Auth.storeToLs(location.hash);
-  location.hash = '';
-}
-
-app.use(require('app/services/auth'));
-app.use(require('app/services/vk'));
-app.use(require('app/services/player'));
-app.use(require('app/services/soundmanager'));
-app.use(require('app/services/layout'));
+app.use(require('app/services/auth-service'));
+app.use(require('app/services/vk-service'));
+app.use(require('app/services/soundmanager-service'));
+app.use(require('app/services/store-service'));
+app.use(require('app/services/player-service'));
+app.use(require('app/services/local-storage-service'));
 app.use(require('app/router'));
+// app.use(require('app/services/firebase-service')('https://ac-music.firebaseio.com/'));
+app.use(require('app/renderer')(document.getElementById('app')));
 
-app.renderTo(document.getElementById('app'));
+app.start();
 
-app.start(Immutable.Map.from({
-  activity: require('app/fixtures/activity'),
-
-  activeTrack: new Track.Empty(),
-
-  playqueue: {
-    source: {
-      path: 'tracks',
-      name: 'Аудіозаписи'
-    },
-
-    items: Immutable.Vector.from([])
-  },
-
-  groups: {
-    count: 0,
-    items: Immutable.Vector.from([])
-  },
-
-  tracks: {
-    count: 0,
-    items: Immutable.Vector.from([])
-  },
-
-  loadingActivities: new Immutable.Set(),
-
-  user: Auth.readFromLs(),
-
-  layout: layouts.empty
-}));
+window.Perf = require('react/addons').addons.Perf;
+// window.app = app;
+window.appstate = require('app/core/appstate');

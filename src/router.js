@@ -1,14 +1,20 @@
 var page = require('page');
-var layouts = require('app/layouts');
+var layout = require('app/layout');
 
-module.exports = function (dbStream, receive, send) {
+module.exports = function (receive, send, mount) {
+  mount(layout);
+
   page('/', function () {
-    send('layout:change', layouts.main);
+    layout.main();
   });
 
   page('/groups/:id', function (ctx) {
-    send('layout:change', layouts.group(parseInt(ctx.params.id, 10)));
+    layout.group(ctx.params.id);
   });
 
-  receive('app:start', page);
+  page('/artist/:name', function (ctx) {
+    layout.artist(ctx.params.name);
+  });
+
+  receive(':app/started', page);
 };

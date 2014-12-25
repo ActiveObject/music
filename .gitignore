@@ -40,3 +40,7 @@ nw/
 _public/
 
 .vagrant
+.env
+
+test/app.js
+.divshot-cache/

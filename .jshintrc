@@ -1,0 +1,11 @@
+{
+  "curly": true,
+  "eqnull": true,
+  "eqeqeq": true,
+  "undef": true,
+  "browser": true,
+  "proto": true,
+  "node": true,
+  "esnext": true,
+  "predef": [ "-Promise"]
+}

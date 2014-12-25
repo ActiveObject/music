@@ -1,60 +1,64 @@
 var _ = require('underscore');
-var debug = require('debug')('app:core:app');
-var React = require('react');
-var Bacon = require('baconjs');
-var when = require('when');
-var curry = require('curry');
-var BufferedEventStream = require('app/core/buffered-event-stream');
+var debug = require('debug')('app:core:dispatcher');
 var { isValue } = require('app/utils');
-
+var appstate = require('app/core/appstate');
+var eventBus = require('app/core/event-bus');
+var BufferedEventStream = require('app/core/buffered-event-stream');
 
 var handlers = [];
-var appstate = null;
-var target = document.body;
-var dbStream = new Bacon.Bus();
+var appEventStream = new BufferedEventStream(eventBus, function (v) {
+  if (Array.isArray(v)) {
+    return v.filter(isDatom).forEach(dispatch);
+  }
 
-var appEventStream = new BufferedEventStream(function (event) {
-  dispatch(event.type, event.payload);
+  if (isDatom(v)) {
+    return dispatch(v);
+  }
 });
 
 function makeReceiver(receivers) {
-  return function createReceiverForEvent(expectedType, fn) {
-    receivers.push(function (db, receivedType, payload) {
+  return function receive(expectedAttr, fn) {
+    var receiver = function (appstate, datom) {
       var result;
 
-      if (expectedType === receivedType) {
-        result = fn(db, payload);
+      if (expectedAttr === datom.a) {
+        result = fn(appstate, datom.v, datom);
       }
 
-      return isValue(result) ? result : db;
-    });
+      return isValue(result) ? result : appstate;
+    };
+
+    receivers.push(receiver);
+
+    return function () {
+      for (var i = 0, l = handlers.length; i < l; i++) {
+        if (handlers[i] === receiver) {
+          handlers.splice(i, 1);
+        }
+      }
+    };
   };
 }
 
-function receiveEvent(eventType, payload) {
-  return function receive(expectedType, fn) {
-    if (expectedType === eventType) {
-      fn(payload);
-    }
+function makeMounter(receive, send) {
+  return function mount(atomable, options) {
+    return appstate.mount(receive, send, atomable, options);
   };
 }
 
-function addWatch(dbStream) {
-  return function watch(key, callback) {
-    var x = dbStream
-      .map(db => db.get(key))
-      .slidingWindow(2, 2)
-      .filter(values => values[0] !== values[1]);
+function send(v) {
+  eventBus.push(v);
+}
 
-    return x.onValues(function (prev, next) {
-      callback(prev, next, appstate);
-    });
-  };
+function isDatom(v) {
+  return _.isObject(v) && _.every(['e', 'a', 'v'], function (key) {
+    return _.has(v, key);
+  });
 }
 
 function use(handler) {
   var receivers = [];
-  var onDbChange = handler(dbStream, makeReceiver(receivers), scheduleEvent, addWatch(dbStream));
+  var onDbChange = handler(makeReceiver(receivers), send, makeMounter(makeReceiver(receivers), send));
 
   handlers.push.apply(handlers, receivers);
 
@@ -63,14 +67,10 @@ function use(handler) {
   }
 }
 
-function scheduleEvent(type, payload) {
-  appEventStream.push({ type: type, payload: payload });
-}
-
-function dispatch(type, payload) {
+function dispatch(datom) {
   appEventStream.pause();
 
-  debug('%s - dispatching', type);
+  debug('[%s %s %s] (s)', datom.e, datom.a, datom.v);
 
   function next(state, handlers) {
     if (handlers.length === 0) {
@@ -79,54 +79,25 @@ function dispatch(type, payload) {
 
     var handler = handlers[0];
 
-    if (handler.length === 4) {
-      return handler(state, type, payload, function (appstate) {
+    if (handler.length === 3) {
+      return handler(state, datom, function (appstate) {
         return next(appstate, handlers.slice(1));
       });
     }
 
-    return next(handler(state, type, payload), handlers.slice(1));
+    return next(handler(state, datom), handlers.slice(1));
   }
 
-  var nextState = next(appstate, handlers);
-
-  debug('%s - dispatch finished', type);
-
-  if (nextState !== appstate) {
-    window.requestAnimationFrame(function () {
-      render(appstate);
-    });
-  }
-
-  appstate = nextState;
-  dbStream.push(nextState);
-
+  var nextState = next(appstate.atom.value, handlers);
+  debug('[%s %s %s] (f)', datom.e, datom.a, datom.v);
+  appstate.atom.swap(nextState);
   appEventStream.resume();
 }
 
-function render(appstate) {
-  var layout = appstate.get('layout');
-  var root = layout(appstate);
-  React.renderComponent(root, target);
-}
-
-function start(initState) {
-  appstate = initState;
-  dbStream.push(appstate);
+function start() {
   appEventStream.resume();
-  dispatch('app:start');
+  dispatch({ e: 'app', a: ':app/started', v: true });
 }
-
-exports.togglePlay = function (track) {
-  scheduleEvent('toggle:play', {
-    track: track
-  });
-};
-
-exports.renderTo = function (el) {
-  target = el;
-};
 
 exports.use = use;
 exports.start = start;
-exports.send = scheduleEvent;

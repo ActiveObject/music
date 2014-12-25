@@ -1,6 +1,6 @@
 var React = require('react');
 var _ = require('underscore');
-var Icon = require('app/components/icon');
+var Icon = React.createFactory(require('app/components/icon'));
 var dom = require('app/core/dom');
 
 module.exports = React.createClass({
