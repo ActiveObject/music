@@ -31,8 +31,8 @@ module.exports = function(receive, send) {
   }));
 
   receive(':player/tracklist', update('player', function (player, v) {
-    if (Object.keys(player.track).length === 0 && v.tracks.size > 0) {
-      send(player.useTrack(v.tracks.first()));
+    if (Object.keys(player.track).length === 0 && v.playlist.tracks.size > 0) {
+      send(player.useTrack(v.playlist.tracks.first()));
     }
 
     return player.modify({ tracklist: v });
