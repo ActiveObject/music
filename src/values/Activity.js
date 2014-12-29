@@ -22,23 +22,23 @@ Activity.prototype.totalWeeks = function () {
 };
 
 Activity.prototype.sliceForDayOfWeek = function (day) {
-  return this.items.filter(v => v.date.day() === day);
+  return this.items.filter(v => v.date.weekday() === day);
 };
 
 Activity.prototype.months = function () {
-  var dateByMonth = this.items.groupBy(v => v.date.month());
+  var dateByMonth = this.sliceForDayOfWeek(0)
+    .groupBy(v => v.date.year() + ':' + v.date.month());
 
-  var ms = dateByMonth.map(function (days, key) {
+  return dateByMonth.map(function (days, key) {
+    var [year, month] = key.split(':').map(Number);
+
     return {
-      number: Number(key),
-      days: days
+      year: year,
+      month: month,
+      size: days.size
     };
-  });
-
-  return ms.map(function (item, i) {
-    return _.extend(item, {
-      weeksN: i > 0 ? Math.floor(item.days.size / 7) : Math.ceil(item.days.size / 7)
-    });
+  }).sort(function (a, b) {
+    return (a.year + a.month) - (b.year + b.month);
   });
 };
 

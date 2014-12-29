@@ -53,7 +53,7 @@ var ActivityCard = React.createClass({
     var dowSlices = [0, 1, 2, 3, 4, 5, 6].map(function (dow) {
       var items = activity.sliceForDayOfWeek(dow).map(function (item, i) {
         return dom.rect()
-          .key(item.date)
+          .key(item.date.format('YYYY-MM-DD'))
           .attr('width', size)
           .attr('height', size)
           .attr('x', i * (size + margin))
@@ -78,12 +78,13 @@ var ActivityCard = React.createClass({
   },
 
   makeMonthLegend: function (activity) {
-    var months = activity.months().map(function (m) {
+    var months = activity.months().map(function (v) {
       return dom.div()
-        .key(m.number)
+        .key(v.year + ':' + v.month)
         .className('activity-card-month')
-        .attr('style', { width: m.weeksN * (this.props.size + this.props.margin) })
-        .append(moment.monthsShort(m.number));
+        .className('activity-card-month-hidden', v.size < 3)
+        .attr('style', { width: v.size * (this.props.size + this.props.margin) })
+        .append(moment.monthsShort(v.month));
     }, this);
 
     return dom.div()
