@@ -110,7 +110,7 @@ Appstate.prototype.newsfeedForGroup = function(id) {
 };
 
 Appstate.prototype.activityForGroup = function(id) {
-  var period = new LastNWeeksDRange(33, new Date());
+  var period = new LastNWeeksDRange(32, new Date());
   var a = new Activity(-id, period, this.atom.value.get('activities'));
   var loader = new ActivityLoader(id, this.atom.value.get('activities'), period);
 
