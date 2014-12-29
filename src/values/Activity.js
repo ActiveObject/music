@@ -17,20 +17,12 @@ function Activity(owner, period, activities) {
   this.items = IList(period.fillEmptyDates(items).sortBy(v => v.date).values());
 }
 
-Activity.prototype.weeks = function () {
-  var dateByWeek = this.items.groupBy(v => v.date.week());
+Activity.prototype.totalWeeks = function () {
+  return this.items.groupBy(v => v.date.week()).size;
+};
 
-  var unorderedWeeks = dateByWeek.map(function(items, key) {
-    var n = Number(key);
-
-    return {
-      number: n,
-      month: moment().week(n).month(),
-      items: items.sortBy(v => v.date.day())
-    };
-  });
-
-  return unorderedWeeks.sortBy((v) => v.number);
+Activity.prototype.sliceForDayOfWeek = function (day) {
+  return this.items.filter(v => v.date.day() === day);
 };
 
 Activity.prototype.months = function () {

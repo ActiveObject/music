@@ -50,15 +50,28 @@ var ActivityCard = React.createClass({
   },
 
   makeActivityChart: function(size, margin, activity) {
-    var weeks = activity.weeks().toArray();
-    var maxNewsCount = activity.items.maxBy(function (v) {
-      return v.news;
+    var dowSlices = [0, 1, 2, 3, 4, 5, 6].map(function (dow) {
+      var items = activity.sliceForDayOfWeek(dow).map(function (item, i) {
+        return dom.rect()
+          .key(item.date)
+          .attr('width', size)
+          .attr('height', size)
+          .attr('x', i * (size + margin))
+          .attr('y', 0)
+          .attr('className', makeFillColor(item.news));
+      });
+
+      return dom.g()
+        .key(dow)
+        .attr('transform', 'translate(' + [0, (size + margin) * dow].join(',') + ')')
+        .append(items.toArray())
+        .make();
     });
 
     return (
       <div key='chart' className='activity-chart'>
-        <svg width={(size + margin) * weeks.length} height={(size + margin) * 7}>
-          {weeks.map(this.makeWeek(maxNewsCount, size, margin))}
+        <svg width={(size + margin) * activity.totalWeeks()} height={(size + margin) * 7}>
+          {dowSlices}
         </svg>
       </div>
     );
@@ -78,24 +91,6 @@ var ActivityCard = React.createClass({
       .className('activity-card-months')
       .append(months.toArray());
   },
-
-  makeWeek: curry(function(maxValue, size, margin, week, i) {
-    var items = week.items.toList().map(function(item, i) {
-      return dom.rect()
-        .key(i)
-        .attr('width', size)
-        .attr('height', size)
-        .attr('y', i * (size + margin))
-        .attr('className', makeFillColor(item.news))
-        .attr('title', item.date.toISOString());
-    });
-
-    return dom.g()
-      .key(week.number)
-      .attr('transform', 'translate(' + [(size + margin) * i, 0].join(',') + ')')
-      .append(items.toArray())
-      .make();
-  }),
 
   makeWeekday: function (n) {
     return dom.div()
