@@ -23,7 +23,7 @@ module.exports = {
       { test: /app\/(.*)\.js$/, loader: 'esnext' },
       { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' },
       { test: require.resolve('react'), loader: 'expose?React' },
-      { test: /\.jsx$/, loader: 'jsx-loader' }
+      { test: /\.jsx$/, loader: 'jsx-loader?harmony' }
     ]
   },
   externals: {
