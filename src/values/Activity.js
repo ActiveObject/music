@@ -1,8 +1,8 @@
 var _ = require('underscore');
 var moment = require('moment');
 var IList = require('immutable').List;
-var merge = require('app/utils').merge;
-var hashCode = require('app/utils').hashCode;
+var merge = require('app/utils/merge');
+var hashCode = require('app/utils/hashCode');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var ActivityItem = require('app/values/activity-item');
 

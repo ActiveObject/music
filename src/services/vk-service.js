@@ -5,7 +5,7 @@ var newsfeed = require('app/values/newsfeed');
 var activity = require('app/values/activity');
 var group = require('app/values/group');
 var Track = require('app/values/track');
-var merge = require('app/utils').merge;
+var merge = require('app/utils/merge');
 var vk = require('app/vk');
 
 function loadGroups(user, offset, count, callback) {

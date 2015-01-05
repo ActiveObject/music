@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var moment = require('moment');
 var ISet = require('immutable').Set;
-var hashCode = require('app/utils').hashCode;
+var hashCode = require('app/utils/hashCode');
 var ActivityItem = require('app/values/activity-item');
 
 function LastNWeeksDRange(n, today) {

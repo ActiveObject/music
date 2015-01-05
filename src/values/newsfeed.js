@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var List = require('immutable').List;
-var merge = require('app/utils').merge;
+var merge = require('app/utils/merge');
 var post = require('app/values/post');
 var activity = require('app/values/activity');
 var moment = require('moment');

@@ -1,5 +1,5 @@
 var uuid = require('uuid');
-var merge = require('app/utils').merge;
+var merge = require('app/utils/merge');
 
 function LibraryTracklist(attrs) {
   this.id = uuid.v4();

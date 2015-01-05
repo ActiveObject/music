@@ -1,4 +1,4 @@
-var merge = require('app/utils').merge;
+var merge = require('app/utils/merge');
 
 function Playlist(attrs) {
   this.isShuffled = attrs.isShuffled;

@@ -1,4 +1,4 @@
-var hashCode = require('app/utils').hashCode;
+var hashCode = require('app/utils/hashCode');
 
 function ActivityItem(date, news) {
   this.date = date;

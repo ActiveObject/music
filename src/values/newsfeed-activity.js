@@ -1,4 +1,4 @@
-var hashCode = require('app/utils').hashCode;
+var hashCode = require('app/utils/hashCode');
 
 function NewsfeedActivity(attrs) {
   this.id = attrs.id;
