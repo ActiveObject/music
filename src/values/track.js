@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var attrEquals = require('app/utils').attrEquals;
+var attrEquals = require('app/utils/attrEquals');
 
 function Track(attrs) {
   this.id = Number(attrs.id);

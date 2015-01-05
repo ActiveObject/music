@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var getOrDefault = require('app/utils').getOrDefault;
+var getOrDefault = require('app/utils/getOrDefault');
 
 function range(page, pageSize, direction) {
   if (direction === 0) {

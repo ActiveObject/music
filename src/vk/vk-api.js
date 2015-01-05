@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
-var not = require('app/utils').not;
+var not = require('app/utils/not');
 var Request = require('./request');
 var Response = require('./response');
 var Atom = require('app/core/atom');

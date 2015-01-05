@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var debug = require('debug')('app:core:dispatcher');
-var { isValue } = require('app/utils');
+var isValue = require('app/utils/isValue');
 var appstate = require('app/core/appstate');
 var eventBus = require('app/core/event-bus');
 var BufferedEventStream = require('app/core/buffered-event-stream');
