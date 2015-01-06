@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var debug = require('debug')('app:core:dispatcher');
 var isValue = require('app/utils/isValue');
+var isDatom = require('app/utils/isDatom');
 var appstate = require('app/core/appstate');
 var eventBus = require('app/core/event-bus');
 var BufferedEventStream = require('app/core/buffered-event-stream');
@@ -48,12 +49,6 @@ function makeMounter(receive, send) {
 
 function send(v) {
   eventBus.push(v);
-}
-
-function isDatom(v) {
-  return _.isObject(v) && _.every(['e', 'a', 'v'], function (key) {
-    return _.has(v, key);
-  });
 }
 
 function use(handler) {
