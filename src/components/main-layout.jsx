@@ -8,16 +8,9 @@ var MainView = require('app/components/main-view.jsx');
 var appstate = require('app/core/appstate');
 
 var MainLayout = React.createClass({
-  getInitialState: function() {
-    return {
-      // visibleGroups: [41293763, 32211876, 34110702, 28152291, 27894770]
-      visibleGroups: [41293763, 32211876, 34110702, 28152291]
-    };
-  },
-
   componentWillMount: function () {
-    this.groups = appstate.groups(this.state.visibleGroups);
-    this.activities = appstate.activities(this.state.visibleGroups);
+    this.groups = appstate.groups(this.props.visibleGroups);
+    this.activities = appstate.activities(this.props.visibleGroups);
   },
 
   componentWillUnmount: function() {

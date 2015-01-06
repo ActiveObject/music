@@ -6,11 +6,15 @@ var ArtistLayout = require('app/layout/artist-layout');
 var AuthLayout = require('app/layout/auth-layout');
 
 function MainLayout() {
-
+  this.groups = [41293763, 32211876, 34110702, 28152291];
 }
 
 MainLayout.prototype.render = function(appstate) {
-  return MainLayoutCmp({ key: 'main', player: appstate.get('player') });
+  return MainLayoutCmp({
+    key: 'main',
+    player: appstate.get('player'),
+    visibleGroups: this.groups
+  });
 };
 
 MainLayout.prototype.group = function (attrs) {
