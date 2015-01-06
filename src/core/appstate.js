@@ -96,19 +96,6 @@ Appstate.prototype.groupById = function(id) {
   });
 };
 
-Appstate.prototype.newsfeedForGroup = function(id) {
-  var saved = this.atom.value.get('newsfeeds').find(nf => nf.owner === -id);
-  var nf = saved ? saved : newsfeed.modify({ owner: -id });
-
-  eventBus.push(nf.load(0, 10));
-
-  return new Entity(nf, function (e, receive) {
-    receive(':app/newsfeed', function(appstate, nf) {
-      Atom.update(e, (v) => nf.owner === -id ? nf : v);
-    });
-  });
-};
-
 Appstate.prototype.activityForGroup = function(id) {
   var period = new LastNWeeksDRange(32, new Date());
   var a = new Activity(-id, period, this.atom.value.get('activities'));

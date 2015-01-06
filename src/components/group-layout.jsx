@@ -6,13 +6,15 @@ var Player = require('app/components/player');
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var Box = require('app/components/box.jsx');
 
+var NewsfeedLoader = require('app/services/newsfeed-loader');
 var appstate = require('app/core/appstate');
 
 var GroupLayout = React.createClass({
   componentWillMount: function() {
     this.group = appstate.groupById(this.props.id);
-    this.newsfeed = appstate.newsfeedForGroup(this.props.id);
     this.activity = appstate.activityForGroup(this.props.id);
+    this.newsfeed = new NewsfeedLoader(-this.props.id);
+    this.newsfeed.load(0, 10);
   },
 
   componentWillUnmount: function() {

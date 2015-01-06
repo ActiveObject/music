@@ -44,4 +44,9 @@ Atom.listen = function(x, onChange) {
   return x.atom.on('change', onChange);
 };
 
+Atom.off = function (x) {
+  assert(Atom.isAtomable(x), 'Atom.off: trying to cleanup non-atomable object, given ' + x);
+  return x.atom.removeAllListeners();
+};
+
 module.exports = Atom;
