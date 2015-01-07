@@ -14,8 +14,9 @@ Atom.prototype = Object.create(EventEmitter.prototype, {
 
 Atom.prototype.swap = function (newValue) {
   if (this.value !== newValue) {
+    var oldValue = this.value;
     this.value = newValue;
-    this.emit('change', this.value);
+    this.emit('change', newValue, oldValue);
   }
 
   return this;
