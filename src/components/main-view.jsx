@@ -6,14 +6,13 @@ var ActivityCard = require('app/components/activity-card.jsx');
 
 var Activity = require('app/values/activity');
 var isValue = require('app/utils/isValue');
-var print = require('app/utils/print');
 
 var MainView = React.createClass({
   shouldComponentUpdate: function (nextProps) {
-    return print(this.props.groups !== nextProps.groups ||
+    return this.props.groups !== nextProps.groups ||
       this.props.activities !== nextProps.activities ||
       this.props.period !== nextProps.period ||
-      this.props.visibleGroups !== nextProps.visibleGroups);
+      this.props.visibleGroups !== nextProps.visibleGroups;
   },
 
   render: function () {
