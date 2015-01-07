@@ -1,32 +1,44 @@
 var React = require('react');
+var Immutable = require('immutable');
+
 var App = require('app/components/app.jsx');
 var Player = require('app/components/player');
 var LazyTracklist = require('app/components/lazy-tracklist');
 var Box = require('app/components/box.jsx');
 var MainView = require('app/components/main-view.jsx');
 
-var appstate = require('app/core/appstate');
+var Atom = require('app/core/atom');
+var ActivityLoader = require('app/services/activity-loader');
+var eventBus = require('app/core/event-bus');
 
 var MainLayout = React.createClass({
   componentWillMount: function () {
-    this.groups = appstate.groups(this.props.visibleGroups);
-    this.activities = appstate.activities(this.props.visibleGroups);
-  },
+    this.loaders = this.props.visibleGroups.map(function (id) {
+      return new ActivityLoader(id, this.props.activities, this.props.period);
+    }, this);
 
-  componentWillUnmount: function() {
-    this.groups.release();
-    this.activities.release();
+    this.loaders.forEach(function (loader) {
+      Atom.listen(loader, function(items) {
+        eventBus.push({ e: 'app', a: ':activity', v: Immutable.Set(items) });
+      });
+    });
   },
 
   render: function() {
     return (
       <App layout={['two-region', 'main-layout']}>
         <Box prefix='ra-' key='region-a'>
-          <MainView groups={this.groups.atom.value} activities={this.activities.atom.value}></MainView>
+          <MainView
+            groups={this.props.groups}
+            activities={this.props.activities}
+            visibleGroups={this.props.visibleGroups}
+            period={this.props.period}></MainView>
         </Box>
 
         <Box prefix='rb-' key='region-b'>
-          <LazyTracklist player={this.props.player} tracklist={this.props.player.visibleTracklist()}></LazyTracklist>
+          <LazyTracklist
+            player={this.props.player}
+            tracklist={this.props.player.visibleTracklist()}></LazyTracklist>
         </Box>
 
         <Box prefix='rc-' key='region-c'>

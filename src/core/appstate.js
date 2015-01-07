@@ -67,25 +67,6 @@ function Entity(v, service) {
   };
 }
 
-function CompoundEntity(xs) {
-  var entities = Immutable.Map(xs);
-  var atom = new Atom(entities.map(e => e.atom.value));
-
-  entities.forEach(function (e, key) {
-    e.atom.on('change', function (ev) {
-      Atom.update(atom, v => v.set(key, ev));
-    });
-  });
-
-  this.atom = atom;
-
-  this.release = function () {
-    entities.forEach(function (e) {
-      e.release();
-    });
-  };
-}
-
 Appstate.prototype.groupById = function(id) {
   var g = this.atom.value.get('groups').find(g => g.id === id);
 
@@ -110,20 +91,6 @@ Appstate.prototype.activityForGroup = function(id) {
       Atom.swap(e, new Activity(-id, period, appstate.get('activities')));
     });
   });
-};
-
-Appstate.prototype.groups = function(ids) {
-  var saved = this.atom.value.get('groups').filter(g => ids.indexOf(g.id) !== -1);
-
-  return new Entity(saved, function (e, receive) {
-    receive(':app/groups', function(appstate, groups) {
-      Atom.update(e, (v) => groups.filter(g => ids.indexOf(g.id) !== -1));
-    });
-  });
-};
-
-Appstate.prototype.activities = function(ids) {
-  return new CompoundEntity(ids.map(id => [id, this.activityForGroup(id)]));
 };
 
 module.exports = new Appstate({

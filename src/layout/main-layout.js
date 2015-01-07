@@ -5,15 +5,21 @@ var GroupLayout = require('app/layout/group-layout');
 var ArtistLayout = require('app/layout/artist-layout');
 var AuthLayout = require('app/layout/auth-layout');
 
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
+
 function MainLayout() {
   this.groups = [41293763, 32211876, 34110702, 28152291];
+  this.period = new LastNWeeksDRange(32, new Date());
 }
 
 MainLayout.prototype.render = function(appstate) {
   return MainLayoutCmp({
     key: 'main',
     player: appstate.get('player'),
-    visibleGroups: this.groups
+    groups: appstate.get('groups'),
+    activities: appstate.get('activities'),
+    visibleGroups: this.groups,
+    period: this.period
   });
 };
 
