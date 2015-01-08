@@ -6,9 +6,9 @@ module.exports = function (mountNode) {
   return function (receive, send) {
 
     function render(appstate) {
-      debug('layout started');
-      var root = appstate.get('layout').render(appstate, send);
-      debug('layout finished');
+      debug('VDOM render started');
+      var root = appstate.get('route').render(appstate, send);
+      debug('VDOM render finished');
 
       React.render(root, mountNode);
 
