@@ -17,15 +17,20 @@
  */
 
 var EventEmitter = require('events').EventEmitter;
+var page = require('page');
 var EmptyLayout = require('app/layout/empty-layout');
 var Atom = require('app/core/atom');
 
 /**
  * LayoutManager implements atom protocol.
  */
-function LayoutManager(attrs) {
-  this.mountPoint = attrs.mountPoint;
-  this.atom = attrs.atom;
+function LayoutManager(mountPoint) {
+  this.mountPoint = mountPoint;
+  this.atom = new Atom(EmptyLayout.create());
+
+  page('/', () => this.main());
+  page('/groups/:id', (ctx) => this.group(ctx.params.id));
+  page('/artist/:name', (ctx) => this.artist(ctx.params.name));
 }
 
 LayoutManager.prototype = Object.create(EventEmitter.prototype, {
@@ -48,7 +53,8 @@ LayoutManager.prototype.main = function () {
   Atom.update(this, state => state.main());
 };
 
-module.exports = new LayoutManager({
-  mountPoint: 'layout',
-  atom: new Atom(EmptyLayout.create()),
-});
+LayoutManager.prototype.start = function() {
+  page();
+};
+
+module.exports = new LayoutManager('layout');

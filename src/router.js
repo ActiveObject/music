@@ -1,20 +1,9 @@
-var page = require('page');
 var layout = require('app/layout');
 
 module.exports = function (receive, send, mount) {
   mount(layout);
 
-  page('/', function () {
-    layout.main();
+  receive(':app/started', function() {
+    layout.start();
   });
-
-  page('/groups/:id', function (ctx) {
-    layout.group(ctx.params.id);
-  });
-
-  page('/artist/:name', function (ctx) {
-    layout.artist(ctx.params.name);
-  });
-
-  receive(':app/started', page);
 };
