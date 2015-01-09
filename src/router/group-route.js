@@ -5,12 +5,21 @@ var MainLayout = require('app/layout/main-layout');
 var ArtistLayout = require('app/layout/artist-layout');
 var AuthLayout = require('app/layout/auth-layout');
 
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
+
 function GroupLayout(attrs) {
   this.id = parseInt(attrs.id);
+  this.period = new LastNWeeksDRange(32, new Date());
 }
 
 GroupLayout.prototype.render = function (appstate) {
-  return new GroupLayoutCmp({ id: this.id, player: appstate.get('player') });
+  return new GroupLayoutCmp({
+    id: this.id,
+    period: this.period,
+    player: appstate.get('player'),
+    groups: appstate.get('groups'),
+    activities: appstate.get('activities')
+  });
 };
 
 GroupLayout.prototype.main = function () {

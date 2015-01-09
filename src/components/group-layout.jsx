@@ -6,31 +6,35 @@ var Player = require('app/components/player');
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var Box = require('app/components/box.jsx');
 
-var appstate = require('app/core/appstate');
+var NewsfeedLoader = require('app/services/newsfeed-loader');
+var ActivityLoader = require('app/services/activity-loader');
+var Activity = require('app/values/activity');
 
 var GroupLayout = React.createClass({
   componentWillMount: function() {
-    this.group = appstate.groupById(this.props.id);
-    this.newsfeed = appstate.newsfeedForGroup(this.props.id);
-    this.activity = appstate.activityForGroup(this.props.id);
+    this.newsfeed = new NewsfeedLoader(-this.props.id);
+    this.activityLoader = new ActivityLoader(this.props.id, this.props.activities, this.props.period);
+
+    this.newsfeed.load(0, 10);
   },
 
   componentWillUnmount: function() {
-    this.group.release();
-    this.activity.release();
     this.newsfeed.release();
   },
 
   render: function() {
+    var group = this.props.groups.find(g => g.id === this.props.id);
+    var activity = new Activity(-this.props.id, this.props.period, this.props.activities);
+
     return (
       <App layout={['two-region', 'group-layout']}>
         <Box prefix='ra-' key='region-a'>
-          <GroupProfile group={this.group.atom.value} activity={this.activity.atom.value}></GroupProfile>
+          <GroupProfile group={group} activity={activity}></GroupProfile>
         </Box>
 
         <Box prefix='rb-' key='region-b'>
           <IScrollLayer>
-            <Newsfeed newsfeed={this.newsfeed.atom.value} player={this.props.player} owner={this.group.atom.value}></Newsfeed>
+            <Newsfeed newsfeed={this.newsfeed.atom.value} player={this.props.player} owner={group}></Newsfeed>
           </IScrollLayer>
         </Box>
 

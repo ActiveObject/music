@@ -1,14 +1,9 @@
 var React = require('react');
 var dom = require('app/core/dom');
 var Post = React.createFactory(require('app/components/post.jsx'));
-var eventBus = require('app/core/event-bus');
 
 var Newsfeed = React.createClass({
   displayName: 'Newsfeed',
-
-  componentDidMount: function() {
-    eventBus.push(this.props.newsfeed.load(0, 10));
-  },
 
   shouldComponentUpdate: function(nextProps) {
     return nextProps.newsfeed !== this.props.newsfeed || nextProps.player !== this.props.player;
@@ -18,7 +13,7 @@ var Newsfeed = React.createClass({
     var player = this.props.player;
     var owner = this.props.owner;
 
-    var posts = this.props.newsfeed.posts.toJS().slice(0, 10).map(function(post) {
+    var posts = this.props.newsfeed.posts.map(function(post) {
       return new Post({
         post: post,
         owner: owner,
@@ -28,7 +23,7 @@ var Newsfeed = React.createClass({
 
     return dom.div()
       .className('newsfeed')
-      .append(posts)
+      .append(posts.toArray())
       .make();
   }
 });
