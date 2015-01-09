@@ -5,18 +5,18 @@ var ArtistProfile = React.createFactory(require('app/components/artist-profile')
 var LazyTracklist = React.createFactory(require('app/components/lazy-tracklist'));
 var Player = React.createFactory(require('app/components/player'));
 
-var MainLayout = require('app/layout/main-layout');
-var AuthLayout = require('app/layout/auth-layout');
-var GroupLayout = require('app/layout/group-layout');
+var MainRoute = require('app/router/main-route');
+var AuthRoute = require('app/router/auth-route');
+var GroupRoute = require('app/router/group-route');
 
 var ArtistTracklist = require('app/values/tracklists/artist-tracklist');
 var Playlist = require('app/values/playlist');
 
-function ArtistLayout(attrs) {
+function ArtistRoute(attrs) {
   this.name = attrs.name;
 }
 
-ArtistLayout.prototype.render = function (appstate) {
+ArtistRoute.prototype.render = function (appstate) {
   var tracklist = new LazyTracklist({
     player: appstate.get('player'),
     tracklist: appstate.get('player').visibleTracklist()
@@ -42,22 +42,22 @@ ArtistLayout.prototype.render = function (appstate) {
   return new App({ layout: ['two-region', 'artist-layout'] }, [regionA, regionB, regionC]);
 };
 
-ArtistLayout.prototype.main = function () {
-  return MainLayout.create();
+ArtistRoute.prototype.main = function () {
+  return MainRoute.create();
 };
 
-ArtistLayout.prototype.group = function (attrs) {
-  return GroupLayout.create(attrs);
+ArtistRoute.prototype.group = function (attrs) {
+  return GroupRoute.create(attrs);
 };
 
-ArtistLayout.prototype.artist = function (attrs) {
-  return new ArtistLayout(attrs);
+ArtistRoute.prototype.artist = function (attrs) {
+  return new ArtistRoute(attrs);
 };
 
-ArtistLayout.prototype.auth = function (attrs) {
-  return AuthLayout.create(attrs);
+ArtistRoute.prototype.auth = function (attrs) {
+  return AuthRoute.create(attrs);
 };
 
 exports.create = function(attrs) {
-  return new ArtistLayout(attrs);
+  return new ArtistRoute(attrs);
 };

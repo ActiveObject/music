@@ -1,19 +1,19 @@
 var React = require('react');
-var GroupLayoutCmp = React.createFactory(require('app/components/group-layout.jsx'));
+var GroupRouteCmp = React.createFactory(require('app/components/group-layout.jsx'));
 
-var MainLayout = require('app/layout/main-layout');
-var ArtistLayout = require('app/layout/artist-layout');
-var AuthLayout = require('app/layout/auth-layout');
+var MainRoute = require('app/router/main-route');
+var ArtistRoute = require('app/router/artist-route');
+var AuthRoute = require('app/router/auth-route');
 
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
-function GroupLayout(attrs) {
+function GroupRoute(attrs) {
   this.id = parseInt(attrs.id);
   this.period = new LastNWeeksDRange(32, new Date());
 }
 
-GroupLayout.prototype.render = function (appstate) {
-  return new GroupLayoutCmp({
+GroupRoute.prototype.render = function (appstate) {
+  return new GroupRouteCmp({
     id: this.id,
     period: this.period,
     player: appstate.get('player'),
@@ -22,22 +22,22 @@ GroupLayout.prototype.render = function (appstate) {
   });
 };
 
-GroupLayout.prototype.main = function () {
-  return MainLayout.create();
+GroupRoute.prototype.main = function () {
+  return MainRoute.create();
 };
 
-GroupLayout.prototype.group = function (attrs) {
-  return new GroupLayout(attrs);
+GroupRoute.prototype.group = function (attrs) {
+  return new GroupRoute(attrs);
 };
 
-GroupLayout.prototype.artist = function (attrs) {
-  return ArtistLayout.create(attrs);
+GroupRoute.prototype.artist = function (attrs) {
+  return ArtistRoute.create(attrs);
 };
 
-GroupLayout.prototype.auth = function (attrs) {
-  return AuthLayout.create(attrs);
+GroupRoute.prototype.auth = function (attrs) {
+  return AuthRoute.create(attrs);
 };
 
 exports.create = function(attrs) {
-  return new GroupLayout(attrs);
+  return new GroupRoute(attrs);
 };

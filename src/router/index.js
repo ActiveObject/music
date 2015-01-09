@@ -51,4 +51,4 @@ Router.prototype.start = function() {
   page();
 };
 
-module.exports = new Router('layout');
+module.exports = new Router('activeRoute');

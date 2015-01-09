@@ -1,6 +1,6 @@
 var Auth = require('app/core/auth');
 var accounts = require('app/accounts');
-var layout = require('app/layout');
+var router = require('app/router');
 
 module.exports = function (receive, send) {
   if (Auth.hasToken(location.hash)) {
@@ -14,7 +14,7 @@ module.exports = function (receive, send) {
 
   receive(':app/user', function(appstate, user) {
     if (!user.isAuthenticated()) {
-      layout.auth(accounts.vk);
+      router.auth(accounts.vk);
     }
 
     return appstate.set('user', user);

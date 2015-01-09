@@ -10,7 +10,7 @@ var NewsfeedLoader = require('app/services/newsfeed-loader');
 var ActivityLoader = require('app/services/activity-loader');
 var Activity = require('app/values/activity');
 
-var GroupLayout = React.createClass({
+var GroupRoute = React.createClass({
   componentWillMount: function() {
     this.newsfeed = new NewsfeedLoader(-this.props.id);
     this.activityLoader = new ActivityLoader(this.props.id, this.props.activities, this.props.period);
@@ -46,4 +46,4 @@ var GroupLayout = React.createClass({
   }
 });
 
-module.exports = GroupLayout;
+module.exports = GroupRoute;

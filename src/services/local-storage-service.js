@@ -22,15 +22,15 @@ module.exports = function (receive, send) {
     }
   });
 
-  receive(':app/started', function () {
-    if (localStorage.hasOwnProperty(':app/tracks')) {
-      send({
-        e: 'app',
-        a: ':app/tracks',
-        v: JSON.parse(localStorage.getItem(':app/tracks')).map(v => new Track(v))
-      });
-    }
-  });
+  // receive(':app/started', function () {
+  //   if (localStorage.hasOwnProperty(':app/tracks')) {
+  //     send({
+  //       e: 'app',
+  //       a: ':app/tracks',
+  //       v: JSON.parse(localStorage.getItem(':app/tracks')).map(v => new Track(v))
+  //     });
+  //   }
+  // });
 
   receive(':player/track', function (appstate, track) {
     localStorage.setItem(':player/track', JSON.stringify(track));
@@ -40,7 +40,7 @@ module.exports = function (receive, send) {
     localStorage.setItem(':app/activity', JSON.stringify(appstate.get('activities').toArray()));
   });
 
-  receive(':app/tracks', function (appstate) {
-    localStorage.setItem(':app/tracks', JSON.stringify(appstate.get('tracks').toArray()));
-  });
+  // receive(':app/tracks', function (appstate) {
+  //   localStorage.setItem(':app/tracks', JSON.stringify(appstate.get('tracks').toArray()));
+  // });
 };
