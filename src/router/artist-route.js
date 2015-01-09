@@ -5,10 +5,6 @@ var ArtistProfile = React.createFactory(require('app/components/artist-profile')
 var LazyTracklist = React.createFactory(require('app/components/lazy-tracklist'));
 var Player = React.createFactory(require('app/components/player'));
 
-var MainRoute = require('app/router/main-route');
-var AuthRoute = require('app/router/auth-route');
-var GroupRoute = require('app/router/group-route');
-
 var ArtistTracklist = require('app/values/tracklists/artist-tracklist');
 var Playlist = require('app/values/playlist');
 
@@ -42,22 +38,6 @@ ArtistRoute.prototype.render = function (appstate) {
   return new App({ layout: ['two-region', 'artist-layout'] }, [regionA, regionB, regionC]);
 };
 
-ArtistRoute.prototype.main = function () {
-  return MainRoute.create();
-};
+ArtistRoute.prototype.lifecycle = require('app/router/default-route-lifecycle');
 
-ArtistRoute.prototype.group = function (attrs) {
-  return GroupRoute.create(attrs);
-};
-
-ArtistRoute.prototype.artist = function (attrs) {
-  return new ArtistRoute(attrs);
-};
-
-ArtistRoute.prototype.auth = function (attrs) {
-  return AuthRoute.create(attrs);
-};
-
-exports.create = function(attrs) {
-  return new ArtistRoute(attrs);
-};
+module.exports = ArtistRoute;

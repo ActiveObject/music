@@ -1,10 +1,5 @@
 var React = require('react');
 var MainRouteCmp = React.createFactory(require('app/components/main-layout.jsx'));
-
-var GroupRoute = require('app/router/group-route');
-var ArtistRoute = require('app/router/artist-route');
-var AuthRoute = require('app/router/auth-route');
-
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 function MainRoute() {
@@ -23,22 +18,6 @@ MainRoute.prototype.render = function(appstate) {
   });
 };
 
-MainRoute.prototype.group = function (attrs) {
-  return GroupRoute.create(attrs);
-};
+MainRoute.prototype.lifecycle = require('app/router/default-route-lifecycle');
 
-MainRoute.prototype.artist = function (attrs) {
-  return ArtistRoute.create(attrs);
-};
-
-MainRoute.prototype.auth = function (attrs) {
-  return AuthRoute.create(attrs);
-};
-
-MainRoute.prototype.main = function() {
-  return this;
-};
-
-exports.create = function() {
-  return new MainRoute();
-};
+module.exports = MainRoute;

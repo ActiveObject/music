@@ -12,15 +12,20 @@
 
 var EventEmitter = require('events').EventEmitter;
 var page = require('page');
-var EmptyRoute = require('app/router/empty-route');
 var Atom = require('app/core/atom');
+
+var AuthRoute = require('app/router/auth-route');
+var GroupRoute = require('app/router/group-route');
+var ArtistRoute = require('app/router/artist-route');
+var MainRoute = require('app/router/main-route');
+var emptyRoute = require('app/router/empty-route');
 
 /**
  * Router implements atom protocol.
  */
 function Router(mountPoint) {
   this.mountPoint = mountPoint;
-  this.atom = new Atom(EmptyRoute.create());
+  this.atom = new Atom(emptyRoute);
 
   page('/', () => this.main());
   page('/groups/:id', (ctx) => this.group(ctx.params.id));
@@ -32,19 +37,25 @@ Router.prototype = Object.create(EventEmitter.prototype, {
 });
 
 Router.prototype.auth = function (vkAccount) {
-  Atom.update(this, state => state.auth({ vkAccount: vkAccount }));
+  this.transitionTo(new AuthRoute({ vkAccount: vkAccount }));
 };
 
 Router.prototype.group = function (id) {
-  Atom.update(this, state => state.group({ id: id }));
+  this.transitionTo(new GroupRoute({ id: id }));
 };
 
 Router.prototype.artist = function (name) {
-  Atom.update(this, state => state.artist({ name: name }));
+  this.transitionTo(new ArtistRoute({ name: name }));
 };
 
 Router.prototype.main = function () {
-  Atom.update(this, state => state.main());
+  this.transitionTo(new MainRoute());
+};
+
+Router.prototype.transitionTo = function (nextRoute) {
+  Atom.update(this, function (currRoute) {
+    return nextRoute.lifecycle.transition(currRoute, nextRoute);
+  });
 };
 
 Router.prototype.start = function() {
