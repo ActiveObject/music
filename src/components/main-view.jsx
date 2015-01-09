@@ -1,20 +1,40 @@
 var React = require('react');
+var Seq = require('immutable').Seq;
 
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var ActivityCard = require('app/components/activity-card.jsx');
 
-var LastNWeeksDRange = require('app/values/last-nweeks-drange');
+var Activity = require('app/values/activity');
+var isValue = require('app/utils/isValue');
 
 var MainView = React.createClass({
   shouldComponentUpdate: function (nextProps) {
-    return this.props.groups !== nextProps.groups || this.props.activities !== nextProps.activities;
+    return this.props.groups !== nextProps.groups ||
+      this.props.activities !== nextProps.activities ||
+      this.props.period !== nextProps.period ||
+      this.props.visibleGroups !== nextProps.visibleGroups;
   },
 
   render: function () {
-    var activities = this.props.groups.map(function(group) {
-      var activity = this.props.activities.get(group.id);
-      return <ActivityCard key={group.id} id={group.id} name= {group.name} activity={activity}></ActivityCard>;
-    }, this).toJS();
+    var groups = this.props.visibleGroups
+      .map(function (id) {
+        return this.props.groups.find(function (group) {
+          return group.id === id;
+        });
+      }, this)
+
+      .filter(isValue);
+
+    var activities = this.props.visibleGroups.map(function (id) {
+      return new Activity(-id, this.props.period, this.props.activities);
+    }, this);
+
+    var cards = Seq(groups).zip(activities).map(function (v) {
+      var group = v[0];
+      var activity = v[1];
+
+      return <ActivityCard key={group.id} id={group.id} name={group.name} activity={activity}></ActivityCard>;
+    });
 
     return (
       <div className='main-view'>
@@ -22,7 +42,7 @@ var MainView = React.createClass({
           <IScrollLayer>
             <div className='main-section'>
               <span className='main-section-title'>Спільноти</span>
-              <div className='cards'>{activities}</div>
+              <div className='cards'>{cards.toArray()}</div>
             </div>
           </IScrollLayer>
         </div>

@@ -21,12 +21,14 @@ function ActivityLoader(id, saved, period) {
       });
     });
 
-    atom.swap(items);
+    if (items.length > 0) {
+      atom.swap(items);
 
-    var oldest = moment(_.last(items).date);
+      var oldest = moment(_.last(items).date);
 
-    if (oldest.isAfter(period.startOf())) {
-      loadWall(-id, feed.next(), onData);
+      if (oldest.isAfter(period.startOf())) {
+        loadWall(-id, feed.next(), onData);
+      }
     }
   }
 

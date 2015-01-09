@@ -18,10 +18,10 @@ module.exports = function (receive, send) {
   });
 
   receive(':activity', function(appstate, activity) {
-    var changes = activity.subtract(appstate.get('activities')).toJS();
+    var changes = activity.subtract(appstate.get('activities'));
 
-    if (changes.length > 0) {
-      send({ e: 'app', a: ':app/activity', v: changes });
+    if (!changes.isEmpty()) {
+      send({ e: 'app', a: ':app/activity', v: changes.toJS() });
     }
   });
 

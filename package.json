@@ -30,7 +30,7 @@
     "colors": "^0.6.2",
     "curry": "^1.2.0",
     "debug": "^1.0.4",
-    "immutable": "^3.0.2",
+    "immutable": "^3.5.0",
     "iscroll": "^5.1.2",
     "jsonp": "0.0.4",
     "mime": "^1.2.11",

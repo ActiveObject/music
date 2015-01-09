@@ -14,8 +14,9 @@ Atom.prototype = Object.create(EventEmitter.prototype, {
 
 Atom.prototype.swap = function (newValue) {
   if (this.value !== newValue) {
+    var oldValue = this.value;
     this.value = newValue;
-    this.emit('change', this.value);
+    this.emit('change', newValue, oldValue);
   }
 
   return this;
@@ -42,6 +43,11 @@ Atom.swap = function(x, newValue) {
 Atom.listen = function(x, onChange) {
   assert(Atom.isAtomable(x), 'Atom.swap: trying to update non-atomable object, given ' + x);
   return x.atom.on('change', onChange);
+};
+
+Atom.off = function (x) {
+  assert(Atom.isAtomable(x), 'Atom.off: trying to cleanup non-atomable object, given ' + x);
+  return x.atom.removeAllListeners();
 };
 
 module.exports = Atom;
