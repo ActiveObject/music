@@ -17,6 +17,16 @@ function LastNWeeksDRange(n, today) {
   this.dates = dates;
 }
 
+LastNWeeksDRange.fromJSON = function (v) {
+  return new LastNWeeksDRange(v, new Date());
+};
+
+LastNWeeksDRange.prototype.toJSON = function () {
+  return {
+    'last-nweeks': this.n
+  };
+};
+
 LastNWeeksDRange.prototype.fillEmptyDates = function(activity) {
   var activityDates = activity.map(function (v) {
     return {
