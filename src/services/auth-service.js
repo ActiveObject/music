@@ -1,6 +1,7 @@
 var Auth = require('app/core/auth');
+var router = require('app/core/router');
+var AuthRoute = require('app/routes/auth-route');
 var accounts = require('app/accounts');
-var router = require('app/router');
 
 module.exports = function (receive, send) {
   if (Auth.hasToken(location.hash)) {
@@ -14,7 +15,7 @@ module.exports = function (receive, send) {
 
   receive(':app/user', function(appstate, user) {
     if (!user.isAuthenticated()) {
-      router.auth(accounts.vk);
+      router.transitionTo(new AuthRoute({ vkAccount: accounts.vk }));
     }
 
     return appstate.set('user', user);

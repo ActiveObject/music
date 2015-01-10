@@ -38,6 +38,6 @@ ArtistRoute.prototype.render = function (appstate) {
   return new App({ layout: ['two-region', 'artist-layout'] }, [regionA, regionB, regionC]);
 };
 
-ArtistRoute.prototype.lifecycle = require('app/router/default-route-lifecycle');
+ArtistRoute.prototype.lifecycle = require('app/core/default-route-lifecycle');
 
 module.exports = ArtistRoute;

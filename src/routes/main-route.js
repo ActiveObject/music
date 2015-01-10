@@ -18,6 +18,6 @@ MainRoute.prototype.render = function(appstate) {
   });
 };
 
-MainRoute.prototype.lifecycle = require('app/router/default-route-lifecycle');
+MainRoute.prototype.lifecycle = require('app/core/default-route-lifecycle');
 
 module.exports = MainRoute;

@@ -5,5 +5,5 @@ module.exports = {
     return React.DOM.div({ className: 'empty-view' });
   },
 
-  lifecycle: require('app/router/default-route-lifecycle')
+  lifecycle: require('app/core/default-route-lifecycle')
 };

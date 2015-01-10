@@ -17,6 +17,6 @@ GroupRoute.prototype.render = function (appstate) {
   });
 };
 
-GroupRoute.prototype.lifecycle = require('app/router/default-route-lifecycle');
+GroupRoute.prototype.lifecycle = require('app/core/default-route-lifecycle');
 
 module.exports = GroupRoute;
