@@ -1,3 +1,16 @@
+/**
+ * type Route =
+ *   | EmptyRoute
+ *   | MainRoute
+ *   | ArtistRoute of name
+ *   | GroupRoute of id
+ *   | AuthRoute of vkAccount
+ *
+ * interface Route =
+ *   render: (appstate, send) -> ReactElement
+ *   lifecycle: RouteLifecycle
+ */
+
 var MainRoute = require('./main-route');
 var GroupRoute = require('./group-route');
 var ArtistRoute = require('./artist-route');
