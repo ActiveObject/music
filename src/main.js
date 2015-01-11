@@ -6,7 +6,7 @@ app.use(require('app/services/soundmanager-service'));
 app.use(require('app/services/store-service'));
 app.use(require('app/services/player-service'));
 app.use(require('app/services/local-storage-service'));
-app.use(require('app/services/router'));
+app.use(require('app/services/router-service'));
 // app.use(require('app/services/firebase-service')('https://ac-music.firebaseio.com/'));
 app.use(require('app/renderer')(document.getElementById('app')));
 
