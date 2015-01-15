@@ -94,5 +94,15 @@ function start() {
   dispatch({ e: 'app', a: ':app/started', v: true });
 }
 
+function pause() {
+  appEventStream.pause();
+}
+
+function resume() {
+  appEventStream.resume();
+}
+
 exports.use = use;
 exports.start = start;
+exports.pause = pause;
+exports.resume = resume;
