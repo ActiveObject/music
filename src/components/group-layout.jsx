@@ -10,12 +10,16 @@ var NewsfeedLoader = require('app/services/newsfeed-loader');
 var ActivityLoader = require('app/services/activity-loader');
 var Activity = require('app/values/activity');
 
-var GroupRoute = React.createClass({
+var GroupLayout = React.createClass({
   componentWillMount: function() {
-    this.newsfeed = new NewsfeedLoader(-this.props.id);
-    this.activityLoader = new ActivityLoader(this.props.id, this.props.activities, this.props.period);
+    this.newsfeed = new NewsfeedLoader({
+      owner: -this.props.id,
+      offset: 0,
+      count: 10
+    });
 
-    this.newsfeed.load(0, 10);
+    this.activityLoader = new ActivityLoader(this.props.id, this.props.activities, this.props.period);
+    this.newsfeed.process();
   },
 
   componentWillUnmount: function() {
@@ -46,4 +50,4 @@ var GroupRoute = React.createClass({
   }
 });
 
-module.exports = GroupRoute;
+module.exports = GroupLayout;

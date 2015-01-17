@@ -13,6 +13,8 @@ var Newsfeed = React.createClass({
     var player = this.props.player;
     var owner = this.props.owner;
 
+    console.log(this._rootNodeID, this._currentElement.key);
+
     var posts = this.props.newsfeed.posts.map(function(post) {
       return new Post({
         post: post,
