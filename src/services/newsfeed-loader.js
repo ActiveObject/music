@@ -5,7 +5,7 @@ var newsfeed = require('app/values/newsfeed');
 
 function chunkify(size, offset, count) {
   if (size <= 0) {
-    throw new Error('chunk size should positive number, but given ' + size);
+    throw new Error('chunk size should be a positive number, but given ' + size);
   }
 
   var result = [];
