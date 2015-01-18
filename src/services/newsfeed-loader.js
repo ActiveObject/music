@@ -27,8 +27,6 @@ function NewsfeedLoader(attrs, inbox) {
   this.inbox = chunkify(2, attrs.offset, attrs.count).map(function (v) {
     return merge(v, { owner: attrs.owner });
   });
-
-  console.log(JSON.stringify(this.inbox));
 }
 
 NewsfeedLoader.prototype.process = function () {
