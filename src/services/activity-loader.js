@@ -5,10 +5,26 @@ var Atom = require('app/core/atom');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 
 function ActivityLoader(id, saved, period) {
-  var feed = new Feed(0, 100);
-  var atom = new Atom();
+  this.inbox = [{
+    id: -id,
+    offset: 0,
+    count: 100,
+    period: period
+  }];
 
-  function onData(err, data) {
+  this.atom = new Atom();
+}
+
+ActivityLoader.prototype.process = function () {
+  if (this.inbox.length === 0) {
+    return;
+  }
+
+  var req = this.inbox[0];
+
+  this.load(req, function (err, data) {
+    this.inbox.shift();
+
     if (err) {
       return console.log(err);
     }
@@ -22,26 +38,29 @@ function ActivityLoader(id, saved, period) {
     });
 
     if (items.length > 0) {
-      atom.swap(items);
+      Atom.swap(this, items);
 
       var oldest = moment(_.last(items).date);
 
-      if (oldest.isAfter(period.startOf())) {
-        loadWall(-id, feed.next(), onData);
+      if (oldest.isAfter(req.period.startOf())) {
+        this.inbox.push({
+          id: req.id,
+          period: req.period,
+          offset: req.offset + req.count,
+          count: req.count
+        });
+
+        this.process();
       }
     }
-  }
+  }.bind(this));
+};
 
-  loadWall(-id, feed.next(), onData);
-
-  this.atom = atom;
-}
-
-function loadWall(owner, params, callback) {
+ActivityLoader.prototype.load = function (req, callback) {
   vk.wall.get({
-    owner_id: owner,
-    offset: params.offset,
-    count: params.count
+    owner_id: req.id,
+    offset: req.offset,
+    count: req.count
   }, function(err, res) {
     if (err) {
       return callback(err);
@@ -49,28 +68,6 @@ function loadWall(owner, params, callback) {
 
     callback(null, res.response);
   });
-}
-
-function Feed(offset, count) {
-  this.atom = new Atom({
-    offset: offset,
-    count: count
-  });
-}
-
-Feed.prototype.next = function () {
-  var offset = this.atom.value.offset;
-  var count = this.atom.value.count;
-
-  this.atom.swap({
-    offset: offset + count,
-    count: count
-  });
-
-  return {
-    offset: offset,
-    count: count
-  };
 };
 
 module.exports = ActivityLoader;

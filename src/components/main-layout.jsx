@@ -21,6 +21,8 @@ var MainLayout = React.createClass({
       Atom.listen(loader, function(items) {
         eventBus.push({ e: 'app', a: ':activity', v: Immutable.Set(items) });
       });
+
+      loader.process();
     });
   },
 
