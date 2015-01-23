@@ -1,6 +1,6 @@
 var app = require('app/core/app');
 var Atom = require('app/core/atom');
-var render = require('app/renderer')(document.getElementById('app'));
+var render = require('app/core/renderer')(document.getElementById('app'));
 
 app.use(require('app/services/auth-service'));
 app.use(require('app/services/vk-service'));
