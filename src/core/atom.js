@@ -50,4 +50,9 @@ Atom.off = function (x) {
   return x.atom.removeAllListeners();
 };
 
+Atom.value = function (x) {
+  assert(Atom.isAtomable(x), 'Atom.valuee: trying to get a value of a non-atomable object, given ' + x);
+  return x.atom.value;
+};
+
 module.exports = Atom;

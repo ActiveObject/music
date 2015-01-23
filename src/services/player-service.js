@@ -1,5 +1,12 @@
-var update = require('app/core/appstate').update;
 var player = require('app/values/player');
+
+function update(key, updater) {
+  return function updateDb(db) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    args.unshift(db.get(key));
+    return db.set(key, updater.apply(db, args));
+  };
+}
 
 module.exports = function(receive, send) {
   receive(':soundmanager/bytes-loaded', update('player', function (player, v) {

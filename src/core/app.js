@@ -1,10 +1,15 @@
 var _ = require('underscore');
+var Immutable = require('immutable');
+var isString = require('underscore').isString;
 var debug = require('debug')('app:core:dispatcher');
 var isValue = require('app/utils/isValue');
 var isDatom = require('app/utils/isDatom');
-var appstate = require('app/core/appstate');
 var eventBus = require('app/core/event-bus');
 var BufferedEventStream = require('app/core/buffered-event-stream');
+var Atom = require('app/core/atom');
+
+
+var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];
 var appEventStream = new BufferedEventStream(eventBus, function (v) {
@@ -16,6 +21,31 @@ var appEventStream = new BufferedEventStream(eventBus, function (v) {
     return dispatch(v);
   }
 });
+
+function mount(receive, send, service) {
+  if (!Atom.isAtomable(service)) {
+    throw new TypeError('Mount target should implement atomable protocol');
+  }
+
+  if (!isString(service.mountPoint)) {
+    throw new TypeError('Mount target should have a mountPoint as string but given ' + service.mountPoint);
+  }
+
+  var e = 'app',
+      a = ':app/' + service.mountPoint;
+
+  service.atom.on('change', function (newState) {
+    send({ e: e, a: a, v: newState });
+  });
+
+  receive(a, function (appstate, v) {
+    return appstate.set(service.mountPoint, v);
+  });
+
+  receive(':app/started', function(appstate) {
+    return appstate.set(service.mountPoint, service.atom.value);
+  });
+}
 
 function makeReceiver(receivers) {
   return function receive(expectedAttr, fn) {
@@ -42,8 +72,8 @@ function makeReceiver(receivers) {
 }
 
 function makeMounter(receive, send) {
-  return function mount(atomable, options) {
-    return appstate.mount(receive, send, atomable, options);
+  return function mountAtomable(atomable, options) {
+    return mount(receive, send, atomable, options);
   };
 }
 
@@ -83,9 +113,9 @@ function dispatch(datom) {
     return next(handler(state, datom), handlers.slice(1));
   }
 
-  var nextState = next(appstate.atom.value, handlers);
+  var nextState = next(Atom.value(app), handlers);
   debug('[%s %s %s] (f)', datom.e, datom.a, datom.v);
-  appstate.atom.swap(nextState);
+  Atom.swap(app, nextState);
   appEventStream.resume();
 }
 
@@ -102,7 +132,8 @@ function resume() {
   appEventStream.resume();
 }
 
-exports.use = use;
-exports.start = start;
-exports.pause = pause;
-exports.resume = resume;
+app.use = use;
+app.start = start;
+app.pause = pause;
+app.resume = resume;
+app.mount = mount;
