@@ -12,6 +12,18 @@ function Track(attrs) {
   this.url = attrs.url;
 }
 
+Track.fromVk = function (data) {
+  return new Track({
+    id: Number(data.id),
+    artist: data.artist,
+    title: data.title,
+    duration: data.duration,
+    index: data.index,
+    owner_id: data.owner_id,
+    url: data.url
+  });
+};
+
 Track.prototype.toString = function() {
   return 'Track #' + this.id;
 };

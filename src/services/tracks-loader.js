@@ -1,20 +1,21 @@
 var vk = require('app/vk');
 var Atom = require('app/core/atom');
-var Group = require('app/values/group');
+var Track = require('app/values/track');
+var merge = require('app/utils/merge');
 
-function GroupsLoader(user) {
+function TracksLoader(user) {
   this.user = user;
 
   this.inbox = [{
     user: user,
     offset: 0,
-    count: 100
+    count: 1000
   }];
 
   this.atom = new Atom();
 }
 
-GroupsLoader.prototype.process = function () {
+TracksLoader.prototype.process = function () {
   if (this.inbox.length === 0) {
     return;
   }
@@ -28,7 +29,9 @@ GroupsLoader.prototype.process = function () {
       return console.log(err);
     }
 
-    Atom.swap(this, data.items.map(Group.fromVk));
+    Atom.swap(this, data.items.map(function (data, i) {
+      return Track.fromVk(merge(data, { index: req.offset + i }));
+    }));
 
     if (data.count > 0 && data.count > req.offset + req.count) {
       this.inbox.push({
@@ -42,12 +45,11 @@ GroupsLoader.prototype.process = function () {
   }.bind(this));
 };
 
-GroupsLoader.prototype.load = function (req, callback) {
-  vk.groups.get({
+TracksLoader.prototype.load = function (req, callback) {
+  vk.audio.get({
     user_id: req.user.id,
     offset: req.offset,
-    count: req.count,
-    extended: 1
+    count: req.count
   }, function(err, res) {
     if (err) {
       return callback(err);
@@ -57,4 +59,4 @@ GroupsLoader.prototype.load = function (req, callback) {
   });
 };
 
-module.exports = GroupsLoader;
+module.exports = TracksLoader;
