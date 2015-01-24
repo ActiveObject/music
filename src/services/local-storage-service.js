@@ -1,5 +1,6 @@
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var Track = require('app/values/track');
+var Group = require('app/values/group');
 
 module.exports = function (receive, send) {
   receive(':app/started', function() {
@@ -32,6 +33,16 @@ module.exports = function (receive, send) {
   //   }
   // });
 
+  receive(':app/started', function () {
+    if (localStorage.hasOwnProperty(':app/groups')) {
+      send({
+        e: 'app',
+        a: ':app/groups',
+        v: JSON.parse(localStorage.getItem(':app/groups')).map(v => new Group(v))
+      });
+    }
+  });
+
   receive(':player/track', function (appstate, track) {
     localStorage.setItem(':player/track', JSON.stringify(track));
   });
@@ -43,4 +54,8 @@ module.exports = function (receive, send) {
   // receive(':app/tracks', function (appstate) {
   //   localStorage.setItem(':app/tracks', JSON.stringify(appstate.get('tracks').toArray()));
   // });
+
+  receive(':app/groups', function (appstate) {
+    localStorage.setItem(':app/groups', JSON.stringify(appstate.get('groups').toArray()));
+  });
 };

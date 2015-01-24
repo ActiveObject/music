@@ -9,6 +9,7 @@ var MainView = require('app/components/main-view.jsx');
 
 var Atom = require('app/core/atom');
 var ActivityLoader = require('app/services/activity-loader');
+var GroupLoader = require('app/services/groups-loader');
 var eventBus = require('app/core/event-bus');
 
 var MainLayout = React.createClass({
@@ -19,11 +20,19 @@ var MainLayout = React.createClass({
 
     this.loaders.forEach(function (loader) {
       Atom.listen(loader, function(items) {
-        eventBus.push({ e: 'app', a: ':activity', v: Immutable.Set(items) });
+        eventBus.push({ e: 'app', a: ':app/activity', v: Immutable.Set(items) });
       });
 
       loader.process();
     });
+
+    this.groupsLoader = new GroupLoader(this.props.user);
+
+    Atom.listen(this.groupsLoader, function (groups) {
+      eventBus.push({ e: 'app', a: ':app/groups', v: Immutable.Set(groups) });
+    });
+
+    this.groupsLoader.process();
   },
 
   render: function() {
