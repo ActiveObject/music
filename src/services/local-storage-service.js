@@ -1,3 +1,4 @@
+var ISet = require('immutable').Set;
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var Track = require('app/values/track');
 var Group = require('app/values/group');
@@ -28,7 +29,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/tracks',
-        v: JSON.parse(localStorage.getItem(':app/tracks')).map(v => new Track(v))
+        v: ISet(JSON.parse(localStorage.getItem(':app/tracks')).map(v => new Track(v)))
       });
     }
   });

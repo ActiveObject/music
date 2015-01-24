@@ -30,6 +30,10 @@ module.exports = function (receive, send) {
   });
 
   receive(':app/tracks', function (appstate, tracks) {
-    return appstate.update('tracks', (v) => v.union(tracks));
+    var changedTracks = tracks.subtract(appstate.get('tracks'));
+    var changedIds = changedTracks.map(v => v.id).toSet();
+    var rest = appstate.get('tracks').filterNot(v => changedIds.has(v.id));
+
+    return appstate.set('tracks', rest.concat(changedTracks));
   });
 };
