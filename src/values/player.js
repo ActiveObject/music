@@ -70,7 +70,7 @@ Player.prototype.seek = function (position) {
   return {
     e: 'app/player',
     a: ':player/seek-position',
-    v: this.track.duration * position * 1000
+    v: this.track.audio.duration * position * 1000
   };
 };
 
@@ -78,7 +78,7 @@ Player.prototype.seekTo = function (position) {
   return {
     e: 'app/player',
     a: ':player/position',
-    v: this.track.duration * position * 1000
+    v: this.track.audio.duration * position * 1000
   };
 };
 
@@ -117,19 +117,19 @@ Player.prototype.useTracklist = function(tracklist) {
 };
 
 Player.prototype.relativePosition = function () {
-  if (this.track.duration === 0) {
+  if (this.track.audio.duration === 0) {
     return 0;
   }
 
-  return this.position / this.track.duration / 1000;
+  return this.position / this.track.audio.duration / 1000;
 };
 
 Player.prototype.relativeSeekPosition = function () {
-  if (this.track.duration === 0) {
+  if (this.track.audio.duration === 0) {
     return 0;
   }
 
-  return this.seekPosition / this.track.duration / 1000;
+  return this.seekPosition / this.track.audio.duration / 1000;
 };
 
 Player.prototype.relativeLoaded = function () {

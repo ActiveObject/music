@@ -43,8 +43,8 @@ Soundmanager.prototype.useTrack = function (track) {
   var stm = this;
 
   var sound = sm.createSound({
-    id: track.id,
-    url: track.url,
+    id: track.audio.toString(),
+    url: track.audio.url,
     autoLoad: false,
     autoPlay: false,
     volume: 100,

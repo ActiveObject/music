@@ -9,7 +9,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app/player',
         a: ':player/track',
-        v: JSON.parse(localStorage.getItem(':player/track'))
+        v: Track.fromJSON(JSON.parse(localStorage.getItem(':player/track')))
       });
     }
   });

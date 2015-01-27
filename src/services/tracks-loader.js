@@ -9,7 +9,7 @@ function TracksLoader(user) {
   this.inbox = [{
     user: user,
     offset: 0,
-    count: 1000
+    count: 100
   }];
 
   this.atom = new Atom();

@@ -10,7 +10,7 @@ function LibraryTracklist(attrs) {
 
 LibraryTracklist.prototype.update = function(library) {
   var tracks = library.toList().sortBy(function(track) {
-    return track.index;
+    return track.audio.index;
   });
 
   return this.modify({
