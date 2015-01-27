@@ -12,4 +12,4 @@ module.exports = function dispatch(state, handlers, datom) {
   }
 
   return dispatch(handler(state, datom), handlers.slice(1), datom);
-}
+};

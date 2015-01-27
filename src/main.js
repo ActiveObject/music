@@ -1,4 +1,4 @@
-var app = require('app/core/app');
+var app = require('app');
 var Atom = require('app/core/atom');
 var render = require('app/core/renderer')(document.getElementById('app'));
 
