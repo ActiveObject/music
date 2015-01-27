@@ -17,7 +17,7 @@
   border-radius: 2px
   cursor: pointer
   transform: rotate(0)
-  transition: background-color 0.2s, border-color 0.2s, transform 0.3s
+  transition: background-color 0.2s, border-color 0.2s
   box-sizing: content-box
 
   .icon
@@ -26,12 +26,9 @@
     padding: 10px
     transition: fill 0.2s
 
-.play-btn.active
-  transform: rotate(90deg)
-
-  .icon
-    transform: rotate(-90deg)
-    fill: white
+.play-btn.active .icon
+  transform: rotate(-90deg)
+  fill: white
 
 .tracklist-header
   height: 70px
