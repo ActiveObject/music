@@ -13,7 +13,16 @@ var dispatch = require('app/core/dispatcher');
 var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];
-var appEventStream = new BufferedEventStream(eventBus, function (v) {
+var dispatchStream = new BufferedEventStream(eventBus, function (v) {
+  function doDispatch(datom) {
+    dispatchStream.pause();
+    debug('[%s %s %s] (s)', datom.e, datom.a, datom.v);
+    var nextState = dispatch(Atom.value(app), handlers, datom);
+    debug('[%s %s %s] (f)', datom.e, datom.a, datom.v);
+    Atom.swap(app, nextState);
+    dispatchStream.resume();
+  }
+
   if (Array.isArray(v)) {
     return v.filter(isDatom).forEach(doDispatch);
   }
@@ -93,26 +102,17 @@ function use(handler) {
   }
 }
 
-function doDispatch(datom) {
-  appEventStream.pause();
-  debug('[%s %s %s] (s)', datom.e, datom.a, datom.v);
-  var nextState = dispatch(Atom.value(app), handlers, datom);
-  debug('[%s %s %s] (f)', datom.e, datom.a, datom.v);
-  Atom.swap(app, nextState);
-  appEventStream.resume();
-}
-
 function start() {
-  appEventStream.resume();
-  doDispatch({ e: 'app', a: ':app/started', v: true });
+  dispatchStream.resume();
+  eventBus.push({ e: 'app', a: ':app/started', v: true });
 }
 
 function pause() {
-  appEventStream.pause();
+  dispatchStream.pause();
 }
 
 function resume() {
-  appEventStream.resume();
+  dispatchStream.resume();
 }
 
 app.use = use;
