@@ -1,15 +1,10 @@
-var React = require('react');
+var React = require('react/addons');
 var Impulse = require('impulse');
-var _ = require('underscore');
-var Icon = React.createFactory(require('app/components/icon'));
-var dom = require('app/core/dom');
+var Icon = require('app/components/icon');
+var cx = React.addons.classSet;
 
-module.exports = React.createClass({
-  displayName: 'PlayBtn',
-
-  shouldComponentUpdate: function (nextProps) {
-    return !_.isEqual(nextProps, this.props);
-  },
+var PlayBtn = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
 
   componentDidMount: function() {
     this.rotate = Impulse(this.getDOMNode()).style('rotate', function(x, y) {
@@ -34,16 +29,17 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    var icon = new Icon({
-      id: this.props.isPlaying ? 'shape-pause' : 'shape-iconmonstr-arrow-37-icon'
+    var classes = cx({
+      'play-btn': true,
+      'active': this.props.isActive
     });
 
-    return dom.div()
-      .key('play-btn')
-      .className('play-btn')
-      .className('active', this.props.isActive)
-      .attr('onClick', this.props.onClick)
-      .append(icon)
-      .make();
+    return (
+      <div key='play-btn' className={classes} onClick={this.props.onClick}>
+        <Icon id={this.props.isPlaying ? 'shape-pause' : 'shape-iconmonstr-arrow-37-icon'}></Icon>
+      </div>
+    );
   }
 });
+
+module.exports = PlayBtn;

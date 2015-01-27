@@ -6,7 +6,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var dom = require('app/core/dom');
 var eventBus = require('app/core/event-bus');
-var PlayBtn = React.createFactory(require('app/components/play-btn'));
+var PlayBtn = React.createFactory(require('app/components/play-btn.jsx'));
 
 require('moment-duration-format');
 
