@@ -22,21 +22,25 @@ Soundmanager.prototype = Object.create(EventEmitter.prototype, {
 Soundmanager.prototype.setup = function (options) {
   sm.setup(merge(options, {
     onready: function () {
-      this.atom.swap(ReadyState.create({}));
+      if (this.atom.value.track) {
+        this.useTrack(this.atom.value.track);
+      }
+
+      Atom.update(this, v => v.setup());
     }.bind(this),
 
     ontimeout: function () {
-      this.atom.swap(UninitializedState.create());
+      this.atom.swap(UninitializedState.create({}));
     }.bind(this)
   }));
 };
 
 Soundmanager.prototype.play = function () {
-  Atom.update(this, state => state.play());
+  Atom.update(this, v => v.play());
 };
 
 Soundmanager.prototype.pause = function () {
-  Atom.update(this, state => state.pause());
+  Atom.update(this, v => v.pause());
 };
 
 Soundmanager.prototype.useTrack = function (track) {
@@ -64,14 +68,14 @@ Soundmanager.prototype.useTrack = function (track) {
     }, 500)
   });
 
-  Atom.update(this, state => state.useTrack(track, sound));
+  Atom.update(this, v => v.useTrack(track, sound));
 };
 
 Soundmanager.prototype.setPosition = function (position) {
-  Atom.update(this, state => state.setPosition(position));
+  Atom.update(this, v => v.setPosition(position));
 };
 
 module.exports = new Soundmanager({
   mountPoint: 'soundmanager',
-  atom: new Atom(UninitializedState.create())
+  atom: new Atom(UninitializedState.create({}))
 });

@@ -1,11 +1,15 @@
 var ReadyState = require('./ready-state');
 
-function UninitializedState() {
-
+function UninitializedState(attrs) {
+  this.track = attrs.track;
+  this.sound = attrs.sound;
 }
 
-UninitializedState.prototype.setup = function (options) {
-  return ReadyState.create(options);
+UninitializedState.prototype.setup = function () {
+  return ReadyState.create({
+    track: this.track,
+    sound: this.sound
+  });
 };
 
 UninitializedState.prototype.play = function () {
@@ -16,14 +20,17 @@ UninitializedState.prototype.pause = function () {
   return this;
 };
 
-UninitializedState.prototype.useTrack = function () {
-  return this;
+UninitializedState.prototype.useTrack = function (track, sound) {
+  return new UninitializedState({
+    track: track,
+    sound: sound
+  });
 };
 
 UninitializedState.prototype.setPosition = function () {
   return this;
 };
 
-exports.create = function() {
-  return new UninitializedState();
+exports.create = function (attrs) {
+  return new UninitializedState(attrs);
 };
