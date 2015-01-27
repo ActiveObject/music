@@ -5,16 +5,31 @@ var newsfeed = require('app/values/newsfeed');
 
 function Group(attrs) {
   this.id = attrs.id;
-  this.isAdmin = attrs.is_admin;
-  this.isClosed = attrs.is_closed;
-  this.isMember = attrs.is_member;
+  this.isAdmin = attrs.isAdmin;
+  this.isClosed = attrs.isClosed;
+  this.isMember = attrs.isMember;
   this.name = attrs.name;
   this.photo_50 = attrs.photo_50;
   this.photo_100 = attrs.photo_100;
   this.photo_200 = attrs.photo_200;
-  this.screenName = attrs.screen_name;
+  this.screenName = attrs.screenName;
   this.type = attrs.type;
 }
+
+Group.fromVk = function (data) {
+  return new Group({
+    id: data.id,
+    isAdmin: data.is_admin,
+    isClosed: data.is_closed,
+    isMember: data.is_member,
+    name: data.name,
+    photo_50: data.photo_50,
+    photo_100: data.photo_100,
+    photo_200: data.photo_200,
+    screenName: data.screen_name,
+    type: data.type
+  });
+};
 
 Group.prototype.toString = function() {
   return 'Group (' + this.name + ')';
@@ -36,7 +51,4 @@ Group.prototype.modify = function (attrs) {
   return new Group(merge(this, attrs));
 };
 
-module.exports = new Group({
-  id: -1,
-  wall: newsfeed
-});
+module.exports = Group;

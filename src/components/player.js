@@ -23,9 +23,9 @@ module.exports = React.createClass({
 
   render: function() {
     var track = {
-      title: this.props.player.track.title,
-      artist: this.props.player.track.artist,
-      duration: formatDuration(moment.duration(this.props.player.track.duration, 's')),
+      title: this.props.player.track.audio.title,
+      artist: this.props.player.track.audio.artist,
+      duration: formatDuration(moment.duration(this.props.player.track.audio.duration, 's')),
       position: formatDuration(moment.duration(this.props.player.position, 'ms'))
     };
 

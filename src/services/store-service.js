@@ -13,20 +13,12 @@ module.exports = function (receive, send) {
     return appstate.set('groups', ISet());
   });
 
-  receive(':app/started', function(appstate) {
+  receive(':app/started', function (appstate) {
     return appstate.set('tracks', ISet());
   });
 
-  receive(':activity', function(appstate, activity) {
-    var changes = activity.subtract(appstate.get('activities'));
-
-    if (!changes.isEmpty()) {
-      send({ e: 'app', a: ':app/activity', v: changes.toJS() });
-    }
-  });
-
   receive(':app/activity', function (appstate, activity) {
-    return appstate.update('activities', (v) => v.concat(activity));
+    return appstate.update('activities', (v) => v.union(activity));
   });
 
   receive(':app/newsfeed', function (appstate, nf) {
@@ -37,7 +29,7 @@ module.exports = function (receive, send) {
     return appstate.update('groups', (v) => v.union(groups));
   });
 
-  receive(':app/tracks', function(appstate, tracks) {
-    return appstate.update('tracks', (v) => v.union(tracks));
+  receive(':app/tracks', function (appstate, tracks) {
+    return appstate.update('tracks', (v) => tracks.union(v));
   });
 };

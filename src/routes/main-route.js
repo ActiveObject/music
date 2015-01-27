@@ -26,6 +26,7 @@ MainRoute.prototype.render = function(appstate) {
     player: appstate.get('player'),
     groups: appstate.get('groups'),
     activities: appstate.get('activities'),
+    user: appstate.get('user'),
     visibleGroups: this.groups,
     period: this.period
   });

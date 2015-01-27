@@ -38,7 +38,11 @@ Activity.prototype.months = function () {
       size: days.size
     };
   }).sort(function (a, b) {
-    return (a.year + a.month) - (b.year + b.month);
+    if (a.year - b.year === 0) {
+      return a.month - b.month;
+    }
+
+    return a.year - b.year;
   });
 };
 

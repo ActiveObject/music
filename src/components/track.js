@@ -48,6 +48,7 @@ module.exports = React.createClass({
   render: function() {
     var isActive = this.props.track.id === this.props.player.track.id;
     var isPlaying = isActive && this.props.player.isPlaying;
+    var audio = this.props.track.audio;
 
     var playBtn = new PlayBtn({
       key: 'play-btn',
@@ -59,23 +60,23 @@ module.exports = React.createClass({
     var title = dom.div()
       .key('title')
       .className('track-title')
-      .append(this.props.track.title);
+      .append(audio.title);
 
     var artist = dom.a()
       .key('artist')
       .className('element-link track-artist')
-      .attr('href', '/artist/' + this.props.track.artist)
-      .append(this.props.track.artist);
+      .attr('href', '/artist/' + audio.artist)
+      .append(audio.artist);
 
     var duration = dom.span()
       .key('duration')
       .className('track-duration')
-      .append(moment.duration(this.props.track.duration, 's').format('mm:ss'));
+      .append(moment.duration(audio.duration, 's').format('mm:ss'));
 
     var desc = dom.div()
       .key('desc')
       .className('track-desc')
-      .attr('title', [this.props.track.artist, this.props.track.title].join(' – '))
+      .attr('title', [audio.artist, audio.title].join(' – '))
       .attr('ref', 'test')
       .append(artist, title);
 

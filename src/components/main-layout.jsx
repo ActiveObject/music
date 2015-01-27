@@ -9,6 +9,8 @@ var MainView = require('app/components/main-view.jsx');
 
 var Atom = require('app/core/atom');
 var ActivityLoader = require('app/services/activity-loader');
+var GroupLoader = require('app/services/groups-loader');
+var TracksLoader = require('app/services/tracks-loader');
 var eventBus = require('app/core/event-bus');
 
 var MainLayout = React.createClass({
@@ -17,13 +19,29 @@ var MainLayout = React.createClass({
       return new ActivityLoader(id, this.props.activities, this.props.period);
     }, this);
 
+    this.groupsLoader = new GroupLoader(this.props.user);
+    this.tracksLoader = new TracksLoader(this.props.user);
+
     this.loaders.forEach(function (loader) {
       Atom.listen(loader, function(items) {
-        eventBus.push({ e: 'app', a: ':activity', v: Immutable.Set(items) });
+        eventBus.push({ e: 'app', a: ':app/activity', v: Immutable.Set(items) });
       });
 
+    });
+
+    Atom.listen(this.groupsLoader, function (groups) {
+      eventBus.push({ e: 'app', a: ':app/groups', v: Immutable.Set(groups) });
+    });
+
+    Atom.listen(this.tracksLoader, function (tracks) {
+      eventBus.push({ e: 'app', a: ':app/tracks', v: Immutable.Set(tracks) });
+    });
+
+    this.loaders.forEach(function (loader) {
       loader.process();
     });
+    this.groupsLoader.process();
+    this.tracksLoader.process();
   },
 
   render: function() {
