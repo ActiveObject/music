@@ -2,7 +2,6 @@ require('app/styles/track.styl');
 require('app/styles/element.styl');
 
 var React = require('react');
-var _ = require('underscore');
 var moment = require('moment');
 var dom = require('app/core/dom');
 var eventBus = require('app/core/event-bus');
