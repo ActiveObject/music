@@ -43,7 +43,7 @@ Soundmanager.prototype.play = function () {
   this.volumeImpulse.decelerate({
     bounce: false,
     deceleration: 100,
-    damping: .4
+    damping: 0.4
   })
     .velocity(150)
     .from(0)
