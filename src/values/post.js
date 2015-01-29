@@ -35,7 +35,7 @@ Post.prototype.tracklist = function() {
   });
 
   var tracks = audioItems.map(function(item, i) {
-    return new Track(merge(item.audio, { index: i }));
+    return Track.fromVk(merge(item.audio, { index: i }));
   });
 
   return new PostTracklist({

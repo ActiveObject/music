@@ -195,7 +195,9 @@ Player.prototype.makeRecent = function(prevRecent, prevTracklist, isTracklistCha
 };
 
 module.exports = new Player({
-  track: {},
+  track: {
+    audio: {}
+  },
   tracklist: new LibraryTracklist({
     playlist: new Playlist({
       tracks: List(),
