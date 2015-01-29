@@ -1,11 +1,12 @@
-var React = require('react');
+var React = require('react/addons');
 var Immutable = require('immutable');
 
 var App = require('app/components/app.jsx');
 var Player = require('app/components/player');
 var LazyTracklist = require('app/components/lazy-tracklist');
 var Box = require('app/components/box.jsx');
-var MainView = require('app/components/main-view.jsx');
+var IScrollLayer = require('app/components/iscroll-layer.jsx');
+var MainActivityList = require('app/components/main-activity-list.jsx');
 
 var Atom = require('app/core/atom');
 var ActivityLoader = require('app/services/activity-loader');
@@ -13,7 +14,11 @@ var GroupLoader = require('app/services/groups-loader');
 var TracksLoader = require('app/services/tracks-loader');
 var eventBus = require('app/core/event-bus');
 
+require('app/styles/main-layout.styl');
+
 var MainLayout = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
   componentWillMount: function () {
     this.loaders = this.props.visibleGroups.map(function (id) {
       return new ActivityLoader(id, this.props.activities, this.props.period);
@@ -26,7 +31,6 @@ var MainLayout = React.createClass({
       Atom.listen(loader, function(items) {
         eventBus.push({ e: 'app', a: ':app/activity', v: Immutable.Set(items) });
       });
-
     });
 
     Atom.listen(this.groupsLoader, function (groups) {
@@ -48,11 +52,14 @@ var MainLayout = React.createClass({
     return (
       <App layout={['two-region', 'main-layout']}>
         <Box prefix='ra-' key='region-a'>
-          <MainView
-            groups={this.props.groups}
-            activities={this.props.activities}
-            visibleGroups={this.props.visibleGroups}
-            period={this.props.period}></MainView>
+          <IScrollLayer>
+            <span className='main-section-title'>Спільноти</span>
+            <MainActivityList
+              visibleGroups={this.props.visibleGroups}
+              period={this.props.period}
+              groups={this.props.groups}
+              activities={this.props.activities}></MainActivityList>
+          </IScrollLayer>
         </Box>
 
         <Box prefix='rb-' key='region-b'>

@@ -1,14 +1,16 @@
 var React = require('react');
 var App = require('app/components/app.jsx');
-var GroupProfile = require('app/components/group-profile.jsx');
 var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var Box = require('app/components/box.jsx');
+var ActivityCard = require('app/components/activity-card.jsx');
 
 var NewsfeedLoader = require('app/services/newsfeed-loader');
 var ActivityLoader = require('app/services/activity-loader');
 var Activity = require('app/values/activity');
+
+require('app/styles/group-layout.styl');
 
 var GroupLayout = React.createClass({
   componentWillMount: function() {
@@ -33,7 +35,19 @@ var GroupLayout = React.createClass({
     return (
       <App layout={['two-region', 'group-layout']}>
         <Box prefix='ra-' key='region-a'>
-          <GroupProfile group={group} activity={activity}></GroupProfile>
+          <div key='group-profile' className='group-profile-info'>
+            <div key='avatar' className='group-profile-avatar'>
+              <img width='150' height='150' src={group.photo_200} />
+            </div>
+            <div key='name'>{group.name}</div>
+          </div>
+
+          <ActivityCard
+            key={group.id}
+            defaultColor='#3949AB'
+            id={group.id}
+            name={group.name}
+            activity={activity}></ActivityCard>
         </Box>
 
         <Box prefix='rb-' key='region-b'>
