@@ -21,7 +21,10 @@ var MainLayout = React.createClass({
 
   componentWillMount: function () {
     this.loaders = this.props.visibleGroups.map(function (id) {
-      return new ActivityLoader(id, this.props.activities, this.props.period);
+      return new ActivityLoader({
+        id: -id,
+        period: this.props.period
+      });
     }, this);
 
     this.groupsLoader = new GroupLoader(this.props.user);

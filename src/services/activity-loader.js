@@ -4,12 +4,12 @@ var vk = require('app/vk');
 var Atom = require('app/core/atom');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 
-function ActivityLoader(id, saved, period) {
+function ActivityLoader(attrs) {
   this.inbox = [{
-    id: -id,
+    id: attrs.id,
     offset: 0,
     count: 100,
-    period: period
+    period: attrs.period
   }];
 
   this.atom = new Atom();

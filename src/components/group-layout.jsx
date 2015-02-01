@@ -20,7 +20,11 @@ var GroupLayout = React.createClass({
       count: 10
     });
 
-    this.activityLoader = new ActivityLoader(this.props.id, this.props.activities, this.props.period);
+    this.activityLoader = new ActivityLoader({
+      id: -this.props.id,
+      period: this.props.period
+    });
+
     this.newsfeed.process();
   },
 
