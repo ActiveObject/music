@@ -1,73 +1,62 @@
 var _ = require('underscore');
+var Immutable = require('immutable');
 var moment = require('moment');
 var vk = require('app/vk');
-var Atom = require('app/core/atom');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 
-function ActivityLoader(attrs) {
-  this.inbox = [{
-    id: attrs.id,
-    offset: 0,
-    count: 100,
-    period: attrs.period
-  }];
-
-  this.atom = new Atom();
+function ActivityLoader(id, period) {
+  this.id = id;
+  this.period = period;
 }
 
-ActivityLoader.prototype.process = function () {
-  if (this.inbox.length === 0) {
-    return;
-  }
+ActivityLoader.prototype.go = function (input, output, errout) {
+  input.onValue(function (msg) {
+    vk.wall.get({
+      owner_id: msg.id,
+      offset: msg.offset,
+      count: msg.count
+    }, function(err, res) {
+      if (err) {
+        return errout.push(err);
+      }
 
-  var req = this.inbox[0];
-
-  this.load(req, function (err, data) {
-    this.inbox.shift();
-
-    if (err) {
-      return console.log(err);
-    }
-
-    var items = data.items.map(function (item) {
-      return new NewsfeedActivity({
-        id: [item.owner_id, item.id].join(':'),
-        owner: item.owner_id,
-        date: moment(item.date * 1000).format('YYYY-MM-DD')
+      var items = res.response.items.map(function (item) {
+        return new NewsfeedActivity({
+          id: [item.owner_id, item.id].join(':'),
+          owner: item.owner_id,
+          date: moment(item.date * 1000).format('YYYY-MM-DD')
+        });
       });
-    });
 
-    if (items.length > 0) {
-      Atom.swap(this, items);
+      if (items.length > 0) {
+        output.push(Immutable.Set(items));
+      }
 
       var oldest = moment(_.last(items).date);
 
-      if (oldest.isAfter(req.period.startOf())) {
-        this.inbox.push({
-          id: req.id,
-          period: req.period,
-          offset: req.offset + req.count,
-          count: req.count
+      if (oldest.isAfter(msg.period.startOf())) {
+        input.push({
+          id: msg.id,
+          period: msg.period,
+          offset: msg.offset + msg.count,
+          count: msg.count
         });
-
-        this.process();
+      } else {
+        input.end();
       }
-    }
-  }.bind(this));
+    });
+  });
+
+  input.push({
+    id: this.id,
+    offset: 0,
+    count: 100,
+    period: this.period
+  });
 };
 
-ActivityLoader.prototype.load = function (req, callback) {
-  vk.wall.get({
-    owner_id: req.id,
-    offset: req.offset,
-    count: req.count
-  }, function(err, res) {
-    if (err) {
-      return callback(err);
-    }
-
-    callback(null, res.response);
-  });
+ActivityLoader.prototype.toString = function () {
+  return 'ActivityLoader(' + this.id + ', ' + this.period.toString() + ')';
 };
 
 module.exports = ActivityLoader;

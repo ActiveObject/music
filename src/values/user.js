@@ -17,6 +17,10 @@ AuthenticatedUser.prototype.isAuthenticated = function () {
   return true;
 };
 
+AuthenticatedUser.prototype.toString = function () {
+  return 'AuthenticatedUser(' + this.id + ')';
+};
+
 function UnauthenticatedUser() {
 
 }

@@ -1,7 +1,8 @@
 var _ = require('underscore');
 var Immutable = require('immutable');
+var Bacon = require('baconjs');
 var isString = require('underscore').isString;
-var debug = require('debug')('app:core:dispatcher');
+var debug = require('debug')('app:core:app');
 var isValue = require('app/utils/isValue');
 var isDatom = require('app/utils/isDatom');
 var eventBus = require('app/core/event-bus');
@@ -13,12 +14,13 @@ var dispatch = require('app/core/dispatcher');
 var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];
+var processNum = 0;
 var dispatchStream = new BufferedEventStream(eventBus, function (v) {
   function doDispatch(datom) {
     dispatchStream.pause();
-    debug('[%s %s %s] (s)', datom.e, datom.a, datom.v);
+    debug('dispatch [%s %s %s] (s)', datom.e, datom.a, datom.v);
     var nextState = dispatch(Atom.value(app), handlers, datom);
-    debug('[%s %s %s] (f)', datom.e, datom.a, datom.v);
+    debug('dispatch [%s %s %s] (f)', datom.e, datom.a, datom.v);
     Atom.swap(app, nextState);
     dispatchStream.resume();
   }
@@ -115,8 +117,34 @@ function resume() {
   dispatchStream.resume();
 }
 
+
+function go(process) {
+  processNum++;
+
+  var id = [processNum, process.toString()].join(':');
+  var output = new Bacon.Bus();
+  var input = new Bacon.Bus();
+  var errout = new Bacon.Bus();
+
+  debug('spawn - %s', id);
+
+  errout.onValue(function (err) {
+    console.log(err);
+  });
+
+  input.onEnd(function () {
+    debug('end - %s', id);
+    output.end();
+  });
+
+  process.go(input, output, errout);
+
+  return output;
+}
+
 app.use = use;
 app.start = start;
 app.pause = pause;
 app.resume = resume;
 app.mount = mount;
+app.go = go;

@@ -6,6 +6,8 @@ var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var Box = require('app/components/box.jsx');
 var ActivityCard = require('app/components/activity-card.jsx');
 
+var app = require('app');
+var eventBus = require('app/core/event-bus');
 var NewsfeedLoader = require('app/services/newsfeed-loader');
 var ActivityLoader = require('app/services/activity-loader');
 var Activity = require('app/values/activity');
@@ -20,12 +22,13 @@ var GroupLayout = React.createClass({
       count: 10
     });
 
-    this.activityLoader = new ActivityLoader({
-      id: -this.props.id,
-      period: this.props.period
-    });
-
     this.newsfeed.process();
+
+    var out = app
+      .go(new ActivityLoader(-this.props.id, this.props.period))
+      .map(v => ({ e: 'app', a: ':app/activity', v: v }));
+
+    eventBus.plug(out);
   },
 
   componentWillUnmount: function() {

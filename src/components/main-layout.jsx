@@ -8,6 +8,7 @@ var Box = require('app/components/box.jsx');
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var MainActivityList = require('app/components/main-activity-list.jsx');
 
+var app = require('app');
 var Atom = require('app/core/atom');
 var ActivityLoader = require('app/services/activity-loader');
 var GroupLoader = require('app/services/groups-loader');
@@ -20,35 +21,24 @@ var MainLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
   componentWillMount: function () {
-    this.loaders = this.props.visibleGroups.map(function (id) {
-      return new ActivityLoader({
-        id: -id,
-        period: this.props.period
-      });
+    this.props.visibleGroups.map(function (id) {
+      var out = app
+        .go(new ActivityLoader(-id, this.props.period))
+        .map(v => ({ e: 'app', a: ':app/activity', v: v }));
+
+      eventBus.plug(out);
     }, this);
 
-    this.groupsLoader = new GroupLoader(this.props.user);
-    this.tracksLoader = new TracksLoader(this.props.user);
+    var gout = app
+      .go(new GroupLoader(this.props.user))
+      .map(v => ({ e: 'app', a: ':app/groups', v: v }));
 
-    this.loaders.forEach(function (loader) {
-      Atom.listen(loader, function(items) {
-        eventBus.push({ e: 'app', a: ':app/activity', v: Immutable.Set(items) });
-      });
-    });
+    var tout = app
+      .go(new TracksLoader(this.props.user))
+      .map(v => ({ e: 'app', a: ':app/tracks', v: v }))
 
-    Atom.listen(this.groupsLoader, function (groups) {
-      eventBus.push({ e: 'app', a: ':app/groups', v: Immutable.Set(groups) });
-    });
-
-    Atom.listen(this.tracksLoader, function (tracks) {
-      eventBus.push({ e: 'app', a: ':app/tracks', v: Immutable.Set(tracks) });
-    });
-
-    this.loaders.forEach(function (loader) {
-      loader.process();
-    });
-    this.groupsLoader.process();
-    this.tracksLoader.process();
+    eventBus.plug(gout);
+    eventBus.plug(tout);
   },
 
   render: function() {

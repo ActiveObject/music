@@ -1,60 +1,46 @@
+var Immutable = require('immutable');
 var vk = require('app/vk');
-var Atom = require('app/core/atom');
 var Group = require('app/values/group');
 
 function GroupsLoader(user) {
   this.user = user;
-
-  this.inbox = [{
-    user: user,
-    offset: 0,
-    count: 100
-  }];
-
-  this.atom = new Atom();
 }
 
-GroupsLoader.prototype.process = function () {
-  if (this.inbox.length === 0) {
-    return;
-  }
+GroupsLoader.prototype.go = function (input, output, errout) {
+  input.onValue(function (msg) {
+    vk.groups.get({
+      user_id: msg.user.id,
+      offset: msg.offset,
+      count: msg.count,
+      extended: 1
+    }, function(err, res) {
+      if (err) {
+        return errout.push(err);
+      }
 
-  var req = this.inbox[0];
+      output.push(Immutable.Set(res.response.items.map(Group.fromVk)));
 
-  this.load(req, function (err, data) {
-    this.inbox.shift();
+      if (res.response.count > 0 && res.response.count > msg.offset + msg.count) {
+        input.push({
+          user: msg.user,
+          offset: msg.offset + msg.count,
+          count: msg.count
+        });
+      } else {
+        input.end();
+      }
+    });
+  });
 
-    if (err) {
-      return console.log(err);
-    }
-
-    Atom.swap(this, data.items.map(Group.fromVk));
-
-    if (data.count > 0 && data.count > req.offset + req.count) {
-      this.inbox.push({
-        user: req.user,
-        offset: req.offset + req.count,
-        count: req.count
-      });
-
-      this.process();
-    }
-  }.bind(this));
+  input.push({
+    user: this.user,
+    offset: 0,
+    count: 100
+  });
 };
 
-GroupsLoader.prototype.load = function (req, callback) {
-  vk.groups.get({
-    user_id: req.user.id,
-    offset: req.offset,
-    count: req.count,
-    extended: 1
-  }, function(err, res) {
-    if (err) {
-      return callback(err);
-    }
-
-    callback(null, res.response);
-  });
+GroupsLoader.prototype.toString = function () {
+  return 'GroupsLoader(' + this.user.toString() + ')';
 };
 
 module.exports = GroupsLoader;
