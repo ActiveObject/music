@@ -39,7 +39,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/groups',
-        v: JSON.parse(localStorage.getItem(':app/groups')).map(v => new Group(v))
+        v: ISet(JSON.parse(localStorage.getItem(':app/groups')).map(v => new Group(v)))
       });
     }
   });

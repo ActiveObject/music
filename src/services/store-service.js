@@ -25,11 +25,11 @@ module.exports = function (receive, send) {
     return appstate.update('newsfeeds', (v) => v.add(nf));
   });
 
-  receive(':app/groups', function (appstate, groups) {
-    return appstate.update('groups', (v) => v.union(groups));
+  receive(':app/groups', function (appstate, v) {
+    return appstate.set('groups', v);
   });
 
-  receive(':app/tracks', function (appstate, tracks) {
-    return appstate.update('tracks', (v) => tracks.union(v));
+  receive(':app/tracks', function (appstate, v) {
+    return appstate.set('tracks', v);
   });
 };

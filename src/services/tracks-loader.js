@@ -37,7 +37,7 @@ TracksLoader.prototype.go = function (input, output, errout) {
   input.push({
     user: this.user,
     offset: 0,
-    count: 100
+    count: 1000
   });
 };
 

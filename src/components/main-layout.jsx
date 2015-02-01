@@ -9,10 +9,7 @@ var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var MainActivityList = require('app/components/main-activity-list.jsx');
 
 var app = require('app');
-var Atom = require('app/core/atom');
 var ActivityLoader = require('app/services/activity-loader');
-var GroupLoader = require('app/services/groups-loader');
-var TracksLoader = require('app/services/tracks-loader');
 var eventBus = require('app/core/event-bus');
 
 require('app/styles/main-layout.styl');
@@ -28,17 +25,6 @@ var MainLayout = React.createClass({
 
       eventBus.plug(out);
     }, this);
-
-    var gout = app
-      .go(new GroupLoader(this.props.user))
-      .map(v => ({ e: 'app', a: ':app/groups', v: v }));
-
-    var tout = app
-      .go(new TracksLoader(this.props.user))
-      .map(v => ({ e: 'app', a: ':app/tracks', v: v }))
-
-    eventBus.plug(gout);
-    eventBus.plug(tout);
   },
 
   render: function() {
