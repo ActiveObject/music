@@ -1,6 +1,6 @@
 var React = require('react');
 var App = require('app/components/app.jsx');
-var Newsfeed = require('app/components/newsfeed');
+var Newsfeed = require('app/components/newsfeed.jsx');
 var Player = require('app/components/player');
 var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var Box = require('app/components/box.jsx');
