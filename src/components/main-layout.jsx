@@ -9,7 +9,7 @@ var IScrollLayer = require('app/components/iscroll-layer.jsx');
 var MainActivityList = require('app/components/main-activity-list.jsx');
 
 var app = require('app');
-var ActivityLoader = require('app/services/activity-loader');
+var ActivityLoader = require('app/processes/activity-loader');
 var eventBus = require('app/core/event-bus');
 
 require('app/styles/main-layout.styl');

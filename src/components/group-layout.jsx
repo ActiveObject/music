@@ -8,8 +8,8 @@ var ActivityCard = require('app/components/activity-card.jsx');
 
 var app = require('app');
 var eventBus = require('app/core/event-bus');
-var NewsfeedLoader = require('app/services/newsfeed-loader');
-var ActivityLoader = require('app/services/activity-loader');
+var NewsfeedLoader = require('app/processes/newsfeed-loader');
+var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
 
