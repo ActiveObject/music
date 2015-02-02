@@ -1,7 +1,7 @@
 require('app/styles/activity-card.styl');
 require('app/styles/element.styl');
 
-var React = require('react');
+var React = require('react/addons');
 var _ = require('underscore');
 var moment = require('moment');
 var curry = require('curry');
@@ -10,19 +10,13 @@ var Activity = require('app/values/activity');
 var dom = require('app/core/dom');
 
 var ActivityCard = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
   getDefaultProps: function() {
     return {
       size: 16,
       margin: 2
     };
-  },
-
-  shouldComponentUpdate: function(nextProps) {
-    return nextProps.id !== this.props.id ||
-      nextProps.size !== this.props.size ||
-      nextProps.margin !== this.props.margin ||
-      nextProps.name !== this.props.name ||
-      nextProps.activity !== this.props.activity;
   },
 
   render: function() {

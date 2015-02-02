@@ -132,9 +132,10 @@ function go(process) {
     console.log(err);
   });
 
-  input.onEnd(function () {
+  output.onEnd(function() {
     debug('end - %s', id);
-    output.end();
+    input.end();
+    errout.end();
   });
 
   process.go(input, output, errout);

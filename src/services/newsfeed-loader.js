@@ -22,47 +22,33 @@ function chunkify(size, offset, count) {
 }
 
 function NewsfeedLoader(attrs, inbox) {
-  this.atom = new Atom(newsfeed);
-
-  this.inbox = chunkify(2, attrs.offset, attrs.count).map(function (v) {
-    return merge(v, { owner: attrs.owner });
-  });
+  this.owner = attrs.owner;
+  this.offset = attrs.offset;
+  this.count = attrs.count;
 }
 
-NewsfeedLoader.prototype.process = function () {
-  if (this.inbox.length === 0) {
-    return this.release();
-  }
+NewsfeedLoader.prototype.go = function(input, output, errout) {
+  input.onValue(function(msg) {
+    vk.wall.get({
+      owner_id: msg.owner,
+      offset: msg.offset,
+      count: msg.count
+    }, function(err, res) {
+      if (err) {
+        return errout.push(err);
+      }
 
-  var that = this;
-
-  this.load(this.inbox[0], function (err, data) {
-    if (err) {
-      return console.log(err);
-    }
-
-    Atom.update(that, v => v.merge(newsfeed.fromVkResponse(data)));
-    that.inbox.shift();
-    that.process();
+      output.push(newsfeed.fromVkResponse(res.response));
+    });
   });
+
+  chunkify(2, this.offset, this.count).forEach(function (v) {
+    input.push(merge(v, { owner: this.owner }));
+  }, this);
 };
 
-NewsfeedLoader.prototype.load = function (req, callback) {
-  vk.wall.get({
-    owner_id: req.owner,
-    offset: req.offset,
-    count: req.count
-  }, function(err, res) {
-    if (err) {
-      return callback(err);
-    }
-
-    callback(null, merge(res.response, { offset: req.offset }));
-  });
-};
-
-NewsfeedLoader.prototype.release = function () {
-  Atom.off(this);
+NewsfeedLoader.prototype.toString = function() {
+  return 'NewsfeedLoader(' + this.owner + ', ' + this.offset + ':' + this.count + ')';
 };
 
 module.exports = NewsfeedLoader;

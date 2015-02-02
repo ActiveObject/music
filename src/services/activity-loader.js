@@ -42,7 +42,7 @@ ActivityLoader.prototype.go = function (input, output, errout) {
           count: msg.count
         });
       } else {
-        input.end();
+        output.end();
       }
     });
   });

@@ -11,18 +11,25 @@ var eventBus = require('app/core/event-bus');
 var NewsfeedLoader = require('app/services/newsfeed-loader');
 var ActivityLoader = require('app/services/activity-loader');
 var Activity = require('app/values/activity');
+var newsfeed = require('app/values/newsfeed');
 
 require('app/styles/group-layout.styl');
 
 var GroupLayout = React.createClass({
+  getInitialState: function () {
+    return { newsfeed: newsfeed };
+  },
+
   componentWillMount: function() {
-    this.newsfeed = new NewsfeedLoader({
+    var nfChannel = app.go(new NewsfeedLoader({
       owner: -this.props.id,
       offset: 0,
       count: 10
-    });
+    }));
 
-    this.newsfeed.process();
+    this.usubscribe = nfChannel
+      .scan(newsfeed, (acc, next) => acc.merge(next))
+      .onValue(v => this.setState({ newsfeed: v }));
 
     var out = app
       .go(new ActivityLoader(-this.props.id, this.props.period))
@@ -32,7 +39,7 @@ var GroupLayout = React.createClass({
   },
 
   componentWillUnmount: function() {
-    this.newsfeed.release();
+    this.usubscribe();
   },
 
   render: function() {
@@ -59,7 +66,7 @@ var GroupLayout = React.createClass({
 
         <Box prefix='rb-' key='region-b'>
           <IScrollLayer>
-            <Newsfeed newsfeed={this.newsfeed.atom.value} player={this.props.player} owner={group}></Newsfeed>
+            <Newsfeed newsfeed={this.state.newsfeed} player={this.props.player} owner={group}></Newsfeed>
           </IScrollLayer>
         </Box>
 
