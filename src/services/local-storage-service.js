@@ -2,6 +2,7 @@ var ISet = require('immutable').Set;
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var Track = require('app/values/track');
 var Group = require('app/values/group');
+var firstValue = require('app/utils/firstValue');
 
 module.exports = function (receive, send) {
   receive(':app/started', function() {
@@ -9,7 +10,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app/player',
         a: ':player/track',
-        v: Track.fromJSON(JSON.parse(localStorage.getItem(':player/track')))
+        v: Track.fromJSON(firstValue(JSON.parse(localStorage.getItem(':player/track'))))
       });
     }
   });
@@ -19,7 +20,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/activity',
-        v: JSON.parse(localStorage.getItem(':app/activity')).map(v => new NewsfeedActivity(v))
+        v: JSON.parse(localStorage.getItem(':app/activity')).map(v => new NewsfeedActivity(firstValue(v)))
       });
     }
   });
@@ -29,7 +30,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/tracks',
-        v: ISet(JSON.parse(localStorage.getItem(':app/tracks')).map(v => new Track(v)))
+        v: ISet(JSON.parse(localStorage.getItem(':app/tracks')).map(v => new Track(firstValue(v))))
       });
     }
   });
@@ -39,7 +40,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/groups',
-        v: ISet(JSON.parse(localStorage.getItem(':app/groups')).map(v => new Group(v)))
+        v: ISet(JSON.parse(localStorage.getItem(':app/groups')).map(v => new Group(firstValue(v))))
       });
     }
   });

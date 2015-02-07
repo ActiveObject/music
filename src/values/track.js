@@ -53,6 +53,16 @@ Track.fromJSON = function (data) {
   });
 };
 
+Track.prototype.toJSON = function () {
+  return {
+    'app/values/track': {
+      id: this.id,
+      owner: this.owner,
+      audio: this.audio
+    }
+  };
+};
+
 Track.prototype.toString = function() {
   return 'Track #' + this.id;
 };

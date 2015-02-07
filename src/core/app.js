@@ -10,7 +10,6 @@ var BufferedEventStream = require('app/core/buffered-event-stream');
 var Atom = require('app/core/atom');
 var dispatch = require('app/core/dispatcher');
 
-
 var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];

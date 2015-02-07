@@ -4,10 +4,18 @@ function PausedState(attrs) {
   this.track = attrs.track;
   this.sound = attrs.sound;
 
-  if (!this.sound.paused) {
+  if (this.sound && !this.sound.paused) {
     this.sound.pause();
   }
 }
+
+PausedState.prototype.toJSON = function () {
+  return {
+    'soundmanager:paused-state': {
+      track: this.track.toJSON()
+    }
+  };
+};
 
 PausedState.prototype.useTrack = function (track, sound) {
   this.sound.stop();

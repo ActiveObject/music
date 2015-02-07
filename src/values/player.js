@@ -23,6 +23,34 @@ function Player(attrs) {
   this.recentTracklists = this.makeRecent(attrs.recentTracklists, attrs.tracklist, isTracklistChanged);
 }
 
+Player.prototype.toJSON = function () {
+  return {
+    'app/values/player': {
+      track: this.track.toJSON(),
+      isPlaying: this.isPlaying,
+      position: this.position,
+      bytesLoaded: this.bytesLoaded,
+      bytesTotal: this.bytesTotal,
+      seeking: this.seeking,
+      seekPosition: this.seekPosition,
+      recentTracklists: []
+    }
+  };
+};
+
+Player.prototype.fromJSON = function (v) {
+  return new Player(merge(v, {
+    track: v.track[Object.keys(v.track)[0]],
+    tracklist: new LibraryTracklist({
+      playlist: new Playlist({
+        tracks: List(),
+        isShuffled: false,
+        isRepeated: false
+      })
+    })
+  }));
+};
+
 Player.prototype.modify = function (attrs) {
   return new Player(merge(this, attrs));
 };

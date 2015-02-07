@@ -31,6 +31,16 @@ Group.fromVk = function (data) {
   });
 };
 
+Group.fromJSON = function (v) {
+  return new Group(v);
+};
+
+Group.prototype.toJSON = function () {
+  return {
+    'app/values/group': _.clone(this)
+  };
+};
+
 Group.prototype.toString = function() {
   return 'Group (' + this.name + ')';
 };
