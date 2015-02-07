@@ -1,12 +1,9 @@
 require('app/styles/tracklist.styl');
 
 var React = require('react');
-var dom = require('app/core/dom');
-var Track = React.createFactory(require('app/components/track'));
+var Track = require('app/components/track');
 
-module.exports = React.createClass({
-  displayName: 'Tracklist',
-
+var Tracklist = React.createClass({
   propTypes: {
     player: React.PropTypes.object.isRequired,
     tracklist: React.PropTypes.object.isRequired
@@ -29,14 +26,12 @@ module.exports = React.createClass({
       });
     }, this);
 
-    var body = dom.div()
-      .className('tracklist-body')
-      .append(tracks)
-      .make();
-
-    return dom.div()
-      .className('tracklist')
-      .append(body)
-      .make();
+    return (
+      <div className='tracklist'>
+        <div className='tracklist-body'>{tracks}</div>
+      </div>
+    );
   }
 });
+
+module.exports = Tracklist;
