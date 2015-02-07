@@ -3,6 +3,7 @@ var NewsfeedActivity = require('app/values/newsfeed-activity');
 var Track = require('app/values/track');
 var Group = require('app/values/group');
 var firstValue = require('app/utils/firstValue');
+var revive = require('app/core/revive');
 
 module.exports = function (receive, send) {
   receive(':app/started', function() {
@@ -10,7 +11,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app/player',
         a: ':player/track',
-        v: Track.fromJSON(firstValue(JSON.parse(localStorage.getItem(':player/track'))))
+        v: firstValue(JSON.parse(localStorage.getItem(':player/track'), revive))
       });
     }
   });
@@ -20,7 +21,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/activity',
-        v: JSON.parse(localStorage.getItem(':app/activity')).map(v => new NewsfeedActivity(firstValue(v)))
+        v: JSON.parse(localStorage.getItem(':app/activity'), revive).activities
       });
     }
   });
@@ -30,7 +31,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/tracks',
-        v: ISet(JSON.parse(localStorage.getItem(':app/tracks')).map(v => new Track(firstValue(v))))
+        v: JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks
       });
     }
   });
@@ -40,7 +41,7 @@ module.exports = function (receive, send) {
       send({
         e: 'app',
         a: ':app/groups',
-        v: ISet(JSON.parse(localStorage.getItem(':app/groups')).map(v => new Group(firstValue(v))))
+        v: JSON.parse(localStorage.getItem(':app/groups'), revive).groups
       });
     }
   });
@@ -50,14 +51,14 @@ module.exports = function (receive, send) {
   });
 
   receive(':app/activity', function (appstate) {
-    localStorage.setItem(':app/activity', JSON.stringify(appstate.get('activities').toArray()));
+    localStorage.setItem(':app/activity', JSON.stringify({ activities: appstate.get('activities') }));
   });
 
   receive(':app/tracks', function (appstate) {
-    localStorage.setItem(':app/tracks', JSON.stringify(appstate.get('tracks').toArray()));
+    localStorage.setItem(':app/tracks', JSON.stringify({ tracks: appstate.get('tracks') }));
   });
 
   receive(':app/groups', function (appstate) {
-    localStorage.setItem(':app/groups', JSON.stringify(appstate.get('groups').toArray()));
+    localStorage.setItem(':app/groups', JSON.stringify({ groups: appstate.get('groups') }));
   });
 };

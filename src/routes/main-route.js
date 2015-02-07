@@ -8,14 +8,14 @@ function MainRoute(groups, period) {
 }
 
 MainRoute.fromJSON = function (v) {
-  return new MainRoute(v['main-route-groups'], DateRange.fromJSON(v['main-route-period']));
+  return new MainRoute(v['router:main-route:groups'], DateRange.fromJSON(v['router:main-route:period']));
 };
 
 MainRoute.prototype.toJSON = function () {
   return {
-    'main-route': {
-      'main-route-groups': this.groups,
-      'main-route-period': this.period.toJSON()
+    'router:main-route': {
+      'router:main-route:groups': this.groups,
+      'router:main-route:period': this.period.toJSON()
     }
   };
 };

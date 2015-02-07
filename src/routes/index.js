@@ -17,16 +17,16 @@ var ArtistRoute = require('./artist-route');
 var emptyRoute = require('./empty-route');
 
 exports.fromJSON = function (v) {
-  if (v['main-route']) {
-    return MainRoute.fromJSON(v['main-route']);
+  if (v['router:main-route']) {
+    return MainRoute.fromJSON(v['router:main-route']);
   }
 
-  if (v['group-route']) {
-    return GroupRoute.fromJSON(v['group-route']);
+  if (v['router:group-route']) {
+    return GroupRoute.fromJSON(v['router:group-route']);
   }
 
-  if (v['artist-route']) {
-    return ArtistRoute.fromJSON(v['artist-route']);
+  if (v['router:artist-route']) {
+    return ArtistRoute.fromJSON(v['router:artist-route']);
   }
 
   return emptyRoute;

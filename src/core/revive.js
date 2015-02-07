@@ -10,10 +10,6 @@ var player = require('app/values/player');
 var firstValue = require('app/utils/firstValue');
 
 module.exports = function revive(key, value) {
-  if (key === '') {
-    return PMap(value);
-  }
-
   if (key === 'soundmanager') {
     return soundmanager.fromJSON(value);
   }

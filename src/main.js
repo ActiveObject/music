@@ -1,3 +1,4 @@
+var PMap = require('immutable').Map;
 var app = require('app');
 var Atom = require('app/core/atom');
 var render = require('app/core/renderer')(document.getElementById('app'));
@@ -25,4 +26,11 @@ app.start();
 window.Perf = require('react/addons').addons.Perf;
 window.app = app;
 window.render = render;
-window.revive = revive;
+
+window.serialize = function () {
+  return JSON.stringify(app.value);
+};
+
+window.deserialize = function (str) {
+  return PMap(JSON.parse(str, revive));
+};
