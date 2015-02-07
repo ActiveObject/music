@@ -1,6 +1,6 @@
 var React = require('react');
 var IScroll = require('iscroll');
-var Tracklist = require('app/components/tracklist.jsx');
+var Tracklist = require('app/components/tracklist');
 
 var ArtistProfile = React.createClass({
   componentDidMount: function() {

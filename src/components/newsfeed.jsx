@@ -1,5 +1,5 @@
 var React = require('react/addons');
-var Post = require('app/components/post.jsx');
+var Post = require('app/components/post');
 
 var Newsfeed = React.createClass({
   mixins: [React.addons.PureRenderMixin],

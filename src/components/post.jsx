@@ -1,7 +1,7 @@
 require('app/styles/post.styl');
 
 var React = require('react');
-var Tracklist = require('app/components/tracklist.jsx');
+var Tracklist = require('app/components/tracklist');
 
 var PostHeader = React.createClass({
   render: function() {

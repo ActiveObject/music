@@ -1,12 +1,12 @@
 var React = require('react/addons');
 var Immutable = require('immutable');
 
-var App = require('app/components/app.jsx');
+var App = require('app/components/app');
 var Player = require('app/components/player');
 var LazyTracklist = require('app/components/lazy-tracklist');
-var Box = require('app/components/box.jsx');
-var IScrollLayer = require('app/components/iscroll-layer.jsx');
-var MainActivityList = require('app/components/main-activity-list.jsx');
+var Box = require('app/components/box');
+var IScrollLayer = require('app/components/iscroll-layer');
+var MainActivityList = require('app/components/main-activity-list');
 
 var app = require('app');
 var ActivityLoader = require('app/processes/activity-loader');

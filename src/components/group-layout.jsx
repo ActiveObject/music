@@ -1,10 +1,10 @@
 var React = require('react');
-var App = require('app/components/app.jsx');
-var Newsfeed = require('app/components/newsfeed.jsx');
+var App = require('app/components/app');
+var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
-var IScrollLayer = require('app/components/iscroll-layer.jsx');
-var Box = require('app/components/box.jsx');
-var ActivityCard = require('app/components/activity-card.jsx');
+var IScrollLayer = require('app/components/iscroll-layer');
+var Box = require('app/components/box');
+var ActivityCard = require('app/components/activity-card');
 
 var app = require('app');
 var eventBus = require('app/core/event-bus');

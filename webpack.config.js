@@ -26,6 +26,9 @@ module.exports = {
       { test: /\.jsx$/, loader: 'jsx-loader?harmony' }
     ]
   },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   externals: {
     'sound-manager': 'soundManager',
     'pouchdb': 'PouchDB',

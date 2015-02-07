@@ -4,7 +4,7 @@ var Seq = require('immutable').Seq;
 var Activity = require('app/values/activity');
 var isValue = require('app/utils/isValue');
 
-var ActivityCard = require('app/components/activity-card.jsx');
+var ActivityCard = require('app/components/activity-card');
 
 var MainActivityList = React.createClass({
   mixins: [React.addons.PureRenderMixin],
