@@ -2,8 +2,6 @@ var React = require('react');
 var IScroll = require('iscroll/build/iscroll');
 
 var IScrollLayer = React.createClass({
-  displayName: 'IScrollLayer',
-
   componentDidMount: function() {
     this.scroll = new IScroll(this.refs.view.getDOMNode(), {
       mouseWheel: true,
