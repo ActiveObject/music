@@ -17,13 +17,14 @@ var Tracklist = React.createClass({
 
   render: function() {
     var tracks = this.props.tracklist.playlist.tracks.toJS().map(function (track) {
-      return new Track({
-        key: track.id,
-        track: track,
-        player: this.props.player,
-        tracklist: this.props.tracklist,
-        y: 0
-      });
+      return (
+        <Track
+          key={track.id}
+          track={track}
+          player={this.props.player}
+          tracklist={this.props.tracklist}
+          y={0}></Track>
+      );
     }, this);
 
     return (

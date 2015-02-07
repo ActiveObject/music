@@ -1,6 +1,6 @@
 require('app/styles/post.styl');
 
-var React = require('react');
+var React = require('react/addons');
 var Tracklist = require('app/components/tracklist');
 
 var PostHeader = React.createClass({
@@ -26,6 +26,8 @@ var PostImage = React.createClass({
 });
 
 var Post = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
   render: function() {
     return (
       <div className='post'>

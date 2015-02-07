@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var App = require('app/components/app');
 var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
@@ -16,6 +16,8 @@ var newsfeed = require('app/values/newsfeed');
 require('app/styles/group-layout.styl');
 
 var GroupLayout = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
   getInitialState: function () {
     return { newsfeed: newsfeed };
   },
