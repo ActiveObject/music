@@ -1,7 +1,7 @@
 var React = require('react');
 var App = React.createFactory(require('app/components/app.jsx'));
 var Box = React.createFactory(require('app/components/box.jsx'));
-var ArtistProfile = React.createFactory(require('app/components/artist-profile'));
+var ArtistProfile = React.createFactory(require('app/components/artist-profile.jsx'));
 var LazyTracklist = React.createFactory(require('app/components/lazy-tracklist'));
 var Player = React.createFactory(require('app/components/player'));
 
