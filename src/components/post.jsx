@@ -4,6 +4,8 @@ var React = require('react/addons');
 var Tracklist = require('app/components/tracklist');
 
 var PostHeader = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
   render: function() {
     return (
       <header>
@@ -18,6 +20,8 @@ var PostHeader = React.createClass({
 });
 
 var PostImage = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
   render: function() {
     return (
       <div className='post-image'>{this.props.photo ? <img src={this.props.photo.photo_604}></img> : null}</div>

@@ -15,6 +15,32 @@ var newsfeed = require('app/values/newsfeed');
 
 require('app/styles/group-layout.styl');
 
+var GroupProfile = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
+
+  render: function () {
+    var activity = new Activity(-this.props.id, this.props.period, this.props.activities);
+
+    return (
+      <div>
+        <div key='group-profile' className='group-profile-info'>
+          <div key='avatar' className='group-profile-avatar'>
+            <img width='150' height='150' src={this.props.group.photo_200} />
+          </div>
+          <div key='name'>{this.props.group.name}</div>
+        </div>
+
+        <ActivityCard
+          key={this.props.group.id}
+          defaultColor='#3949AB'
+          id={this.props.group.id}
+          name={this.props.group.name}
+          activity={activity}></ActivityCard>
+      </div>
+    );
+  }
+});
+
 var GroupLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
@@ -46,24 +72,15 @@ var GroupLayout = React.createClass({
 
   render: function() {
     var group = this.props.groups.find(g => g.id === this.props.id);
-    var activity = new Activity(-this.props.id, this.props.period, this.props.activities);
 
     return (
       <App layout={['two-region', 'group-layout']}>
         <Box prefix='ra-' key='region-a'>
-          <div key='group-profile' className='group-profile-info'>
-            <div key='avatar' className='group-profile-avatar'>
-              <img width='150' height='150' src={group.photo_200} />
-            </div>
-            <div key='name'>{group.name}</div>
-          </div>
-
-          <ActivityCard
-            key={group.id}
-            defaultColor='#3949AB'
-            id={group.id}
-            name={group.name}
-            activity={activity}></ActivityCard>
+          <GroupProfile
+            id={this.props.id}
+            group={group}
+            activities={this.props.activities}
+            period={this.props.period}></GroupProfile>
         </Box>
 
         <Box prefix='rb-' key='region-b'>
