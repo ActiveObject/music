@@ -1,3 +1,11 @@
+0.3.0 / 2015-02-22
+===================
+
+  * Using go-style processes to fetch data
+  * Simplify router
+  * Add ability serilialize/deserialize app state
+  * Move out the renderer from appstate changes loop
+
 0.2.0 / 2014-12-25
 ===================
 
