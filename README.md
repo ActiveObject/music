@@ -1,4 +1,6 @@
-# Music app
+## Music app
+
+![App main page](http://activeobject.github.io/music/images/main-screen.png)
 
 ## Development
 The app has next requirements:
