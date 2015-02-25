@@ -37,6 +37,7 @@ module.exports = {
   watchDelay: 200,
   plugins: [
     definePlugin,
-    new webpack.IgnorePlugin(/vertx/)
+    new webpack.IgnorePlugin(/vertx/),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ]
 };
