@@ -7,6 +7,10 @@
     "music"
   ],
   "author": "Vasyl Pryimachuk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ActiveObject/music.git"
+  },
   "license": "Apache-2.0",
   "devDependencies": {
     "chai": "^1.9.2",
@@ -70,6 +74,7 @@
     "lint": "jshint ./src/**/*.js --reporter node_modules/jshint-stylish/stylish.js",
     "dev": "npm run build:dev && webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo",
     "heroku:config": "heroku config:pull MUSIC_APP_ID MUSIC_APP_HOST",
+    "deploy": "npm run deploy:divshot",
     "deploy:heroku": "npm run heroku:config && env $(cat .env | xargs) npm run build:heroku && git push heroku deploy:master -f",
     "deploy:divshot": "MUSIC_APP_ID=4656659 npm run build && divshot push production",
     "deploy:divshot:dev": "MUSIC_APP_ID=4656659 npm run build && divshot push development"
