@@ -6,7 +6,7 @@
   "keywords": [
     "music"
   ],
-  "author": "Vasyl Pryimachuk",
+  "author": "Vasyl Pryimachuk <activeobject.ac@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/ActiveObject/music.git"
