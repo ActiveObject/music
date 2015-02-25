@@ -11,9 +11,13 @@ AuthRoute.prototype.render = function(appstate) {
 };
 
 AuthRoute.prototype.lifecycle = {
-  transition: (prevRoute, nextRoute) => prevRoute
+  transition: function (prevRoute, nextRoute) {
+    if (nextRoute instanceof AuthRoute) {
+      return nextRoute;
+    }
+
+    return prevRoute;
+  }
 };
 
-exports.create = function(attrs) {
-  return new AuthRoute(attrs);
-};
+module.exports = AuthRoute;
