@@ -37,7 +37,18 @@ Group.fromJSON = function (v) {
 
 Group.prototype.toJSON = function () {
   return {
-    'app/values/group': _.clone(this)
+    'app/values/group': {
+      id: this.id,
+      isAdmin: this.isAdmin,
+      isClosed: this.isClosed,
+      isMember: this.isMember,
+      name: this.name,
+      photo_50: this.photo_50,
+      photo_100: this.photo_100,
+      photo_200: this.photo_200,
+      screenName: this.screenName,
+      type: this.type
+    }
   };
 };
 
