@@ -1,11 +1,16 @@
+/* global performance */
+
 var _ = require('underscore');
 var stats = [];
+var pending = {};
 
 function avg (items) {
-  return Number((_.reduce(items, function(memo, num){ return memo + num; }, 0) / items.length).toFixed(4));
+  return Number((_.reduce(items, function(memo, num){ return memo + num; }, 0) / items.length).toFixed(3));
 }
 
-window.printStats = function() {
+module.exports = stats;
+
+module.exports.print = function printStats() {
   var services = _.groupBy(stats, 'name');
   var result = _.mapObject(services, function(val, key) {
     var durations = _.map(val, function(item) {
@@ -13,14 +18,29 @@ window.printStats = function() {
     });
 
     return {
-      max: _.max(durations),
-      avg: avg(durations),
+      event: key,
+      'max (ms)': Number(_.max(durations).toFixed(3)),
+      'avg (ms)': avg(durations),
       count: durations.length
     };
   });
 
-  console.table(result);
+  console.table(_.values(result));
   return result;
 };
 
-module.exports = stats;
+module.exports.time = function(name) {
+  pending[name] = performance.now();
+};
+
+module.exports.timeEnd = function(name) {
+  if (pending[name]) {
+    stats.push({
+      name: name,
+      startTime: pending[name],
+      endTime: performance.now()
+    });
+
+    pending[name] = null;
+  }
+};

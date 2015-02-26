@@ -6,7 +6,9 @@ function BufferedEventStream(source, onEvent) {
       return;
     }
 
-    process(onEvent(buffer.shift()));
+    setTimeout(function() {
+      process(onEvent(buffer.shift()));
+    }, 0);
   }
 
   source.onValue(function (event) {

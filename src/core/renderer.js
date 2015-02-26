@@ -1,19 +1,24 @@
 var React = require('react');
 var debug = require('debug')('app:renderer');
-var stats = require('app/core/stats');
+
+if (process.env.NODE_ENV === 'development') {
+  var stats = require('app/core/stats');
+}
 
 module.exports = function (mountNode) {
   return function renderAppstate(v) {
     if (!document.hidden) {
       debug('VDOM render started');
-      var startTime = Date.now();
+
+      if (process.env.NODE_ENV === 'development') {
+        stats.time('render');
+      }
+
       var root = v.get('activeRoute').render(v);
 
-      stats.push({
-        name: 'render',
-        startTime: startTime,
-        endTime: Date.now()
-      });
+      if (process.env.NODE_ENV === 'development') {
+        stats.timeEnd('render');
+      }
 
       debug('VDOM render finished');
 
