@@ -2,6 +2,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var ISet = require('immutable').Set;
 var hashCode = require('app/utils/hashCode');
+var dayOfYear = require('app/utils/dayOfYear');
 var ActivityItem = require('app/values/activity-item');
 
 function LastNWeeksDRange(n, today) {
@@ -28,21 +29,15 @@ LastNWeeksDRange.prototype.toJSON = function () {
 };
 
 LastNWeeksDRange.prototype.fillEmptyDates = function(activity) {
-  var activityDates = activity.map(function (v) {
-    return {
-      doy: moment(v.date).dayOfYear(),
-      news: v.news
-    };
+  var activityDates = Object.create(null);
+
+  activity.forEach(function (v) {
+    activityDates[dayOfYear(v.date)] = v.news;
   });
 
-  var dates = this.dates.map(function(d) {
-    var doy = d.dayOfYear();
-    var found = activityDates.find(v => doy === v.doy);
-
-    return new ActivityItem(d, found ? found.news : 0);
+  return this.dates.map(function(d) {
+    return new ActivityItem(d, activityDates[dayOfYear(d.toDate())] || 0);
   });
-
-  return ISet(dates);
 };
 
 LastNWeeksDRange.prototype.startOf = function () {

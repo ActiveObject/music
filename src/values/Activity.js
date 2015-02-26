@@ -7,14 +7,15 @@ var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var ActivityItem = require('app/values/activity-item');
 
 function Activity(owner, period, activities) {
-  var items = activities
+  var items = _.chain(activities.toArray())
     .filter(a => a.owner === owner)
     .groupBy(a => a.date)
-    .map(v => v.size)
-    .map((v, k) => new ActivityItem(moment(k), v));
+    .mapObject((v, k) => new ActivityItem(new Date(k), v.length))
+    .values()
+    .value();
 
   this.owner = owner;
-  this.items = IList(period.fillEmptyDates(items).sortBy(v => v.date).values());
+  this.items = IList(_.sortBy(period.fillEmptyDates(items), 'date'));
 }
 
 Activity.prototype.totalWeeks = function () {
