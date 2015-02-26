@@ -22,7 +22,15 @@ module.exports = function (mountNode) {
 
       debug('VDOM render finished');
 
+      if (process.env.NODE_ENV === 'development') {
+        stats.time('React.render');
+      }
+
       React.render(root, mountNode);
+
+      if (process.env.NODE_ENV === 'development') {
+        stats.timeEnd('React.render');
+      }
     }
   };
 };
