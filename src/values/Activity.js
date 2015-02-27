@@ -1,10 +1,13 @@
 var _ = require('underscore');
 var moment = require('moment');
 var IList = require('immutable').List;
+var ISet = require('immutable').Set;
 var merge = require('app/utils/merge');
 var hashCode = require('app/utils/hashCode');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var ActivityItem = require('app/values/activity-item');
+var week = require('app/utils/week');
+var weekday = require('app/utils/weekday');
 
 function Activity(owner, period, activities) {
   var items = _.chain(activities.toArray())
@@ -19,11 +22,13 @@ function Activity(owner, period, activities) {
 }
 
 Activity.prototype.totalWeeks = function () {
-  return this.items.groupBy(v => v.date.week()).size;
+  var t = {};
+  this.items.forEach(v => t[week(v.date.toDate())] = 1);
+  return Object.keys(t).length;
 };
 
 Activity.prototype.sliceForDayOfWeek = function (day) {
-  return this.items.filter(v => v.date.weekday() === day);
+  return this.items.filter(v => weekday(v.date.toDate()) === day);
 };
 
 Activity.prototype.months = function () {

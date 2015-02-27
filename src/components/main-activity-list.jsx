@@ -10,27 +10,22 @@ var MainActivityList = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
   render: function() {
-    var groups = this.props.visibleGroups
-      .map(function (id) {
-        return this.props.groups.find(function (group) {
-          return group.id === id;
-        });
-      }, this)
+    var cards = this.props.visibleGroups
+      .map(id => this.props.groups.find(group => group.id === id))
+      .filter(isValue)
+      .map(function(group) {
+        var activity = new Activity(-group.id, this.props.period, this.props.activities);
 
-      .filter(isValue);
+        return (
+          <ActivityCard
+            key={group.id}
+            id={group.id}
+            name={group.name}
+            activity={activity} />
+        );
+      }, this);
 
-    var activities = this.props.visibleGroups.map(function (id) {
-      return new Activity(-id, this.props.period, this.props.activities);
-    }, this);
-
-    var cards = Seq(groups).zip(activities).map(function (v) {
-      var group = v[0];
-      var activity = v[1];
-
-      return <ActivityCard key={group.id} id={group.id} name={group.name} activity={activity}></ActivityCard>;
-    });
-
-    return <div>{cards.toArray()}</div>;
+    return <div>{cards}</div>;
   }
 });
 
