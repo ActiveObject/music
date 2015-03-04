@@ -47,7 +47,7 @@ var ActivityCard = React.createClass({
     var dowSlices = [0, 1, 2, 3, 4, 5, 6].map(function (dow) {
       var items = activity.sliceForDayOfWeek(dow).map(function (item, i) {
         return dom.rect()
-          .key(item.date.format('YYYY-MM-DD'))
+          .key(item.date.toDate().valueOf())
           .attr('width', size)
           .attr('height', size)
           .attr('x', i * (size + margin))
