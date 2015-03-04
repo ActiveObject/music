@@ -1,4 +1,5 @@
 var QS = require('querystring');
+var Url = require('url');
 var User = require('app/values/user');
 
 exports.readFromLs = function readFromLs() {
@@ -10,6 +11,16 @@ exports.readFromLs = function readFromLs() {
   }
 
   return new User.Unauthenticated();
+};
+
+exports.readFromUrl = function readFromUrl(url) {
+  var hash = Url.parse(url).hash.slice(1);
+  var qs = QS.parse(hash);
+
+  return new User.Authenticated({
+    id: qs.user_id,
+    accessToken: qs.access_token
+  });
 };
 
 exports.hasToken = function hasToken(hash) {

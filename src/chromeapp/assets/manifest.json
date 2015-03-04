@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Music",
+  "version": "0.3.0",
+  "icons": {
+    "128": "icon_128.png"
+  },
+  "permissions": [
+    "identity",
+    "https://api.vk.com/method/*",
+    "http://fonts.googleapis.com/*"
+  ],
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "minimum_chrome_version": "28"
+}

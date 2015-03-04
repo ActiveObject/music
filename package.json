@@ -64,16 +64,29 @@
     "copy:assets": "cp -R src/assets ./_public",
     "copy:vendor:dev": "cp vendor/soundmanager2.js _public/soundmanager2.js",
     "copy:vendor:prod": "cp vendor/soundmanager2-nodebug-jsmin.js _public/soundmanager2.js",
+    "copy:chromeapp": "cp -R src/chromeapp/assets/* _public",
     "nwbuild": "nwbuild -p mac -o nw _public",
+
     "build:prepare": "npm run lint && npm run clean:build && npm run clean:public && npm run copy:assets",
     "build:dev": "npm run build:prepare && npm run copy:vendor:dev && grunt build && npm run clean:build",
     "build:nw": "npm run build:prepare && npm run copy:vendor:prod && grunt build && webpack -p --progress --targe node-webkit && npm run nwbuild",
     "build:test": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js",
     "build:heroku": "git clean -x -d -f && slc build",
-    "build": "npm run build:prepare && npm run copy:vendor:prod && grunt build && NODE_ENV=production webpack -p --debug --devtool source-map --progress && npm run clean:build",
+    "build": "npm run build:prepare && npm run copy:vendor:prod && grunt build && npm run clean:build && npm run webpack:webapp",
+    "build:chromeapp": "npm run build:prepare && npm run copy:vendor:prod && npm run copy:chromeapp && grunt build && npm run clean:build && npm run webpack:chromeapp",
+
     "lint": "jshint ./src/**/*.js --reporter node_modules/jshint-stylish/stylish.js",
-    "dev": "npm run build:dev && webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline",
+
+    "webpack:webapp": "NODE_ENV=production webpack --entry=./src/main-webapp.js -p --debug --devtool source-map --progress",
+    "webpack:webapp-dev": "webpack-dev-server --entry=./src/main-webapp.js --progress --colors --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline",
+    "webpack:chromeapp": "MUSIC_APP_ID=4812383 NODE_ENV=production webpack --entry=./src/main-chromeapp.js --debug --devtool source-map --progress",
+    "webpack:chromeapp-dev": "MUSIC_APP_ID=4812383 webpack --entry=./src/main-chromeapp.js --watch --debug --devtool source-map --progress",
+
+    "dev": "npm run build:dev && npm run webpack:webapp-dev",
+    "dev:chromeapp": "npm run build:prepare && npm run copy:vendor:dev && npm run copy:chromeapp && grunt build && npm run clean:build && npm run webpack:chromeapp-dev",
+
     "heroku:config": "heroku config:pull MUSIC_APP_ID MUSIC_APP_HOST",
+
     "deploy": "npm run deploy:divshot",
     "deploy:heroku": "npm run heroku:config && env $(cat .env | xargs) npm run build:heroku && git push heroku deploy:master -f",
     "deploy:divshot": "MUSIC_APP_ID=4656659 npm run build && divshot push production",

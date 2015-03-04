@@ -8,12 +8,12 @@ if (!Number(process.env.MUSIC_APP_ID)) {
 var definePlugin = new webpack.DefinePlugin({
   'process.env': {
     NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-    MUSIC_APP_ID: JSON.stringify(process.env.MUSIC_APP_ID)
+    MUSIC_APP_ID: JSON.stringify(process.env.MUSIC_APP_ID),
+    MUSIC_CHROME_APP_ID: JSON.stringify(process.env.MUSIC_CHROME_APP_ID)
   }
 });
 
 module.exports = {
-  entry: './src/main.js',
   output: {
     path: './_public',
     filename: 'app.js'
@@ -31,7 +31,6 @@ module.exports = {
   },
   externals: {
     'sound-manager': 'soundManager',
-    'pouchdb': 'PouchDB',
     'firebase': 'Firebase'
   },
   watchDelay: 200,
