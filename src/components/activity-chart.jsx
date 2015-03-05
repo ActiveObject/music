@@ -1,3 +1,5 @@
+require('app/styles/activity-chart.styl');
+
 var React = require('react');
 var moment = require('moment');
 var dom = require('app/core/dom');
@@ -21,7 +23,7 @@ var ActivityChart = React.createClass({
 
     var weekdays = dom.div()
       .key('weekdays')
-      .className('activity-card-weekdays')
+      .className('activity-chart-weekdays')
       .attr('style', { left: -(this.props.size + this.props.margin), width: this.props.size })
       .append([1, 3, 5].map(this.makeWeekday))
       .make();
@@ -69,22 +71,22 @@ var ActivityChart = React.createClass({
     var months = activity.months().map(function (v) {
       return dom.div()
         .key(v.year + ':' + v.month)
-        .className('activity-card-month')
-        .className('activity-card-month-hidden', v.size < 3)
+        .className('activity-chart-month')
+        .className('activity-chart-month-hidden', v.size < 3)
         .attr('style', { width: v.size * (this.props.size + this.props.margin) })
         .append(moment.monthsShort(v.month));
     }, this);
 
     return dom.div()
       .key('months')
-      .className('activity-card-months')
+      .className('activity-chart-months')
       .append(months.toArray());
   },
 
   makeWeekday: function (n) {
     return dom.div()
       .key(n)
-      .className('activity-card-weekday')
+      .className('activity-chart-weekday')
       .attr('style', {
         height: this.props.size,
         top: (this.props.size + this.props.margin) * n,
