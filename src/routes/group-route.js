@@ -31,6 +31,10 @@ GroupRoute.prototype.render = function (appstate) {
   });
 };
 
+GroupRoute.prototype.url = function() {
+  return '/groups/' + this.id;
+};
+
 GroupRoute.prototype.lifecycle = require('app/core/default-route-lifecycle');
 
 module.exports = GroupRoute;
