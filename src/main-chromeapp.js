@@ -4,6 +4,7 @@ var Atom = require('app/core/atom');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var revive = require('app/core/revive');
 
+require('app/core/request').useXhr();
 
 app.use(require('app/chromeapp/auth-service'));
 app.use(require('app/services/vk-service'));

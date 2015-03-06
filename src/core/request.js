@@ -20,4 +20,16 @@ function xhrRequest(url, callback) {
   return xhr.send();
 }
 
-module.exports = chrome && chrome.identity ? xhrRequest : jsonpRequest;
+var sendRequest = jsonpRequest;
+
+module.exports = function request(...args) {
+  return sendRequest(...args);
+};
+
+module.exports.useXhr = function() {
+  sendRequest = xhrRequest;
+};
+
+module.exports.useJsonp = function() {
+  sendRequest = jsonpRequest;
+};
