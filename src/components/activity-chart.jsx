@@ -24,7 +24,7 @@ var ActivityChart = React.createClass({
     var weekdays = dom.div()
       .key('weekdays')
       .className('activity-chart-weekdays')
-      .attr('style', { left: -(this.props.size + this.props.margin), width: this.props.size })
+      .attr('style', { width: this.props.size })
       .append([1, 3, 5].map(this.makeWeekday))
       .make();
 

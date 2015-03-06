@@ -4,7 +4,7 @@ var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
 var IScrollLayer = require('app/components/iscroll-layer');
 var Box = require('app/components/box');
-var ActivityCard = require('app/components/activity-card');
+var ActivityChart = require('app/components/activity-chart');
 
 var app = require('app');
 var eventBus = require('app/core/event-bus');
@@ -30,12 +30,7 @@ var GroupProfile = React.createClass({
           <div key='name'>{this.props.group.name}</div>
         </div>
 
-        <ActivityCard
-          key={this.props.group.id}
-          defaultColor='#3949AB'
-          id={this.props.group.id}
-          name={this.props.group.name}
-          activity={activity}></ActivityCard>
+        <ActivityChart activity={activity}></ActivityChart>
       </div>
     );
   }
