@@ -1,6 +1,6 @@
 var Url = require('url');
 var _ = require('underscore');
-var jsonp = require('jsonp');
+var request = require('app/core/request');
 
 var Request = function (attrs) {
   this.entryPoint = attrs.entryPoint;
@@ -23,37 +23,14 @@ var Request = function (attrs) {
 };
 
 Request.prototype.send = function (callback) {
-  if (chrome && chrome.identity) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', this.url, true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        var body;
-
-        try {
-          body = JSON.parse(xhr.responseText);
-        } catch (e) {
-          return callback(e);
-        }
-
-        if (body.error) {
-          return callback(body.error);
-        }
-
-        if (!body.response) {
-          return callback(new Error('Missing response body'));
-        }
-
-        callback(null, body);
-      }
-    };
-
-    return xhr.send();
-  }
-
-  jsonp(this.url, function (err, data) {
+  request(this.url, function (err, data) {
     if (err) {
       return callback(err);
+    }
+
+
+    if (data.error) {
+      return callback(data.error);
     }
 
     if (!data.response) {
