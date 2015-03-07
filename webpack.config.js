@@ -15,15 +15,13 @@ var definePlugin = new webpack.DefinePlugin({
 
 module.exports = {
   output: {
-    path: './_public',
     filename: 'app.js'
   },
   module: {
     loaders: [
-      { test: /src\/(.*)\.js$/, loader: 'babel-loader' },
+      { test: /src\/(.*)\.(js|jsx)$/, loader: 'babel-loader' },
       { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' },
-      { test: require.resolve('react'), loader: 'expose?React' },
-      { test: /\.jsx$/, loader: 'jsx-loader?harmony' }
+      { test: require.resolve('react'), loader: 'expose?React' }
     ]
   },
   resolve: {
