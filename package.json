@@ -72,7 +72,7 @@
     "dev:chromeapp": "npm run prebuild:chromeapp && npm run copy:chromeapp:dev && npm run webpack:chromeapp-dev",
 
     "build:webapp": "npm run copy:webapp && npm run webpack:webapp",
-    "build:chromeapp": "npm run copy:chromeapp && npm run webpack:chromeapp",
+    "build:chromeapp": "npm run copy:chromeapp && npm run webpack:chromeapp && zip -r chromeapp.zip $npm_package_config_chromeapp_output",
     "build:test": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js",
     "prebuild:webapp": "npm run clean:build && npm run clean:webapp && mkdir $npm_package_config_webapp_output && npm run lint && grunt build --output-dir=$npm_package_config_webapp_output && npm run clean:build",
     "prebuild:chromeapp": "npm run clean:build && npm run clean:chromeapp && mkdir $npm_package_config_chromeapp_output && npm run lint && grunt build --output-dir=$npm_package_config_chromeapp_output && npm run clean:build",
@@ -81,7 +81,7 @@
     "clean:webapp": "rm -rf $npm_package_config_webapp_output",
     "clean:chromeapp": "rm -rf $npm_package_config_chromeapp_output",
 
-    "copy:assets": "cp -R src/assets $COPY_DEST",
+    "copy:assets": "cp -R src/assets/* $COPY_DEST",
     "copy:vendor:dev": "cp vendor/soundmanager2.js $COPY_DEST/soundmanager2.js",
     "copy:vendor:prod": "cp vendor/soundmanager2-nodebug-jsmin.js $COPY_DEST/soundmanager2.js",
     "copy:webapp": "COPY_DEST=$npm_package_config_webapp_output npm run copy:vendor:prod && COPY_DEST=$npm_package_config_webapp_output npm run copy:assets",
