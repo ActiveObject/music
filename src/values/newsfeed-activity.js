@@ -1,4 +1,3 @@
-var clone = require('underscore').clone;
 var hashCode = require('app/utils/hashCode');
 
 function NewsfeedActivity(attrs) {
@@ -9,7 +8,11 @@ function NewsfeedActivity(attrs) {
 
 NewsfeedActivity.prototype.toJSON = function () {
   return {
-    'app/values/newsfeed-activity': clone(this)
+    'app/values/newsfeed-activity': {
+      id: this.id,
+      date: this.date,
+      owner: this.owner
+    }
   };
 };
 

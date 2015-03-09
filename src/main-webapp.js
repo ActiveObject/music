@@ -4,6 +4,7 @@ var Atom = require('app/core/atom');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var revive = require('app/core/revive');
 
+require('app/core/request').useJsonp();
 
 app.use(require('app/services/auth-service'));
 app.use(require('app/services/vk-service'));
@@ -23,14 +24,21 @@ document.addEventListener('visibilitychange', function() {
 
 app.start();
 
-window.Perf = require('react/addons').addons.Perf;
-window.app = app;
-window.render = render;
+if (process.env.NODE_ENV === 'development') {
+  window.Perf = require('react/addons').addons.Perf;
+  window.app = app;
+  window.render = render;
 
-window.serialize = function () {
-  return JSON.stringify(app.value);
-};
+  window.serialize = function () {
+    return JSON.stringify(app.value);
+  };
 
-window.deserialize = function (str) {
-  return PMap(JSON.parse(str, revive));
-};
+  window.deserialize = function (str) {
+    return PMap(JSON.parse(str, revive));
+  };
+
+  window.stats = require('app/core/stats');
+
+  Perf.start();
+}
+

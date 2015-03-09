@@ -10,18 +10,30 @@ var BufferedEventStream = require('app/core/buffered-event-stream');
 var Atom = require('app/core/atom');
 var dispatch = require('app/core/dispatcher');
 
+if (process.env.NODE_ENV === 'development') {
+  var stats = require('app/core/stats');
+}
+
 var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];
 var processNum = 0;
 var dispatchStream = new BufferedEventStream(eventBus, function (v) {
   function doDispatch(datom) {
+    if (process.env.NODE_ENV === 'development') {
+      stats.time('dispatch[' + datom.a + ']');
+    }
+
     dispatchStream.pause();
     debug('dispatch [%s %s %s] (s)', datom.e, datom.a, datom.v);
     var nextState = dispatch(Atom.value(app), handlers, datom);
     debug('dispatch [%s %s %s] (f)', datom.e, datom.a, datom.v);
     Atom.swap(app, nextState);
     dispatchStream.resume();
+
+    if (process.env.NODE_ENV === 'development') {
+      stats.timeEnd('dispatch[' + datom.a + ']');
+    }
   }
 
   if (Array.isArray(v)) {
@@ -70,7 +82,7 @@ function makeReceiver(receivers) {
       return isValue(result) ? result : appstate;
     };
 
-    receivers.push(receiver);
+    receivers.push([receiver, 'receive[' + expectedAttr + ']']);
 
     return function () {
       for (var i = 0, l = handlers.length; i < l; i++) {
@@ -92,14 +104,15 @@ function send(v) {
   eventBus.push(v);
 }
 
-function use(handler) {
+function use(handler, name) {
   var receivers = [];
+  var serviceName = typeof name === 'string' ? name : 'Service' + handlers.length;
   var onDbChange = handler(makeReceiver(receivers), send, makeMounter(makeReceiver(receivers), send));
 
   handlers.push.apply(handlers, receivers);
 
   if (_.isFunction(onDbChange)) {
-    handlers.push(onDbChange);
+    handlers.push([onDbChange, serviceName]);
   }
 }
 

@@ -1,28 +1,34 @@
 var _ = require('underscore');
 var moment = require('moment');
 var IList = require('immutable').List;
+var ISet = require('immutable').Set;
 var merge = require('app/utils/merge');
 var hashCode = require('app/utils/hashCode');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var ActivityItem = require('app/values/activity-item');
+var week = require('app/utils/week');
+var weekday = require('app/utils/weekday');
 
 function Activity(owner, period, activities) {
-  var items = activities
+  var items = _.chain(activities.toArray())
     .filter(a => a.owner === owner)
     .groupBy(a => a.date)
-    .map(v => v.size)
-    .map((v, k) => new ActivityItem(moment(k), v));
+    .mapObject((v, k) => new ActivityItem(new Date(k), v.length))
+    .values()
+    .value();
 
   this.owner = owner;
-  this.items = IList(period.fillEmptyDates(items).sortBy(v => v.date).values());
+  this.items = IList(_.sortBy(period.fillEmptyDates(items), 'date'));
 }
 
 Activity.prototype.totalWeeks = function () {
-  return this.items.groupBy(v => v.date.week()).size;
+  var t = {};
+  this.items.forEach(v => t[week(v.date.toDate())] = 1);
+  return Object.keys(t).length;
 };
 
 Activity.prototype.sliceForDayOfWeek = function (day) {
-  return this.items.filter(v => v.date.weekday() === day);
+  return this.items.filter(v => weekday(v.date.toDate()) === day);
 };
 
 Activity.prototype.months = function () {

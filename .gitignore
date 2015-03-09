@@ -38,6 +38,7 @@ node_modules/*
 !node_modules/app
 nw/
 _public/
+_chromeapp
 
 .vagrant
 .env
