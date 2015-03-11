@@ -1,7 +1,7 @@
 var React = require('react/addons');
 var Impulse = require('impulse');
 var Icon = require('app/components/icon');
-var cx = React.addons.classSet;
+var cx = require('classnames');
 
 var PlayBtn = React.createClass({
   mixins: [React.addons.PureRenderMixin],

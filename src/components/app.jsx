@@ -2,12 +2,10 @@ require('app/styles/main.styl');
 require('app/styles/two-region.styl');
 
 var _ = require('underscore');
-var React = require('react/addons');
-var cx = React.addons.classSet;
+var React = require('react');
+var cx = require('classnames');
 
-module.exports = React.createClass({
-  displayName: 'App',
-
+var App = React.createClass({
   render: function() {
     var layout = [].concat(this.props.layout);
 
@@ -22,3 +20,5 @@ module.exports = React.createClass({
     return <div className={classes}>{this.props.children}</div>;
   }
 });
+
+module.exports = App;
