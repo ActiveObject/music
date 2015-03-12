@@ -40,6 +40,7 @@
     "impulse": "^0.1.0",
     "iscroll": "^5.1.2",
     "jsonp": "0.0.4",
+    "keymaster": "^1.6.2",
     "mime": "^1.2.11",
     "moment": "^2.7.0",
     "moment-duration-format": "^1.3.0",

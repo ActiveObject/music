@@ -25,6 +25,7 @@ document.addEventListener('visibilitychange', function() {
 app.start();
 
 if (process.env.NODE_ENV === 'development') {
+  window.dev = require('app/devtool')(app);
   window.Perf = require('react/addons').addons.Perf;
   window.app = app;
   window.render = render;

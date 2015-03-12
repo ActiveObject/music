@@ -129,6 +129,9 @@ function resume() {
   dispatchStream.resume();
 }
 
+function isRunning() {
+  return dispatchStream.isRunning();
+}
 
 function go(process) {
   processNum++;
@@ -159,5 +162,6 @@ app.use = use;
 app.start = start;
 app.pause = pause;
 app.resume = resume;
+app.isRunning = isRunning;
 app.mount = mount;
 app.go = go;

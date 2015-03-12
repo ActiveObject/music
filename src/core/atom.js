@@ -42,7 +42,10 @@ Atom.swap = function(x, newValue) {
 
 Atom.listen = function(x, onChange) {
   assert(Atom.isAtomable(x), 'Atom.swap: trying to update non-atomable object, given ' + x);
-  return x.atom.on('change', onChange);
+
+  x.atom.on('change', onChange);
+
+  return () => x.atom.removeListener('change', onChange);
 };
 
 Atom.off = function (x) {

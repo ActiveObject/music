@@ -32,4 +32,8 @@ BufferedEventStream.prototype.resume = function () {
   this._process();
 };
 
+BufferedEventStream.prototype.isRunning = function() {
+  return !this._paused;
+};
+
 module.exports = BufferedEventStream;
