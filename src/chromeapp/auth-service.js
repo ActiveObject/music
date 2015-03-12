@@ -1,4 +1,5 @@
 var Url = require('url');
+var VError = require('verror');
 var Auth = require('app/core/auth');
 var router = require('app/core/router');
 var AuthRoute = require('app/routes/auth-route');
@@ -27,7 +28,12 @@ module.exports = function (receive) {
       interactive: true
     }, function(redirectUrl) {
       if (!redirectUrl) {
-        throw new Error(chrome.runtime.lastError.message);
+        throw new VError(
+          'Authentication failed: %s \n' +
+          'Chrome App id: %s, check if it is the id of published app.',
+          chrome.runtime.lastError.message,
+          process.env.MUSIC_CHROME_APP_ID
+        );
       }
 
       try {

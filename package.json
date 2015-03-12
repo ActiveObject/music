@@ -49,6 +49,7 @@
     "react": "0.13.0",
     "underscore": "^1.8.0",
     "uuid": "^2.0.1",
+    "verror": "^1.6.0",
     "when": "^3.4.2"
   },
   "engines": {
@@ -56,7 +57,8 @@
   },
   "config": {
     "webapp:output": "_public",
-    "chromeapp:output": "_chromeapp"
+    "chromeapp:output": "_chromeapp",
+    "chromeapp:id": "aallbkpffjkpkhkjbflbimoedmfnmlel"
   },
   "scripts": {
     "start": "node server.js",
@@ -70,7 +72,7 @@
     "dev:webapp": "npm run prebuild:webapp && npm run copy:webapp:dev && npm run webpack:webapp-dev",
     "dev:chromeapp": "npm run prebuild:chromeapp && npm run copy:chromeapp:dev && npm run webpack:chromeapp-dev",
     "build:webapp": "npm run copy:webapp && npm run webpack:webapp",
-    "build:chromeapp": "npm run copy:chromeapp && npm run webpack:chromeapp && zip -r chromeapp.zip $npm_package_config_chromeapp_output",
+    "build:chromeapp": "npm run copy:chromeapp && MUSIC_CHROME_APP_ID=$npm_package_config_chromeapp_id npm run webpack:chromeapp && zip -r chromeapp.zip $npm_package_config_chromeapp_output",
     "build:test": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js",
     "prebuild:webapp": "npm run clean:build && npm run clean:webapp && mkdir $npm_package_config_webapp_output && npm run lint && grunt build --output-dir=$npm_package_config_webapp_output && npm run clean:build",
     "prebuild:chromeapp": "npm run clean:build && npm run clean:chromeapp && mkdir $npm_package_config_chromeapp_output && npm run lint && grunt build --output-dir=$npm_package_config_chromeapp_output && npm run clean:build",
