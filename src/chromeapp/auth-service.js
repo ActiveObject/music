@@ -26,6 +26,10 @@ module.exports = function (receive) {
       url: vkAuthUrl,
       interactive: true
     }, function(redirectUrl) {
+      if (!redirectUrl) {
+        throw new Error(chrome.runtime.lastError.message);
+      }
+
       try {
         eventBus.push({ e: 'app', a: ':app/user', v: Auth.readFromUrl(redirectUrl) });
       } catch (e) {
