@@ -13,8 +13,25 @@ function AuthenticatedUser(options) {
   this.accessToken = options.accessToken;
 }
 
+AuthenticatedUser.fromTransit = function(v) {
+  return new AuthenticatedUser(v);
+};
+
 AuthenticatedUser.prototype.isAuthenticated = function () {
   return true;
+};
+
+AuthenticatedUser.prototype.transitTag = 'app-value';
+
+AuthenticatedUser.prototype.tag = function () {
+  return 'authenticated-user';
+};
+
+AuthenticatedUser.prototype.rep = function () {
+  return {
+    id: this.id,
+    accessToken: this.accessToken
+  };
 };
 
 AuthenticatedUser.prototype.toString = function () {

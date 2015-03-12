@@ -35,6 +35,10 @@ Group.fromJSON = function (v) {
   return new Group(v);
 };
 
+Group.fromTransit = function (v) {
+  return Group.fromJSON(v);
+};
+
 Group.prototype.toJSON = function () {
   return {
     'app/values/group': {
@@ -50,6 +54,16 @@ Group.prototype.toJSON = function () {
       type: this.type
     }
   };
+};
+
+Group.prototype.transitTag = 'app-value';
+
+Group.prototype.tag = function () {
+  return 'group';
+};
+
+Group.prototype.rep = function () {
+  return this.toJSON()['app/values/group'];
 };
 
 Group.prototype.toString = function() {

@@ -26,18 +26,10 @@ app.start();
 
 if (process.env.NODE_ENV === 'development') {
   window.dev = require('app/devtool')(app);
+  window.TimeRecord = require('app/devtool/time-record');
   window.Perf = require('react/addons').addons.Perf;
   window.app = app;
   window.render = render;
-
-  window.serialize = function () {
-    return JSON.stringify(app.value);
-  };
-
-  window.deserialize = function (str) {
-    return PMap(JSON.parse(str, revive));
-  };
-
   window.stats = require('app/core/stats');
 
   Perf.start();

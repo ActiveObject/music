@@ -3,6 +3,7 @@ var List = require('immutable').List;
 var merge = require('app/utils/merge');
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 var Playlist = require('app/values/playlist');
+var Track = require('app/values/track');
 
 function Player(attrs) {
   if (!(this instanceof Player)) {
@@ -49,6 +50,38 @@ Player.prototype.fromJSON = function (v) {
       })
     })
   }));
+};
+
+Player.prototype.fromTransit = function (v) {
+  return new Player(merge(v, {
+    track: v.track,
+    tracklist: new LibraryTracklist({
+      playlist: new Playlist({
+        tracks: List(),
+        isShuffled: false,
+        isRepeated: false
+      })
+    })
+  }));
+};
+
+Player.prototype.transitTag = 'app-value';
+
+Player.prototype.tag = function() {
+  return 'player';
+};
+
+Player.prototype.rep = function() {
+  return {
+    track: this.track,
+    isPlaying: this.isPlaying,
+    position: this.position,
+    bytesLoaded: this.bytesLoaded,
+    bytesTotal: this.bytesTotal,
+    seeking: this.seeking,
+    seekPosition: this.seekPosition,
+    recentTracklists: []
+  };
 };
 
 Player.prototype.modify = function (attrs) {

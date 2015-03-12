@@ -6,6 +6,10 @@ function NewsfeedActivity(attrs) {
   this.owner = attrs.owner;
 }
 
+NewsfeedActivity.fromTransit = function (v) {
+  return new NewsfeedActivity(v);
+};
+
 NewsfeedActivity.prototype.toJSON = function () {
   return {
     'app/values/newsfeed-activity': {
@@ -14,6 +18,16 @@ NewsfeedActivity.prototype.toJSON = function () {
       owner: this.owner
     }
   };
+};
+
+NewsfeedActivity.prototype.transitTag = 'app-value';
+
+NewsfeedActivity.prototype.tag = function () {
+  return 'newsfeed-activity';
+};
+
+NewsfeedActivity.prototype.rep = function() {
+  return this.toJSON()['app/values/newsfeed-activity'];
 };
 
 NewsfeedActivity.prototype.hashCode = function () {

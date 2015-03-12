@@ -11,6 +11,30 @@ function Audio(attrs) {
   this.url = attrs.url;
 }
 
+Audio.fromTransit = function (v) {
+  return new Audio(v);
+};
+
+Audio.prototype.toJSON = function() {
+  return {
+    artist: this.artist,
+    title: this.title,
+    duration: this.duration,
+    index: this.index,
+    url: this.url
+  };
+};
+
+Audio.prototype.transitTag = 'app-value';
+
+Audio.prototype.tag = function () {
+  return 'audio';
+};
+
+Audio.prototype.rep = function () {
+  return this.toJSON();
+};
+
 Audio.prototype.toString = function () {
   return 'Audio(' + this.artist + ', ' + this.title + ')';
 };
@@ -53,13 +77,31 @@ Track.fromJSON = function (data) {
   });
 };
 
+Track.fromTransit = function (v) {
+  return new Track(v);
+};
+
 Track.prototype.toJSON = function () {
   return {
     'app/values/track': {
       id: this.id,
       owner: this.owner,
-      audio: this.audio
+      audio: this.audio.toJSON()
     }
+  };
+};
+
+Track.prototype.transitTag = 'app-value';
+
+Track.prototype.tag = function () {
+  return 'track';
+};
+
+Track.prototype.rep = function () {
+  return {
+    id: this.id,
+    owner: this.owner,
+    audio: this.audio
   };
 };
 
@@ -80,3 +122,4 @@ Track.prototype.modify = function (attrs) {
 };
 
 module.exports = Track;
+module.exports.Audio = Audio;
