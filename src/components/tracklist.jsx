@@ -16,7 +16,7 @@ var Tracklist = React.createClass({
   },
 
   render: function() {
-    var tracks = this.props.tracklist.playlist.tracks.toJS().map(function (track) {
+    var tracks = this.props.tracklist.playlist.tracks.map(function (track) {
       return (
         <Track
           key={track.id}
