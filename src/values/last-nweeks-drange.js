@@ -1,6 +1,4 @@
-var _ = require('underscore');
 var moment = require('moment');
-var ISet = require('immutable').Set;
 var hashCode = require('app/utils/hashCode');
 var dayOfYear = require('app/utils/dayOfYear');
 var ActivityItem = require('app/values/activity-item');
