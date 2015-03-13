@@ -1,3 +1,5 @@
+var transit = require('transit-js');
+
 function CachedHandler(valueTag, transformFn) {
   this.cache = {
     toId: transit.map(),

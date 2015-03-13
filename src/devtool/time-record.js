@@ -1,53 +1,12 @@
-var transit = require('transit-js');
-var Imm = require('immutable');
-
-var AppCachedHandler = require('./cache/app-cached-handler');
-var CachedReader = require('./cache/cached-reader');
-var CachedHandler = require('./cache/cached-handler');
-
-var MainRoute = require('app/routes/main-route');
-var Track = require('app/values/track');
-var Group = require('app/values/group');
-var NewsfeedActivity = require('app/values/newsfeed-activity');
-var User = require('app/values/user');
-var player = require('app/values/player');
+var writer = require('./writer');
+var reader = require('./reader');
 
 function TimeRecord(history) {
   this.history = history;
 }
 
 TimeRecord.fromTransit = function(v) {
-  var reader = transit.reader('json', {
-    arrayBuilder: {
-      init: () => [],
-      add: function (ret, val) { ret.push(val); return ret; },
-      finalize: ret => ret,
-      fromArray: arr => arr
-    },
-
-    mapBuilder: {
-      init: () => ({}),
-      add: function (ret, key, val) { ret[key] = val; return ret; },
-      finalize: ret => ret
-    },
-
-    handlers: CachedReader({
-      'immutable-list': Imm.List,
-      'immutable-map': Imm.Map,
-      'immutable-set': Imm.Set,
-      'immutable-ordered-map': Imm.OrderedMap,
-
-      'audio': Track.Audio.fromTransit,
-      'track': Track.fromTransit,
-      'player': player.fromTransit.bind(player),
-      'main-route': MainRoute.fromTransit,
-      'authenticated-user': User.Authenticated.fromTransit,
-      'group': Group.fromTransit,
-      'newsfeed-activity': NewsfeedActivity.fromTransit
-    })
-  });
-
-  return new TimeRecord(reader.read(v));
+  return new TimeRecord(reader('json').read(v));
 };
 
 TimeRecord.prototype.play = function(app, render) {
@@ -73,23 +32,6 @@ TimeRecord.prototype.play = function(app, render) {
 TimeRecord.prototype.toTransit = function(callback) {
   var propsToOmit = ['vk', 'soundmanager'];
 
-  var writer = transit.writer('json', {
-    handlers: transit.map([
-      Imm.List, (new CachedHandler('immutable-list', (v) => v.toArray())),
-      Imm.Map, (new CachedHandler('immutable-map', (v) => v.toObject())),
-      Imm.Set, (new CachedHandler('immutable-set', (v) => v.toArray())),
-      Imm.OrderedMap, (new CachedHandler('immutable-ordered-map', (v) => v.toArray().filter(x => x))),
-
-      Track.Audio, (new AppCachedHandler('audio')),
-      Track, (new AppCachedHandler('track')),
-      player.constructor, (new AppCachedHandler('player')),
-      MainRoute, (new AppCachedHandler('main-route')),
-      User.Authenticated, (new AppCachedHandler('authenticated-user')),
-      Group, (new AppCachedHandler('group')),
-      NewsfeedActivity, (new AppCachedHandler('newsfeed-activity'))
-    ])
-  });
-
   var records = this.history.map(function(v) {
     return {
       time: v.time,
@@ -110,7 +52,7 @@ TimeRecord.prototype.toTransit = function(callback) {
   // };
 
   // process(records, []);
-  return writer.write(records);
+  return writer('json').write(records);
 };
 
 module.exports = TimeRecord;
