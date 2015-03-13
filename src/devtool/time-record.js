@@ -8,27 +8,28 @@ var NewsfeedActivity = require('app/values/newsfeed-activity');
 var User = require('app/values/user');
 var player = require('app/values/player');
 
-function AppValueHandler(cache) {
-  this.cache = cache;
-};
+function AppCachedHandler(tag) {
+  this.cache = {
+    toId: transit.map(),
+    curId: 1
+  };
 
-AppValueHandler.prototype.tag = function(v, h) {
+  this.cacheTag = `cache:${tag}`;
+}
+
+AppCachedHandler.prototype.tag = function(v, h) {
   if (this.cache.toId.get(v)) {
-    return 'cache';
+    return this.cacheTag;
   }
 
   return v.tag();
 };
 
-AppValueHandler.prototype.rep = function(v, h) {
+AppCachedHandler.prototype.rep = function(v, h) {
   var id = this.cache.toId.get(v);
 
   if (id) {
     return id;
-  }
-
-  if (this.cache.curId < 10) {
-    console.log(this.cache.curId, v.toJS ? v.toJS() : v);
   }
 
   this.cache.toId.set(v, this.cache.curId++);
@@ -36,133 +37,69 @@ AppValueHandler.prototype.rep = function(v, h) {
   return v.rep();
 };
 
-
-function ImmutableMapHandler(cache) {
-  this.cache = cache;
-}
-
-ImmutableMapHandler.prototype.tag = function(v, h) {
-  if (this.cache.toId.get(v)) {
-    return 'cache';
-  }
-
-  return 'immutable-map';
-};
-
-ImmutableMapHandler.prototype.rep = function(v, h) {
-  var id = this.cache.toId.get(v);
-
-  if (id) {
-    return id;
-  }
-
-  if (this.cache.curId < 10) {
-    console.log('Map', this.cache.curId, v.toJS ? v.toJS() : v);
-  }
-
-  this.cache.toId.set(v, this.cache.curId++);
-  return v.toObject();
-};
-
-
-function ImmutableSetHandler(cache) {
-  this.cache = cache;
-}
-
-ImmutableSetHandler.prototype.tag = function(v, h) {
-  if (this.cache.toId.get(v)) {
-    return 'cache';
-  }
-
-  return 'immutable-set';
-};
-
-ImmutableSetHandler.prototype.rep = function(v, h) {
-  var id = this.cache.toId.get(v);
-
-  if (id) {
-    return id;
-  }
-
-  if (this.cache.curId < 10) {
-    console.log('Set', this.cache.curId, v.toJS ? v.toJS() : v);
-  }
-
-  this.cache.toId.set(v, this.cache.curId++);
-  return v.toArray();
-};
-
-
-function ImmutableListHandler(cache) {
-  this.cache = cache;
-}
-
-ImmutableListHandler.prototype.tag = function(v, h) {
-  if (this.cache.toId.get(v)) {
-    return 'cache';
-  }
-
-  return 'immutable-list';
-};
-
-ImmutableListHandler.prototype.rep = function(v, h) {
-  var id = this.cache.toId.get(v);
-
-  if (id) {
-    return id;
-  }
-
-
-  if (this.cache.curId < 10) {
-    console.log('List', this.cache.curId, v.toJS ? v.toJS() : v);
-  }
-
-
-  this.cache.toId.set(v, this.cache.curId++);
-  return v;
-};
-
-
-function ImmutableOrderedMapHandler(cache) {
-  this.cache = cache;
-}
-
-ImmutableOrderedMapHandler.prototype.tag = function(v, h) {
-  if (this.cache.toId.get(v)) {
-    return 'cache';
-  }
-
-  return 'immutable-ordered-map';
-};
-
-ImmutableOrderedMapHandler.prototype.rep = function(v, h) {
-  var id = this.cache.toId.get(v);
-
-  if (id) {
-    return id;
-  }
-
-  this.cache.toId.set(v, this.cache.curId++);
-  return v.toArray().filter(x => x);
-};
-
-
 function TimeRecord(history) {
   this.history = history;
 }
 
 TimeRecord.fromTransit = function(v) {
-  var cache = {
+  var cache1 = {
     fromId: transit.map(),
     curId: 1
   };
 
-  function addToCache(fn, ctx) {
+  var cache2 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache3 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache4 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache5 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache6 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache7 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache8 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache9 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache10 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  var cache11 = {
+    fromId: transit.map(),
+    curId: 1
+  };
+
+  function addToCache(cache, fn, ctx) {
     return function(v) {
       var ret = ctx ? fn.call(ctx, v) : fn(v);
-      if (cache.curId < 10) {
-        console.log('addToCache:', cache.curId, v.toJS ? v.toJS() : v);
-      }
       cache.fromId.set(cache.curId++, ret);
       return ret;
     };
@@ -171,7 +108,7 @@ TimeRecord.fromTransit = function(v) {
   var reader = transit.reader('json', {
     arrayBuilder: {
       init: () => [],
-      add: (ret, val) => ret.push(val),
+      add: function (ret, val) { ret.push(val); return ret; },
       finalize: ret => ret,
       fromArray: arr => arr
     },
@@ -181,20 +118,31 @@ TimeRecord.fromTransit = function(v) {
       finalize: ret => ret
     },
     handlers: {
-      'immutable-list': addToCache(v => Imm.List(v)),
-      'immutable-map': addToCache(v => Imm.Map(v)),
-      'immutable-set': addToCache(arr => Imm.Set(arr)),
-      'immutable-ordered-map': addToCache(arr => Imm.OrderedMap(arr)),
+      'immutable-list': addToCache(cache1, v => Imm.List(v)),
+      'immutable-map': addToCache(cache2, v => Imm.Map(v)),
+      'immutable-set': addToCache(cache3, arr => Imm.Set(arr)),
+      'immutable-ordered-map': addToCache(cache4, arr => Imm.OrderedMap(arr)),
 
-      'audio': addToCache(Track.Audio.fromTransit),
-      'track': addToCache(Track.fromTransit),
-      'player': addToCache(player.fromTransit, player),
-      'main-route': addToCache(MainRoute.fromTransit),
-      'authenticated-user': addToCache(User.Authenticated.fromTransit),
-      'group': addToCache(Group.fromTransit),
-      'newsfeed-activity': addToCache(NewsfeedActivity.fromTransit),
+      'audio': addToCache(cache5, Track.Audio.fromTransit),
+      'track': addToCache(cache6, Track.fromTransit),
+      'player': addToCache(cache7, player.fromTransit, player),
+      'main-route': addToCache(cache8, MainRoute.fromTransit),
+      'authenticated-user': addToCache(cache9, User.Authenticated.fromTransit),
+      'group': addToCache(cache10, Group.fromTransit),
+      'newsfeed-activity': addToCache(cache11, NewsfeedActivity.fromTransit),
 
-      'cache': (v, h) => cache.fromId.get(v)
+      'cache:immutable-list': (v, h) => cache1.fromId.get(v),
+      'cache:immutable-map': (v, h) => cache2.fromId.get(v),
+      'cache:immutable-set': (v, h) => cache3.fromId.get(v),
+      'cache:immutable-ordered-map': (v, h) => cache4.fromId.get(v),
+
+      'cache:audio': (v, h) => cache5.fromId.get(v),
+      'cache:track': (v, h) => cache6.fromId.get(v),
+      'cache:player': (v, h) => cache7.fromId.get(v),
+      'cache:main-route': (v, h) => cache8.fromId.get(v),
+      'cache:authenticated-user': (v, h) => cache9.fromId.get(v),
+      'cache:group': (v, h) => cache10.fromId.get(v),
+      'cache:newsfeed-activity': (v, h) => cache11.fromId.get(v),
     }
   });
 
@@ -204,50 +152,93 @@ TimeRecord.fromTransit = function(v) {
 TimeRecord.prototype.play = function(app, render) {
   app.pause();
 
-  var next = (i) => {
-    if (i >= this.history.length) {
+  var next = (items) => {
+    if (items.length === 0) {
       return app.resume();
     }
 
-    render(this.history[i].value);
-
-    if (i - 2 === this.history.length) {
-      setTimeout(next.bind(this, i + 1), this.history[i].time - this.history[i - 1].time);
-    } else {
-      setTimeout(next.bind(this, i + 1), this.history[i + 1].time - this.history[i].time);
+    if (items.length === 1) {
+      render(items[0].value);
+      return app.resume();
     }
+
+    render(items[0].value);
+    setTimeout(next.bind(null, items.slice(1)), items[1].time - items[0].time);
   };
 
-  next(0);
+  next(this.history);
 };
 
-TimeRecord.prototype.toTransit = function() {
-  var cache = {
+function CachedHandler(valueTag, transformFn) {
+  this.cache = {
     toId: transit.map(),
     curId: 1
   };
 
+  this.valueTag = valueTag;
+  this.cacheTag = `cache:${valueTag}`;
+  this.transformFn = transformFn;
+}
+
+CachedHandler.prototype.tag = function (v, h) {
+  if (this.cache.toId.get(v)) {
+    return this.cacheTag;
+  }
+
+  return this.valueTag;
+};
+
+CachedHandler.prototype.rep = function(v, h) {
+  var id = this.cache.toId.get(v);
+
+  if (id) {
+    return id;
+  }
+
+  this.cache.toId.set(v, this.cache.curId++);
+  return this.transformFn(v);
+};
+
+TimeRecord.prototype.toTransit = function(callback) {
   var propsToOmit = ['vk', 'soundmanager'];
 
-  var writer = transit.writer('json-verbose', {
+  var writer = transit.writer('json', {
     handlers: transit.map([
-      Imm.List, (new ImmutableListHandler(cache)),
-      Imm.Map, (new ImmutableMapHandler(cache)),
-      Imm.Set, (new ImmutableSetHandler(cache)),
-      Imm.OrderedMap, (new ImmutableOrderedMapHandler(cache)),
+      Imm.List, (new CachedHandler('immutable-list', (v) => v.toArray())),
+      Imm.Map, (new CachedHandler('immutable-map', (v) => v.toObject())),
+      Imm.Set, (new CachedHandler('immutable-set', (v) => v.toArray())),
+      Imm.OrderedMap, (new CachedHandler('immutable-ordered-map', (v) => v.toArray().filter(x => x))),
 
-      'app-value', (new AppValueHandler(cache))
+      Track.Audio, (new AppCachedHandler('audio')),
+      Track, (new AppCachedHandler('track')),
+      player.constructor, (new AppCachedHandler('player')),
+      MainRoute, (new AppCachedHandler('main-route')),
+      User.Authenticated, (new AppCachedHandler('authenticated-user')),
+      Group, (new AppCachedHandler('group')),
+      NewsfeedActivity, (new AppCachedHandler('newsfeed-activity'))
     ])
   });
 
-  var record = this.history.map(function(v) {
+  var records = this.history.map(function(v) {
     return {
       time: v.time,
       value: v.value.filterNot((v, k) => propsToOmit.indexOf(k) !== -1)
-    }
+    };
   });
 
-  return writer.write(record);
+  var process = function (items, res) {
+    if (items.length === 0) {
+      console.log('done');
+      return callback('[' + res.join(',') + ']');
+    }
+
+    console.log('processing... (%s)', (1 - items.length / records.length) * 100);
+    var ret = writer.write(items.slice(0, 1));
+    res.push(ret);
+    setTimeout(() => process(items.slice(1), res), 0);
+  };
+
+  process(records, []);
 };
 
 module.exports = TimeRecord;

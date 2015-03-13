@@ -7,7 +7,7 @@ function TimeMachine(app) {
 }
 
 TimeMachine.prototype.record = function() {
-  var unsubscribe = Atom.listen(app, (v) => this.history.push({
+  var unsubscribe = Atom.listen(this.app, (v) => this.history.push({
     time: Date.now(),
     value: v
   }));
