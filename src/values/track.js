@@ -4,16 +4,16 @@ var hashCode = require('app/utils/hashCode');
 var merge = require('app/utils/merge');
 
 function Audio(attrs) {
+  if (!(this instanceof Audio)) {
+    return new Audio(attrs);
+  }
+
   this.artist = attrs.artist;
   this.title = attrs.title;
   this.duration = attrs.duration;
   this.index = attrs.index;
   this.url = attrs.url;
 }
-
-Audio.fromTransit = function (v) {
-  return new Audio(v);
-};
 
 Audio.prototype.toJSON = function() {
   return {
@@ -48,6 +48,10 @@ Audio.prototype.equals = function (other) {
 };
 
 function Track(attrs) {
+  if (!(this instanceof Track)) {
+    return new Track(attrs);
+  }
+
   this.id = Number(attrs.id);
   this.owner = attrs.owner_id;
   this.audio = attrs.audio;
@@ -73,10 +77,6 @@ Track.fromJSON = function (data) {
     owner: data.owner,
     audio: new Audio(data.audio)
   });
-};
-
-Track.fromTransit = function (v) {
-  return new Track(v);
 };
 
 Track.prototype.toJSON = function () {

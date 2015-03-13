@@ -7,6 +7,7 @@ var MainRoute = require('app/routes/main-route');
 var Track = require('app/values/track');
 var Group = require('app/values/group');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var User = require('app/values/user');
 var player = require('app/values/player');
 
@@ -24,7 +25,8 @@ module.exports = function createWriter(type) {
       MainRoute, (new AppCachedHandler('main-route')),
       User.Authenticated, (new AppCachedHandler('authenticated-user')),
       Group, (new AppCachedHandler('group')),
-      NewsfeedActivity, (new AppCachedHandler('newsfeed-activity'))
+      NewsfeedActivity, (new AppCachedHandler('newsfeed-activity')),
+      LastNWeeksDRange, (new AppCachedHandler('last-nweeks-drange'))
     ])
   });
 };

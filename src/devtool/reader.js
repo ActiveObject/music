@@ -6,6 +6,7 @@ var MainRoute = require('app/routes/main-route');
 var Track = require('app/values/track');
 var Group = require('app/values/group');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
+var LastNWeekDrange = require('app/values/last-nweeks-drange');
 var User = require('app/values/user');
 var player = require('app/values/player');
 
@@ -30,13 +31,14 @@ module.exports = function createReader(type) {
       'immutable-set': Imm.Set,
       'immutable-ordered-map': Imm.OrderedMap,
 
-      'audio': Track.Audio.fromTransit,
-      'track': Track.fromTransit,
-      'player': player.fromTransit.bind(player),
-      'main-route': MainRoute.fromTransit,
-      'authenticated-user': User.Authenticated.fromTransit,
-      'group': Group.fromTransit,
-      'newsfeed-activity': NewsfeedActivity.fromTransit
+      'audio': Track.Audio,
+      'track': Track,
+      'player': v => player.fromTransit(v),
+      'main-route': MainRoute,
+      'authenticated-user': User.Authenticated,
+      'group': Group,
+      'newsfeed-activity': NewsfeedActivity,
+      'last-nweeks-drange': v => new LastNWeekDrange(v, new Date())
     })
   });
 };

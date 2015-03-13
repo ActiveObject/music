@@ -1,14 +1,14 @@
 var hashCode = require('app/utils/hashCode');
 
 function NewsfeedActivity(attrs) {
+  if (!(this instanceof NewsfeedActivity)) {
+    return new NewsfeedActivity(attrs);
+  }
+
   this.id = attrs.id;
   this.date = attrs.date;
   this.owner = attrs.owner;
 }
-
-NewsfeedActivity.fromTransit = function (v) {
-  return new NewsfeedActivity(v);
-};
 
 NewsfeedActivity.prototype.toJSON = function () {
   return {

@@ -28,6 +28,14 @@ LastNWeeksDRange.prototype.toJSON = function () {
   };
 };
 
+LastNWeeksDRange.prototype.tag = function () {
+  return 'last-nweeks-drange';
+};
+
+LastNWeeksDRange.prototype.rep = function () {
+  return this.n;
+};
+
 LastNWeeksDRange.prototype.fillEmptyDates = function(activity) {
   var activityDates = Object.create(null);
 

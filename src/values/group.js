@@ -2,6 +2,10 @@ var merge = require('app/utils/merge');
 var attrEquals = require('app/utils/attrEquals');
 
 function Group(attrs) {
+  if (!(this instanceof Group)) {
+    return new Group(attrs);
+  }
+
   this.id = attrs.id;
   this.isAdmin = attrs.isAdmin;
   this.isClosed = attrs.isClosed;
@@ -31,10 +35,6 @@ Group.fromVk = function (data) {
 
 Group.fromJSON = function (v) {
   return new Group(v);
-};
-
-Group.fromTransit = function (v) {
-  return Group.fromJSON(v);
 };
 
 Group.prototype.toJSON = function () {
