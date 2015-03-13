@@ -1,7 +1,5 @@
-var _ = require('underscore');
 var merge = require('app/utils/merge');
 var attrEquals = require('app/utils/attrEquals');
-var newsfeed = require('app/values/newsfeed');
 
 function Group(attrs) {
   this.id = attrs.id;
