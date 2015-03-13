@@ -4,6 +4,7 @@ var CachedReader = require('./cache/cached-reader');
 
 var MainRoute = require('app/routes/main-route');
 var Track = require('app/values/track');
+var Audio = require('app/values/audio');
 var Group = require('app/values/group');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var LastNWeekDrange = require('app/values/last-nweeks-drange');
@@ -31,7 +32,7 @@ module.exports = function createReader(type) {
       'immutable-set': Imm.Set,
       'immutable-ordered-map': Imm.OrderedMap,
 
-      'audio': Track.Audio,
+      'audio': Audio,
       'track': Track,
       'player': v => player.fromTransit(v),
       'main-route': MainRoute,

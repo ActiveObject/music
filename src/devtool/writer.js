@@ -5,6 +5,7 @@ var CachedHandler = require('./cache/cached-handler');
 
 var MainRoute = require('app/routes/main-route');
 var Track = require('app/values/track');
+var Audio = require('app/values/audio');
 var Group = require('app/values/group');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
@@ -19,7 +20,7 @@ module.exports = function createWriter(type) {
       Imm.Set, (new CachedHandler('immutable-set', (v) => v.toArray())),
       Imm.OrderedMap, (new CachedHandler('immutable-ordered-map', (v) => v.toArray().filter(x => x))),
 
-      Track.Audio, (new AppCachedHandler('audio')),
+      Audio, (new AppCachedHandler('audio')),
       Track, (new AppCachedHandler('track')),
       player.constructor, (new AppCachedHandler('player')),
       MainRoute, (new AppCachedHandler('main-route')),
