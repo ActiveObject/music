@@ -1,6 +1,9 @@
 var transit = require('transit-js');
 var Imm = require('immutable');
-var each = require('underscore').each;
+
+var AppCachedHandler = require('./cache/app-cached-handler');
+var CachedReader = require('./cache/cached-reader');
+var CachedHandler = require('./cache/cached-handler');
 
 var MainRoute = require('app/routes/main-route');
 var Track = require('app/values/track');
@@ -8,56 +11,6 @@ var Group = require('app/values/group');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var User = require('app/values/user');
 var player = require('app/values/player');
-
-function AppCachedHandler(tag) {
-  this.cache = {
-    toId: transit.map(),
-    curId: 1
-  };
-
-  this.cacheTag = `cache:${tag}`;
-}
-
-AppCachedHandler.prototype.tag = function(v, h) {
-  if (this.cache.toId.get(v)) {
-    return this.cacheTag;
-  }
-
-  return v.tag();
-};
-
-AppCachedHandler.prototype.rep = function(v, h) {
-  var id = this.cache.toId.get(v);
-
-  if (id) {
-    return id;
-  }
-
-  this.cache.toId.set(v, this.cache.curId++);
-
-  return v.rep();
-};
-
-function CachedReader(config) {
-  if (!(this instanceof CachedReader)) {
-    return new CachedReader(config);
-  }
-
-  each(config, function(fn, tag) {
-    var cache = {
-      fromId: transit.map(),
-      curId: 1
-    };
-
-    this[tag] = function(v) {
-      var ret = fn(v);
-      cache.fromId.set(cache.curId++, ret);
-      return ret;
-    };
-
-    this[`cache:${tag}`] = (v, h) => cache.fromId.get(v);
-  }, this);
-}
 
 function TimeRecord(history) {
   this.history = history;
@@ -115,36 +68,6 @@ TimeRecord.prototype.play = function(app, render) {
   };
 
   next(this.history);
-};
-
-function CachedHandler(valueTag, transformFn) {
-  this.cache = {
-    toId: transit.map(),
-    curId: 1
-  };
-
-  this.valueTag = valueTag;
-  this.cacheTag = `cache:${valueTag}`;
-  this.transformFn = transformFn;
-}
-
-CachedHandler.prototype.tag = function (v, h) {
-  if (this.cache.toId.get(v)) {
-    return this.cacheTag;
-  }
-
-  return this.valueTag;
-};
-
-CachedHandler.prototype.rep = function(v, h) {
-  var id = this.cache.toId.get(v);
-
-  if (id) {
-    return id;
-  }
-
-  this.cache.toId.set(v, this.cache.curId++);
-  return this.transformFn(v);
 };
 
 TimeRecord.prototype.toTransit = function(callback) {
