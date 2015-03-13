@@ -21,8 +21,6 @@ AuthenticatedUser.prototype.isAuthenticated = function () {
   return true;
 };
 
-AuthenticatedUser.prototype.transitTag = 'app-value';
-
 AuthenticatedUser.prototype.tag = function () {
   return 'authenticated-user';
 };

@@ -25,8 +25,6 @@ Audio.prototype.toJSON = function() {
   };
 };
 
-Audio.prototype.transitTag = 'app-value';
-
 Audio.prototype.tag = function () {
   return 'audio';
 };
@@ -90,8 +88,6 @@ Track.prototype.toJSON = function () {
     }
   };
 };
-
-Track.prototype.transitTag = 'app-value';
 
 Track.prototype.tag = function () {
   return 'track';

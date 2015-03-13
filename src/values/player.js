@@ -65,8 +65,6 @@ Player.prototype.fromTransit = function (v) {
   }));
 };
 
-Player.prototype.transitTag = 'app-value';
-
 Player.prototype.tag = function() {
   return 'player';
 };

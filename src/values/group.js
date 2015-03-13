@@ -54,8 +54,6 @@ Group.prototype.toJSON = function () {
   };
 };
 
-Group.prototype.transitTag = 'app-value';
-
 Group.prototype.tag = function () {
   return 'group';
 };

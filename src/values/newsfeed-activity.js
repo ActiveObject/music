@@ -20,8 +20,6 @@ NewsfeedActivity.prototype.toJSON = function () {
   };
 };
 
-NewsfeedActivity.prototype.transitTag = 'app-value';
-
 NewsfeedActivity.prototype.tag = function () {
   return 'newsfeed-activity';
 };

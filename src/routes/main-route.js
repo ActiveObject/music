@@ -24,8 +24,6 @@ MainRoute.prototype.toJSON = function () {
   };
 };
 
-MainRoute.prototype.transitTag = 'app-value';
-
 MainRoute.prototype.tag = function () {
   return 'main-route';
 };
