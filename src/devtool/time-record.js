@@ -1,5 +1,6 @@
 var transit = require('transit-js');
 var Imm = require('immutable');
+var each = require('underscore').each;
 
 var MainRoute = require('app/routes/main-route');
 var Track = require('app/values/track');
@@ -37,74 +38,32 @@ AppCachedHandler.prototype.rep = function(v, h) {
   return v.rep();
 };
 
+function CachedReader(config) {
+  if (!(this instanceof CachedReader)) {
+    return new CachedReader(config);
+  }
+
+  each(config, function(fn, tag) {
+    var cache = {
+      fromId: transit.map(),
+      curId: 1
+    };
+
+    this[tag] = function(v) {
+      var ret = fn(v);
+      cache.fromId.set(cache.curId++, ret);
+      return ret;
+    };
+
+    this[`cache:${tag}`] = (v, h) => cache.fromId.get(v);
+  }, this);
+}
+
 function TimeRecord(history) {
   this.history = history;
 }
 
 TimeRecord.fromTransit = function(v) {
-  var cache1 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache2 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache3 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache4 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache5 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache6 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache7 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache8 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache9 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache10 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  var cache11 = {
-    fromId: transit.map(),
-    curId: 1
-  };
-
-  function addToCache(cache, fn, ctx) {
-    return function(v) {
-      var ret = ctx ? fn.call(ctx, v) : fn(v);
-      cache.fromId.set(cache.curId++, ret);
-      return ret;
-    };
-  }
-
   var reader = transit.reader('json', {
     arrayBuilder: {
       init: () => [],
@@ -112,38 +71,27 @@ TimeRecord.fromTransit = function(v) {
       finalize: ret => ret,
       fromArray: arr => arr
     },
+
     mapBuilder: {
       init: () => ({}),
       add: function (ret, key, val) { ret[key] = val; return ret; },
       finalize: ret => ret
     },
-    handlers: {
-      'immutable-list': addToCache(cache1, v => Imm.List(v)),
-      'immutable-map': addToCache(cache2, v => Imm.Map(v)),
-      'immutable-set': addToCache(cache3, arr => Imm.Set(arr)),
-      'immutable-ordered-map': addToCache(cache4, arr => Imm.OrderedMap(arr)),
 
-      'audio': addToCache(cache5, Track.Audio.fromTransit),
-      'track': addToCache(cache6, Track.fromTransit),
-      'player': addToCache(cache7, player.fromTransit, player),
-      'main-route': addToCache(cache8, MainRoute.fromTransit),
-      'authenticated-user': addToCache(cache9, User.Authenticated.fromTransit),
-      'group': addToCache(cache10, Group.fromTransit),
-      'newsfeed-activity': addToCache(cache11, NewsfeedActivity.fromTransit),
+    handlers: CachedReader({
+      'immutable-list': Imm.List,
+      'immutable-map': Imm.Map,
+      'immutable-set': Imm.Set,
+      'immutable-ordered-map': Imm.OrderedMap,
 
-      'cache:immutable-list': (v, h) => cache1.fromId.get(v),
-      'cache:immutable-map': (v, h) => cache2.fromId.get(v),
-      'cache:immutable-set': (v, h) => cache3.fromId.get(v),
-      'cache:immutable-ordered-map': (v, h) => cache4.fromId.get(v),
-
-      'cache:audio': (v, h) => cache5.fromId.get(v),
-      'cache:track': (v, h) => cache6.fromId.get(v),
-      'cache:player': (v, h) => cache7.fromId.get(v),
-      'cache:main-route': (v, h) => cache8.fromId.get(v),
-      'cache:authenticated-user': (v, h) => cache9.fromId.get(v),
-      'cache:group': (v, h) => cache10.fromId.get(v),
-      'cache:newsfeed-activity': (v, h) => cache11.fromId.get(v),
-    }
+      'audio': Track.Audio.fromTransit,
+      'track': Track.fromTransit,
+      'player': player.fromTransit.bind(player),
+      'main-route': MainRoute.fromTransit,
+      'authenticated-user': User.Authenticated.fromTransit,
+      'group': Group.fromTransit,
+      'newsfeed-activity': NewsfeedActivity.fromTransit
+    })
   });
 
   return new TimeRecord(reader.read(v));
@@ -226,19 +174,20 @@ TimeRecord.prototype.toTransit = function(callback) {
     };
   });
 
-  var process = function (items, res) {
-    if (items.length === 0) {
-      console.log('done');
-      return callback('[' + res.join(',') + ']');
-    }
+  // var process = function (items, res) {
+  //   if (items.length === 0) {
+  //     console.log('done');
+  //     return callback('[' + res.join(',') + ']');
+  //   }
 
-    console.log('processing... (%s)', (1 - items.length / records.length) * 100);
-    var ret = writer.write(items.slice(0, 1));
-    res.push(ret);
-    setTimeout(() => process(items.slice(1), res), 0);
-  };
+  //   console.log('processing... (%s)', (1 - items.length / records.length) * 100);
+  //   var ret = writer.write(items.slice(0, 1));
+  //   res.push(ret);
+  //   setTimeout(() => process(items.slice(1), res), 0);
+  // };
 
-  process(records, []);
+  // process(records, []);
+  return writer.write(records);
 };
 
 module.exports = TimeRecord;
