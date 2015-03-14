@@ -4,6 +4,7 @@ var AppCachedHandler = require('./cache/app-cached-handler');
 var CachedHandler = require('./cache/cached-handler');
 
 var MainRoute = require('app/routes/main-route');
+var GroupRoute = require('app/routes/group-route');
 var Track = require('app/values/track');
 var Audio = require('app/values/audio');
 var Group = require('app/values/group');
@@ -24,6 +25,7 @@ module.exports = function createWriter(type) {
       Track, (new AppCachedHandler('track')),
       player.constructor, (new AppCachedHandler('player')),
       MainRoute, (new AppCachedHandler('main-route')),
+      GroupRoute, (new AppCachedHandler('group-route')),
       User.Authenticated, (new AppCachedHandler('authenticated-user')),
       Group, (new AppCachedHandler('group')),
       NewsfeedActivity, (new AppCachedHandler('newsfeed-activity')),

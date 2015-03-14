@@ -3,6 +3,7 @@ var Imm = require('immutable');
 var CachedReader = require('./cache/cached-reader');
 
 var MainRoute = require('app/routes/main-route');
+var GroupRoute = require('app/routes/group-route');
 var Track = require('app/values/track');
 var Audio = require('app/values/audio');
 var Group = require('app/values/group');
@@ -36,6 +37,7 @@ module.exports = function createReader(type) {
       'track': Track,
       'player': v => player.fromTransit(v),
       'main-route': MainRoute,
+      'group-route': GroupRoute,
       'authenticated-user': User.Authenticated,
       'group': Group,
       'newsfeed-activity': NewsfeedActivity,

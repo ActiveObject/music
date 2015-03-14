@@ -4,21 +4,33 @@ var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var DateRange = require('app/values/date-range');
 
 function GroupRoute(attrs) {
+  if (!(this instanceof GroupRoute)) {
+    return new GroupRoute(attrs);
+  }
+
   this.id = parseInt(attrs.id);
   this.period = new LastNWeeksDRange(32, new Date());
 }
 
 GroupRoute.fromJSON = function (v) {
-  return new GroupRoute(v['router:group-route:id'], DateRange.fromJSON(v['router:group-route:period']));
+  return new GroupRoute(v);
 };
 
 GroupRoute.prototype.toJSON = function () {
   return {
     'router:group-route': {
-      'router:group-route:id': this.id,
-      'router:group-route:period': this.period.toJSON()
+      id: this.id,
+      period: this.period
     }
   };
+};
+
+GroupRoute.prototype.tag = function () {
+  return 'group-route';
+};
+
+GroupRoute.prototype.rep = function () {
+  return this.toJSON()['router:group-route'];
 };
 
 GroupRoute.prototype.render = function (appstate) {
