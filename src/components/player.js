@@ -7,16 +7,7 @@ var vbus = require('app/core/vbus');
 var PlayBtn = React.createFactory(require('app/components/play-btn'));
 var AudioProgressLine = React.createFactory(require('app/components/audio-progress-line'));
 var Tabs = React.createFactory(require('app/components/tabs'));
-
-require('moment-duration-format');
-
-function pad(n) {
-  return n < 10 ? '0' + n : String(n);
-}
-
-function formatDuration(d) {
-  return pad(d.minutes()) + ':' + pad(d.seconds());
-}
+var formatDuration = require('app/utils/duration');
 
 module.exports = React.createClass({
   displayName: 'ActiveTrack',
@@ -25,8 +16,8 @@ module.exports = React.createClass({
     var track = {
       title: this.props.player.track.audio.title,
       artist: this.props.player.track.audio.artist,
-      duration: formatDuration(moment.duration(this.props.player.track.audio.duration, 's')),
-      position: formatDuration(moment.duration(this.props.player.position, 'ms'))
+      duration: formatDuration(this.props.player.track.audio.duration),
+      position: formatDuration(Math.floor(this.props.player.position / 1000))
     };
 
     var playBtn = new PlayBtn({

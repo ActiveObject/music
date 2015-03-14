@@ -2,27 +2,31 @@ require('app/styles/tracklist.styl');
 require('app/styles/lazy-tracklist.styl');
 
 var React = require('react');
-var _ = require('underscore');
+var throttle = require('underscore').throttle;
 var IScroll = require('iscroll/build/iscroll-probe');
-var dom = require('app/core/dom');
-var Track = React.createFactory(require('app/components/track'));
+var vbus = require('app/core/vbus');
+var Track = require('app/components/track');
 var Cursor = require('app/values/cursor');
 
-module.exports = React.createClass({
-  displayName: 'LazyTracklist',
+var TrackContainer = React.createClass({
+  propTypes: {
+    y: React.PropTypes.number.isRequired
+  },
 
+  render: function () {
+    var style = {
+      transform: `translate(0, ${this.props.y}px)`
+    };
+
+    return <div className='track-container' style={style}>{this.props.children}</div>;
+  }
+});
+
+var LazyTracklist = React.createClass({
   propTypes: {
     player: React.PropTypes.object.isRequired,
     tracklist: React.PropTypes.object.isRequired,
     itemHeight: React.PropTypes.number.isRequired
-  },
-
-  shouldComponentUpdate: function (nextProps, nextState) {
-    return nextState.cursor !== this.state.cursor ||
-      nextProps.player.track.id !== this.props.player.track.id ||
-      nextProps.player.isPlaying !== this.props.player.isPlaying ||
-      nextProps.tracklist !== this.props.tracklist ||
-      nextProps.itemHeight !== this.props.itemHeight;
   },
 
   getInitialState: function () {
@@ -52,7 +56,7 @@ module.exports = React.createClass({
       probeType: 3
     });
 
-    this.scroll.on('scroll', _.throttle(function () {
+    this.scroll.on('scroll', throttle(function () {
       component.setState({ cursor: component.state.cursor.updatePosition(this.y) });
     }), 1000);
   },
@@ -73,26 +77,35 @@ module.exports = React.createClass({
 
   render: function() {
     var tracks = this.state.cursor.selection().map(function (track) {
-      return new Track({
-        key: track.value.id,
-        track: track.value,
-        y: track.yOffset,
-        player: this.props.player,
-        tracklist: this.props.tracklist
-      });
+      var isActive = track.value.id === this.props.player.track.id;
+      var isPlaying = isActive && this.props.player.isPlaying;
+
+      return (
+        <TrackContainer key={track.value.id} y={track.yOffset}>
+          <Track
+            track={track.value}
+            tracklist={this.props.tracklist}
+            isActive={isActive}
+            isPlaying={isPlaying}
+            onTogglePlay={this.togglePlay} />
+        </TrackContainer>
+      );
     }, this);
 
-    var body = dom.div()
-      .className('tracklist-body')
-      .attr('style', { height: this.props.tracklist.playlist.tracks.count() * this.props.itemHeight })
-      .append(tracks)
-      .make();
+    var style = {
+      height: this.props.tracklist.playlist.tracks.count() * this.props.itemHeight
+    };
 
-    return dom.div()
-      .className('tracklist scroll-wrapper lazy-tracklist')
-      .attr('ref', 'view')
-      .key('tracklist-wrapper')
-      .append(body)
-      .make();
+    return (
+      <div ref='view' className='tracklist scroll-wrapper lazy-tracklist' key='tracklist-wrapper'>
+        <div className='tracklist-body' style={style}>{tracks}</div>
+      </div>
+    );
+  },
+
+  togglePlay: function (track) {
+    vbus.push(this.props.player.togglePlay(track, this.props.tracklist));
   }
 });
+
+module.exports = LazyTracklist;

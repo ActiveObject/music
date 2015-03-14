@@ -1,6 +1,7 @@
 require('app/styles/tracklist.styl');
 
 var React = require('react');
+var vbus = require('app/core/vbus');
 var Track = require('app/components/track');
 
 var Tracklist = React.createClass({
@@ -9,21 +10,19 @@ var Tracklist = React.createClass({
     tracklist: React.PropTypes.object.isRequired
   },
 
-  shouldComponentUpdate: function (nextProps, nextState) {
-    return nextProps.player.track.id !== this.props.player.track.id ||
-      nextProps.player.isPlaying !== this.props.player.isPlaying ||
-      nextProps.tracklist !== this.props.tracklist;
-  },
-
   render: function() {
     var tracks = this.props.tracklist.playlist.tracks.map(function (track) {
+      var isActive = track.id === this.props.player.track.id;
+      var isPlaying = isActive && this.props.player.isPlaying;
+
       return (
         <Track
           key={track.id}
           track={track}
-          player={this.props.player}
           tracklist={this.props.tracklist}
-          y={0}></Track>
+          isActive={isActive}
+          isPlaying={isPlaying}
+          onTogglePlay={this.togglePlay} />
       );
     }, this);
 
@@ -32,6 +31,10 @@ var Tracklist = React.createClass({
         <div className='tracklist-body'>{tracks}</div>
       </div>
     );
+  },
+
+  togglePlay: function (track) {
+    vbus.push(this.props.player.togglePlay(track, this.props.tracklist));
   }
 });
 
