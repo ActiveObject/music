@@ -66,7 +66,7 @@ Player.prototype.fromTransit = function (v) {
 };
 
 Player.prototype.tag = function() {
-  return 'player';
+  return ':app/player';
 };
 
 Player.prototype.rep = function() {

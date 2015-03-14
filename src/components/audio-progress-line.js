@@ -72,31 +72,19 @@ var AudioProgressLine = React.createClass({
 
   dragStart: function (e) {
     this.setState({ seekStart: e.clientX });
-    vbus.push({
-      e: 'app',
-      a: ':app/player',
-      v: this.props.player.startSeeking()
-    });
+    vbus.push(this.props.player.startSeeking());
   },
 
   dragEnd: function (e) {
     if (this.props.player.seeking) {
       this.setState({ seekStart: 0 });
-      vbus.push({
-        e: 'app',
-        a: ':app/player',
-        v: this.props.player.stopSeeking()
-      });
+      vbus.push(this.props.player.stopSeeking());
     }
   },
 
   moveSeekIndicator: function (e) {
     if (this.props.player.seeking) {
-      vbus.push({
-        e: 'app',
-        a: ':app/player',
-        v: this.props.player.seek(this.seekPosition(e.clientX))
-      });
+      vbus.push(this.props.player.seek(this.seekPosition(e.clientX)));
     }
   },
 
@@ -119,11 +107,7 @@ var AudioProgressLine = React.createClass({
   },
 
   seekToPosition: function (e) {
-    vbus.push({
-      e: 'app',
-      a: ':app/player',
-      v: this.props.player.seekTo(this.seekPosition(e.clientX))
-    });
+    vbus.push(this.props.player.seekTo(this.seekPosition(e.clientX)));
   },
 
   trackProgress: function () {

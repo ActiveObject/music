@@ -11,6 +11,7 @@ var MainActivityList = require('app/components/main-activity-list');
 var app = require('app');
 var ActivityLoader = require('app/processes/activity-loader');
 var vbus = require('app/core/vbus');
+var addTag = require('app/utils/addTag');
 
 require('app/styles/main-layout.styl');
 
@@ -21,7 +22,7 @@ var MainLayout = React.createClass({
     this.props.visibleGroups.map(function (id) {
       var out = app
         .go(new ActivityLoader(-id, this.props.period))
-        .map(v => ({ e: 'app', a: ':app/activity', v: v }));
+        .map(addTag(':app/activity'));
 
       vbus.plug(out);
     }, this);

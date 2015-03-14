@@ -2,16 +2,16 @@ var sm = require('app/soundmanager');
 
 module.exports = function (receive, send, mount) {
   sm.on('finish', function (track) {
-    send({ e: 'app/soundmanager', a: ':soundmanager/finish', v: track });
+    send([':soundmanager/finish', track]);
   });
 
   sm.on('whileplaying', function (position) {
-    send({ e: 'app/soundmanager', a: ':soundmanager/position', v: position });
+    send([':soundmanager/position', position]);
   });
 
   sm.on('whileloading', function (bytesLoaded, bytesTotal) {
-    send({ e: 'app/soundmanager', a: ':soundmanager/bytes-loaded', v: bytesLoaded });
-    send({ e: 'app/soundmanager', a: ':soundmanager/bytes-total', v: bytesTotal });
+    send([':soundmanager/bytes-loaded', bytesLoaded]);
+    send([':soundmanager/bytes-total', bytesTotal]);
   });
 
   receive(':app/started', function (appstate) {

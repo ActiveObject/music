@@ -10,7 +10,7 @@ module.exports = function (receive, send) {
   }
 
   receive(':app/started', function() {
-    send({ e: 'app', a: ':app/user', v: Auth.readFromLs() });
+    send(Auth.readFromLs());
   });
 
   receive(':app/user', function(appstate, user) {

@@ -2,7 +2,7 @@ if (process.env.NODE_ENV === 'development') {
   var stats = require('app/core/stats');
 }
 
-function doDispatch(state, handlers, datom) {
+function doDispatch(state, handlers, v) {
   if (handlers.length === 0) {
     return state;
   }
@@ -14,15 +14,15 @@ function doDispatch(state, handlers, datom) {
     stats.time(name);
   }
 
-  var nextState = handler(state, datom);
+  var nextState = handler(state, v);
 
   if (process.env.NODE_ENV === 'development') {
     stats.timeEnd(name);
   }
 
-  return doDispatch(nextState, handlers.slice(1), datom);
+  return doDispatch(nextState, handlers.slice(1), v);
 }
 
-module.exports = function dispatch(state, handlers, datom) {
-  return doDispatch(state, handlers, datom);
+module.exports = function dispatch(state, handlers, v) {
+  return doDispatch(state, handlers, v);
 };

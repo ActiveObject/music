@@ -18,12 +18,7 @@ module.exports = function (receive, send) {
   receive(':app/started', function(appstate) {
     getStoredValue(':player/track', function (track) {
       var track = firstValue(JSON.parse(track, revive));
-
-      send({
-        e: 'app',
-        a: ':app/player',
-        v: appstate.get('player').useTrack(track)
-      });
+      send(appstate.get('player').useTrack(track));
     });
   });
 

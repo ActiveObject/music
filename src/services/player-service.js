@@ -14,7 +14,7 @@ module.exports = function(receive, send) {
   receive(':soundmanager/position', update('player', (p, v) => p.modify({ position: v })))
 
   receive(':soundmanager/finish', function (appstate) {
-    send({ e: 'app', a: ':app/player', v: appstate.get('player').nextTrack().play() });
+    send(appstate.get('player').nextTrack().play());
   });
 
   receive(':app/player', (appstate, v) => appstate.set('player', v));

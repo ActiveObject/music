@@ -18,30 +18,62 @@ var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];
 var processNum = 0;
-var dispatchStream = new BufferedEventStream(vbus, function (v) {
-  function doDispatch(datom) {
-    if (process.env.NODE_ENV === 'development') {
-      stats.time('dispatch[' + datom.a + ']');
-    }
 
-    dispatchStream.pause();
-    debug('dispatch [%s %s %s] (s)', datom.e, datom.a, datom.v);
-    var nextState = dispatch(Atom.value(app), handlers, datom);
-    debug('dispatch [%s %s %s] (f)', datom.e, datom.a, datom.v);
-    Atom.swap(app, nextState);
-    dispatchStream.resume();
-
-    if (process.env.NODE_ENV === 'development') {
-      stats.timeEnd('dispatch[' + datom.a + ']');
-    }
+function tagOf(v) {
+  if (typeof v === 'string') {
+    return v;
   }
 
   if (Array.isArray(v)) {
-    return v.filter(isDatom).forEach(doDispatch);
+    return v[0];
+  }
+
+  if (typeof v.tag === 'function') {
+    return v.tag();
   }
 
   if (isDatom(v)) {
-    return doDispatch(v);
+    return v.a;
+  }
+
+  throw new TypeError('Unknown vbus value', v);
+}
+
+function valueOf(v) {
+  if (typeof v === 'string') {
+    return v;
+  }
+
+  if (Array.isArray(v)) {
+    return v[1];
+  }
+
+  if (typeof v.tag === 'function') {
+    return v;
+  }
+
+  if (isDatom(v)) {
+    return v.v;
+  }
+
+  throw new TypeError('Unknown vbus value', v);
+}
+
+
+var dispatchStream = new BufferedEventStream(vbus, function (v) {
+  if (process.env.NODE_ENV === 'development') {
+    stats.time('dispatch[' + tagOf(v) + ']');
+  }
+
+  dispatchStream.pause();
+  debug('dispatch [%s] (s)', tagOf(v));
+  var nextState = dispatch(Atom.value(app), handlers, v);
+  debug('dispatch [%s] (f)', tagOf(v));
+  Atom.swap(app, nextState);
+  dispatchStream.resume();
+
+  if (process.env.NODE_ENV === 'development') {
+    stats.timeEnd('dispatch[' + tagOf(v) + ']');
   }
 });
 
@@ -70,19 +102,20 @@ function mount(receive, send, service) {
   });
 }
 
+
 function makeReceiver(receivers) {
-  return function receive(expectedAttr, fn) {
-    var receiver = function (appstate, datom) {
+  return function receive(expectedTag, fn) {
+    var receiver = function (appstate, v) {
       var result;
 
-      if (expectedAttr === datom.a) {
-        result = fn(appstate, datom.v, datom);
+      if (expectedTag === tagOf(v)) {
+        result = fn(appstate, valueOf(v));
       }
 
       return isValue(result) ? result : appstate;
     };
 
-    receivers.push([receiver, 'receive[' + expectedAttr + ']']);
+    receivers.push([receiver, 'receive[' + expectedTag + ']']);
 
     return function () {
       for (var i = 0, l = handlers.length; i < l; i++) {
@@ -118,7 +151,7 @@ function use(handler, name) {
 
 function start() {
   dispatchStream.resume();
-  vbus.push({ e: 'app', a: ':app/started', v: true });
+  vbus.push(':app/started');
 }
 
 function pause() {

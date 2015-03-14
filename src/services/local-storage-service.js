@@ -6,41 +6,25 @@ module.exports = function (receive, send) {
     if (localStorage.hasOwnProperty(':player/track')) {
       var track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
 
-      send({
-        e: 'app',
-        a: ':app/player',
-        v: appstate.get('player').useTrack(track)
-      });
+      send(appstate.get('player').useTrack(track));
     }
   });
 
   receive(':app/started', function() {
     if (localStorage.hasOwnProperty(':app/activity')) {
-      send({
-        e: 'app',
-        a: ':app/activity',
-        v: JSON.parse(localStorage.getItem(':app/activity'), revive).activities
-      });
+      send([':app/activity', JSON.parse(localStorage.getItem(':app/activity'), revive).activities]);
     }
   });
 
   receive(':app/started', function () {
     if (localStorage.hasOwnProperty(':app/tracks')) {
-      send({
-        e: 'app',
-        a: ':app/tracks',
-        v: JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks
-      });
+      send([':app/tracks', JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks]);
     }
   });
 
   receive(':app/started', function () {
     if (localStorage.hasOwnProperty(':app/groups')) {
-      send({
-        e: 'app',
-        a: ':app/groups',
-        v: JSON.parse(localStorage.getItem(':app/groups'), revive).groups
-      });
+      send([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
     }
   });
 

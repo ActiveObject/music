@@ -22,7 +22,7 @@ AuthenticatedUser.prototype.isAuthenticated = function () {
 };
 
 AuthenticatedUser.prototype.tag = function () {
-  return 'authenticated-user';
+  return ':app/user';
 };
 
 AuthenticatedUser.prototype.rep = function () {

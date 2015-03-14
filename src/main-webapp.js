@@ -18,11 +18,12 @@ Atom.listen(app, render);
 app.start();
 
 if (process.env.NODE_ENV === 'development') {
+  window.app = app;
+  window.vbus = require('app/core/vbus');
+  window.render = render;
   window.dev = require('app/devtool')(app);
   window.TimeRecord = require('app/devtool/time-record');
   window.Perf = require('react/addons').addons.Perf;
-  window.app = app;
-  window.render = render;
   window.stats = require('app/core/stats');
 
   Perf.start();

@@ -37,7 +37,7 @@ module.exports = function (receive) {
       }
 
       try {
-        vbus.push({ e: 'app', a: ':app/user', v: Auth.readFromUrl(redirectUrl) });
+        vbus.push(Auth.readFromUrl(redirectUrl));
       } catch (e) {
         console.log(e);
       }
