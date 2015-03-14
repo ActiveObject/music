@@ -47,7 +47,7 @@ module.exports = function (receive) {
     .sampledBy(groupIndexStream)
     .onValue(function (user) {
       var gout = app
-        .go(new GroupLoader(appstate.get('user')))
+        .go(new GroupLoader(user))
         .reduce(Immutable.Set(), (acc, v) => acc.union(v))
         .map(addTag(':app/groups'));
 

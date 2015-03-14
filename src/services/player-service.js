@@ -10,9 +10,9 @@ function update(key, updater) {
 }
 
 module.exports = function(receive) {
-  receive(':soundmanager/bytes-loaded', update('player', (p, v) => p.modify({ bytesLoaded: v })))
-  receive(':soundmanager/bytes-total', update('player', (p, v) => p.modify({ bytesTotal: v })))
-  receive(':soundmanager/position', update('player', (p, v) => p.modify({ position: v })))
+  receive(':soundmanager/bytes-loaded', update('player', (p, v) => p.modify({ bytesLoaded: v })));
+  receive(':soundmanager/bytes-total', update('player', (p, v) => p.modify({ bytesTotal: v })));
+  receive(':soundmanager/position', update('player', (p, v) => p.modify({ position: v })));
 
   receive(':soundmanager/finish', function (appstate) {
     vbus.push(appstate.get('player').nextTrack().play());
@@ -33,7 +33,7 @@ module.exports = function(receive) {
 
     if (player.tracklist.type === 'artist') {
       return appstate.update('player', function (player) {
-        return player.useTracklist(player.tracklist.update(tracks))
+        return player.useTracklist(player.tracklist.update(tracks));
       });
     }
   });

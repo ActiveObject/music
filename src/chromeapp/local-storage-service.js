@@ -18,8 +18,7 @@ function getStoredValue(key, fn) {
 module.exports = function (receive) {
   receive(':app/started', function(appstate) {
     getStoredValue(':player/track', function (track) {
-      var track = firstValue(JSON.parse(track, revive));
-      vbus.push(appstate.get('player').useTrack(track));
+      vbus.push(appstate.get('player').useTrack(firstValue(JSON.parse(track, revive))));
     });
   });
 

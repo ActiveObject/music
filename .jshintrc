@@ -7,5 +7,5 @@
   "proto": true,
   "node": true,
   "esnext": true,
-  "predef": [ "-Promise", "chrome"]
+  "predef": [ "-Promise", "chrome", "-Audio"]
 }
