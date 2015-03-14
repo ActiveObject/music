@@ -30,15 +30,6 @@ TimeRecord.prototype.play = function(app, render) {
 };
 
 TimeRecord.prototype.toTransit = function(callback) {
-  var propsToOmit = ['vk', 'soundmanager'];
-
-  var records = this.history.map(function(v) {
-    return {
-      time: v.time,
-      value: v.value.filterNot((v, k) => propsToOmit.indexOf(k) !== -1)
-    };
-  });
-
   // var process = function (items, res) {
   //   if (items.length === 0) {
   //     console.log('done');
@@ -52,7 +43,7 @@ TimeRecord.prototype.toTransit = function(callback) {
   // };
 
   // process(records, []);
-  return writer('json').write(records);
+  return writer('json').write(this.history);
 };
 
 module.exports = TimeRecord;
