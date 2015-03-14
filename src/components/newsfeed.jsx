@@ -9,10 +9,10 @@ var Newsfeed = React.createClass({
     var owner = this.props.owner;
 
     var posts = this.props.newsfeed.posts.map(function(post) {
-      return <Post post={post} owner={owner} player={player}></Post>;
+      return <Post post={post} owner={owner} player={player} />;
     });
 
-    return <div className='newsfeed'>{posts.toArray()}</div>
+    return <div className='newsfeed'>{posts}</div>
   }
 });
 
