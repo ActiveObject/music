@@ -1,8 +1,6 @@
-var PMap = require('immutable').Map;
 var app = require('app');
 var Atom = require('app/core/atom');
 var render = require('app/core/renderer')(document.getElementById('app'));
-var revive = require('app/core/revive');
 
 require('app/core/request').useXhr();
 
@@ -17,29 +15,16 @@ app.use(require('app/chromeapp/router-service'));
 
 Atom.listen(app, render);
 
-document.addEventListener('visibilitychange', function() {
-  render(Atom.value(app));
-}, false);
-
 app.start();
 
 if (process.env.NODE_ENV === 'development') {
-  window.eventBus = require('app/core/event-bus');
+  window.dev = require('app/devtool')(app);
+  window.TimeRecord = require('app/devtool/time-record');
   window.Perf = require('react/addons').addons.Perf;
   window.app = app;
   window.render = render;
-
-  window.serialize = function () {
-    return JSON.stringify(app.value);
-  };
-
-  window.deserialize = function (str) {
-    return PMap(JSON.parse(str, revive));
-  };
-
   window.stats = require('app/core/stats');
 
   Perf.start();
-  eventBus.log();
 }
 
