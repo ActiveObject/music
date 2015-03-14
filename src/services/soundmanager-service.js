@@ -22,19 +22,27 @@ module.exports = function (receive, send, mount) {
     });
   });
 
-  receive(':player/is-playing', function (appstate, isPlaying) {
-    if (isPlaying) {
-      sm.play();
-    } else {
-      sm.pause();
+  receive(':app/player', function (appstate, player) {
+    if (appstate.get('player').track !== player.track) {
+      sm.useTrack(player.track);
+
+      if (player.isPlaying) {
+        sm.play();
+      }
+
+      return;
     }
-  });
 
-  receive(':player/track', function (appstate, track) {
-    sm.useTrack(track);
-  });
+    if (!appstate.get('player').isPlaying && player.isPlaying) {
+      return sm.play();
+    }
 
-  receive(':player/position', function (appstate, v) {
-    sm.setPosition(v);
+    if (appstate.get('player').isPlaying && !player.isPlaying) {
+      return sm.pause();
+    }
+
+    if (appstate.get('player').position !== player.position) {
+      sm.setPosition(player.position);
+    }
   });
 };

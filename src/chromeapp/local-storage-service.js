@@ -15,12 +15,14 @@ function getStoredValue(key, fn) {
 }
 
 module.exports = function (receive, send) {
-  receive(':app/started', function() {
+  receive(':app/started', function(appstate) {
     getStoredValue(':player/track', function (track) {
+      var track = firstValue(JSON.parse(track, revive));
+
       send({
-        e: 'app/player',
-        a: ':player/track',
-        v: firstValue(JSON.parse(track, revive))
+        e: 'app',
+        a: ':app/player',
+        v: appstate.get('player').useTrack(track)
       });
     });
   });
@@ -55,12 +57,14 @@ module.exports = function (receive, send) {
     });
   });
 
-  receive(':player/track', function (appstate, track) {
-    chrome.storage.local.set({
-      ':player/track': JSON.stringify(track)
-    }, function () {
+  receive(':app/player', function (appstate, player) {
+    if (player.track !== appstate.get('player').track) {
+      chrome.storage.local.set({
+        ':player/track': JSON.stringify(player.track)
+      }, function () {
 
-    });
+      });
+    }
   });
 
   receive(':app/activity', function (appstate) {

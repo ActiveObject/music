@@ -87,15 +87,15 @@ Player.prototype.modify = function (attrs) {
 };
 
 Player.prototype.play = function() {
-  return { e: 'app/player', a: ':player/is-playing', v: true };
+  return this.modify({ isPlaying: true });
 };
 
 Player.prototype.pause = function () {
-  return { e: 'app/player', a: ':player/is-playing', v: false };
+  return this.modify({ isPlaying: false });
 };
 
 Player.prototype.stop = function () {
-  return [this.pause(), this.seek(0)];
+  return this.pause().seek(0);
 };
 
 Player.prototype.togglePlay = function (track, tracklist) {
@@ -103,56 +103,51 @@ Player.prototype.togglePlay = function (track, tracklist) {
     return this.togglePlayState();
   }
 
-  var datoms = [];
+  var player = this;
 
   if (track.id !== this.track.id) {
-    datoms.push(this.useTrack(track));
-    datoms.push(this.play());
+    player = player.useTrack(track).play();
   }
 
   if (track.id === this.track.id) {
-    datoms.push(this.togglePlayState());
+    player = player.togglePlayState();
   }
 
   if (tracklist !== this.tracklist) {
-    datoms.push(this.useTracklist(tracklist));
+    player = player.useTracklist(tracklist);
   }
 
-  return datoms;
+  return player;
 };
 
 Player.prototype.togglePlayState = function () {
-  return { e: 'app/player', a: ':player/is-playing', v: !this.isPlaying };
+  return this.modify({ isPlaying: !this.isPlaying });
 };
 
 Player.prototype.seek = function (position) {
-  return {
-    e: 'app/player',
-    a: ':player/seek-position',
-    v: this.track.audio.duration * position * 1000
-  };
+  return this.modify({
+    seekPosition: this.track.audio.duration * position * 1000
+  });
 };
 
 Player.prototype.seekTo = function (position) {
-  return {
-    e: 'app/player',
-    a: ':player/position',
-    v: this.track.audio.duration * position * 1000
-  };
+  return this.modify({
+    position: this.track.audio.duration * position * 1000
+  });
 };
 
 Player.prototype.startSeeking = function (v) {
-  return [
-    { e: 'app/player', a: ':player/seek-position', v: this.position },
-    { e: 'app/player', a: ':player/seeking', v: true }
-  ];
+  return this.modify({
+    seekPosition: this.position,
+    seeking: true
+  });
 };
 
 Player.prototype.stopSeeking = function () {
-  return [
-    { e: 'app/player', a: ':player/position', v: this.seekPosition },
-    { e: 'app/player', a: ':player/seeking', v: false }
-  ];
+  return this.modify({
+    position: this.seekPosition,
+    seeking: false
+  });
 };
 
 Player.prototype.nextTrack = function() {
@@ -164,15 +159,19 @@ Player.prototype.nextTrack = function() {
 };
 
 Player.prototype.switchToPlaylist = function (id) {
-  return { e: 'app/player', a: ':player/visible-tracklist', v: id };
+  return this.setVisibleTracklist(id);
 };
 
 Player.prototype.useTrack = function (track) {
-  return { e: 'app/player', a: ':player/track', v: track };
+  return this.modify({ track: track });
 };
 
 Player.prototype.useTracklist = function(tracklist) {
-  return { e: 'app/player', a: ':player/tracklist', v: tracklist };
+  if (Object.keys(this.track).length === 0 && tracklist.playlist.tracks.size > 0) {
+    return this.useTrack(tracklist.playlist.tracks.first());
+  }
+
+  return this.modify({ tracklist: tracklist });
 };
 
 Player.prototype.relativePosition = function () {
