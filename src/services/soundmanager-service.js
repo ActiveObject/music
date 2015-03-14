@@ -1,17 +1,18 @@
+var vbus = require('app/core/vbus');
 var sm = require('app/soundmanager');
 
-module.exports = function (receive, send, mount) {
+module.exports = function (receive, mount) {
   sm.on('finish', function (track) {
-    send([':soundmanager/finish', track]);
+    vbus.push([':soundmanager/finish', track]);
   });
 
   sm.on('whileplaying', function (position) {
-    send([':soundmanager/position', position]);
+    vbus.push([':soundmanager/position', position]);
   });
 
   sm.on('whileloading', function (bytesLoaded, bytesTotal) {
-    send([':soundmanager/bytes-loaded', bytesLoaded]);
-    send([':soundmanager/bytes-total', bytesTotal]);
+    vbus.push([':soundmanager/bytes-loaded', bytesLoaded]);
+    vbus.push([':soundmanager/bytes-total', bytesTotal]);
   });
 
   receive(':app/started', function (appstate) {

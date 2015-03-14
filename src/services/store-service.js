@@ -1,6 +1,6 @@
 var ISet = require('immutable').Set;
 
-module.exports = function (receive, send) {
+module.exports = function (receive) {
   receive(':app/started', function (appstate) {
     return appstate.set('newsfeeds', ISet());
   });

@@ -1,30 +1,31 @@
+var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
 var firstValue = require('app/utils/firstValue');
 
-module.exports = function (receive, send) {
+module.exports = function (receive) {
   receive(':app/started', function(appstate) {
     if (localStorage.hasOwnProperty(':player/track')) {
       var track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
 
-      send(appstate.get('player').useTrack(track));
+      vbus.push(appstate.get('player').useTrack(track));
     }
   });
 
   receive(':app/started', function() {
     if (localStorage.hasOwnProperty(':app/activity')) {
-      send([':app/activity', JSON.parse(localStorage.getItem(':app/activity'), revive).activities]);
+      vbus.push([':app/activity', JSON.parse(localStorage.getItem(':app/activity'), revive).activities]);
     }
   });
 
   receive(':app/started', function () {
     if (localStorage.hasOwnProperty(':app/tracks')) {
-      send([':app/tracks', JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks]);
+      vbus.push([':app/tracks', JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks]);
     }
   });
 
   receive(':app/started', function () {
     if (localStorage.hasOwnProperty(':app/groups')) {
-      send([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
+      vbus.push([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
     }
   });
 

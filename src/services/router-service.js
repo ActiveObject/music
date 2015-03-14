@@ -7,7 +7,7 @@ var MainRoute = require('app/routes/main-route');
 
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
-module.exports = function (receive, send, mount) {
+module.exports = function (receive, mount) {
   mount(router);
 
   page('/', function () {

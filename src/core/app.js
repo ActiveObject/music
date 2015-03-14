@@ -77,7 +77,7 @@ var dispatchStream = new BufferedEventStream(vbus, function (v) {
   }
 });
 
-function mount(receive, send, service) {
+function mount(receive, service) {
   if (!Atom.isAtomable(service)) {
     throw new TypeError('Mount target should implement atomable protocol');
   }
@@ -86,11 +86,10 @@ function mount(receive, send, service) {
     throw new TypeError('Mount target should have a mountPoint as string but given ' + service.mountPoint);
   }
 
-  var e = 'app',
-      a = ':app/' + service.mountPoint;
+  var a = ':app/' + service.mountPoint;
 
   service.atom.on('change', function (newState) {
-    send({ e: e, a: a, v: newState });
+    vbus.push([a, newState]);
   });
 
   receive(a, function (appstate, v) {
@@ -127,20 +126,16 @@ function makeReceiver(receivers) {
   };
 }
 
-function makeMounter(receive, send) {
+function makeMounter(receive) {
   return function mountAtomable(atomable, options) {
-    return mount(receive, send, atomable, options);
+    return mount(receive, atomable, options);
   };
-}
-
-function send(v) {
-  vbus.push(v);
 }
 
 function use(handler, name) {
   var receivers = [];
   var serviceName = typeof name === 'string' ? name : 'Service' + handlers.length;
-  var onDbChange = handler(makeReceiver(receivers), send, makeMounter(makeReceiver(receivers), send));
+  var onDbChange = handler(makeReceiver(receivers), makeMounter(makeReceiver(receivers)));
 
   handlers.push.apply(handlers, receivers);
 

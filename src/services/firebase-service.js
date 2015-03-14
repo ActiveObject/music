@@ -1,13 +1,14 @@
+var vbus = require('vbus');
 var Firebase = require('firebase');
 
 module.exports = function (dbUrl) {
   var dbRef = new Firebase(dbUrl);
   var trackRef = dbRef.child('player/track');
 
-  return function (receive, send) {
+  return function (receive) {
     receive(':app/started', function () {
       trackRef.on('value', function (snapshot) {
-        send({ e: 'app/player', a: ':player/track', v: snapshot.val() });
+        vbus.push({ e: 'app/player', a: ':player/track', v: snapshot.val() });
       });
     });
 

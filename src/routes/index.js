@@ -7,7 +7,7 @@
  *   | AuthRoute of vkAccount
  *
  * interface Route =
- *   render: (appstate, send) -> ReactElement
+ *   render: (appstate) -> ReactElement
  *   lifecycle: RouteLifecycle
  */
 

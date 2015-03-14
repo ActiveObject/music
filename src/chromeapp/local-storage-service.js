@@ -5,6 +5,7 @@ var Track = require('app/values/track');
 var Group = require('app/values/group');
 var firstValue = require('app/utils/firstValue');
 var revive = require('app/core/revive');
+var vbus = require('app/core/vbus');
 
 function getStoredValue(key, fn) {
   chrome.storage.local.get(key, function (items) {
@@ -14,41 +15,29 @@ function getStoredValue(key, fn) {
   });
 }
 
-module.exports = function (receive, send) {
+module.exports = function (receive) {
   receive(':app/started', function(appstate) {
     getStoredValue(':player/track', function (track) {
       var track = firstValue(JSON.parse(track, revive));
-      send(appstate.get('player').useTrack(track));
+      vbus.push(appstate.get('player').useTrack(track));
     });
   });
 
   receive(':app/started', function() {
     getStoredValue(':app/activity', function (activity) {
-      send({
-        e: 'app',
-        a: ':app/activity',
-        v: JSON.parse(activity, revive).activities
-      });
+      vbus.push([':app/activity', JSON.parse(activity, revive).activities]);
     });
   });
 
   receive(':app/started', function () {
     getStoredValue(':app/tracks', function (tracks) {
-      send({
-        e: 'app',
-        a: ':app/tracks',
-        v: JSON.parse(tracks, revive).tracks
-      });
+      vbus.push([ ':app/tracks', JSON.parse(tracks, revive).tracks]);
     });
   });
 
   receive(':app/started', function () {
     getStoredValue(':app/groups', function (groups) {
-      send({
-        e: 'app',
-        a: ':app/groups',
-        v: JSON.parse(groups, revive).groups
-      });
+      vbus.push([':app/groups', JSON.parse(groups, revive).groups]);
     });
   });
 

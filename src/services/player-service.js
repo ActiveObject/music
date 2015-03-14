@@ -1,3 +1,4 @@
+var vbus = require('app/core/vbus');
 var player = require('app/values/player');
 
 function update(key, updater) {
@@ -8,13 +9,13 @@ function update(key, updater) {
   };
 }
 
-module.exports = function(receive, send) {
+module.exports = function(receive) {
   receive(':soundmanager/bytes-loaded', update('player', (p, v) => p.modify({ bytesLoaded: v })))
   receive(':soundmanager/bytes-total', update('player', (p, v) => p.modify({ bytesTotal: v })))
   receive(':soundmanager/position', update('player', (p, v) => p.modify({ position: v })))
 
   receive(':soundmanager/finish', function (appstate) {
-    send(appstate.get('player').nextTrack().play());
+    vbus.push(appstate.get('player').nextTrack().play());
   });
 
   receive(':app/player', (appstate, v) => appstate.set('player', v));
