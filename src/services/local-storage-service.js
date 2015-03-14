@@ -1,9 +1,5 @@
-var ISet = require('immutable').Set;
-var NewsfeedActivity = require('app/values/newsfeed-activity');
-var Track = require('app/values/track');
-var Group = require('app/values/group');
-var firstValue = require('app/utils/firstValue');
 var revive = require('app/core/revive');
+var firstValue = require('app/utils/firstValue');
 
 module.exports = function (receive, send) {
   receive(':app/started', function() {
