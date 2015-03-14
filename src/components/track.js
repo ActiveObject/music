@@ -4,7 +4,7 @@ require('app/styles/element.styl');
 var React = require('react');
 var moment = require('moment');
 var dom = require('app/core/dom');
-var eventBus = require('app/core/event-bus');
+var vbus = require('app/core/vbus');
 var PlayBtn = React.createFactory(require('app/components/play-btn'));
 
 require('moment-duration-format');
@@ -70,7 +70,7 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    eventBus.push({
+    vbus.push({
       e: 'app',
       a: ':app/player',
       v: this.props.player.togglePlay(this.props.track, this.props.tracklist)

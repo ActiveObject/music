@@ -3,7 +3,7 @@ require('app/styles/active-track.styl');
 var React = require('react');
 var moment = require('moment');
 var dom = require('app/core/dom');
-var eventBus = require('app/core/event-bus');
+var vbus = require('app/core/vbus');
 var PlayBtn = React.createFactory(require('app/components/play-btn'));
 var AudioProgressLine = React.createFactory(require('app/components/audio-progress-line'));
 var Tabs = React.createFactory(require('app/components/tabs'));
@@ -100,7 +100,7 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    eventBus.push({
+    vbus.push({
       e: 'app',
       a: ':app/player',
       v: this.props.player.togglePlay()
@@ -108,7 +108,7 @@ module.exports = React.createClass({
   },
 
   changePlaylist: function (id) {
-    eventBus.push({
+    vbus.push({
       e: 'app',
       a: ':app/player',
       v: this.props.player.switchToTracklist(id)

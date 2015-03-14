@@ -5,7 +5,7 @@ var isString = require('underscore').isString;
 var debug = require('debug')('app:core:app');
 var isValue = require('app/utils/isValue');
 var isDatom = require('app/utils/isDatom');
-var eventBus = require('app/core/event-bus');
+var vbus = require('app/core/vbus');
 var BufferedEventStream = require('app/core/buffered-event-stream');
 var Atom = require('app/core/atom');
 var dispatch = require('app/core/dispatcher');
@@ -18,7 +18,7 @@ var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];
 var processNum = 0;
-var dispatchStream = new BufferedEventStream(eventBus, function (v) {
+var dispatchStream = new BufferedEventStream(vbus, function (v) {
   function doDispatch(datom) {
     if (process.env.NODE_ENV === 'development') {
       stats.time('dispatch[' + datom.a + ']');
@@ -101,7 +101,7 @@ function makeMounter(receive, send) {
 }
 
 function send(v) {
-  eventBus.push(v);
+  vbus.push(v);
 }
 
 function use(handler, name) {
@@ -118,7 +118,7 @@ function use(handler, name) {
 
 function start() {
   dispatchStream.resume();
-  eventBus.push({ e: 'app', a: ':app/started', v: true });
+  vbus.push({ e: 'app', a: ':app/started', v: true });
 }
 
 function pause() {

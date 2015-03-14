@@ -7,7 +7,7 @@ var Box = require('app/components/box');
 var ActivityChart = require('app/components/activity-chart');
 
 var app = require('app');
-var eventBus = require('app/core/event-bus');
+var vbus = require('app/core/vbus');
 var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
@@ -58,7 +58,7 @@ var GroupLayout = React.createClass({
       .go(new ActivityLoader(-this.props.id, this.props.period))
       .map(v => ({ e: 'app', a: ':app/activity', v: v }));
 
-    eventBus.plug(out);
+    vbus.plug(out);
   },
 
   componentWillUnmount: function() {

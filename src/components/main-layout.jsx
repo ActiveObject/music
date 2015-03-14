@@ -10,7 +10,7 @@ var MainActivityList = require('app/components/main-activity-list');
 
 var app = require('app');
 var ActivityLoader = require('app/processes/activity-loader');
-var eventBus = require('app/core/event-bus');
+var vbus = require('app/core/vbus');
 
 require('app/styles/main-layout.styl');
 
@@ -23,7 +23,7 @@ var MainLayout = React.createClass({
         .go(new ActivityLoader(-id, this.props.period))
         .map(v => ({ e: 'app', a: ':app/activity', v: v }));
 
-      eventBus.plug(out);
+      vbus.plug(out);
     }, this);
   },
 

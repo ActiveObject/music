@@ -3,7 +3,7 @@ var Bacon = require('baconjs');
 var app = require('app');
 var GroupLoader = require('app/processes/groups-loader');
 var TracksLoader = require('app/processes/tracks-loader');
-var eventBus = require('app/core/event-bus');
+var vbus = require('app/core/vbus');
 
 module.exports = function (receive) {
   var unplugTrackIndexing = function () {};
@@ -23,10 +23,10 @@ module.exports = function (receive) {
 
   receive(':app/user', function (appstate, user) {
     if (user.isAuthenticated()) {
-      unplugTrackIndexing = eventBus.plug(trackIndexStream);
-      unplugGroupIndexing = eventBus.plug(groupIndexStream);
-      eventBus.push({ e: 'vk', a: ':vk/index-tracks', v: true });
-      eventBus.push({ e: 'vk', a: ':vk/index-groups', v: true });
+      unplugTrackIndexing = vbus.plug(trackIndexStream);
+      unplugGroupIndexing = vbus.plug(groupIndexStream);
+      vbus.push({ e: 'vk', a: ':vk/index-tracks', v: true });
+      vbus.push({ e: 'vk', a: ':vk/index-groups', v: true });
     } else {
       unplugTrackIndexing();
       unplugGroupIndexing();
@@ -40,7 +40,7 @@ module.exports = function (receive) {
       .go(new TracksLoader(appstate.get('user')))
       .reduce(Immutable.Set(), (acc, v) => acc.union(v));
 
-    eventBus.plug(tout.map(v => ({ e: 'app', a: ':app/tracks', v: v })));
+    vbus.plug(tout.map(v => ({ e: 'app', a: ':app/tracks', v: v })));
   });
 
   receive(':vk/index-groups', function (appstate) {
@@ -48,6 +48,6 @@ module.exports = function (receive) {
       .go(new GroupLoader(appstate.get('user')))
       .reduce(Immutable.Set(), (acc, v) => acc.union(v));
 
-    eventBus.plug(gout.map(v => ({ e: 'app', a: ':app/groups', v: v })));
+    vbus.plug(gout.map(v => ({ e: 'app', a: ':app/groups', v: v })));
   });
 };

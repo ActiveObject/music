@@ -4,7 +4,7 @@ var Auth = require('app/core/auth');
 var router = require('app/core/router');
 var AuthRoute = require('app/routes/auth-route');
 var User = require('app/values/user');
-var eventBus = require('app/core/event-bus');
+var vbus = require('app/core/vbus');
 var accounts = require('app/accounts');
 
 var vkAuthUrl = Url.format({
@@ -37,7 +37,7 @@ module.exports = function (receive) {
       }
 
       try {
-        eventBus.push({ e: 'app', a: ':app/user', v: Auth.readFromUrl(redirectUrl) });
+        vbus.push({ e: 'app', a: ':app/user', v: Auth.readFromUrl(redirectUrl) });
       } catch (e) {
         console.log(e);
       }
