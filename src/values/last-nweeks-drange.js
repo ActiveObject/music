@@ -1,14 +1,16 @@
-var moment = require('moment');
 var hashCode = require('app/utils/hashCode');
 var dayOfYear = require('app/utils/dayOfYear');
 var ActivityItem = require('app/values/activity-item');
 
-function LastNWeeksDRange(n, today) {
-  var amout = moment(today).day() + (n - 1) * 7 + 1;
-  var dates = [];
+var dayms = 24 * 60 * 60 * 1000;
 
-  for (var i = 0; i < amout; i++) {
-    dates.push(moment(today).subtract(i, 'days'));
+function LastNWeeksDRange(n, today) {
+  var dates = [];
+  var todayTimestamp = today.valueOf();
+  var totalDays = n * 7 - (7 - today.getDay() - 1);
+
+  for (var i = 0; i < totalDays; i++) {
+    dates.push(new Date(todayTimestamp - i * dayms));
   }
 
   this.n = n;
@@ -42,7 +44,7 @@ LastNWeeksDRange.prototype.fillEmptyDates = function(activity) {
   });
 
   return this.dates.map(function(d) {
-    return new ActivityItem(d, activityDates[dayOfYear(d.toDate())] || 0);
+    return new ActivityItem(d, activityDates[dayOfYear(d)] || 0);
   });
 };
 

@@ -23,17 +23,17 @@ function Activity(owner, period, activities) {
 
 Activity.prototype.totalWeeks = function () {
   var t = {};
-  this.items.forEach(v => t[week(v.date.toDate())] = 1);
+  this.items.forEach(v => t[week(v.date)] = 1);
   return Object.keys(t).length;
 };
 
 Activity.prototype.sliceForDayOfWeek = function (day) {
-  return this.items.filter(v => weekday(v.date.toDate()) === day);
+  return this.items.filter(v => weekday(v.date) === day);
 };
 
 Activity.prototype.months = function () {
   var dateByMonth = this.sliceForDayOfWeek(0)
-    .groupBy(v => v.date.year() + ':' + v.date.month());
+    .groupBy(v => v.date.getFullYear() + ':' + (v.date.getMonth() + 1));
 
   return dateByMonth.map(function (days, key) {
     var [year, month] = key.split(':').map(Number);
