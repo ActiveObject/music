@@ -50,25 +50,27 @@ module.exports = function (receive) {
     }
   });
 
-  receive(':app/activity', function (appstate) {
+  receive(':app/activity', function (appstate, activities) {
     chrome.storage.local.set({
-      ':app/activity': JSON.stringify({ activities: appstate.get('activities') })
+      ':app/activity': JSON.stringify({
+        activities: appstate.get('activities').union(activities)
+      })
     }, function () {
 
     });
   });
 
-  receive(':app/tracks', function (appstate) {
+  receive(':app/tracks', function (appstate, tracks) {
     chrome.storage.local.set({
-      ':app/tracks': JSON.stringify({ tracks: appstate.get('tracks') })
+      ':app/tracks': JSON.stringify({ tracks: tracks })
     }, function () {
 
     });
   });
 
-  receive(':app/groups', function (appstate) {
+  receive(':app/groups', function (appstate, groups) {
     chrome.storage.local.set({
-      ':app/groups': JSON.stringify({ groups: appstate.get('groups') })
+      ':app/groups': JSON.stringify({ groups: groups })
     }, function () {
 
     });

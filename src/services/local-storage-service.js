@@ -35,15 +35,17 @@ module.exports = function (receive) {
     }
   });
 
-  receive(':app/activity', function (appstate) {
-    localStorage.setItem(':app/activity', JSON.stringify({ activities: appstate.get('activities') }));
+  receive(':app/activity', function (appstate, activities) {
+    localStorage.setItem(':app/activity', JSON.stringify({
+      activities: appstate.get('activities').union(activities)
+    }));
   });
 
-  receive(':app/tracks', function (appstate) {
-    localStorage.setItem(':app/tracks', JSON.stringify({ tracks: appstate.get('tracks') }));
+  receive(':app/tracks', function (appstate, tracks) {
+    localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
   });
 
-  receive(':app/groups', function (appstate) {
-    localStorage.setItem(':app/groups', JSON.stringify({ groups: appstate.get('groups') }));
+  receive(':app/groups', function (appstate, groups) {
+    localStorage.setItem(':app/groups', JSON.stringify({ groups: groups }));
   });
 };
