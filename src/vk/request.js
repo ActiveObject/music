@@ -1,6 +1,6 @@
 var Url = require('url');
-var _ = require('underscore');
 var request = require('app/core/request');
+var merge = require('app/utils/merge');
 
 var Request = function (attrs) {
   this.entryPoint = attrs.entryPoint;
@@ -15,7 +15,7 @@ var Request = function (attrs) {
     protocol: Url.parse(this.entryPoint).protocol,
     host: Url.parse(this.entryPoint).host,
     pathname: Url.parse(this.entryPoint).pathname + this.method,
-    query: _.extend(this.params, {
+    query: merge(this.params, {
       access_token: this.token,
       v: this.version
     })
@@ -48,7 +48,7 @@ Request.prototype.nextAttempt = function() {
 };
 
 Request.prototype.modify = function(attrs) {
-  return new Request(_.extend({}, this, attrs));
+  return new Request(merge(this, attrs));
 };
 
 module.exports = Request;
