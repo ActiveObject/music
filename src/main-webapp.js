@@ -27,5 +27,6 @@ if (process.env.NODE_ENV === 'development') {
   window.stats = require('app/core/stats');
 
   Perf.start();
+  vbus.log();
 }
 

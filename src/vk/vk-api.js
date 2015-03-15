@@ -1,5 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
+var merge = require('app/utils/merge');
 var not = require('app/utils/not');
 var Request = require('./request');
 var Response = require('./response');
@@ -22,7 +23,7 @@ UnathorizedApiState.prototype.authorize = function (user) {
     user: user.id,
     token: user.accessToken,
     entryPoint: this.entryPoint,
-    pending: this.pending,
+    pending: this.pending.map(req => req.modify({ token: user.accessToken })),
     version: this.version
   });
 };
@@ -32,7 +33,7 @@ UnathorizedApiState.prototype.takeResult = function (req, res) {
 };
 
 UnathorizedApiState.prototype.modify = function (attrs) {
-  return new UnathorizedApiState(_.extend({}, this, attrs));
+  return new UnathorizedApiState(merge(this, attrs));
 };
 
 function ProcessingApiState(attrs) {
@@ -73,7 +74,7 @@ ProcessingApiState.prototype.takeResult = function(req, res) {
 };
 
 ProcessingApiState.prototype.modify = function (attrs) {
-  return new ProcessingApiState(_.extend({}, this, attrs));
+  return new ProcessingApiState(merge(this, attrs));
 };
 
 
@@ -97,7 +98,7 @@ LimitedAccessApiState.prototype.takeResult = function (req, res) {
 };
 
 LimitedAccessApiState.prototype.modify = function (attrs) {
-  return new LimitedAccessApiState(_.extend({}, this, attrs));
+  return new LimitedAccessApiState(merge(this, attrs));
 };
 
 

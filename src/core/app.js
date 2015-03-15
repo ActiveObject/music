@@ -3,12 +3,14 @@ var Immutable = require('immutable');
 var Bacon = require('baconjs');
 var isString = require('underscore').isString;
 var debug = require('debug')('app:core:app');
-var isValue = require('app/utils/isValue');
-var isDatom = require('app/utils/isDatom');
 var vbus = require('app/core/vbus');
 var BufferedEventStream = require('app/core/buffered-event-stream');
 var Atom = require('app/core/atom');
 var dispatch = require('app/core/dispatcher');
+
+var isValue = require('app/utils/isValue');
+var tagOf = require('app/utils/tagOf');
+var valueOf = require('app/utils/valueOf');
 
 if (process.env.NODE_ENV === 'development') {
   var stats = require('app/core/stats');
@@ -18,47 +20,6 @@ var app = module.exports = new Atom(Immutable.Map());
 
 var handlers = [];
 var processNum = 0;
-
-function tagOf(v) {
-  if (typeof v === 'string') {
-    return v;
-  }
-
-  if (Array.isArray(v)) {
-    return v[0];
-  }
-
-  if (typeof v.tag === 'function') {
-    return v.tag();
-  }
-
-  if (isDatom(v)) {
-    return v.a;
-  }
-
-  throw new TypeError('Unknown vbus value', v);
-}
-
-function valueOf(v) {
-  if (typeof v === 'string') {
-    return v;
-  }
-
-  if (Array.isArray(v)) {
-    return v[1];
-  }
-
-  if (typeof v.tag === 'function') {
-    return v;
-  }
-
-  if (isDatom(v)) {
-    return v.v;
-  }
-
-  throw new TypeError('Unknown vbus value', v);
-}
-
 
 var dispatchStream = new BufferedEventStream(vbus, function (v) {
   if (process.env.NODE_ENV === 'development') {
