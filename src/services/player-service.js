@@ -21,9 +21,8 @@ module.exports = function(receive) {
   receive(':app/player', (appstate, v) => appstate.set('player', v));
   receive(':app/started', appstate => appstate.set('player', player));
 
-  receive(':app/tracks', function(appstate) {
+  receive(':app/tracks', function(appstate, tracks) {
     var player = appstate.get('player');
-    var tracks = appstate.get('tracks');
 
     if (player.tracklist.type === 'library') {
       return appstate.update('player', function (player) {
