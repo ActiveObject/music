@@ -45,8 +45,4 @@ module.exports = function (receive) {
 
     return appstate.set('user', new User.Unauthenticated());
   });
-
-  receive(':app/user', function (appstate, user) {
-    return appstate.set('user', user);
-  });
 };

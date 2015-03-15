@@ -18,7 +18,5 @@ module.exports = function (receive) {
     if (!user.isAuthenticated()) {
       router.transitionTo(new AuthRoute({ vkAccount: accounts.vk }));
     }
-
-    return appstate.set('user', user);
   });
 };
