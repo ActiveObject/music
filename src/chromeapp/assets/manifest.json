@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Music",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "icons": {
     "128": "icon_128.png"
   },
