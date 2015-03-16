@@ -1,17 +1,14 @@
 var _ = require('underscore');
-var moment = require('moment');
 var IList = require('immutable').List;
-var ISet = require('immutable').Set;
 var merge = require('app/utils/merge');
 var hashCode = require('app/utils/hashCode');
-var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var ActivityItem = require('app/values/activity-item');
 var week = require('app/utils/week');
 var weekday = require('app/utils/weekday');
 
 function Activity(owner, period, activities) {
+  console.time('activity');
   var items = _.chain(activities.toArray())
-    .filter(a => a.owner === owner)
     .groupBy(a => a.date)
     .mapObject((v, k) => new ActivityItem(new Date(k), v.length))
     .values()
@@ -19,6 +16,7 @@ function Activity(owner, period, activities) {
 
   this.owner = owner;
   this.items = IList(_.sortBy(period.fillEmptyDates(items), 'date'));
+  console.timeEnd('activity');
 }
 
 Activity.prototype.totalWeeks = function () {

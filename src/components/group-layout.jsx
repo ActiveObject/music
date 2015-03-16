@@ -1,19 +1,45 @@
 var React = require('react/addons');
+var ISet = require('immutable').Set;
 var App = require('app/components/app');
 var Newsfeed = require('app/components/newsfeed');
 var Player = require('app/components/player');
 var IScrollLayer = require('app/components/iscroll-layer');
-var Box = require('app/components/box');
 var ActivityChart = require('app/components/activity-chart');
+var Box = require('app/components/box');
 
 var app = require('app');
-var vbus = require('app/core/vbus');
 var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
 
 require('app/styles/group-layout.styl');
+
+var GroupActivityCard = React.createClass({
+  getInitialState: function () {
+    return {
+      activity: ISet()
+    };
+  },
+
+  componentWillMount: function () {
+    var out = app
+      .go(new ActivityLoader(-this.props.group.id, this.props.period))
+      .scan(this.state.activity, (v, next) => v.union(next))
+
+    this.unsub = out.onValue(v => this.setState({ activity: v }))
+  },
+
+  componentWillUnmount: function () {
+    this.unsub();
+  },
+
+  render: function () {
+    var activity = new Activity(-this.props.group.id, this.props.period, this.state.activity);
+    return <ActivityChart activity={activity} />;
+  }
+});
+
 
 var GroupProfile = React.createClass({
   mixins: [React.addons.PureRenderMixin],
@@ -30,7 +56,7 @@ var GroupProfile = React.createClass({
           <div key='name'>{this.props.group.name}</div>
         </div>
 
-        <ActivityChart activity={activity}></ActivityChart>
+        <GroupActivityCard group={this.props.group} period={this.props.period} />
       </div>
     );
   }
@@ -53,12 +79,6 @@ var GroupLayout = React.createClass({
     this.usubscribe = nfChannel
       .scan(newsfeed, (acc, next) => acc.merge(next))
       .onValue(v => this.setState({ newsfeed: v }));
-
-    var out = app
-      .go(new ActivityLoader(-this.props.id, this.props.period))
-      .map(v => ({ e: 'app', a: ':app/activity', v: v }));
-
-    vbus.plug(out);
   },
 
   componentWillUnmount: function() {
