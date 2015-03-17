@@ -2,8 +2,9 @@ require('app/styles/track.styl');
 require('app/styles/element.styl');
 
 var React = require('react/addons');
+var cx = require('classnames');
 var duration = require('app/utils/duration');
-var PlayBtn = require('app/components/play-btn');
+var PlayBtnCell = require('app/components/play-btn-cell');
 
 var Track = React.createClass({
   mixins: [React.addons.PureRenderMixin],
@@ -25,19 +26,20 @@ var Track = React.createClass({
 
   render: function() {
     var audio = this.props.track.audio;
+    var classSet = cx({
+      'track': true,
+      'track--active': this.props.isActive
+    });
 
     return (
-      <div className='track'>
-        <PlayBtn
+      <div className={classSet}>
+        <PlayBtnCell
           isPlaying={this.props.isPlaying}
           isActive={this.props.isActive}
           onClick={v => this.props.onTogglePlay(this.props.track)} />
 
-        <div className='track-desc' title={`${audio.artist} - ${audio.title}`}>
-          <a className='element-link track-artist' href={`/artist/${audio.artist}`}>{audio.artist}</a>
-          <div className='track-title'>{audio.title}</div>
-        </div>
-
+        <div className='track-title'>{audio.title}</div>
+        <div className='track-artist'><span>{audio.artist}</span></div>
         <div className='track-duration'>{duration(audio.duration)}</div>
       </div>
     );

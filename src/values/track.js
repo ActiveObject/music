@@ -8,6 +8,7 @@ function Track(attrs) {
 
   this.id = Number(attrs.id);
   this.owner = attrs.owner_id;
+  this.album = attrs.album;
   this.audio = attrs.audio;
 }
 
@@ -15,6 +16,7 @@ Track.fromVk = function (data) {
   return new Track({
     id: Number(data.id),
     owner: data.owner_id,
+    album: data.album_id,
     audio: new Audio({
       artist: data.artist,
       title: data.title,
@@ -29,6 +31,7 @@ Track.fromJSON = function (data) {
   return new Track({
     id: data.id,
     owner: data.owner,
+    album: data.album,
     audio: new Audio(data.audio)
   });
 };
@@ -38,6 +41,7 @@ Track.prototype.toJSON = function () {
     'app/values/track': {
       id: this.id,
       owner: this.owner,
+      album: this.album,
       audio: this.audio.toJSON()
     }
   };

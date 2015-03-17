@@ -4,6 +4,19 @@
   overflow: hidden
   transition: background-color 0.3s, width 0.3s linear
 
+.main-layout .rb-bounding-box,
+.main-layout .rc-bounding-box
+  padding: 0
+
+.main-layout .rb-content-box,
+.main-layout .rc-content-box
+  width: 100%
+
+@media screen and (min-width: 1400px)
+  .main-layout .rb-content-box,
+  .main-layout .rc-content-box
+    width: 85%
+
 .main-layout .scroll-body
   padding: 50px 0
 
@@ -13,3 +26,10 @@
   font-weight: 100
   line-height: 1.2em
   padding-left: 16px
+
+.playlist h3
+  font-family: 'Roboto', sans-serif
+  font-weight: 100
+  font-size: 1.5em
+  padding-left: 45px
+  margin-top: 80px

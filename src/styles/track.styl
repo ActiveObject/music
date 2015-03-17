@@ -1,31 +1,42 @@
 @import 'nib'
 
-.track-duration
-  position: absolute
-  right: 0
-  margin-right: 15px
-  margin-top: 21px
-  height: 40px
-
 .track
   display: flex
+  align-items: center
   height: 40px
   width: 100%
-  margin: 20px 0
-  font-size: 0.9em
+  padding: 0 5px
   font-family: 'Roboto', sans-serif
-  font-weight: 300
+  font-size: 0.9em
+  transition: background-color 0.1s ease-in
+
+.track-title,
+.track-artist,
+.track-duration
+  margin: 0 5px
 
 .track-title,
 .track-artist
   text-overflow: ellipsis
   white-space: nowrap
   overflow: hidden
-  line-height: 1.4em
+
+.track-title
+  width: 50%
 
 .track-artist
-  font-weight: 500
+  width: 40%
 
-.track-desc
-  margin-right: 80px
-  margin-top: 6px
+.track-duration
+  width: 10%
+  text-align: right
+
+.play-btn-cell
+  cursor: pointer
+  user-select: none
+
+  .icon
+    width: 40px
+    height: 40px
+    padding: 10px
+    transition: fill 0.2s

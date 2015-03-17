@@ -30,7 +30,7 @@ var LazyTracklist = React.createClass({
   },
 
   getInitialState: function () {
-    var items = this.props.tracklist.playlist.tracks.toJS();
+    var items = this.props.tracklist.playlist.tracks.toJS().slice(0, 5);
 
     return {
       cursor: new Cursor(items, {
@@ -42,7 +42,7 @@ var LazyTracklist = React.createClass({
 
   getDefaultProps: function () {
     return {
-      itemHeight: 40 + 20,
+      itemHeight: 40,
       pageSize: 10
     };
   },
@@ -69,9 +69,9 @@ var LazyTracklist = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     if (this.props.tracklist !== nextProps.tracklist) {
-      this.setState({
-        cursor: this.state.cursor.updateItems(nextProps.tracklist.playlist.tracks.toJS())
-      });
+      // this.setState({
+      //   cursor: this.state.cursor.updateItems(nextProps.tracklist.playlist.tracks.toJS())
+      // });
     }
   },
 

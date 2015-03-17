@@ -1,4 +1,5 @@
 require('app/styles/active-track.styl');
+require('app/styles/play-btn.styl');
 
 var React = require('react');
 var moment = require('moment');
@@ -73,20 +74,9 @@ module.exports = React.createClass({
       .className('player-body')
       .append(playBtn, desc, time, progress);
 
-    var tabs = dom.div()
-      .key('tabs')
-      .className('player-playlist-tabs player-playlist-tabs-active')
-      .append(new Tabs({
-        items: this.props.player.recentTracklists.map(function (item) {
-          return { text: item.tracklist.name, isActive: item.visible, id: item.tracklist.id };
-        }),
-
-        onChange: this.changePlaylist
-      }));
-
     return dom.div()
       .className('active-track')
-      .append(body, tabs)
+      .append(body)
       .make();
   },
 

@@ -11,7 +11,7 @@ var Tracklist = React.createClass({
   },
 
   render: function() {
-    var tracks = this.props.tracklist.playlist.tracks.map(function (track) {
+    var tracks = this.props.tracklist.playlist.tracks.slice(0, 5).map(function (track) {
       var isActive = track.id === this.props.player.track.id;
       var isPlaying = isActive && this.props.player.isPlaying;
 
