@@ -11,7 +11,7 @@ ActivityStore.forGroup = function (group) {
   result.unsub = vbus
     .filter(v => tagOf(v) === ':app/activity')
     .map(([tag, v]) => v.filter(item => item.owner === -group.id))
-    .onValue(v => Atom.update(result, (a) => a.union(v)))
+    .onValue(v => Atom.update(result, (a) => a.union(v)));
 
   return result;
 };
