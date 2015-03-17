@@ -8,30 +8,40 @@ var ActivityChart = require('app/components/activity-chart');
 var Box = require('app/components/box');
 
 var app = require('app');
+var vbus = require('app/core/vbus');
+var Atom = require('app/core/atom');
+var addTag = require('app/utils/addTag');
 var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
+var ActivityStore = require('app/stores/activity-store');
+var GroupStore = require('app/stores/group-store');
 
 require('app/styles/group-layout.styl');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
+    this.activity = ActivityStore.forGroup(this.props.group);
+
     return {
-      activity: ISet()
+      activity: this.activity.value
     };
   },
 
   componentWillMount: function () {
     var out = app
       .go(new ActivityLoader(-this.props.group.id, this.props.period))
-      .scan(this.state.activity, (v, next) => v.union(next))
+      .map(addTag(':app/activity'));
 
-    this.unsub = out.onValue(v => this.setState({ activity: v }))
+    this.unsub1 = Atom.listen(this.activity, (v) => this.setState({ activity: v }));
+    this.unsub2 = vbus.plug(out);
   },
 
   componentWillUnmount: function () {
-    this.unsub();
+    this.unsub1();
+    this.unsub2();
+    this.activity.unsub();
   },
 
   render: function () {
@@ -45,8 +55,6 @@ var GroupProfile = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
   render: function () {
-    var activity = new Activity(-this.props.id, this.props.period, this.props.activities);
-
     return (
       <div>
         <div key='group-profile' className='group-profile-info'>
@@ -66,7 +74,10 @@ var GroupLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
   getInitialState: function () {
-    return { newsfeed: newsfeed };
+    return {
+      newsfeed: newsfeed,
+      groups: GroupStore.value
+    };
   },
 
   componentWillMount: function() {
@@ -79,14 +90,17 @@ var GroupLayout = React.createClass({
     this.usubscribe = nfChannel
       .scan(newsfeed, (acc, next) => acc.merge(next))
       .onValue(v => this.setState({ newsfeed: v }));
+
+    this.unsub = Atom.listen(GroupStore, v => this.setState({ groups: v }));
   },
 
   componentWillUnmount: function() {
     this.usubscribe();
+    this.unsub();
   },
 
   render: function() {
-    var group = this.props.groups.find(g => g.id === this.props.id);
+    var group = this.state.groups.find(g => g.id === this.props.id);
 
     return (
       <App layout={['two-region', 'group-layout']}>

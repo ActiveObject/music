@@ -9,10 +9,16 @@ function update(key, updater) {
   };
 }
 
+// var tagOf = require('app/utils/tagOf');
+
 module.exports = function(receive) {
-  receive(':soundmanager/bytes-loaded', update('player', (p, v) => p.modify({ bytesLoaded: v })));
-  receive(':soundmanager/bytes-total', update('player', (p, v) => p.modify({ bytesTotal: v })));
-  receive(':soundmanager/position', update('player', (p, v) => p.modify({ position: v })));
+  // vbus
+  //   .filter(v => tagOf(v) === ':soundmanager/bytes-loaded')
+  //   .onValue(function () { debugger });
+
+  // receive(':soundmanager/bytes-loaded', update('player', (p, v) => p.modify({ bytesLoaded: v })));
+  // receive(':soundmanager/bytes-total', update('player', (p, v) => p.modify({ bytesTotal: v })));
+  // receive(':soundmanager/position', update('player', (p, v) => p.modify({ position: v })));
 
   receive(':soundmanager/finish', function (appstate) {
     vbus.push(appstate.get('player').nextTrack().play());

@@ -29,23 +29,23 @@ module.exports = function (receive) {
     }
   });
 
-  receive(':app/player', function (appstate, player) {
-    if (player.track !== appstate.get('player')) {
-      localStorage.setItem(':player/track', JSON.stringify(player.track));
-    }
-  });
+  // receive(':app/player', function (appstate, player) {
+  //   if (player.track !== appstate.get('player')) {
+  //     localStorage.setItem(':player/track', JSON.stringify(player.track));
+  //   }
+  // });
 
-  receive(':app/activity', function (appstate, activities) {
-    localStorage.setItem(':app/activity', JSON.stringify({
-      activities: appstate.get('activities').union(activities)
-    }));
-  });
+  // receive(':app/activity', function (appstate, activities) {
+  //   localStorage.setItem(':app/activity', JSON.stringify({
+  //     activities: appstate.get('activities').union(activities)
+  //   }));
+  // });
 
-  receive(':app/tracks', function (appstate, tracks) {
-    localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
-  });
+  // receive(':app/tracks', function (appstate, tracks) {
+  //   localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
+  // });
 
-  receive(':app/groups', function (appstate, groups) {
-    localStorage.setItem(':app/groups', JSON.stringify({ groups: groups }));
-  });
+  // receive(':app/groups', function (appstate, groups) {
+  //   localStorage.setItem(':app/groups', JSON.stringify({ groups: groups }));
+  // });
 };

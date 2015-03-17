@@ -9,14 +9,31 @@ var Box = require('app/components/box');
 var IScrollLayer = require('app/components/iscroll-layer');
 var GroupActivityCard = require('app/components/group-activity-card');
 
+var Atom = require('app/core/atom');
+var GroupStore = require('app/stores/group-store');
+
 require('app/styles/main-layout.styl');
 
 var ActivityList = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
+  getInitialState: function () {
+    return {
+      groups: GroupStore.value
+    };
+  },
+
+  componentWillMount: function () {
+    this.unsub = Atom.listen(GroupStore, v => this.setState({ groups: v }));
+  },
+
+  componentWillUnmount: function () {
+    this.unsub();
+  },
+
   render: function () {
     var cards = this.props.visibleGroups
-      .map(id => this.props.groups.find(group => group.id === id))
+      .map(id => this.state.groups.find(group => group.id === id))
       .filter(isValue)
       .map(group => <GroupActivityCard period={this.props.period} group={group} />);
 
@@ -33,10 +50,7 @@ var MainLayout = React.createClass({
         <Box prefix='ra-' key='region-a'>
           <IScrollLayer>
             <span className='main-section-title'>Спільноти</span>
-            <ActivityList
-              visibleGroups={this.props.visibleGroups}
-              groups={this.props.groups}
-              period={this.props.period} />
+            <ActivityList visibleGroups={this.props.visibleGroups} period={this.props.period} />
           </IScrollLayer>
         </Box>
 
