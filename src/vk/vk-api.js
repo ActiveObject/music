@@ -208,7 +208,7 @@ module.exports = new VkApi({
   mountPoint: 'vk',
   rateLimit: 2,
   atom: new Atom(new UnathorizedApiState({
-    version: '5.25',
+    version: '5.29',
     entryPoint: 'https://api.vk.com/method/',
     pending: []
   }))

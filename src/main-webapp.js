@@ -21,6 +21,7 @@ require('app/stores/activity-store');
 require('app/stores/group-store');
 require('app/stores/track-store');
 require('app/stores/player-store');
+require('app/stores/album-store');
 
 require('app/services/vk-indexing-service');
 require('app/services/router-service');

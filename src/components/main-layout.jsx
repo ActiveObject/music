@@ -14,6 +14,7 @@ var Atom = require('app/core/atom');
 var GroupStore = require('app/stores/group-store');
 var TrackStore = require('app/stores/track-store');
 var PlayerStore = require('app/stores/player-store');
+var AlbumStore = require('app/stores/album-store');
 var Playlist = require('app/values/playlist');
 var GenreTracklist = require('app/values/tracklists/genre-tracklist');
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
@@ -53,65 +54,46 @@ var MainLayout = React.createClass({
 
   getInitialState: function () {
     return {
-      tracks: TrackStore.value
+      tracks: TrackStore.value,
+      albums: AlbumStore.value
     };
   },
 
   componentWillMount: function () {
-    this.unsub = Atom.listen(TrackStore, v => this.setState({ tracks: v }));
+    this.unsub1 = Atom.listen(TrackStore, v => this.setState({ tracks: v }));
+    this.unsub2 = Atom.listen(AlbumStore, v => this.setState({ albums: v }));
   },
 
   componentWillUnmount: function () {
-    this.unsub();
+    this.unsub1();
+    this.unsub2();
   },
 
   render: function() {
-    var playlists = [
-      new LibraryTracklist({
-        name: 'All tracks',
-        playlist: new Playlist({
-          tracks: Immutable.List(),
-          isShuffled: false,
-          isRepeated: false
-        })
-      }).update(this.state.tracks),
-      new GenreTracklist({
-        genre: 19024584,
-        name: 'Progressive Breaks',
-        playlist: new Playlist({
-          tracks: Immutable.List(),
-          isShuffled: false,
-          isRepeated: false
-        })
-      }).update(this.state.tracks),
-      new GenreTracklist({
-        genre: 19507776,
-        name: 'DnB',
-        playlist: new Playlist({
-          tracks: Immutable.List(),
-          isShuffled: false,
-          isRepeated: false
-        })
-      }).update(this.state.tracks),
-      new GenreTracklist({
-        genre: 19024555,
-        name: 'Dubstep',
-        playlist: new Playlist({
-          tracks: Immutable.List(),
-          isShuffled: false,
-          isRepeated: false
-        })
-      }).update(this.state.tracks),
-      new GenreTracklist({
-        genre: 22196201,
-        name: 'Breaks',
-        playlist: new Playlist({
-          tracks: Immutable.List(),
-          isShuffled: false,
-          isRepeated: false
-        })
-      }).update(this.state.tracks)
-    ].map(function (tracklist) {
+    var allTracks = new LibraryTracklist({
+      name: 'All tracks',
+      playlist: new Playlist({
+        tracks: Immutable.List(),
+        isShuffled: false,
+        isRepeated: false
+      })
+    }).update(this.state.tracks);
+
+    var albums = this.state.albums
+      .sortBy(v => v.title)
+      .map(function (album) {
+        return new GenreTracklist({
+          genre: album.id,
+          name: album.title,
+          playlist: new Playlist({
+            tracks: Immutable.List(),
+            isShuffled: false,
+            isRepeated: false
+          })
+        }).update(this.state.tracks);
+      }, this);
+
+    var playlists = [allTracks].concat(albums.toJS()).map(function (tracklist) {
       return <PlaylistView value={tracklist} />;
     }, this);
 
