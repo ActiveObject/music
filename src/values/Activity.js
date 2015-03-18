@@ -7,7 +7,6 @@ var week = require('app/utils/week');
 var weekday = require('app/utils/weekday');
 
 function Activity(owner, period, activities) {
-  console.time('activity');
   var items = _.chain(activities.toArray())
     .groupBy(a => a.date)
     .mapObject((v, k) => new ActivityItem(new Date(k), v.length))
@@ -16,7 +15,6 @@ function Activity(owner, period, activities) {
 
   this.owner = owner;
   this.items = IList(_.sortBy(period.fillEmptyDates(items), 'date'));
-  console.timeEnd('activity');
 }
 
 Activity.prototype.totalWeeks = function () {
