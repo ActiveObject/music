@@ -70,6 +70,26 @@ var PlaylistView = React.createClass({
   }
 });
 
+var PlayerContainer = React.createClass({
+  getInitialState: function () {
+    return {
+      player: PlayerStore.value
+    };
+  },
+
+  componentWillMount: function () {
+    this.unsub = Atom.listen(PlayerStore, v => this.setState({ player: v }));
+  },
+
+  componentWillUnmount: function () {
+    this.unsub();
+  },
+
+  render: function() {
+    return <Player player={this.state.player} />;
+  }
+});
+
 var MainLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
@@ -144,7 +164,7 @@ var MainLayout = React.createClass({
         </Box>
 
         <Box prefix='rc-' key='region-c'>
-          <Player player={this.props.player}></Player>
+          <PlayerContainer />
         </Box>
       </App>
     );
