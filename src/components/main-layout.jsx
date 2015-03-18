@@ -12,6 +12,7 @@ var GroupActivityCard = require('app/components/group-activity-card');
 var Atom = require('app/core/atom');
 var GroupStore = require('app/stores/group-store');
 var TrackStore = require('app/stores/track-store');
+var PlayerStore = require('app/stores/player-store');
 var Playlist = require('app/values/playlist');
 var GenreTracklist = require('app/values/tracklists/genre-tracklist');
 
@@ -45,11 +46,25 @@ var ActivityList = React.createClass({
 });
 
 var PlaylistView = React.createClass({
+  getInitialState: function () {
+    return {
+      player: PlayerStore.value
+    };
+  },
+
+  componentWillMount: function () {
+    this.unsub = Atom.listen(PlayerStore, v => this.setState({ player: v }));
+  },
+
+  componentWillUnmount: function () {
+    this.unsub();
+  },
+
   render: function() {
     return (
       <div className='playlist'>
         <h3>{this.props.value.name}</h3>
-        <Tracklist player={this.props.player} tracklist={this.props.value} />
+        <Tracklist player={this.state.player} tracklist={this.props.value} />
       </div>
     );
   }
@@ -112,7 +127,7 @@ var MainLayout = React.createClass({
         })
       }).update(this.state.tracks)
     ].map(function (tracklist) {
-      return <PlaylistView player={this.props.player} value={tracklist} />;
+      return <PlaylistView value={tracklist} />;
     }, this);
 
     return (
