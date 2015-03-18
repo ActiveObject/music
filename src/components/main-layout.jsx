@@ -1,23 +1,17 @@
 var React = require('react/addons');
 var Immutable = require('immutable');
+var Atom = require('app/core/atom');
 var isValue = require('app/utils/isValue');
+var GroupStore = require('app/stores/group-store');
 
 var App = require('app/components/app');
-var Tracklist = require('app/components/tracklist');
 var Box = require('app/components/box');
 var IScrollLayer = require('app/components/iscroll-layer');
 var GroupActivityCard = require('app/components/group-activity-card');
 var PlayerContainer = require('app/components/player-container');
-var PlaylistView = require('app/components/playlist-view');
+var UserPlaylists = require('app/components/user-playlists');
 
-var Atom = require('app/core/atom');
-var GroupStore = require('app/stores/group-store');
-var TrackStore = require('app/stores/track-store');
 var PlayerStore = require('app/stores/player-store');
-var AlbumStore = require('app/stores/album-store');
-var Playlist = require('app/values/playlist');
-var GenreTracklist = require('app/values/tracklists/genre-tracklist');
-var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 
 require('app/styles/main-layout.styl');
 
@@ -48,55 +42,10 @@ var ActivityList = React.createClass({
   }
 });
 
-
 var MainLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
-  getInitialState: function () {
-    return {
-      tracks: TrackStore.value,
-      albums: AlbumStore.value
-    };
-  },
-
-  componentWillMount: function () {
-    this.unsub1 = Atom.listen(TrackStore, v => this.setState({ tracks: v }));
-    this.unsub2 = Atom.listen(AlbumStore, v => this.setState({ albums: v }));
-  },
-
-  componentWillUnmount: function () {
-    this.unsub1();
-    this.unsub2();
-  },
-
   render: function() {
-    var allTracks = new LibraryTracklist({
-      name: 'All tracks',
-      playlist: new Playlist({
-        tracks: Immutable.List(),
-        isShuffled: false,
-        isRepeated: false
-      })
-    }).update(this.state.tracks);
-
-    var albums = this.state.albums
-      .sortBy(v => v.title)
-      .map(function (album) {
-        return new GenreTracklist({
-          genre: album.id,
-          name: album.title,
-          playlist: new Playlist({
-            tracks: Immutable.List(),
-            isShuffled: false,
-            isRepeated: false
-          })
-        }).update(this.state.tracks);
-      }, this);
-
-    var playlists = [allTracks].concat(albums.toJS()).map(function (tracklist) {
-      return <PlaylistView value={tracklist} />;
-    }, this);
-
     return (
       <App layout={['two-region', 'main-layout']}>
         <Box prefix='ra-' key='region-a'>
@@ -107,7 +56,9 @@ var MainLayout = React.createClass({
         </Box>
 
         <Box prefix='rb-' key='region-b'>
-          <IScrollLayer>{playlists}</IScrollLayer>
+          <IScrollLayer>
+            <UserPlaylists />
+          </IScrollLayer>
         </Box>
 
         <Box prefix='rc-' key='region-c'>
