@@ -1,7 +1,8 @@
+var vbus = require('app/core/vbus');
+var tagOf = require('app/utils/tagOf');
 var vk = require('app/vk');
 
-module.exports = function VkService(receive, mount) {
-  receive(':app/user', function(appstate, user) {
-    vk.authorize(user);
-  });
-};
+vbus
+  .filter(v => tagOf(v) === ':app/user')
+  .filter(user => user.isAuthenticated())
+  .onValue(user => vk.authorize(user));

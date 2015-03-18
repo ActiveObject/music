@@ -11,7 +11,7 @@ function Router(mountPoint) {
 
 Router.prototype.transitionTo = function (nextRoute) {
   Atom.update(this, function (currRoute) {
-    return nextRoute.lifecycle.transition(currRoute, nextRoute);
+    return currRoute.lifecycle.transition(currRoute, nextRoute);
   });
 };
 

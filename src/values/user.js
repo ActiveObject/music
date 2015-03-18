@@ -40,6 +40,10 @@ function UnauthenticatedUser() {
 
 }
 
+UnauthenticatedUser.prototype.tag = function() {
+  return ':app/user';
+};
+
 UnauthenticatedUser.prototype.isAuthenticated = function () {
   return false;
 };
