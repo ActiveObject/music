@@ -20,7 +20,7 @@ user.onValue(function (user) {
 
   var aout = go(new AlbumsLoader(user))
     .reduce(ISet(), (acc, v) => acc.union(v))
-    .map(addTag(':app/albums'))
+    .map(addTag(':app/albums'));
 
   vbus.plug(tout);
   vbus.plug(gout);

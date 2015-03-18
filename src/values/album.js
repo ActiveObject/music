@@ -3,7 +3,7 @@ function Album(attrs) {
     return new Album(attrs);
   }
 
-  this.id = attrs.id,
+  this.id = attrs.id;
   this.owner = attrs.owner;
   this.title = attrs.title;
 }
