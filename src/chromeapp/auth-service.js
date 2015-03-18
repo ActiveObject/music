@@ -21,28 +21,24 @@ var vkAuthUrl = Url.format({
   }
 });
 
-module.exports = function (receive) {
-  receive(':app/started', function(appstate) {
-    chrome.identity.launchWebAuthFlow({
-      url: vkAuthUrl,
-      interactive: true
-    }, function(redirectUrl) {
-      if (!redirectUrl) {
-        throw new VError(
-          'Authentication failed: %s \n' +
-          'Chrome App id: %s, check if it is the id of published app.',
-          chrome.runtime.lastError.message,
-          process.env.MUSIC_CHROME_APP_ID
-        );
-      }
+chrome.identity.launchWebAuthFlow({
+  url: vkAuthUrl,
+  interactive: true
+}, function(redirectUrl) {
+  if (!redirectUrl) {
+    throw new VError(
+      'Authentication failed: %s \n' +
+      'Chrome App id: %s, check if it is the id of published app.',
+      chrome.runtime.lastError.message,
+      process.env.MUSIC_CHROME_APP_ID
+    );
+  }
 
-      try {
-        vbus.push(Auth.readFromUrl(redirectUrl));
-      } catch (e) {
-        console.log(e);
-      }
-    });
+  try {
+    vbus.push(Auth.readFromUrl(redirectUrl));
+  } catch (e) {
+    console.log(e);
+  }
+});
 
-    return appstate.set('user', new User.Unauthenticated());
-  });
-};
+vbus.push(new User.Unauthenticated());

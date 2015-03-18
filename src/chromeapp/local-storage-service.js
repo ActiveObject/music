@@ -1,11 +1,13 @@
-var ISet = require('immutable').Set;
 var has = require('underscore').has;
-var NewsfeedActivity = require('app/values/newsfeed-activity');
-var Track = require('app/values/track');
-var Group = require('app/values/group');
-var firstValue = require('app/utils/firstValue');
-var revive = require('app/core/revive');
+var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
+var revive = require('app/core/revive');
+var tagOf = require('app/utils/tagOf');
+var firstValue = require('app/utils/firstValue');
+var PlayerStore = require('app/stores/player-store');
+var ActivityStore = require('app/stores/activity-store');
+var GroupStore = require('app/stores/group-store');
+var TrackStore = require('app/stores/track-store');
 
 function getStoredValue(key, fn) {
   chrome.storage.local.get(key, function (items) {
@@ -15,64 +17,54 @@ function getStoredValue(key, fn) {
   });
 }
 
-module.exports = function (receive) {
-  // receive(':app/started', function(appstate) {
-  //   getStoredValue(':player/track', function (track) {
-  //     vbus.push(appstate.get('player').useTrack(firstValue(JSON.parse(track, revive))));
-  //   });
-  // });
+getStoredValue(':player/track', function (track) {
+  vbus.push(PlayerStore.value.useTrack(firstValue(JSON.parse(track, revive))));
+});
 
-  receive(':app/started', function() {
-    getStoredValue(':app/activity', function (activity) {
-      vbus.push([':app/activity', JSON.parse(activity, revive).activities]);
+getStoredValue(':app/activity', function (activity) {
+  vbus.push([':app/activity', JSON.parse(activity, revive).activities]);
+});
+
+getStoredValue(':app/tracks', function (tracks) {
+  vbus.push([':app/tracks', JSON.parse(tracks, revive).tracks]);
+});
+
+getStoredValue(':app/groups', function (groups) {
+  vbus.push([':app/groups', JSON.parse(groups, revive).groups]);
+});
+
+
+vbus
+  .filter(v => tagOf(v) === ':app/player')
+  .map(player => player.track)
+  .skipDuplicates()
+  .map(JSON.stringify)
+  .onValue(function(v) {
+    chrome.storage.local.set({ ':player/track': v }, function () {
+
     });
   });
 
-  receive(':app/started', function () {
-    getStoredValue(':app/tracks', function (tracks) {
-      vbus.push([ ':app/tracks', JSON.parse(tracks, revive).tracks]);
-    });
+Atom.listen(ActivityStore, function(activity) {
+  chrome.storage.local.set({
+    ':app/activity': JSON.stringify({ activities: activity })
+  }, function () {
+
   });
+});
 
-  receive(':app/started', function () {
-    getStoredValue(':app/groups', function (groups) {
-      vbus.push([':app/groups', JSON.parse(groups, revive).groups]);
-    });
+Atom.listen(GroupStore, function(groups) {
+  chrome.storage.local.set({
+    ':app/groups': JSON.stringify({ groups: groups })
+  }, function () {
+
   });
+});
 
-  // receive(':app/player', function (appstate, player) {
-  //   if (player.track !== appstate.get('player').track) {
-  //     chrome.storage.local.set({
-  //       ':player/track': JSON.stringify(player.track)
-  //     }, function () {
+Atom.listen(TrackStore, function(tracks) {
+  chrome.storage.local.set({
+    ':app/tracks': JSON.stringify({ tracks: tracks })
+  }, function () {
 
-  //     });
-  //   }
-  // });
-
-  // receive(':app/activity', function (appstate, activities) {
-  //   chrome.storage.local.set({
-  //     ':app/activity': JSON.stringify({
-  //       activities: appstate.get('activities').union(activities)
-  //     })
-  //   }, function () {
-
-  //   });
-  // });
-
-  // receive(':app/tracks', function (appstate, tracks) {
-  //   chrome.storage.local.set({
-  //     ':app/tracks': JSON.stringify({ tracks: tracks })
-  //   }, function () {
-
-  //   });
-  // });
-
-  // receive(':app/groups', function (appstate, groups) {
-  //   chrome.storage.local.set({
-  //     ':app/groups': JSON.stringify({ groups: groups })
-  //   }, function () {
-
-  //   });
-  // });
-};
+  });
+});
