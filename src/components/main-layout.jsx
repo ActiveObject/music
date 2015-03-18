@@ -3,11 +3,11 @@ var Immutable = require('immutable');
 var isValue = require('app/utils/isValue');
 
 var App = require('app/components/app');
-var Player = require('app/components/player');
 var Tracklist = require('app/components/tracklist');
 var Box = require('app/components/box');
 var IScrollLayer = require('app/components/iscroll-layer');
 var GroupActivityCard = require('app/components/group-activity-card');
+var PlayerContainer = require('app/components/player-container');
 
 var Atom = require('app/core/atom');
 var GroupStore = require('app/stores/group-store');
@@ -15,6 +15,7 @@ var TrackStore = require('app/stores/track-store');
 var PlayerStore = require('app/stores/player-store');
 var Playlist = require('app/values/playlist');
 var GenreTracklist = require('app/values/tracklists/genre-tracklist');
+var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 
 require('app/styles/main-layout.styl');
 
@@ -70,26 +71,6 @@ var PlaylistView = React.createClass({
   }
 });
 
-var PlayerContainer = React.createClass({
-  getInitialState: function () {
-    return {
-      player: PlayerStore.value
-    };
-  },
-
-  componentWillMount: function () {
-    this.unsub = Atom.listen(PlayerStore, v => this.setState({ player: v }));
-  },
-
-  componentWillUnmount: function () {
-    this.unsub();
-  },
-
-  render: function() {
-    return <Player player={this.state.player} />;
-  }
-});
-
 var MainLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
@@ -109,7 +90,14 @@ var MainLayout = React.createClass({
 
   render: function() {
     var playlists = [
-      this.props.player.visibleTracklist(),
+      new LibraryTracklist({
+        name: 'All tracks',
+        playlist: new Playlist({
+          tracks: Immutable.List(),
+          isShuffled: false,
+          isRepeated: false
+        })
+      }).update(this.state.tracks),
       new GenreTracklist({
         genre: 19024584,
         name: 'Progressive Breaks',

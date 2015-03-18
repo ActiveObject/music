@@ -12,7 +12,6 @@ app.use(require('app/chromeapp/auth-service'));
 // app.use(require('app/chromeapp/local-storage-service'));
 app.use(require('app/services/vk-service'));
 app.use(require('app/services/soundmanager-service'));
-app.use(require('app/services/player-service'));
 app.use(require('app/chromeapp/router-service'));
 
 Atom.listen(app, render);

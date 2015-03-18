@@ -3,13 +3,13 @@ var revive = require('app/core/revive');
 var firstValue = require('app/utils/firstValue');
 
 module.exports = function (receive) {
-  receive(':app/started', function(appstate) {
-    if (localStorage.hasOwnProperty(':player/track')) {
-      var track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
+  // receive(':app/started', function(appstate) {
+  //   if (localStorage.hasOwnProperty(':player/track')) {
+  //     var track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
 
-      vbus.push(appstate.get('player').useTrack(track));
-    }
-  });
+  //     vbus.push(appstate.get('player').useTrack(track));
+  //   }
+  // });
 
   receive(':app/started', function() {
     if (localStorage.hasOwnProperty(':app/activity')) {

@@ -1,18 +1,21 @@
 var vbus = require('app/core/vbus');
 var sm = require('app/soundmanager');
+var PlayerStore = require('app/stores/player-store');
+var tagOf = require('app/utils/tagOf');
 
 module.exports = function (receive, mount) {
   sm.on('finish', function (track) {
-    vbus.push([':soundmanager/finish', track]);
+    vbus.push(PlayerStore.value.nextTrack().play());
   });
 
   sm.on('whileplaying', function (position) {
-    vbus.push([':soundmanager/position', position]);
+    if (!PlayerStore.value.seeking) {
+      vbus.push(PlayerStore.value.modify({ position: position }));
+    }
   });
 
   sm.on('whileloading', function (bytesLoaded, bytesTotal) {
-    vbus.push([':soundmanager/bytes-loaded', bytesLoaded]);
-    vbus.push([':soundmanager/bytes-total', bytesTotal]);
+    vbus.push(PlayerStore.value.modify({ bytesLoaded, bytesTotal }));
   });
 
   receive(':app/started', function (appstate) {
@@ -23,27 +26,31 @@ module.exports = function (receive, mount) {
     });
   });
 
-  receive(':app/player', function (appstate, player) {
-    if (appstate.get('player').track !== player.track) {
-      sm.useTrack(player.track);
+  vbus
+    .filter(v => tagOf(v) === ':app/player')
+    .map(p => p.track)
+    .skipDuplicates()
+    .onValue(track => sm.useTrack(track))
 
-      if (player.isPlaying) {
+  vbus
+    .filter(v => tagOf(v) === ':app/player')
+    .map(p => p.isPlaying)
+    .skipDuplicates()
+    .onValue(function (isPlaying) {
+      if (isPlaying) {
         sm.play();
+      } else {
+        sm.pause();
       }
+    })
 
-      return;
-    }
-
-    if (!appstate.get('player').isPlaying && player.isPlaying) {
-      return sm.play();
-    }
-
-    if (appstate.get('player').isPlaying && !player.isPlaying) {
-      return sm.pause();
-    }
-
-    if (appstate.get('player').position !== player.position) {
-      sm.setPosition(player.position);
-    }
-  });
+  vbus
+    .filter(v => tagOf(v) === ':app/player')
+    .map(p => [p.seeking, p.seekPosition])
+    .skipDuplicates(([oldValue], [newValue]) => oldValue === newValue)
+    .onValue(function([isSeeking, seekPosition]) {
+      if (!isSeeking) {
+        sm.setPosition(seekPosition)
+      }
+    })
 };
