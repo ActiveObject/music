@@ -32,6 +32,5 @@ require('app/services/auth-service');
 require('app/services/soundmanager-service');
 require('app/services/local-storage-service');
 
-
 app.start();
 

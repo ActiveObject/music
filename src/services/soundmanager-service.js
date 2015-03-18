@@ -47,6 +47,6 @@ vbus
   .skipDuplicates(([oldValue], [newValue]) => oldValue === newValue)
   .onValue(function([isSeeking, seekPosition]) {
     if (!isSeeking) {
-      sm.setPosition(seekPosition)
+      sm.setPosition(seekPosition);
     }
   });

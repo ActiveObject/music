@@ -1,7 +1,12 @@
+var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
+var tagOf = require('app/utils/tagOf');
 var firstValue = require('app/utils/firstValue');
-var PlayerStore = require('app/stores/player-store')
+var PlayerStore = require('app/stores/player-store');
+var ActivityStore = require('app/stores/activity-store');
+var GroupStore = require('app/stores/group-store');
+var TrackStore = require('app/stores/track-store');
 
 if (localStorage.hasOwnProperty(':player/track')) {
   let track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
@@ -20,22 +25,21 @@ if (localStorage.hasOwnProperty(':app/groups')) {
   vbus.push([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
 }
 
-// receive(':app/player', function (appstate, player) {
-//   if (player.track !== appstate.get('player')) {
-//     localStorage.setItem(':player/track', JSON.stringify(player.track));
-//   }
-// });
+vbus
+  .filter(v => tagOf(v) === ':app/player')
+  .map(player => player.track)
+  .skipDuplicates()
+  .map(JSON.stringify)
+  .onValue(v => localStorage.setItem(':player/track', v));
 
-// receive(':app/activity', function (appstate, activities) {
-//   localStorage.setItem(':app/activity', JSON.stringify({
-//     activities: appstate.get('activities').union(activities)
-//   }));
-// });
+Atom.listen(ActivityStore, function(activity) {
+  localStorage.setItem(':app/activity', JSON.stringify({ activities: activity }));
+});
 
-// receive(':app/tracks', function (appstate, tracks) {
-//   localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
-// });
+Atom.listen(GroupStore, function(groups) {
+  localStorage.setItem(':app/groups', JSON.stringify({ groups: groups }));
+});
 
-// receive(':app/groups', function (appstate, groups) {
-//   localStorage.setItem(':app/groups', JSON.stringify({ groups: groups }));
-// });
+Atom.listen(TrackStore, function(tracks) {
+  localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
+});
