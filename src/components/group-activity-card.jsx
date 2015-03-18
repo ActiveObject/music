@@ -1,5 +1,5 @@
 var React = require('react');
-var app = require('app');
+var go = require('app/core/go');
 var Atom = require('app/core/atom');
 var Activity = require('app/values/activity');
 var ActivityLoader = require('app/processes/activity-loader');
@@ -18,8 +18,7 @@ var GroupActivityCard = React.createClass({
   },
 
   componentWillMount: function () {
-    var out = app
-      .go(new ActivityLoader(-this.props.group.id, this.props.period))
+    var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));
 
     this.unsub1 = Atom.listen(this.activity, (v) => this.setState({ activity: v }));

@@ -9,7 +9,7 @@ var Box = require('app/components/box');
 var PlayerContainer = require('app/components/player-container');
 var PlaylistView = require('app/components/playlist-view');
 
-var app = require('app');
+var go = require('app/core/go');
 var vbus = require('app/core/vbus');
 var Atom = require('app/core/atom');
 var addTag = require('app/utils/addTag');
@@ -37,8 +37,7 @@ var GroupActivityCard = React.createClass({
   },
 
   componentWillMount: function () {
-    var out = app
-      .go(new ActivityLoader(-this.props.group.id, this.props.period))
+    var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));
 
     this.unsub1 = Atom.listen(this.activity, (v) => this.setState({ activity: v }));
@@ -89,7 +88,7 @@ var GroupLayout = React.createClass({
   },
 
   componentWillMount: function() {
-    var nfChannel = app.go(new NewsfeedLoader({
+    var nfChannel = go(new NewsfeedLoader({
       owner: -this.props.id,
       offset: 0,
       count: 10

@@ -1,6 +1,5 @@
 var _ = require('underscore');
 var Immutable = require('immutable');
-var Bacon = require('baconjs');
 var isString = require('underscore').isString;
 var debug = require('debug')('app:core:app');
 var vbus = require('app/core/vbus');
@@ -17,8 +16,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 var app = module.exports = new Atom(Immutable.Map());
-
-var processNum = 0;
 
 function mount(receive, service) {
   if (!Atom.isAtomable(service)) {
@@ -44,30 +41,4 @@ function mount(receive, service) {
   });
 }
 
-function go(process) {
-  processNum++;
-
-  var id = [processNum, process.toString()].join(':');
-  var output = new Bacon.Bus();
-  var input = new Bacon.Bus();
-  var errout = new Bacon.Bus();
-
-  debug('spawn - %s', id);
-
-  errout.onValue(function (err) {
-    console.log(err);
-  });
-
-  output.onEnd(function() {
-    debug('end - %s', id);
-    input.end();
-    errout.end();
-  });
-
-  process.go(input, output, errout);
-
-  return output;
-}
-
 app.mount = mount;
-app.go = go;
