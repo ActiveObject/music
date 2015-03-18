@@ -3,7 +3,6 @@ var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
 
-
 if (process.env.NODE_ENV === 'development') {
   window.app = app;
   window.vbus = require('app/core/vbus');
@@ -32,5 +31,5 @@ require('app/services/auth-service');
 require('app/services/soundmanager-service');
 require('app/services/local-storage-service');
 
-app.start();
+// app.start();
 

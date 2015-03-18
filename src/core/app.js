@@ -18,25 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 
 var app = module.exports = new Atom(Immutable.Map());
 
-var handlers = [];
 var processNum = 0;
-
-var dispatchStream = new BufferedEventStream(vbus, function (v) {
-  if (process.env.NODE_ENV === 'development') {
-    stats.time('dispatch[' + tagOf(v) + ']');
-  }
-
-  dispatchStream.pause();
-  debug('dispatch [%s] (s)', tagOf(v));
-  var nextState = dispatch(Atom.value(app), handlers, v);
-  debug('dispatch [%s] (f)', tagOf(v));
-  Atom.swap(app, nextState);
-  dispatchStream.resume();
-
-  if (process.env.NODE_ENV === 'development') {
-    stats.timeEnd('dispatch[' + tagOf(v) + ']');
-  }
-});
 
 function mount(receive, service) {
   if (!Atom.isAtomable(service)) {
@@ -60,66 +42,6 @@ function mount(receive, service) {
   receive(':app/started', function(appstate) {
     return appstate.set(service.mountPoint, service.atom.value);
   });
-}
-
-
-function makeReceiver(receivers) {
-  return function receive(expectedTag, fn) {
-    var receiver = function (appstate, v) {
-      var result;
-
-      if (expectedTag === tagOf(v)) {
-        result = fn(appstate, valueOf(v));
-      }
-
-      return isValue(result) ? result : appstate;
-    };
-
-    receivers.push([receiver, 'receive[' + expectedTag + ']']);
-
-    return function () {
-      for (var i = 0, l = handlers.length; i < l; i++) {
-        if (handlers[i] === receiver) {
-          handlers.splice(i, 1);
-        }
-      }
-    };
-  };
-}
-
-function makeMounter(receive) {
-  return function mountAtomable(atomable, options) {
-    return mount(receive, atomable, options);
-  };
-}
-
-function use(handler, name) {
-  var receivers = [];
-  var serviceName = typeof name === 'string' ? name : 'Service' + handlers.length;
-  var onDbChange = handler(makeReceiver(receivers), makeMounter(makeReceiver(receivers)));
-
-  handlers.push.apply(handlers, receivers);
-
-  if (_.isFunction(onDbChange)) {
-    handlers.push([onDbChange, serviceName]);
-  }
-}
-
-function start() {
-  dispatchStream.resume();
-  vbus.push(':app/started');
-}
-
-function pause() {
-  dispatchStream.pause();
-}
-
-function resume() {
-  dispatchStream.resume();
-}
-
-function isRunning() {
-  return dispatchStream.isRunning();
 }
 
 function go(process) {
@@ -147,10 +69,5 @@ function go(process) {
   return output;
 }
 
-app.use = use;
-app.start = start;
-app.pause = pause;
-app.resume = resume;
-app.isRunning = isRunning;
 app.mount = mount;
 app.go = go;
