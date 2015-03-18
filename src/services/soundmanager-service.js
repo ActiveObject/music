@@ -20,7 +20,8 @@ sm.on('whileloading', function (bytesLoaded, bytesTotal) {
 sm.setup({
   url: 'swf',
   flashVersion: 9,
-  preferFlash: false
+  preferFlash: false,
+  debugMode: false
 });
 
 vbus
