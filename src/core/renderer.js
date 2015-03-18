@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 module.exports = function (mountNode) {
-  return function renderAppstate(v) {
+  return function renderAppstate(layout) {
     if (!document.hidden) {
       debug('VDOM render started');
 
@@ -14,7 +14,7 @@ module.exports = function (mountNode) {
         stats.time('render');
       }
 
-      var root = v.get('activeRoute').render(v);
+      var root = layout.render();
 
       if (process.env.NODE_ENV === 'development') {
         stats.timeEnd('render');

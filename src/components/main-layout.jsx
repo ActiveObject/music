@@ -8,6 +8,7 @@ var Box = require('app/components/box');
 var IScrollLayer = require('app/components/iscroll-layer');
 var GroupActivityCard = require('app/components/group-activity-card');
 var PlayerContainer = require('app/components/player-container');
+var PlaylistView = require('app/components/playlist-view');
 
 var Atom = require('app/core/atom');
 var GroupStore = require('app/stores/group-store');
@@ -46,30 +47,6 @@ var ActivityList = React.createClass({
   }
 });
 
-var PlaylistView = React.createClass({
-  getInitialState: function () {
-    return {
-      player: PlayerStore.value
-    };
-  },
-
-  componentWillMount: function () {
-    this.unsub = Atom.listen(PlayerStore, v => this.setState({ player: v }));
-  },
-
-  componentWillUnmount: function () {
-    this.unsub();
-  },
-
-  render: function() {
-    return (
-      <div className='playlist'>
-        <h3>{this.props.value.name}</h3>
-        <Tracklist player={this.state.player} tracklist={this.props.value} />
-      </div>
-    );
-  }
-});
 
 var MainLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],

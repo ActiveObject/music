@@ -16,11 +16,11 @@ function getStoredValue(key, fn) {
 }
 
 module.exports = function (receive) {
-  receive(':app/started', function(appstate) {
-    getStoredValue(':player/track', function (track) {
-      vbus.push(appstate.get('player').useTrack(firstValue(JSON.parse(track, revive))));
-    });
-  });
+  // receive(':app/started', function(appstate) {
+  //   getStoredValue(':player/track', function (track) {
+  //     vbus.push(appstate.get('player').useTrack(firstValue(JSON.parse(track, revive))));
+  //   });
+  // });
 
   receive(':app/started', function() {
     getStoredValue(':app/activity', function (activity) {
@@ -40,39 +40,39 @@ module.exports = function (receive) {
     });
   });
 
-  receive(':app/player', function (appstate, player) {
-    if (player.track !== appstate.get('player').track) {
-      chrome.storage.local.set({
-        ':player/track': JSON.stringify(player.track)
-      }, function () {
+  // receive(':app/player', function (appstate, player) {
+  //   if (player.track !== appstate.get('player').track) {
+  //     chrome.storage.local.set({
+  //       ':player/track': JSON.stringify(player.track)
+  //     }, function () {
 
-      });
-    }
-  });
+  //     });
+  //   }
+  // });
 
-  receive(':app/activity', function (appstate, activities) {
-    chrome.storage.local.set({
-      ':app/activity': JSON.stringify({
-        activities: appstate.get('activities').union(activities)
-      })
-    }, function () {
+  // receive(':app/activity', function (appstate, activities) {
+  //   chrome.storage.local.set({
+  //     ':app/activity': JSON.stringify({
+  //       activities: appstate.get('activities').union(activities)
+  //     })
+  //   }, function () {
 
-    });
-  });
+  //   });
+  // });
 
-  receive(':app/tracks', function (appstate, tracks) {
-    chrome.storage.local.set({
-      ':app/tracks': JSON.stringify({ tracks: tracks })
-    }, function () {
+  // receive(':app/tracks', function (appstate, tracks) {
+  //   chrome.storage.local.set({
+  //     ':app/tracks': JSON.stringify({ tracks: tracks })
+  //   }, function () {
 
-    });
-  });
+  //   });
+  // });
 
-  receive(':app/groups', function (appstate, groups) {
-    chrome.storage.local.set({
-      ':app/groups': JSON.stringify({ groups: groups })
-    }, function () {
+  // receive(':app/groups', function (appstate, groups) {
+  //   chrome.storage.local.set({
+  //     ':app/groups': JSON.stringify({ groups: groups })
+  //   }, function () {
 
-    });
-  });
+  //   });
+  // });
 };

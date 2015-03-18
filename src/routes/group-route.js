@@ -36,10 +36,7 @@ GroupRoute.prototype.rep = function () {
 GroupRoute.prototype.render = function (appstate) {
   return new GroupRouteCmp({
     id: this.id,
-    period: this.period,
-    player: appstate.get('player'),
-    groups: appstate.get('groups'),
-    activities: appstate.get('activities')
+    period: this.period
   });
 };
 

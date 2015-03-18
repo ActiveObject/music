@@ -32,13 +32,9 @@ MainRoute.prototype.rep = function () {
   return this.toJSON()['router:main-route'];
 };
 
-MainRoute.prototype.render = function(appstate) {
+MainRoute.prototype.render = function() {
   return MainRouteCmp({
     key: 'main',
-    player: appstate.get('player'),
-    groups: appstate.get('groups'),
-    activities: appstate.get('activities'),
-    user: appstate.get('user'),
     visibleGroups: this.groups,
     period: this.period
   });

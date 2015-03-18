@@ -7,9 +7,7 @@ var MainRoute = require('app/routes/main-route');
 
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
-module.exports = function (receive, mount) {
-  mount(router);
-
+module.exports = function (receive) {
   page('/', function () {
     var groups = [41293763, 32211876, 34110702, 28152291];
     var period = new LastNWeeksDRange(32, new Date());
