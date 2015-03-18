@@ -22,7 +22,7 @@ AuthenticatedUser.prototype.isAuthenticated = function () {
 };
 
 AuthenticatedUser.prototype.tag = function () {
-  return ':app/user';
+  return ':app/authenticated-user';
 };
 
 AuthenticatedUser.prototype.rep = function () {
@@ -41,7 +41,11 @@ function UnauthenticatedUser() {
 }
 
 UnauthenticatedUser.prototype.tag = function() {
-  return ':app/user';
+  return ':app/unauthenticated-user';
+};
+
+UnauthenticatedUser.prototype.rep = function() {
+  return {};
 };
 
 UnauthenticatedUser.prototype.isAuthenticated = function () {

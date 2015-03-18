@@ -23,10 +23,11 @@ module.exports = function createWriter(type) {
 
       Audio, (new AppCachedHandler('audio')),
       Track, (new AppCachedHandler('track')),
-      player.constructor, (new AppCachedHandler('player')),
+      player.constructor, (new AppCachedHandler(':app/player')),
       MainRoute, (new AppCachedHandler('main-route')),
       GroupRoute, (new AppCachedHandler('group-route')),
-      User.Authenticated, (new AppCachedHandler('authenticated-user')),
+      User.Authenticated, (new AppCachedHandler(':app/authenticated-user')),
+      User.Unauthenticated, (new AppCachedHandler(':app/unauthenticated-user')),
       Group, (new AppCachedHandler('group')),
       NewsfeedActivity, (new AppCachedHandler('newsfeed-activity')),
       LastNWeeksDRange, (new AppCachedHandler('last-nweeks-drange'))

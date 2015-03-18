@@ -1,13 +1,11 @@
 var key = require('keymaster');
-var TimeMachine = require('./time-machine');
+var record = require('./time-machine');
 
-module.exports = function (app) {
-  var tm = new TimeMachine(app);
-
+module.exports = function (vbus) {
   key('command+shift+x', function() {
     if (!window.stopRecording) {
       console.log('Start recording...');
-      window.stopRecording = tm.record();
+      window.stopRecording = record(vbus);
     } else {
       console.log('Stop recording. Time record saved to window.timeRecord');
       window.timeRecord = window.stopRecording();
@@ -15,5 +13,8 @@ module.exports = function (app) {
     }
   });
 
-  return tm;
+  return function() {
+    console.log('Start recording...');
+    window.stopRecording = record(vbus);
+  };
 };

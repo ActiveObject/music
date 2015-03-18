@@ -9,20 +9,20 @@ TimeRecord.fromTransit = function(v) {
   return new TimeRecord(reader('json').read(v));
 };
 
-TimeRecord.prototype.play = function(app, render) {
-  app.pause();
-
+TimeRecord.prototype.play = function(vbus) {
   var next = (items) => {
     if (items.length === 0) {
-      return app.resume();
+      // return app.resume();
+      return;
     }
 
     if (items.length === 1) {
-      render(items[0].value);
-      return app.resume();
+      vbus.push(items[0].value);
+      // return app.resume();
+      return;
     }
 
-    render(items[0].value);
+    vbus.push(items[0].value);
     setTimeout(next.bind(null, items.slice(1)), items[1].time - items[0].time);
   };
 

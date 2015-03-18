@@ -11,8 +11,7 @@ if (Auth.hasToken(location.hash)) {
 }
 
 vbus
-  .filter(v => tagOf(v) === ':app/user')
-  .filter(user => !user.isAuthenticated())
+  .filter(v => tagOf(v) === ':app/unauthenticated-user')
   .onValue(user => router.transitionTo(new AuthRoute({ vkAccount: accounts.vk })));
 
 vbus.push(Auth.readFromLs());

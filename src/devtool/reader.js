@@ -35,10 +35,11 @@ module.exports = function createReader(type) {
 
       'audio': Audio,
       'track': Track,
-      'player': v => player.fromTransit(v),
+      ':app/player': v => player.fromTransit(v),
       'main-route': MainRoute,
       'group-route': GroupRoute,
-      'authenticated-user': User.Authenticated,
+      ':app/authenticated-user': User.Authenticated,
+      ':app/unauthenticated-user': User.Unauthenticated,
       'group': Group,
       'newsfeed-activity': NewsfeedActivity,
       'last-nweeks-drange': v => new LastNWeekDrange(v, new Date())

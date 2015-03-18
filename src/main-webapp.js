@@ -4,7 +4,7 @@ var render = require('app/core/renderer')(document.getElementById('app'));
 
 if (process.env.NODE_ENV === 'development') {
   window.vbus = require('app/core/vbus');
-  window.dev = require('app/devtool')(app);
+  window.dev = require('app/devtool')(vbus)();
   window.TimeRecord = require('app/devtool/time-record');
   window.Perf = require('react/addons').addons.Perf;
   window.stats = require('app/core/stats');

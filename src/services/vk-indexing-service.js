@@ -6,9 +6,7 @@ var TracksLoader = require('app/processes/tracks-loader');
 var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
 
-var user = vbus
-  .filter(v => tagOf(v) === ':app/user')
-  .filter(user => user.isAuthenticated());
+var user = vbus.filter(v => tagOf(v) === ':app/authenticated-user');
 
 user.onValue(function (user) {
   var tout = go(new TracksLoader(user))
