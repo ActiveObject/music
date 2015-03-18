@@ -6,6 +6,7 @@ var isFunction = require('underscore').isFunction;
 function Atom(initialValue) {
   this.value = initialValue;
   this.atom = this;
+  this.setMaxListeners(100);
 }
 
 Atom.prototype = Object.create(EventEmitter.prototype, {
