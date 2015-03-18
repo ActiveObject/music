@@ -13,7 +13,7 @@ module.exports = function (receive, mount) {
   receive(':app/started', function (appstate) {
     var groups = [41293763, 32211876, 34110702, 28152291];
     var period = new LastNWeeksDRange(32, new Date());
-    var route = new MainRoute({ groups: groups, period: groups });
+    var route = new MainRoute({ groups: groups, period: period });
 
     router.transitionTo(route);
   });

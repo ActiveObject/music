@@ -14,8 +14,6 @@ app.use(require('app/services/soundmanager-service'));
 app.use(require('app/services/player-service'));
 app.use(require('app/services/local-storage-service'));
 app.use(require('app/services/router-service'));
-// app.use(require('app/services/vk-indexing-service'));
-// app.use(require('app/services/store-service'));
 
 Atom.listen(app, render);
 
