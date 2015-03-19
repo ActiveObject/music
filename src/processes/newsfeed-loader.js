@@ -27,7 +27,7 @@ function NewsfeedLoader(attrs, inbox) {
   this.count = attrs.count;
 }
 
-NewsfeedLoader.prototype.go = function(input, output, errout) {
+NewsfeedLoader.prototype.go = function(input, output) {
   input.onValue(function(msg) {
     vk.wall.get({
       owner_id: msg.owner,
@@ -35,7 +35,7 @@ NewsfeedLoader.prototype.go = function(input, output, errout) {
       count: msg.count
     }, function(err, res) {
       if (err) {
-        return errout.push(err);
+        return output.push(err);
       }
 
       output.push(newsfeed.fromVkResponse(res.response));

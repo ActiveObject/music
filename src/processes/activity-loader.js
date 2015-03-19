@@ -9,7 +9,7 @@ function ActivityLoader(id, period) {
   this.period = period;
 }
 
-ActivityLoader.prototype.go = function (input, output, errout) {
+ActivityLoader.prototype.go = function (input, output) {
   input.onValue(function (msg) {
     vk.wall.get({
       owner_id: msg.id,
@@ -17,7 +17,7 @@ ActivityLoader.prototype.go = function (input, output, errout) {
       count: msg.count
     }, function(err, res) {
       if (err) {
-        return errout.push(err);
+        return output.error(err);
       }
 
       var items = res.response.items.map(function (item) {

@@ -6,7 +6,7 @@ function AlbumsLoader(user) {
   this.user = user;
 }
 
-AlbumsLoader.prototype.go = function (input, output, errout) {
+AlbumsLoader.prototype.go = function (input, output) {
   input.onValue(function (msg) {
     vk.audio.getAlbums({
       user_id: msg.user.id,
@@ -14,7 +14,7 @@ AlbumsLoader.prototype.go = function (input, output, errout) {
       count: msg.count
     }, function(err, res) {
       if (err) {
-        return errout.push(err);
+        return output.error(err);
       }
 
       output.push(Immutable.Set(res.response.items.map(Album.fromVk)));
