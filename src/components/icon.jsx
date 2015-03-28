@@ -1,11 +1,7 @@
-var React = require('react');
+var React = require('react/addons');
 
-module.exports = React.createClass({
-  displayName: 'Icon',
-
-  shouldComponentUpdate: function (nextProps) {
-    return nextProps.id !== this.props.id;
-  },
+var Icon = React.createClass({
+  mixins: [React.addons.PureRenderMixin],
 
   componentDidMount: function () {
     this.getDOMNode().appendChild(this.makeXlink(this.props.id));
@@ -18,7 +14,7 @@ module.exports = React.createClass({
   },
 
   render: function () {
-    return React.DOM.svg({ className: 'icon', viewBox: '0 0 100 100' });
+    return <svg className='icon' viewBox='0 0 100 100'></svg>;
   },
 
   makeXlink: function (id) {
@@ -27,3 +23,5 @@ module.exports = React.createClass({
     return el;
   }
 });
+
+module.exports = Icon;
