@@ -6,7 +6,7 @@ function GroupsLoader(user) {
   this.user = user;
 }
 
-GroupsLoader.prototype.go = function (input, output, errout) {
+GroupsLoader.prototype.go = function (input, output) {
   input.onValue(function (msg) {
     vk.groups.get({
       user_id: msg.user.id,
@@ -15,7 +15,7 @@ GroupsLoader.prototype.go = function (input, output, errout) {
       extended: 1
     }, function(err, res) {
       if (err) {
-        return errout.push(err);
+        return output.push(err);
       }
 
       output.push(Immutable.Set(res.response.items.map(Group.fromVk)));

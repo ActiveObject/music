@@ -9,21 +9,16 @@ module.exports = function go(process) {
   var id = [processNum, process.toString()].join(':');
   var output = new Bacon.Bus();
   var input = new Bacon.Bus();
-  var errout = new Bacon.Bus();
 
   debug('spawn - %s', id);
 
-  errout.onValue(function (err) {
-    console.log(err);
-  });
-
+  output.onError(err => console.log(err));
   output.onEnd(function() {
     debug('end - %s', id);
     input.end();
-    errout.end();
   });
 
-  process.go(input, output, errout);
+  process.go(input, output);
 
   return output;
 };

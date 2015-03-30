@@ -7,7 +7,7 @@ function TracksLoader(user) {
   this.user = user;
 }
 
-TracksLoader.prototype.go = function (input, output, errout) {
+TracksLoader.prototype.go = function (input, output) {
   input.onValue(function (msg) {
     vk.audio.get({
       user_id: msg.user.id,
@@ -15,7 +15,7 @@ TracksLoader.prototype.go = function (input, output, errout) {
       count: msg.count
     }, function(err, res) {
       if (err) {
-        return errout.push(err);
+        return output.push(err);
       }
 
       output.push(Immutable.Set(res.response.items.map(function (data, i) {
