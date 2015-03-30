@@ -1,8 +1,9 @@
 var React = require('react/addons');
 var Immutable = require('immutable');
 var Atom = require('app/core/atom');
+var db = require('app/core/db');
+var tagOf = require('app/utils/tagOf');
 var isValue = require('app/utils/isValue');
-var GroupStore = require('app/stores/group-store');
 
 var App = require('app/components/app');
 var Box = require('app/components/box');
@@ -11,7 +12,7 @@ var GroupActivityCard = require('app/components/group-activity-card');
 var PlayerContainer = require('app/components/player-container');
 var UserPlaylists = require('app/components/user-playlists');
 
-var PlayerStore = require('app/stores/player-store');
+var groups = require('app/groups');
 
 require('app/styles/main-layout.styl');
 
@@ -20,15 +21,24 @@ var ActivityList = React.createClass({
 
   getInitialState: function () {
     return {
-      groups: GroupStore.value
+      groups: Atom.value(groups)
     };
   },
 
   componentWillMount: function () {
-    this.unsub = Atom.listen(GroupStore, v => this.setState({ groups: v }));
+    this.uninstallGroups = db.install(groups, function (acc, v) {
+      if (tagOf(v) === ':app/groups') {
+        return acc.union(v[1]);
+      }
+
+      return acc;
+    });
+
+    this.unsub = Atom.listen(groups, v => this.setState({ groups: v }));
   },
 
   componentWillUnmount: function () {
+    this.uninstallGroups();
     this.unsub();
   },
 

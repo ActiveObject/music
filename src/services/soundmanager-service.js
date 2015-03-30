@@ -1,20 +1,23 @@
+var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var sm = require('app/soundmanager');
-var PlayerStore = require('app/stores/player-store');
+var db = require('app/core/db');
 var tagOf = require('app/utils/tagOf');
 
+var player = require('app/player');
+
 sm.on('finish', function (track) {
-  vbus.push(PlayerStore.value.nextTrack().play());
+  vbus.push(Atom.value(player).nextTrack().play());
 });
 
 sm.on('whileplaying', function (position) {
-  if (!PlayerStore.value.seeking) {
-    vbus.push(PlayerStore.value.modify({ position: position }));
+  if (!Atom.value(player).seeking) {
+    vbus.push(Atom.value(player).modify({ position: position }));
   }
 });
 
 sm.on('whileloading', function (bytesLoaded, bytesTotal) {
-  vbus.push(PlayerStore.value.modify({ bytesLoaded, bytesTotal }));
+  vbus.push(Atom.value(player).modify({ bytesLoaded, bytesTotal }));
 });
 
 sm.setup({

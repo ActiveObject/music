@@ -1,6 +1,8 @@
 var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
+var db = require('app/core/db');
+var vbus = require('app/core/vbus');
 
 if (process.env.NODE_ENV === 'development') {
   window.vbus = require('app/core/vbus');
@@ -15,13 +17,9 @@ if (process.env.NODE_ENV === 'development') {
 
 Atom.listen(router, render);
 
-require('app/core/request').useJsonp();
+db.in.plug(vbus);
 
-require('app/stores/activity-store');
-require('app/stores/group-store');
-require('app/stores/track-store');
-require('app/stores/player-store');
-require('app/stores/album-store');
+require('app/core/request').useJsonp();
 
 require('app/services/vk-indexing-service');
 require('app/services/router-service');

@@ -4,10 +4,6 @@ var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
 var tagOf = require('app/utils/tagOf');
 var firstValue = require('app/utils/firstValue');
-var PlayerStore = require('app/stores/player-store');
-var ActivityStore = require('app/stores/activity-store');
-var GroupStore = require('app/stores/group-store');
-var TrackStore = require('app/stores/track-store');
 
 function getStoredValue(key, fn) {
   chrome.storage.local.get(key, function (items) {
@@ -18,7 +14,7 @@ function getStoredValue(key, fn) {
 }
 
 getStoredValue(':player/track', function (track) {
-  vbus.push(PlayerStore.value.useTrack(firstValue(JSON.parse(track, revive))));
+  vbus.push(Atom.value(PlayerStore).useTrack(firstValue(JSON.parse(track, revive))));
 });
 
 getStoredValue(':app/activity', function (activity) {

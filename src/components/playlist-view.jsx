@@ -1,19 +1,25 @@
 var Atom = require('app/core/atom');
-var PlayerStore = require('app/stores/player-store');
+var db = require('app/core/db');
+var tagOf = require('app/utils/tagOf');
+var player = require('app/values/player');
 var Tracklist = require('app/components/tracklist');
 
 var PlaylistView = React.createClass({
   getInitialState: function () {
+    this.player = new Atom(player);
+
     return {
-      player: PlayerStore.value
+      player: Atom.value(this.player)
     };
   },
 
   componentWillMount: function () {
-    this.unsub = Atom.listen(PlayerStore, v => this.setState({ player: v }));
+    this.uninstallPlayer = db.install(this.player, (acc, v) => tagOf(v) === ':app/player' ? v : acc);
+    this.unsub = Atom.listen(this.player, v => this.setState({ player: v }));
   },
 
   componentWillUnmount: function () {
+    this.uninstallPlayer();
     this.unsub();
   },
 

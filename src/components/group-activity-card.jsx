@@ -1,23 +1,35 @@
 var React = require('react');
+var ISet = require('immutable').Set;
 var go = require('app/core/go');
 var Atom = require('app/core/atom');
 var Activity = require('app/values/activity');
 var ActivityLoader = require('app/processes/activity-loader');
 var ActivityCard = require('app/components/activity-card');
-var ActivityStore = require('app/stores/activity-store');
 var vbus = require('app/core/vbus');
 var addTag = require('app/utils/addTag');
+var tagOf = require('app/utils/tagOf');
+var db = require('app/core/db');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
-    this.activity = ActivityStore.forGroup(this.props.group);
+    this.activity = new Atom(ISet());
 
     return {
-      activity: this.activity.value
+      activity: Atom.value(this.activity)
     };
   },
 
   componentWillMount: function () {
+    var gid = this.props.group.id;
+
+    this.uninstall = db.install(this.activity, function (acc, v) {
+      if (tagOf(v) === ':app/activity') {
+        return acc.union(v[1].filter(v => v.owner === -gid));
+      }
+
+      return acc;
+    });
+
     var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));
 
@@ -28,7 +40,7 @@ var GroupActivityCard = React.createClass({
   componentWillUnmount: function () {
     this.unsub1();
     this.unsub2();
-    this.activity.unsub();
+    this.uninstall();
   },
 
   render: function () {

@@ -1,16 +1,25 @@
 var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
+var db = require('app/core/db');
 var tagOf = require('app/utils/tagOf');
 var firstValue = require('app/utils/firstValue');
-var PlayerStore = require('app/stores/player-store');
-var ActivityStore = require('app/stores/activity-store');
-var GroupStore = require('app/stores/group-store');
-var TrackStore = require('app/stores/track-store');
+var player = require('app/player');
+var groups = require('app/groups');
+var tracks = require('app/tracks');
+var activity = require('app/activity');
+
+db.install(activity, function (acc, v) {
+  if (tagOf(v) === ':app/activity') {
+    return acc.union(v[1]);
+  }
+
+  return acc;
+});
 
 if (localStorage.hasOwnProperty(':player/track')) {
   let track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
-  vbus.push(PlayerStore.value.useTrack(track));
+  vbus.push(Atom.value(player).useTrack(track));
 }
 
 if (localStorage.hasOwnProperty(':app/activity')) {
@@ -32,14 +41,14 @@ vbus
   .map(JSON.stringify)
   .onValue(v => localStorage.setItem(':player/track', v));
 
-Atom.listen(ActivityStore, function(activity) {
+Atom.listen(activity, function(activity) {
   localStorage.setItem(':app/activity', JSON.stringify({ activities: activity }));
 });
 
-Atom.listen(GroupStore, function(groups) {
+Atom.listen(groups, function(groups) {
   localStorage.setItem(':app/groups', JSON.stringify({ groups: groups }));
 });
 
-Atom.listen(TrackStore, function(tracks) {
+Atom.listen(tracks, function(tracks) {
   localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
 });

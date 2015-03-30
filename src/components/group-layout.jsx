@@ -9,14 +9,16 @@ var PlayerContainer = require('app/components/player-container');
 
 var go = require('app/core/go');
 var vbus = require('app/core/vbus');
+var db = require('app/core/db');
 var Atom = require('app/core/atom');
 var addTag = require('app/utils/addTag');
+var tagOf = require('app/utils/tagOf');
 var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
-var ActivityStore = require('app/stores/activity-store');
-var GroupStore = require('app/stores/group-store');
+
+var groups = require('app/groups');
 
 var UserPlaylists = require('app/components/user-playlists');
 
@@ -24,14 +26,24 @@ require('app/styles/group-layout.styl');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
-    this.activity = ActivityStore.forGroup(this.props.group);
+    this.activity = new Atom(ISet());
 
     return {
-      activity: this.activity.value
+      activity: Atom.value(this.activity)
     };
   },
 
   componentWillMount: function () {
+    var gid = this.props.group.id;
+
+    this.uninstall = db.install(this.activity, function (acc, v) {
+      if (tagOf(v) === ':app/activity') {
+        return acc.union(v[1].filter(v => v.owner === -gid));
+      }
+
+      return acc;
+    });
+
     var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));
 
@@ -42,7 +54,7 @@ var GroupActivityCard = React.createClass({
   componentWillUnmount: function () {
     this.unsub1();
     this.unsub2();
-    this.activity.unsub();
+    this.uninstall();
   },
 
   render: function () {
@@ -77,7 +89,7 @@ var GroupLayout = React.createClass({
   getInitialState: function () {
     return {
       newsfeed: newsfeed,
-      groups: GroupStore.value
+      groups: Atom.value(groups)
     };
   },
 
@@ -92,10 +104,19 @@ var GroupLayout = React.createClass({
       .scan(newsfeed, (acc, next) => acc.merge(next))
       .onValue(v => this.setState({ newsfeed: v }));
 
-    this.unsub = Atom.listen(GroupStore, v => this.setState({ groups: v }));
+    this.uninstallGroups = db.install(groups, function (acc, v) {
+      if (tagOf(v) === ':app/groups') {
+        return acc.union(v[1]);
+      }
+
+      return acc;
+    });
+
+    this.unsub = Atom.listen(groups, v => this.setState({ groups: v }));
   },
 
   componentWillUnmount: function() {
+    this.uninstallGroups();
     this.usubscribe();
     this.unsub();
   },

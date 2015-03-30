@@ -2,27 +2,49 @@ var React = require('react/addons');
 var Immutable = require('immutable');
 var Atom = require('app/core/atom');
 var Playlist = require('app/values/playlist');
-var TrackStore = require('app/stores/track-store');
-var AlbumStore = require('app/stores/album-store');
 var GenreTracklist = require('app/values/tracklists/genre-tracklist');
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 var PlaylistView = require('app/components/playlist-view');
+var db = require('app/core/db');
+var tagOf = require('app/utils/tagOf');
 
+var tracks = require('app/tracks');
+var albums = require('app/albums');
 
 var UserPlaylists = React.createClass({
   getInitialState: function () {
+    this.albums = new Atom(Immutable.Set());
+
     return {
-      tracks: TrackStore.value,
-      albums: AlbumStore.value
+      tracks: Atom.value(tracks),
+      albums: Atom.value(albums)
     };
   },
 
   componentWillMount: function () {
-    this.unsub1 = Atom.listen(TrackStore, v => this.setState({ tracks: v }));
-    this.unsub2 = Atom.listen(AlbumStore, v => this.setState({ albums: v }));
+    this.uninstallTracks = db.install(tracks, function (acc, v) {
+      if (tagOf(v) === ':app/tracks') {
+        return acc.union(v[1]);
+      }
+
+      return acc;
+    });
+
+    this.uninstallAlbums = db.install(albums, function (acc, v) {
+      if (tagOf(v) === ':app/albums') {
+        return acc.union(v[1]);
+      }
+
+      return acc;
+    });
+
+    this.unsub1 = Atom.listen(tracks, v => this.setState({ tracks: v }));
+    this.unsub2 = Atom.listen(albums, v => this.setState({ albums: v }));
   },
 
   componentWillUnmount: function () {
+    this.uninstallTracks();
+    this.uninstallAlbums();
     this.unsub1();
     this.unsub2();
   },
