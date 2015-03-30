@@ -1,10 +1,10 @@
 var Atom = require('app/core/atom');
-var Bacon = require('baconjs');
+var Kefir = require('kefir');
 var gid = 1;
 
 function Database(attrs) {
   this.queries = attrs.queries;
-  this.in = new Bacon.Bus();
+  this.in = Kefir.pool();
   this.in.onValue(v => {
     this.queries.forEach(function (query) {
       var newVal = query.fn(query.atom.value, v);

@@ -35,10 +35,10 @@ chrome.identity.launchWebAuthFlow({
   }
 
   try {
-    vbus.push(Auth.readFromUrl(redirectUrl));
+    vbus.emit(Auth.readFromUrl(redirectUrl));
   } catch (e) {
     console.log(e);
   }
 });
 
-vbus.push(new User.Unauthenticated());
+vbus.emit(new User.Unauthenticated());

@@ -29,13 +29,13 @@ ActivityLoader.prototype.go = function (input, output) {
       });
 
       if (items.length > 0) {
-        output.push(Immutable.Set(items));
+        output.emit(Immutable.Set(items));
       }
 
       var oldest = moment(_.last(items).date);
 
       if (oldest.isAfter(msg.period.startOf())) {
-        input.push({
+        input.emit({
           id: msg.id,
           period: msg.period,
           offset: msg.offset + msg.count,
@@ -47,10 +47,10 @@ ActivityLoader.prototype.go = function (input, output) {
     });
   });
 
-  input.push({
+  input.emit({
     id: this.id,
     offset: 0,
-    count: 100,
+    count: 50,
     period: this.period
   });
 };

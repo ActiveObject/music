@@ -1,4 +1,4 @@
-var Bacon = require('baconjs');
+var Kefir = require('kefir');
 var debug = require('debug')('app:core:go');
 
 var processNum = 0;
@@ -7,8 +7,8 @@ module.exports = function go(process) {
   processNum++;
 
   var id = [processNum, process.toString()].join(':');
-  var output = new Bacon.Bus();
-  var input = new Bacon.Bus();
+  var output = Kefir.emitter();
+  var input = Kefir.emitter();
 
   debug('spawn - %s', id);
 

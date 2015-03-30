@@ -17,10 +17,10 @@ AlbumsLoader.prototype.go = function (input, output) {
         return output.error(err);
       }
 
-      output.push(Immutable.Set(res.response.items.map(Album.fromVk)));
+      output.emit(Immutable.Set(res.response.items.map(Album.fromVk)));
 
       if (res.response.count > 0 && res.response.count > msg.offset + msg.count) {
-        input.push({
+        input.emit({
           user: msg.user,
           offset: msg.offset + msg.count,
           count: msg.count
@@ -31,7 +31,7 @@ AlbumsLoader.prototype.go = function (input, output) {
     });
   });
 
-  input.push({
+  input.emit({
     user: this.user,
     offset: 0,
     count: 100

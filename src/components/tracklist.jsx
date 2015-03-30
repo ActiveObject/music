@@ -42,7 +42,7 @@ var Tracklist = React.createClass({
   },
 
   togglePlay: function (track) {
-    vbus.push(this.props.player.togglePlay(track, this.props.tracklist));
+    vbus.emit(this.props.player.togglePlay(track, this.props.tracklist));
   },
 
   next: function() {

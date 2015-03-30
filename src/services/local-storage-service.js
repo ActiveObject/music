@@ -19,19 +19,19 @@ db.install(activity, function (acc, v) {
 
 if (localStorage.hasOwnProperty(':player/track')) {
   let track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
-  vbus.push(Atom.value(player).useTrack(track));
+  vbus.emit(Atom.value(player).useTrack(track));
 }
 
 if (localStorage.hasOwnProperty(':app/activity')) {
-  vbus.push([':app/activity', JSON.parse(localStorage.getItem(':app/activity'), revive).activities]);
+  vbus.emit([':app/activity', JSON.parse(localStorage.getItem(':app/activity'), revive).activities]);
 }
 
 if (localStorage.hasOwnProperty(':app/tracks')) {
-  vbus.push([':app/tracks', JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks]);
+  vbus.emit([':app/tracks', JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks]);
 }
 
 if (localStorage.hasOwnProperty(':app/groups')) {
-  vbus.push([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
+  vbus.emit([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
 }
 
 vbus

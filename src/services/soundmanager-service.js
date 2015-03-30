@@ -7,17 +7,17 @@ var tagOf = require('app/utils/tagOf');
 var player = require('app/player');
 
 sm.on('finish', function (track) {
-  vbus.push(Atom.value(player).nextTrack().play());
+  vbus.emit(Atom.value(player).nextTrack().play());
 });
 
 sm.on('whileplaying', function (position) {
   if (!Atom.value(player).seeking) {
-    vbus.push(Atom.value(player).modify({ position: position }));
+    vbus.emit(Atom.value(player).modify({ position: position }));
   }
 });
 
 sm.on('whileloading', function (bytesLoaded, bytesTotal) {
-  vbus.push(Atom.value(player).modify({ bytesLoaded, bytesTotal }));
+  vbus.emit(Atom.value(player).modify({ bytesLoaded, bytesTotal }));
 });
 
 sm.setup({

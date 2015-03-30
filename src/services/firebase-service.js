@@ -8,7 +8,7 @@ module.exports = function (dbUrl) {
   return function (receive) {
     receive(':app/started', function () {
       trackRef.on('value', function (snapshot) {
-        vbus.push({ e: 'app/player', a: ':player/track', v: snapshot.val() });
+        vbus.emit({ e: 'app/player', a: ':player/track', v: snapshot.val() });
       });
     });
 

@@ -1,2 +1,1 @@
-var Bacon = require('baconjs');
-module.exports = new Bacon.Bus();
+module.exports = require('kefir').bus();

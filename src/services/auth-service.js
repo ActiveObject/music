@@ -14,4 +14,4 @@ vbus
   .filter(v => tagOf(v) === ':app/unauthenticated-user')
   .onValue(user => router.transitionTo(new AuthRoute({ vkAccount: accounts.vk })));
 
-vbus.push(Auth.readFromLs());
+vbus.emit(Auth.readFromLs());

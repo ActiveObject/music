@@ -35,15 +35,15 @@ NewsfeedLoader.prototype.go = function(input, output) {
       count: msg.count
     }, function(err, res) {
       if (err) {
-        return output.push(err);
+        return output.error(err);
       }
 
-      output.push(newsfeed.fromVkResponse(res.response));
+      output.emit(newsfeed.fromVkResponse(res.response));
     });
   });
 
   chunkify(2, this.offset, this.count).forEach(function (v) {
-    input.push(merge(v, { owner: this.owner }));
+    input.emit(merge(v, { owner: this.owner }));
   }, this);
 };
 

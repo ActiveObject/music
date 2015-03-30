@@ -81,10 +81,10 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    vbus.push(this.props.player.togglePlay());
+    vbus.emit(this.props.player.togglePlay());
   },
 
   changePlaylist: function (id) {
-    vbus.push(this.props.player.switchToTracklist(id));
+    vbus.emit(this.props.player.switchToTracklist(id));
   }
 });

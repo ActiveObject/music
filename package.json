@@ -31,7 +31,6 @@
     "webpack-dev-server": "^1.7.0"
   },
   "dependencies": {
-    "baconjs": "^0.7.22",
     "classnames": "^1.1.4",
     "colors": "^0.6.2",
     "curry": "^1.2.0",
@@ -40,6 +39,7 @@
     "impulse": "^0.1.0",
     "iscroll": "^5.1.2",
     "jsonp": "0.0.4",
+    "kefir": "^1.3.0",
     "keymaster": "^1.6.2",
     "mime": "^1.2.11",
     "moment": "^2.7.0",
@@ -87,7 +87,7 @@
     "copy:webapp:dev": "COPY_DEST=$npm_package_config_webapp_output npm run copy:vendor:dev && COPY_DEST=$npm_package_config_webapp_output npm run copy:assets",
     "copy:chromeapp": "COPY_DEST=$npm_package_config_chromeapp_output npm run copy:vendor:prod && COPY_DEST=$npm_package_config_chromeapp_output npm run copy:assets && cp -R src/chromeapp/assets/* $npm_package_config_chromeapp_output",
     "copy:chromeapp:dev": "COPY_DEST=$npm_package_config_chromeapp_output npm run copy:vendor:dev && COPY_DEST=$npm_package_config_chromeapp_output npm run copy:assets &&  cp -R src/chromeapp/assets/* $npm_package_config_chromeapp_output",
-    "webpack:webapp": "NODE_ENV=production webpack --entry=./src/main-webapp.js -p --debug --devtool source-map --progress",
+    "webpack:webapp": "NODE_ENV=production webpack --entry=./src/main-webapp.js -p --debug --devtool source-map --progress --output-path=$npm_package_config_webapp_output",
     "webpack:webapp-dev": "webpack-dev-server --entry=./src/main-webapp.js --progress --colors --port=5003 --content-base=$npm_package_config_webapp_output --debug --devtool eval-source-map --output-pathinfo --inline",
     "webpack:chromeapp": "MUSIC_APP_ID=4812383 NODE_ENV=production webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --debug --devtool source-map --progress",
     "webpack:chromeapp-dev": "MUSIC_APP_ID=4812383 webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --watch --debug --devtool source-map --progress",

@@ -17,12 +17,12 @@ TimeRecord.prototype.play = function(vbus) {
     }
 
     if (items.length === 1) {
-      vbus.push(items[0].value);
+      vbus.emit(items[0].value);
       // return app.resume();
       return;
     }
 
-    vbus.push(items[0].value);
+    vbus.emit(items[0].value);
     setTimeout(next.bind(null, items.slice(1)), items[1].time - items[0].time);
   };
 
