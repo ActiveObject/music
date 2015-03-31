@@ -8,6 +8,7 @@ var ActivityCard = require('app/components/activity-card');
 var vbus = require('app/core/vbus');
 var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
+var plug = require('app/utils/plug');
 var db = require('app/core/db');
 
 var GroupActivityCard = React.createClass({
@@ -34,13 +35,13 @@ var GroupActivityCard = React.createClass({
       .map(addTag(':app/activity'));
 
     this.unsub1 = Atom.listen(this.activity, (v) => this.setState({ activity: v }));
-    this.unsub2 = vbus.plug(out);
+    this.unsub2 = plug(vbus, out);
   },
 
   componentWillUnmount: function () {
+    this.uninstall();
     this.unsub1();
     this.unsub2();
-    this.uninstall();
   },
 
   render: function () {

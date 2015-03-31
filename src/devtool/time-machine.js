@@ -3,13 +3,12 @@ var TimeRecord = require('./time-record');
 
 module.exports = function(vbus) {
   var history = [];
-  var unsubscribe = vbus.onValue(v => history.push({ time: Date.now(), value: v }));
+  var addToHistory = v => history.push({ time: Date.now(), value: v });
+  vbus.onValue(addToHistory);
 
   return () => {
     var record = new TimeRecord(history);
-
-    unsubscribe();
-
+    vbus.offValue(addToHistory);
     return record;
   };
 };

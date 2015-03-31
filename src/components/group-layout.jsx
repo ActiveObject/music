@@ -13,6 +13,7 @@ var db = require('app/core/db');
 var Atom = require('app/core/atom');
 var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
+var plug = require('app/utils/plug');
 var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
@@ -48,7 +49,7 @@ var GroupActivityCard = React.createClass({
       .map(addTag(':app/activity'));
 
     this.unsub1 = Atom.listen(this.activity, (v) => this.setState({ activity: v }));
-    this.unsub2 = vbus.plug(out);
+    this.unsub2 = plug(vbus, out);
   },
 
   componentWillUnmount: function () {
