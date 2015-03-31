@@ -7,6 +7,7 @@ var GroupRoute = require('app/routes/group-route');
 var Track = require('app/values/track');
 var Audio = require('app/values/audio');
 var Group = require('app/values/group');
+var Album = require('app/values/album');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var LastNWeekDrange = require('app/values/last-nweeks-drange');
 var User = require('app/values/user');
@@ -41,6 +42,7 @@ module.exports = function createReader(type) {
       ':app/authenticated-user': User.Authenticated,
       ':app/unauthenticated-user': User.Unauthenticated,
       'group': Group,
+      ':app/album': Album,
       'newsfeed-activity': NewsfeedActivity,
       'last-nweeks-drange': v => new LastNWeekDrange(v, new Date())
     })

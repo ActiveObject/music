@@ -8,6 +8,7 @@ var GroupRoute = require('app/routes/group-route');
 var Track = require('app/values/track');
 var Audio = require('app/values/audio');
 var Group = require('app/values/group');
+var Album = require('app/values/album');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var User = require('app/values/user');
@@ -29,6 +30,7 @@ module.exports = function createWriter(type) {
       User.Authenticated, (new AppCachedHandler(':app/authenticated-user')),
       User.Unauthenticated, (new AppCachedHandler(':app/unauthenticated-user')),
       Group, (new AppCachedHandler('group')),
+      Album, (new AppCachedHandler(':app/album')),
       NewsfeedActivity, (new AppCachedHandler('newsfeed-activity')),
       LastNWeeksDRange, (new AppCachedHandler('last-nweeks-drange'))
     ])
