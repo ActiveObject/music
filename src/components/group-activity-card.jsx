@@ -10,10 +10,11 @@ var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
 var plug = require('app/utils/plug');
 var db = require('app/core/db');
+var activity = require('app/activity');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
-    this.activity = new Atom(ISet());
+    this.activity = new Atom(Atom.value(activity).filter(v => v.owner === -this.props.group.id));
 
     return {
       activity: Atom.value(this.activity)
