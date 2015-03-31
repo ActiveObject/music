@@ -50,7 +50,7 @@ ActivityLoader.prototype.go = function (input, output) {
   input.emit({
     id: this.id,
     offset: 0,
-    count: 50,
+    count: 100,
     period: this.period
   });
 };
