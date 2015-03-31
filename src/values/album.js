@@ -16,6 +16,20 @@ Album.fromVk = function (attrs) {
   });
 };
 
+Album.fromJSON = function(v) {
+  return new Album(v);
+};
+
+Album.prototype.toJSON = function() {
+  return {
+    'app/values/album': {
+      id: this.id,
+      owner: this.owner,
+      title: this.title
+    }
+  };
+};
+
 Album.prototype.valueOf = function () {
   return this.id;
 };

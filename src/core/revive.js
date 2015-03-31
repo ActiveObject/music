@@ -5,6 +5,7 @@ var soundmanager = require('app/soundmanager');
 var routes = require('app/routes');
 var Track = require('app/values/track');
 var Group = require('app/values/group');
+var Album = require('app/values/album');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var player = require('app/values/player');
 var firstValue = require('app/utils/firstValue');
@@ -30,6 +31,10 @@ module.exports = function revive(key, value) {
     return Group.fromJSON(value);
   }
 
+  if (key === 'app/values/album') {
+    return Album.fromJSON(value);
+  }
+
   if (key === 'app/values/newsfeed-activity') {
     return new NewsfeedActivity(value);
   }
@@ -43,6 +48,10 @@ module.exports = function revive(key, value) {
   }
 
   if (key === 'groups') {
+    return PSet(value.map(firstValue));
+  }
+
+  if (key === 'albums') {
     return PSet(value.map(firstValue));
   }
 

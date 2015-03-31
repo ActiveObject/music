@@ -8,6 +8,7 @@ var firstValue = require('app/utils/firstValue');
 var player = require('app/player');
 var groups = require('app/groups');
 var tracks = require('app/tracks');
+var albums = require('app/albums');
 var activity = require('app/activity');
 
 db.install(activity, function (acc, v) {
@@ -43,6 +44,10 @@ getStoredValue(':app/groups', function (groups) {
   vbus.emit([':app/groups', JSON.parse(groups, revive).groups]);
 });
 
+getStoredValue(':app/albums', function (albums) {
+  vbus.emit([':app/albums', JSON.parse(albums, revive).albums]);
+});
+
 
 vbus
   .filter(v => tagOf(v) === ':app/player')
@@ -74,6 +79,14 @@ Atom.listen(groups, function(groups) {
 Atom.listen(player, function(tracks) {
   chrome.storage.local.set({
     ':app/tracks': JSON.stringify({ tracks: tracks })
+  }, function () {
+
+  });
+});
+
+Atom.listen(albums, function(albums) {
+  chrome.storage.local.set({
+    ':app/albums': JSON.stringify({ albums: albums })
   }, function () {
 
   });

@@ -7,15 +7,8 @@ var firstValue = require('app/utils/firstValue');
 var player = require('app/player');
 var groups = require('app/groups');
 var tracks = require('app/tracks');
+var albums = require('app/albums');
 var activity = require('app/activity');
-
-db.install(activity, function (acc, v) {
-  if (tagOf(v) === ':app/activity') {
-    return acc.union(v[1]);
-  }
-
-  return acc;
-});
 
 if (localStorage.hasOwnProperty(':player/track')) {
   let track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
@@ -32,6 +25,10 @@ if (localStorage.hasOwnProperty(':app/tracks')) {
 
 if (localStorage.hasOwnProperty(':app/groups')) {
   vbus.emit([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
+}
+
+if (localStorage.hasOwnProperty(':app/albums')) {
+  vbus.emit([':app/albums', JSON.parse(localStorage.getItem(':app/albums'), revive).albums]);
 }
 
 vbus
@@ -51,4 +48,8 @@ Atom.listen(groups, function(groups) {
 
 Atom.listen(tracks, function(tracks) {
   localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
+});
+
+Atom.listen(albums, function(albums) {
+  localStorage.setItem(':app/albums', JSON.stringify({ albums: albums }));
 });

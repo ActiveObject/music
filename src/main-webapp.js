@@ -36,6 +36,14 @@ db.install(require('app/albums'), function (acc, v) {
   return acc;
 });
 
+db.install(require('app/activity'), function (acc, v) {
+  if (tagOf(v) === ':app/activity') {
+    return acc.union(v[1]);
+  }
+
+  return acc;
+});
+
 window.unsub = onValue(vbus, v => db.tick(v));
 
 require('app/core/request').useJsonp();
