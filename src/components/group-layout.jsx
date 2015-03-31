@@ -14,6 +14,7 @@ var Atom = require('app/core/atom');
 var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
 var plug = require('app/utils/plug');
+var onValue = require('app/utils/onValue');
 var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
@@ -102,9 +103,8 @@ var GroupLayout = React.createClass({
       count: 10
     }));
 
-    this.usubscribe = nfChannel
-      .scan((acc, next) => acc.merge(next), newsfeed)
-      .onValue(v => this.setState({ newsfeed: v }));
+    this.usubscribe = onValue(nfChannel.scan((acc, next) => acc.merge(next), newsfeed),
+      v => this.setState({ newsfeed: v }));
 
     this.uninstallGroups = db.install(groups, function (acc, v) {
       if (tagOf(v) === ':app/groups') {
