@@ -20,6 +20,7 @@ var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
 
 var groups = require('app/groups');
+var activity = require('app/activity');
 
 var UserPlaylists = require('app/components/user-playlists');
 
@@ -27,7 +28,7 @@ require('app/styles/group-layout.styl');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
-    this.activity = new Atom(ISet());
+    this.activity = new Atom(Atom.value(activity).filter(v => v.owner === -this.props.group.id));
 
     return {
       activity: Atom.value(this.activity)
@@ -102,7 +103,7 @@ var GroupLayout = React.createClass({
     }));
 
     this.usubscribe = nfChannel
-      .scan(newsfeed, (acc, next) => acc.merge(next))
+      .scan((acc, next) => acc.merge(next), newsfeed)
       .onValue(v => this.setState({ newsfeed: v }));
 
     this.uninstallGroups = db.install(groups, function (acc, v) {
