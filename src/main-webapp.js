@@ -4,6 +4,7 @@ var render = require('app/core/renderer')(document.getElementById('app'));
 var db = require('app/core/db');
 var vbus = require('app/core/vbus');
 var onValue = require('app/utils/onValue');
+var tagOf = require('app/utils/tagOf');
 
 if (process.env.NODE_ENV === 'development') {
   window.vbus = require('app/core/vbus');
@@ -14,10 +15,26 @@ if (process.env.NODE_ENV === 'development') {
   window.db = db;
 
   Perf.start();
-  // vbus.log();
+  vbus.log();
 }
 
 Atom.listen(router, render);
+
+db.install(require('app/tracks'), function (acc, v) {
+  if (tagOf(v) === ':app/tracks') {
+    return acc.union(v[1]);
+  }
+
+  return acc;
+});
+
+db.install(require('app/albums'), function (acc, v) {
+  if (tagOf(v) === ':app/albums') {
+    return acc.union(v[1]);
+  }
+
+  return acc;
+});
 
 window.unsub = onValue(vbus, v => db.tick(v));
 
@@ -28,4 +45,4 @@ require('app/services/router-service');
 require('app/services/vk-service');
 require('app/services/auth-service');
 require('app/services/soundmanager-service');
-// require('app/services/local-storage-service');
+require('app/services/local-storage-service');

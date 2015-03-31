@@ -13,8 +13,6 @@ var albums = require('app/albums');
 
 var UserPlaylists = React.createClass({
   getInitialState: function () {
-    this.albums = new Atom(Immutable.Set());
-
     return {
       tracks: Atom.value(tracks),
       albums: Atom.value(albums)
@@ -22,29 +20,11 @@ var UserPlaylists = React.createClass({
   },
 
   componentWillMount: function () {
-    this.uninstallTracks = db.install(tracks, function (acc, v) {
-      if (tagOf(v) === ':app/tracks') {
-        return acc.union(v[1]);
-      }
-
-      return acc;
-    });
-
-    this.uninstallAlbums = db.install(albums, function (acc, v) {
-      if (tagOf(v) === ':app/albums') {
-        return acc.union(v[1]);
-      }
-
-      return acc;
-    });
-
     this.unsub1 = Atom.listen(tracks, v => this.setState({ tracks: v }));
     this.unsub2 = Atom.listen(albums, v => this.setState({ albums: v }));
   },
 
   componentWillUnmount: function () {
-    this.uninstallTracks();
-    this.uninstallAlbums();
     this.unsub1();
     this.unsub2();
   },
