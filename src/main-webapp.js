@@ -1,3 +1,4 @@
+var each = require('underscore').each;
 var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
@@ -33,4 +34,13 @@ require('app/services/router-service');
 require('app/services/vk-service');
 require('app/services/auth-service');
 require('app/services/soundmanager-service');
-require('app/services/local-storage-service');
+
+var out = require('app/services/local-storage-service')(function (key, fn) {
+  if (localStorage.hasOwnProperty(key)) {
+    fn(localStorage.getItem(key));
+  }
+});
+
+out.onValue(function (item) {
+  each(item, (value, key) => localStorage.setItem(key, value));
+});

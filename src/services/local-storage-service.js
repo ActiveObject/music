@@ -1,3 +1,4 @@
+var Kefir = require('kefir');
 var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
@@ -8,46 +9,52 @@ var tracks = require('app/db/tracks');
 var albums = require('app/db/albums');
 var activity = require('app/db/activity');
 
-if (localStorage.hasOwnProperty(':player/track')) {
-  let track = firstValue(JSON.parse(localStorage.getItem(':player/track'), revive));
-  vbus.emit(Atom.value(player).useTrack(track));
-}
+module.exports = function (getStoredValue) {
+  var out = Kefir.emitter();
 
-if (localStorage.hasOwnProperty(':app/activity')) {
-  vbus.emit([':app/activity', JSON.parse(localStorage.getItem(':app/activity'), revive).activities]);
-}
+  getStoredValue(':player/track', function (track) {
+    vbus.emit(Atom.value(player).useTrack(firstValue(JSON.parse(track, revive))));
+  });
 
-if (localStorage.hasOwnProperty(':app/tracks')) {
-  vbus.emit([':app/tracks', JSON.parse(localStorage.getItem(':app/tracks'), revive).tracks]);
-}
+  getStoredValue(':app/activity', function (activity) {
+    vbus.emit([':app/activity', JSON.parse(activity, revive).activities]);
+  });
 
-if (localStorage.hasOwnProperty(':app/groups')) {
-  vbus.emit([':app/groups', JSON.parse(localStorage.getItem(':app/groups'), revive).groups]);
-}
+  getStoredValue(':app/tracks', function (tracks) {
+    vbus.emit([':app/tracks', JSON.parse(tracks, revive).tracks]);
+  });
 
-if (localStorage.hasOwnProperty(':app/albums')) {
-  vbus.emit([':app/albums', JSON.parse(localStorage.getItem(':app/albums'), revive).albums]);
-}
+  getStoredValue(':app/groups', function (groups) {
+    vbus.emit([':app/groups', JSON.parse(groups, revive).groups]);
+  });
 
-player
-  .changes
-  .map(player => player.track)
-  .skipDuplicates()
-  .map(JSON.stringify)
-  .onValue(v => localStorage.setItem(':player/track', v));
+  getStoredValue(':app/albums', function (albums) {
+    vbus.emit([':app/albums', JSON.parse(albums, revive).albums]);
+  });
 
-Atom.listen(activity, function(activity) {
-  localStorage.setItem(':app/activity', JSON.stringify({ activities: activity }));
-});
 
-Atom.listen(groups, function(groups) {
-  localStorage.setItem(':app/groups', JSON.stringify({ groups: groups }));
-});
+  player
+    .changes
+    .map(player => player.track)
+    .skipDuplicates()
+    .map(JSON.stringify)
+    .onValue(v => out.emit({ ':player/track': v }));
 
-Atom.listen(tracks, function(tracks) {
-  localStorage.setItem(':app/tracks', JSON.stringify({ tracks: tracks }));
-});
+  Atom.listen(activity, function(activity) {
+    out.emit({ ':app/activity': JSON.stringify({ activities: activity }) });
+  });
 
-Atom.listen(albums, function(albums) {
-  localStorage.setItem(':app/albums', JSON.stringify({ albums: albums }));
-});
+  Atom.listen(groups, function(groups) {
+    out.emit({ ':app/groups': JSON.stringify({ groups: groups }) });
+  });
+
+  Atom.listen(tracks, function(tracks) {
+    out.emit({ ':app/tracks': JSON.stringify({ tracks: tracks }) });
+  });
+
+  Atom.listen(albums, function(albums) {
+    out.emit({ ':app/albums': JSON.stringify({ albums: albums }) });
+  });
+
+  return out;
+};
