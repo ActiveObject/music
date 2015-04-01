@@ -11,15 +11,6 @@ var tracks = require('app/tracks');
 var albums = require('app/albums');
 var activity = require('app/activity');
 
-db.install(activity, function (acc, v) {
-  if (tagOf(v) === ':app/activity') {
-    return acc.union(v[1]);
-  }
-
-  return acc;
-});
-
-
 function getStoredValue(key, fn) {
   chrome.storage.local.get(key, function (items) {
     if (has(items, key)) {

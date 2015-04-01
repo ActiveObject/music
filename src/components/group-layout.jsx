@@ -106,14 +106,7 @@ var GroupLayout = React.createClass({
     this.usubscribe = onValue(nfChannel.scan((acc, next) => acc.merge(next), newsfeed),
       v => this.setState({ newsfeed: v }));
 
-    this.uninstallGroups = db.install(groups, function (acc, v) {
-      if (tagOf(v) === ':app/groups') {
-        return acc.union(v[1]);
-      }
-
-      return acc;
-    });
-
+    this.uninstallGroups = db.install(groups, addToSet(':app/groups'));
     this.unsub = Atom.listen(groups, v => this.setState({ groups: v }));
   },
 

@@ -2,7 +2,7 @@ var React = require('react/addons');
 var Immutable = require('immutable');
 var Atom = require('app/core/atom');
 var db = require('app/core/db');
-var tagOf = require('app/utils/tagOf');
+var addToSet = require('app/utils/addToSet');
 var isValue = require('app/utils/isValue');
 
 var App = require('app/components/app');
@@ -26,14 +26,7 @@ var ActivityList = React.createClass({
   },
 
   componentWillMount: function () {
-    this.uninstallGroups = db.install(groups, function (acc, v) {
-      if (tagOf(v) === ':app/groups') {
-        return acc.union(v[1]);
-      }
-
-      return acc;
-    });
-
+    this.uninstallGroups = db.install(groups, addToSet(':app/groups'));
     this.unsub = Atom.listen(groups, v => this.setState({ groups: v }));
   },
 

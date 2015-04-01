@@ -4,7 +4,7 @@ var render = require('app/core/renderer')(document.getElementById('app'));
 var db = require('app/core/db');
 var vbus = require('app/core/vbus');
 var onValue = require('app/utils/onValue');
-var tagOf = require('app/utils/tagOf');
+var addToSet = require('app/utils/addToSet');
 
 if (process.env.NODE_ENV === 'development') {
   window.vbus = require('app/core/vbus');
@@ -20,29 +20,9 @@ if (process.env.NODE_ENV === 'development') {
 
 Atom.listen(router, render);
 
-db.install(require('app/tracks'), function (acc, v) {
-  if (tagOf(v) === ':app/tracks') {
-    return acc.union(v[1]);
-  }
-
-  return acc;
-});
-
-db.install(require('app/albums'), function (acc, v) {
-  if (tagOf(v) === ':app/albums') {
-    return acc.union(v[1]);
-  }
-
-  return acc;
-});
-
-db.install(require('app/activity'), function (acc, v) {
-  if (tagOf(v) === ':app/activity') {
-    return acc.union(v[1]);
-  }
-
-  return acc;
-});
+db.install(require('app/tracks'), addToSet(':app/tracks'));
+db.install(require('app/albums'), addToSet(':app/albums'));
+db.install(require('app/activity'), addToSet(':app/activity'));
 
 window.unsub = onValue(vbus, v => db.tick(v));
 
