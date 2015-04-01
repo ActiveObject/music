@@ -20,8 +20,8 @@ var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
 
-var groups = require('app/groups');
-var activity = require('app/activity');
+var groups = require('app/db/groups');
+var activity = require('app/db/activity');
 
 var UserPlaylists = require('app/components/user-playlists');
 

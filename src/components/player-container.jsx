@@ -2,7 +2,7 @@ var React = require('react');
 var Atom = require('app/core/atom');
 var db = require('app/core/db');
 var tagOf = require('app/utils/tagOf');
-var player = require('app/player');
+var player = require('app/db/player');
 var Player = require('app/components/player');
 
 var PlayerContainer = React.createClass({

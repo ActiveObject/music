@@ -8,8 +8,8 @@ var PlaylistView = require('app/components/playlist-view');
 var db = require('app/core/db');
 var tagOf = require('app/utils/tagOf');
 
-var tracks = require('app/tracks');
-var albums = require('app/albums');
+var tracks = require('app/db/tracks');
+var albums = require('app/db/albums');
 
 var UserPlaylists = React.createClass({
   getInitialState: function () {

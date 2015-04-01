@@ -1,7 +1,7 @@
 var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var sm = require('app/soundmanager');
-var player = require('app/player');
+var player = require('app/db/player');
 
 sm.on('finish', function (track) {
   vbus.emit(Atom.value(player).nextTrack().play());

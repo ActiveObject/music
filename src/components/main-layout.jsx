@@ -12,7 +12,7 @@ var GroupActivityCard = require('app/components/group-activity-card');
 var PlayerContainer = require('app/components/player-container');
 var UserPlaylists = require('app/components/user-playlists');
 
-var groups = require('app/groups');
+var groups = require('app/db/groups');
 
 require('app/styles/main-layout.styl');
 

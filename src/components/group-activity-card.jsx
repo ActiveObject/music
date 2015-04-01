@@ -10,7 +10,7 @@ var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
 var plug = require('app/utils/plug');
 var db = require('app/core/db');
-var activity = require('app/activity');
+var activity = require('app/db/activity');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {

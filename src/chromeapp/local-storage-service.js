@@ -5,11 +5,11 @@ var revive = require('app/core/revive');
 var db = require('app/core/db');
 var tagOf = require('app/utils/tagOf');
 var firstValue = require('app/utils/firstValue');
-var player = require('app/player');
-var groups = require('app/groups');
-var tracks = require('app/tracks');
-var albums = require('app/albums');
-var activity = require('app/activity');
+var player = require('app/db/player');
+var groups = require('app/db/groups');
+var tracks = require('app/db/tracks');
+var albums = require('app/db/albums');
+var activity = require('app/db/activity');
 
 function getStoredValue(key, fn) {
   chrome.storage.local.get(key, function (items) {

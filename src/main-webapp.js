@@ -20,9 +20,9 @@ if (process.env.NODE_ENV === 'development') {
 
 Atom.listen(router, render);
 
-db.install(require('app/tracks'), addToSet(':app/tracks'));
-db.install(require('app/albums'), addToSet(':app/albums'));
-db.install(require('app/activity'), addToSet(':app/activity'));
+db.install(require('app/db/tracks'), addToSet(':app/tracks'));
+db.install(require('app/db/albums'), addToSet(':app/albums'));
+db.install(require('app/db/activity'), addToSet(':app/activity'));
 
 window.unsub = onValue(vbus, v => db.tick(v));
 
