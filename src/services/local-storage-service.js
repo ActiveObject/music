@@ -1,8 +1,6 @@
 var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
-var db = require('app/core/db');
-var tagOf = require('app/utils/tagOf');
 var firstValue = require('app/utils/firstValue');
 var player = require('app/db/player');
 var groups = require('app/db/groups');
@@ -31,8 +29,8 @@ if (localStorage.hasOwnProperty(':app/albums')) {
   vbus.emit([':app/albums', JSON.parse(localStorage.getItem(':app/albums'), revive).albums]);
 }
 
-vbus
-  .filter(v => tagOf(v) === ':app/player')
+player
+  .changes
   .map(player => player.track)
   .skipDuplicates()
   .map(JSON.stringify)
