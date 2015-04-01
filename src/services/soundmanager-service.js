@@ -1,9 +1,6 @@
 var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var sm = require('app/soundmanager');
-var db = require('app/core/db');
-var tagOf = require('app/utils/tagOf');
-
 var player = require('app/player');
 
 sm.on('finish', function (track) {
@@ -27,14 +24,14 @@ sm.setup({
   debugMode: false
 });
 
-vbus
-  .filter(v => tagOf(v) === ':app/player')
+player
+  .changes
   .map(p => p.track)
   .skipDuplicates()
   .onValue(track => sm.useTrack(track));
 
-vbus
-  .filter(v => tagOf(v) === ':app/player')
+player
+  .changes
   .map(p => p.isPlaying)
   .skipDuplicates()
   .onValue(function (isPlaying) {
@@ -45,8 +42,8 @@ vbus
     }
   });
 
-vbus
-  .filter(v => tagOf(v) === ':app/player')
+player
+  .changes
   .map(p => [p.seeking, p.seekPosition])
   .skipDuplicates(([oldValue], [newValue]) => oldValue === newValue)
   .onValue(function([isSeeking, seekPosition]) {
