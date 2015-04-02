@@ -1,56 +1,81 @@
 var Atom = require('app/core/atom');
-var gid = 1;
 
 function Database(attrs) {
   this.queries = attrs.queries;
 }
 
-Database.prototype.install = function (atom, queryFn) {
-  var id = gid++;
+function TickRecord(attrs) {
+  this.value = attrs.value;
+  this.startTime = attrs.startTime;
+  this.endTime = attrs.endTime;
+  this.results = attrs.results;
+}
 
-  this.queries.push({
-    id: id,
-    atom: atom,
-    fn: queryFn,
-    initialValue: Atom.value(atom)
+function AppliedTickRecord(attrs) {
+  this.tick = attrs.tick;
+  this.times = attrs.times;
+}
+
+TickRecord.prototype.applyTo = function(queries) {
+  return new AppliedTickRecord({
+    tick: this,
+    times: this.results.map(function (result, i) {
+      var startTime = performance.now();
+      Atom.swap(queries[i], result.value)
+      return {
+        startTime: startTime,
+        endTime: performance.now()
+      };
+    })
   });
+};
 
-  return () => {
-    this.queries = this.queries.filter(v => v.id !== id);
+function Query(atom, fn) {
+  this.atom = atom;
+  this.fn = fn;
+  this.initialValue = Atom.value(atom);
+}
+
+Query.prototype.tick = function(v) {
+  var startTime = performance.now();
+  var r = this.fn(this.atom.value, v);
+
+  return {
+    value: r,
+    startTime: startTime,
+    endTime: performance.now()
   };
 };
 
-Database.prototype.play = function (values) {
-  console.time('db.play');
-  var next = (i) => {
-    if (i >= this.queries.length) {
-      return;
-    }
+Database.prototype.install = function (atom, queryFn) {
+  var query = new Query(atom, queryFn);
+  this.queries.push(query);
 
-    var query = this.queries[i];
-    var newVal = values.reduce((acc, v) => query.fn(acc, v), query.initialValue);
-    Atom.swap(query, newVal);
-    next(i + 1);
+  return () => {
+    this.queries = this.queries.filter(v => v !== query);
   };
-
-  next(0);
-  // var queries = values.map(v => this.tick(v))
-  // console.log(queries);
-  console.timeEnd('db.play');
 };
 
 Database.prototype.tick = function (v) {
-  return this.queries.map(function (query) {
-    var newVal = query.fn(query.atom.value, v);
-    Atom.swap(query, newVal);
-    return newVal;
+  var startTime = performance.now();
+  var results = this.queries.map(query => query.tick(v));
+
+  var tr = new TickRecord({
+    value: v,
+    startTime: startTime,
+    endTime: performance.now(),
+    results: results
   });
+
+  return tr.applyTo(this.queries);
 };
 
 Database.prototype.reset = function() {
   this.queries.forEach(function (query) {
     Atom.swap(query, query.initialValue);
   });
+
+  this.queries = [];
 
   return this;
 };

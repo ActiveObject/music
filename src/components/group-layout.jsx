@@ -15,6 +15,7 @@ var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
 var plug = require('app/utils/plug');
 var onValue = require('app/utils/onValue');
+var addToSet = require('app/utils/addToSet');
 var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');

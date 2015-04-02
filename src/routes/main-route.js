@@ -40,6 +40,10 @@ MainRoute.prototype.render = function() {
   });
 };
 
+MainRoute.prototype.url = function() {
+  return '/';
+};
+
 MainRoute.prototype.lifecycle = require('app/core/default-route-lifecycle');
 
 module.exports = MainRoute;

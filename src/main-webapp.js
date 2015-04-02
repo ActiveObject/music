@@ -6,26 +6,45 @@ var db = require('app/core/db');
 var vbus = require('app/core/vbus');
 var onValue = require('app/utils/onValue');
 var addToSet = require('app/utils/addToSet');
+var tagOf = require('app/utils/tagOf');
 
-if (process.env.NODE_ENV === 'development') {
-  window.vbus = require('app/core/vbus');
-  window.dev = require('app/devtool')(vbus)();
-  window.TimeRecord = require('app/devtool/time-record');
-  window.Perf = require('react/addons').addons.Perf;
-  window.stats = require('app/core/stats');
-  window.db = db;
+var app = {
+  uninstallList: [],
+  ticks: [],
 
-  Perf.start();
-  vbus.log();
-}
+  installQueries: function() {
+    db.install(require('app/db/tracks'), addToSet(':app/tracks'));
+    db.install(require('app/db/albums'), addToSet(':app/albums'));
+    db.install(require('app/db/activity'), addToSet(':app/activity'));
+    db.install(require('app/db/layout'), function(layout, v) {
+      if (tagOf(v) === 'main-route' || tagOf(v) === 'group-route') {
+        return v;
+      }
+
+      return layout;
+    })
+  },
+
+  stop: function() {
+    app.uninstallList.forEach(uninstall => uninstall());
+    app.uninstallList = [];
+  },
+
+  start: function() {
+    app.installQueries();
+    app.uninstallList.push(onValue(vbus.map(v => db.tick(v)), tx => app.ticks.push(tx)));
+  },
+
+  replay: function() {
+    app.stop();
+    db.reset();
+    app.installQueries();
+    app.ticks.forEach(tick => db.tick(tick.tick.value));
+  }
+};
 
 Atom.listen(router, render);
-
-db.install(require('app/db/tracks'), addToSet(':app/tracks'));
-db.install(require('app/db/albums'), addToSet(':app/albums'));
-db.install(require('app/db/activity'), addToSet(':app/activity'));
-
-window.unsub = onValue(vbus, v => db.tick(v));
+app.start();
 
 require('app/core/request').useJsonp();
 
@@ -44,3 +63,16 @@ var out = require('app/services/local-storage-service')(function (key, fn) {
 out.onValue(function (item) {
   each(item, (value, key) => localStorage.setItem(key, value));
 });
+
+if (process.env.NODE_ENV === 'development') {
+  window.app = app;
+  window.vbus = require('app/core/vbus');
+  window.dev = require('app/devtool')(vbus)();
+  window.TimeRecord = require('app/devtool/time-record');
+  window.Perf = require('react/addons').addons.Perf;
+  window.stats = require('app/core/stats');
+  window.db = require('app/core/db');
+
+  Perf.start();
+  vbus.log();
+}
