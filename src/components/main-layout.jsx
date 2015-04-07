@@ -26,12 +26,12 @@ var ActivityList = React.createClass({
   },
 
   componentWillMount: function () {
-    this.uninstallGroups = db.install(groups, addToSet(':app/groups'));
+    // this.uninstallGroups = db.install(groups, addToSet(':app/groups'));
     this.unsub = Atom.listen(groups, v => this.setState({ groups: v }));
   },
 
   componentWillUnmount: function () {
-    this.uninstallGroups();
+    // this.uninstallGroups();
     this.unsub();
   },
 
