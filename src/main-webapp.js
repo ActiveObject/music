@@ -3,19 +3,20 @@ var each = require('underscore').each;
 var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
-var db = require('app/core/db');
 var db3 = require('app/core/db3');
 var vbus = require('app/core/vbus');
 var onValue = require('app/utils/onValue');
+var plug = require('app/utils/plug');
 var addToSet = require('app/utils/addToSet');
 var tagOf = require('app/utils/tagOf');
-var dbin = require('app/core/dbin');
+var seq = require('app/core/db/producers/seq');
+var changelog = require('app/core/db/producers/changelog');
 
 var app = {
-  uninstallList: [],
-  ticks: [],
+  // uninstallList: [],
+  // ticks: [],
 
-  installQueries: function() {
+  // installQueries: function() {
     // db.install(require('app/db/tracks'), addToSet(':app/tracks'));
     // db.install(require('app/db/albums'), addToSet(':app/albums'));
     // db.install(require('app/db/activity'), addToSet(':app/activity'));
@@ -26,37 +27,51 @@ var app = {
 
     //   return layout;
     // })
-  },
+  // },
 
   stop: function() {
-    app.uninstallList.forEach(uninstall => uninstall());
-    app.uninstallList = [];
+  //   app.uninstallList.forEach(uninstall => uninstall());
+  //   app.uninstallList = [];
   },
 
   start: function() {
-    app.installQueries();
-    app.uninstallList.push(onValue(vbus.map(v => db.tick(v)), tx => app.ticks.push(tx)));
+    // app.installQueries();
+    // app.uninstallList.push(onValue(vbus.map(v => db.tick(v)), tx => app.ticks.push(tx)));
   },
 
-  replay: function() {
-    app.stop();
-    db.reset();
-    app.installQueries();
-    app.ticks.forEach(tick => db.tick(tick.tick.value));
-  }
+  // replay: function() {
+    // app.stop();
+    // db.reset();
+    // app.installQueries();
+    // app.ticks.forEach(tick => db.tick(tick.tick.value));
+  // }
 };
 
-var event = db3.seq(0);
-var s = vbus.map(event);
 window.values = [];
 
 vbus.onValue(v => values.push(v));
-dbin.map(v => db3.add(v)).log();
-dbin.plug(s);
+var unplug = plug(db3.stream, vbus.map(seq(0)));
 
 window.replay = function(vs) {
-  dbin.unplug(s);
-  dbin.emit(db3.changelog(vs));
+  unplug();
+  db3.stream.emit(changelog(vs));
+};
+
+window.play = function () {
+  unplug();
+  var event = seq(0);
+  db3.stream.emit(changelog([]));
+
+  function next(vs) {
+    if (vs.length === 0) {
+      return console.log('STOP');
+    }
+
+    db3.stream.emit(event(vs[0]));
+    setTimeout(() => next(vs.slice(1)), 100);
+  }
+
+  next(values);
 };
 
 Atom.listen(router, render);
@@ -87,7 +102,6 @@ if (process.env.NODE_ENV === 'development') {
   window.TimeRecord = require('app/devtool/time-record');
   window.Perf = require('react/addons').addons.Perf;
   window.stats = require('app/core/stats');
-  window.db = require('app/core/db');
 
   Perf.start();
   // vbus.log();

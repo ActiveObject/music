@@ -10,52 +10,38 @@ var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
 var onValue = require('app/utils/onValue');
 var plug = require('app/utils/plug');
-var db = require('app/core/db');
 var activity = require('app/db/activity');
 var db3 = require('app/core/db3');
-var dbin = require('app/core/dbin');
+var scanSince = require('app/core/db/consumers/scanSince');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
-    // this.activity = new Atom(Atom.value(activity).filter(v => v.owner === -this.props.group.id));
-
     return {
       activity: ISet()
-      // activity: Atom.value(this.activity)
     };
   },
 
   componentWillMount: function () {
     var gid = this.props.group.id;
 
-    // this.uninstall = db.install(this.activity, function (acc, v) {
-    //   if (tagOf(v) === ':app/activity') {
-    //     return acc.union(v[1].filter(v => v.owner === -gid));
-    //   }
-
-    //   return acc;
-    // });
-
-    var stream = db3.install(db3.scanSince(0, ISet(), function(acc, v) {
+    var stream = db3.install(scanSince(0, ISet(), function(acc, v) {
       if (tagOf(v) === ':app/activity') {
         return acc.union(v[1].filter(v => v.owner === -gid));
       }
 
       return acc;
-    }), dbin);
+    }));
 
     this.uninstall = onValue(stream, v => this.setState({ activity: v }));
 
     var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));
 
-    // this.unsub1 = Atom.listen(this.activity, (v) => this.setState({ activity: v }));
     this.unsub2 = plug(vbus, out);
   },
 
   componentWillUnmount: function () {
     this.uninstall();
-    // this.unsub1();
     this.unsub2();
   },
 

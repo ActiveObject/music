@@ -2,7 +2,6 @@ var has = require('underscore').has;
 var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
-var db = require('app/core/db');
 var vbus = require('app/core/vbus');
 var onValue = require('app/utils/onValue');
 var addToSet = require('app/utils/addToSet');
@@ -19,12 +18,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 Atom.listen(router, render);
-
-db.install(require('app/db/tracks'), addToSet(':app/tracks'));
-db.install(require('app/db/albums'), addToSet(':app/albums'));
-db.install(require('app/db/activity'), addToSet(':app/activity'));
-
-window.unsub = onValue(vbus, v => db.tick(v));
 
 require('app/core/request').useXhr();
 
