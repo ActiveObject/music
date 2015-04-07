@@ -21,7 +21,7 @@ TickRecord.prototype.applyTo = function(queries) {
     tick: this,
     times: this.results.map(function (result, i) {
       var startTime = performance.now();
-      Atom.swap(queries[i], result.value)
+      Atom.swap(queries[i], result.value);
       return {
         startTime: startTime,
         endTime: performance.now()
