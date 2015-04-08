@@ -1,9 +1,9 @@
 module.exports = function scan(initValue, combine) {
-  return function (history, changes) {
-    var state = history.reduce((acc, v) => combine(acc, v.value), initValue);
+  return function (history, state, produce) {
+    if (arguments.length === 1) {
+      return history.reduce(scan, initValue);
+    }
 
-    return changes.scan(function (acc, transform) {
-      return transform(acc, (acc, v) => combine(acc, v.value), initValue);
-    }, state);
+    return produce(state, initValue, (acc, v) => combine(acc, v.value));
   };
 };

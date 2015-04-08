@@ -1,13 +1,13 @@
 module.exports = function scanSince(n, initValue, combine) {
-  return function (history, changes) {
-    var state = history.reduce(function (acc, v) {
-      return v.id >= n ? combine(acc, v.value) : acc;
-    }, initValue);
+  function combineSince(acc, v) {
+    return v.id >= n ? combine(acc, v.value) : acc;
+  }
 
-    return changes.scan(function (acc, transform) {
-      return transform(acc, function (acc, v) {
-        return v.id >= n ? combine(acc, v.value) : acc;
-      }, initValue);
-    }, state);
+  return function (history, state, produce) {
+    if (arguments.length === 1) {
+      return history.reduce(combineSince, initValue);
+    }
+
+    return produce(state, initValue, combineSince);
   };
 };

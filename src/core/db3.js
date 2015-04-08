@@ -3,10 +3,19 @@ var List = require('immutable').List;
 var events = List();
 var stream = Kefir.bus();
 
-exports.stream = stream;
-exports.install = (fn) => fn(events, stream);
+function scanner(consumer) {
+  return function (acc, producer) {
+    return producer(fn => consumer(events, acc, fn));
+  }
+}
 
-stream.onValue(function (transform) {
-  events = transform(events, (acc, v) => acc.push(v), List());
+exports.install = function (consume) {
+  return stream.scan(scanner(consume), consume(events));
+};
+
+exports.modify = function (produce) {
+  stream.emit(produce);
+  events = produce(fn => fn(events, List(), (acc, v) => acc.push(v)));
   return events;
-});
+};
+

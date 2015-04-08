@@ -50,24 +50,26 @@ var app = {
 window.values = [];
 
 vbus.onValue(v => values.push(v));
-var unplug = plug(db3.stream, vbus.map(seq(0)));
+var unplug = onValue(vbus.map(seq(0)), function (produce) {
+  db3.modify(produce);
+});
 
 window.replay = function(vs) {
   unplug();
-  db3.stream.emit(changelog(vs));
+  db3.modify(changelog(vs));
 };
 
 window.play = function () {
   unplug();
   var event = seq(0);
-  db3.stream.emit(changelog([]));
+  db3.modify(changelog([]));
 
   function next(vs) {
     if (vs.length === 0) {
       return console.log('STOP');
     }
 
-    db3.stream.emit(event(vs[0]));
+    db3.modify(event(vs[0]));
     setTimeout(() => next(vs.slice(1)), 100);
   }
 
