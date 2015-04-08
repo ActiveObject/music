@@ -14,8 +14,7 @@ exports.install = function (consume) {
 };
 
 exports.modify = function (produce) {
-  stream.emit(produce);
   events = produce(fn => fn(events, List(), (acc, v) => acc.push(v)));
+  stream.emit(produce);
   return events;
 };
-
