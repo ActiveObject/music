@@ -1,13 +1,16 @@
 var Kefir = require('kefir');
+var ISet = require('immutable').Set;
+var db = require('app/core/db3');
 var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
 var firstValue = require('app/utils/firstValue');
+var addToSet = require('app/utils/addToSet');
 var player = require('app/db/player');
 var groups = require('app/db/groups');
 var tracks = require('app/db/tracks');
 var albums = require('app/db/albums');
-var activity = require('app/db/activity');
+var activity = db.scanEntity(ISet(), addToSet(':app/activity'));
 
 module.exports = function (getStoredValue) {
   var out = Kefir.emitter();

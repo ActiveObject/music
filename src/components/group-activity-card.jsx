@@ -10,7 +10,6 @@ var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
 var onValue = require('app/utils/onValue');
 var plug = require('app/utils/plug');
-var activity = require('app/db/activity');
 var db3 = require('app/core/db3');
 var scanSince = require('app/core/db/consumers/scanSince');
 

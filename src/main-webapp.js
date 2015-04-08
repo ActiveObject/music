@@ -87,15 +87,15 @@ require('app/services/vk-service');
 require('app/services/auth-service');
 require('app/services/soundmanager-service');
 
-// var out = require('app/services/local-storage-service')(function (key, fn) {
-//   if (localStorage.hasOwnProperty(key)) {
-//     fn(localStorage.getItem(key));
-//   }
-// });
+var out = require('app/services/local-storage-service')(function (key, fn) {
+  if (localStorage.hasOwnProperty(key)) {
+    fn(localStorage.getItem(key));
+  }
+});
 
-// out.onValue(function (item) {
-//   each(item, (value, key) => localStorage.setItem(key, value));
-// });
+out.onValue(function (item) {
+  each(item, (value, key) => localStorage.setItem(key, value));
+});
 
 if (process.env.NODE_ENV === 'development') {
   window.app = app;
