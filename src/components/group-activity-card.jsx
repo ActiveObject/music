@@ -32,7 +32,7 @@ var GroupActivityCard = React.createClass({
       return acc;
     }));
 
-    this.uninstall = onValue(stream, v => this.setState({ activity: v }));
+    this.uninstall = onValue(stream.skipDuplicates(), v => this.setState({ activity: v }));
 
     var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));
