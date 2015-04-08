@@ -1,7 +1,9 @@
 module.exports = function scanChanges(seed, combine) {
-  return function (history, changes) {
-    return changes.scan(function (acc, transform) {
-      return transform(acc, (acc, v) => combine(acc, v.value), seed);
-    }, seed);
+  return function (history, state, produce) {
+    if (arguments.length === 1) {
+      return seed;
+    }
+
+    return produce(state, seed, (acc, v) => combine(acc, v.value));
   };
 };
