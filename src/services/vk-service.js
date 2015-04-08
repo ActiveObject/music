@@ -1,7 +1,7 @@
-var vbus = require('app/core/vbus');
 var tagOf = require('app/utils/tagOf');
+var onValue = require('app/utils/onValue');
 var vk = require('app/vk');
 
-vbus
-  .filter(v => tagOf(v) === ':app/authenticated-user')
-  .onValue(user => vk.authorize(user));
+module.exports = function (vbus) {
+  return onValue(vbus.filter(v => tagOf(v) === ':app/authenticated-user'), user => vk.authorize(user));
+};
