@@ -4,10 +4,8 @@ module.exports = function seq(initValue) {
   return function event(v) {
     var item = { id: i++, value: v };
 
-    return function (next) {
-      return next(function (state, initState, consume) {
-        return consume(state, item);
-      });
+    return function (state, initState, consume) {
+      return consume(state, item);
     };
   };
 };

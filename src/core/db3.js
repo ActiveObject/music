@@ -5,7 +5,7 @@ var stream = Kefir.bus();
 
 function scanner(consumer) {
   return function (acc, producer) {
-    return producer(fn => consumer(events, acc, fn));
+    return consumer(events, acc, producer);
   };
 }
 
@@ -14,7 +14,7 @@ exports.install = function (consume) {
 };
 
 exports.modify = function (produce) {
-  events = produce(fn => fn(events, List(), (acc, v) => acc.push(v)));
+  events = produce(events, List(), (acc, v) => acc.push(v));
   stream.emit(produce);
   return events;
 };
