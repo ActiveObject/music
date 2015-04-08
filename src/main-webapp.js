@@ -20,6 +20,7 @@ var app = {
     app.uninstallList.push(require('app/services/vk-indexing-service')(vbus));
     app.uninstallList.push(require('app/services/router-service')(vbus));
     app.uninstallList.push(require('app/services/vk-service')(vbus));
+    app.uninstallList.push(require('app/services/auth-service')(vbus));
   }
 };
 
@@ -41,7 +42,6 @@ if (process.env.NODE_ENV === 'development') {
 
 app.start();
 
-require('app/services/auth-service');
 require('app/services/soundmanager-service');
 
 var out = require('app/services/local-storage-service')(function (key, fn) {

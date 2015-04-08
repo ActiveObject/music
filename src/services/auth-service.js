@@ -3,14 +3,18 @@ var Auth = require('app/core/auth');
 var AuthRoute = require('app/routes/auth-route');
 var accounts = require('app/accounts');
 var tagOf = require('app/utils/tagOf');
+var onValue = require('app/utils/onValue');
 
 if (Auth.hasToken(location.hash)) {
   Auth.storeToLs(location.hash);
   location.hash = '';
 }
 
-vbus
-  .filter(v => tagOf(v) === ':app/unauthenticated-user')
-  .onValue(user => vbus.emit(new AuthRoute({ vkAccount: accounts.vk })));
+module.exports = function (vbus) {
+  vbus.emit(Auth.readFromLs());
 
-vbus.emit(Auth.readFromLs());
+  return onValue(vbus.filter(v => tagOf(v) === ':app/unauthenticated-user'), function (user) {
+    vbus.emit(new AuthRoute({ vkAccount: accounts.vk }));
+  });
+};
+
