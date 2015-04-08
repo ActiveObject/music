@@ -17,7 +17,6 @@ function setToLocalStorage(item) {
   each(item, (value, key) => localStorage.setItem(key, value));
 }
 
-
 var app = {
   uninstallList: [],
 
