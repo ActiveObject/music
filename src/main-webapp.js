@@ -7,6 +7,17 @@ var vbus = require('app/core/vbus');
 var onValue = require('app/utils/onValue');
 var seq = require('app/core/db/producers/seq');
 
+function getFromLocalStorage(key, fn) {
+  if (localStorage.hasOwnProperty(key)) {
+    fn(localStorage.getItem(key));
+  }
+}
+
+function setToLocalStorage(item) {
+  each(item, (value, key) => localStorage.setItem(key, value));
+}
+
+
 var app = {
   uninstallList: [],
 
@@ -22,6 +33,7 @@ var app = {
     app.uninstallList.push(require('app/services/vk-service')(vbus));
     app.uninstallList.push(require('app/services/auth-service')(vbus));
     app.uninstallList.push(require('app/services/soundmanager-service')(vbus));
+    app.uninstallList.push(require('app/services/local-storage-service')(setToLocalStorage));
   }
 };
 
@@ -43,12 +55,4 @@ if (process.env.NODE_ENV === 'development') {
 
 app.start();
 
-var out = require('app/services/local-storage-service')(function (key, fn) {
-  if (localStorage.hasOwnProperty(key)) {
-    fn(localStorage.getItem(key));
-  }
-});
-
-out.onValue(function (item) {
-  each(item, (value, key) => localStorage.setItem(key, value));
-});
+require('app/services/local-storage-service').read(getFromLocalStorage);
