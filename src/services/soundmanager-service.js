@@ -1,8 +1,8 @@
 var Atom = require('app/core/atom');
 var sm = require('app/soundmanager');
 var player = require('app/db/player');
-var onValue = require('app/utils/onValue');
-var on = require('app/utils/on');
+var onValue = require('app/fn/onValue');
+var on = require('app/fn/on');
 
 sm.setup({
   url: 'swf',

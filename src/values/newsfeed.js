@@ -1,5 +1,5 @@
 var List = require('immutable').List;
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 var post = require('app/values/post');
 
 function Newsfeed(attrs) {

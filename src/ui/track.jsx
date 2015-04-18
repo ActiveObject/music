@@ -3,7 +3,7 @@ require('app/styles/element.styl');
 
 var React = require('react/addons');
 var cx = require('classnames');
-var duration = require('app/utils/duration');
+var duration = require('app/fn/duration');
 var PlayBtnCell = require('app/ui/play-btn-cell');
 
 var Track = React.createClass({

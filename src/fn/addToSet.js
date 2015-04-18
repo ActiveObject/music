@@ -1,4 +1,4 @@
-var tagOf = require('app/utils/tagOf');
+var tagOf = require('app/fn/tagOf');
 
 module.exports = function addToSet(valueTag) {
   return function union(acc, v) {

@@ -4,9 +4,9 @@ var go = require('app/core/go');
 var GroupsLoader = require('app/processes/groups-loader');
 var TracksLoader = require('app/processes/tracks-loader');
 var AlbumsLoader = require('app/processes/albums-loader');
-var addTag = require('app/utils/addTag');
-var tagOf = require('app/utils/tagOf');
-var onValue = require('app/utils/onValue');
+var addTag = require('app/fn/addTag');
+var tagOf = require('app/fn/tagOf');
+var onValue = require('app/fn/onValue');
 
 module.exports = function(vbus) {
   var user = vbus.filter(v => tagOf(v) === ':app/authenticated-user');

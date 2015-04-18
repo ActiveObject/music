@@ -1,5 +1,5 @@
-var merge = require('app/utils/merge');
-var attrEquals = require('app/utils/attrEquals');
+var merge = require('app/fn/merge');
+var attrEquals = require('app/fn/attrEquals');
 
 function Group(attrs) {
   if (!(this instanceof Group)) {

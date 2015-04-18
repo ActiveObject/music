@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var List = require('immutable').List;
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 var Playlist = require('app/values/playlist');
 var Track = require('app/values/track');

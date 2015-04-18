@@ -1,5 +1,5 @@
 var List = require('immutable').List;
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 var PostTracklist = require('app/values/tracklists/post-tracklist');
 var Playlist = require('app/values/playlist');
 var Track = require('app/values/track');

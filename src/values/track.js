@@ -1,4 +1,4 @@
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 var Audio = require('app/values/audio');
 
 function Track(attrs) {

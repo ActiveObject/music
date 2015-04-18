@@ -1,7 +1,7 @@
 var Immutable = require('immutable');
 var vk = require('app/vk');
 var Track = require('app/values/track');
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 
 function TracksLoader(user) {
   this.user = user;

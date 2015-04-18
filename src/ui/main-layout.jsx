@@ -1,8 +1,8 @@
 var React = require('react/addons');
 var Immutable = require('immutable');
 var Atom = require('app/core/atom');
-var addToSet = require('app/utils/addToSet');
-var isValue = require('app/utils/isValue');
+var addToSet = require('app/fn/addToSet');
+var isValue = require('app/fn/isValue');
 
 var App = require('app/ui/app');
 var Box = require('app/ui/box');

@@ -1,4 +1,4 @@
-var isDatom = require('app/utils/isDatom');
+var isDatom = require('app/fn/isDatom');
 
 module.exports = function tagOf(v) {
   if (typeof v === 'string') {

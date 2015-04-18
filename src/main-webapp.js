@@ -5,7 +5,7 @@ var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var db = require('app/core/db3');
 var vbus = require('app/core/vbus');
-var onValue = require('app/utils/onValue');
+var onValue = require('app/fn/onValue');
 var seq = require('app/core/db/producers/seq');
 
 function getFromLocalStorage(key, fn) {

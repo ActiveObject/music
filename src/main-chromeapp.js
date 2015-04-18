@@ -3,8 +3,8 @@ var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var vbus = require('app/core/vbus');
-var onValue = require('app/utils/onValue');
-var addToSet = require('app/utils/addToSet');
+var onValue = require('app/fn/onValue');
+var addToSet = require('app/fn/addToSet');
 
 if (process.env.NODE_ENV === 'development') {
   window.vbus = require('app/core/vbus');

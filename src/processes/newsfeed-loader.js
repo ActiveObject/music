@@ -1,6 +1,6 @@
 var Atom = require('app/core/atom');
 var vk = require('app/vk');
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 var newsfeed = require('app/values/newsfeed');
 
 function chunkify(size, offset, count) {

@@ -8,7 +8,7 @@ var vbus = require('app/core/vbus');
 var PlayBtn = React.createFactory(require('app/ui/play-btn'));
 var AudioProgressLine = React.createFactory(require('app/ui/audio-progress-line'));
 var Tabs = React.createFactory(require('app/ui/tabs'));
-var formatDuration = require('app/utils/duration');
+var formatDuration = require('app/fn/duration');
 
 module.exports = React.createClass({
   displayName: 'ActiveTrack',

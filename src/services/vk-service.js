@@ -1,5 +1,5 @@
-var tagOf = require('app/utils/tagOf');
-var onValue = require('app/utils/onValue');
+var tagOf = require('app/fn/tagOf');
+var onValue = require('app/fn/onValue');
 var vk = require('app/vk');
 
 module.exports = function (vbus) {

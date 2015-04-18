@@ -1,5 +1,5 @@
-var hashCode = require('app/utils/hashCode');
-var dayOfYear = require('app/utils/dayOfYear');
+var hashCode = require('app/fn/hashCode');
+var dayOfYear = require('app/fn/dayOfYear');
 var ActivityItem = require('app/values/activity-item');
 
 var dayms = 24 * 60 * 60 * 1000;

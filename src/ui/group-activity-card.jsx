@@ -6,10 +6,10 @@ var Activity = require('app/values/activity');
 var ActivityLoader = require('app/processes/activity-loader');
 var ActivityCard = require('app/ui/activity-card');
 var vbus = require('app/core/vbus');
-var addTag = require('app/utils/addTag');
-var tagOf = require('app/utils/tagOf');
-var onValue = require('app/utils/onValue');
-var plug = require('app/utils/plug');
+var addTag = require('app/fn/addTag');
+var tagOf = require('app/fn/tagOf');
+var onValue = require('app/fn/onValue');
+var plug = require('app/fn/plug');
 var db3 = require('app/core/db3');
 var scanSince = require('app/core/db/consumers/scanSince');
 

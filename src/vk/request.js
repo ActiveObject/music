@@ -1,6 +1,6 @@
 var Url = require('url');
 var request = require('app/core/request');
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 
 var Request = function (attrs) {
   this.entryPoint = attrs.entryPoint;

@@ -2,7 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var Impulse = require('impulse');
 var _ = require('underscore');
 var sm = require('sound-manager');
-var merge = require('app/utils/merge');
+var merge = require('app/fn/merge');
 var Atom = require('app/core/atom');
 
 var UninitializedState = require('./uninitialized-state');

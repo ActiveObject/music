@@ -8,7 +8,7 @@ var Group = require('app/values/group');
 var Album = require('app/values/album');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var player = require('app/values/player');
-var firstValue = require('app/utils/firstValue');
+var firstValue = require('app/fn/firstValue');
 
 module.exports = function revive(key, value) {
   if (key === 'soundmanager') {

@@ -1,10 +1,10 @@
 var _ = require('underscore');
 var IList = require('immutable').List;
-var merge = require('app/utils/merge');
-var hashCode = require('app/utils/hashCode');
+var merge = require('app/fn/merge');
+var hashCode = require('app/fn/hashCode');
 var ActivityItem = require('app/values/activity-item');
-var week = require('app/utils/week');
-var weekday = require('app/utils/weekday');
+var week = require('app/fn/week');
+var weekday = require('app/fn/weekday');
 
 function Activity(owner, period, activities) {
   var items = _.chain(activities.toArray())

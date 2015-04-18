@@ -1,5 +1,5 @@
-var hashCode = require('app/utils/hashCode');
-var attrEquals = require('app/utils/attrEquals');
+var hashCode = require('app/fn/hashCode');
+var attrEquals = require('app/fn/attrEquals');
 
 function Audio(attrs) {
   if (!(this instanceof Audio)) {
