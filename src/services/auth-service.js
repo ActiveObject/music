@@ -1,7 +1,7 @@
 var vbus = require('app/core/vbus');
 var Auth = require('app/core/auth');
 var AuthRoute = require('app/routes/auth-route');
-var accounts = require('app/accounts');
+var vk = require('app/values/accounts/vk');
 var tagOf = require('app/utils/tagOf');
 var onValue = require('app/utils/onValue');
 
@@ -14,7 +14,7 @@ module.exports = function (vbus) {
   vbus.emit(Auth.readFromLs());
 
   return onValue(vbus.filter(v => tagOf(v) === ':app/unauthenticated-user'), function (user) {
-    vbus.emit(new AuthRoute({ vkAccount: accounts.vk }));
+    vbus.emit(new AuthRoute({ vkAccount: vk }));
   });
 };
 
