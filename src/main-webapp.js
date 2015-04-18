@@ -1,5 +1,6 @@
 var each = require('underscore').each;
 var Atom = require('app/core/atom');
+var Auth = require('app/core/auth');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var db = require('app/core/db3');
@@ -36,6 +37,11 @@ var app = {
   }
 };
 
+if (Auth.hasToken(location.hash)) {
+  Auth.storeToLs(location.hash);
+  location.hash = '';
+}
+
 Atom.listen(router, render);
 
 require('app/core/request').useJsonp();
@@ -53,5 +59,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.start();
+
+vbus.emit(Auth.readFromLs());
 
 require('app/services/local-storage-service').read(getFromLocalStorage);

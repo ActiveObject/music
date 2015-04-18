@@ -3,11 +3,10 @@ var AuthView = React.createFactory(require('app/components/auth'));
 
 function AuthRoute(attrs) {
   this.vkAccount = attrs.vkAccount;
-  this.url = this.vkAccount.url;
 }
 
 AuthRoute.prototype.render = function(appstate) {
-  return new AuthView({ url: this.url });
+  return new AuthView({ url: this.vkAccount.url });
 };
 
 AuthRoute.prototype.lifecycle = {
@@ -18,6 +17,18 @@ AuthRoute.prototype.lifecycle = {
 
     return prevRoute;
   }
+};
+
+AuthRoute.prototype.tag = function () {
+  return 'auth-route';
+};
+
+AuthRoute.prototype.toJSON = function () {
+  return {
+    'router:auth-route': {
+      vkAccount: this.vkAccount
+    }
+  };
 };
 
 module.exports = AuthRoute;

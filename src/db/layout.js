@@ -3,7 +3,7 @@ var emptyRoute = require('app/routes/empty-route');
 var tagOf = require('app/utils/tagOf');
 
 module.exports = db.scanEntity(emptyRoute, function(layout, v) {
-  if (tagOf(v) === 'main-route' || tagOf(v) === 'group-route') {
+  if (tagOf(v) === 'main-route' || tagOf(v) === 'group-route' || tagOf(v) === 'auth-route') {
     return v;
   }
 
