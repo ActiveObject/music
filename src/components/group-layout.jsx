@@ -9,7 +9,6 @@ var PlayerContainer = require('app/components/player-container');
 
 var go = require('app/core/go');
 var vbus = require('app/core/vbus');
-var db = require('app/core/db');
 var Atom = require('app/core/atom');
 var addTag = require('app/utils/addTag');
 var tagOf = require('app/utils/tagOf');
@@ -20,9 +19,9 @@ var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
-
+var db3 = require('app/core/db3');
+var scanSince = require('app/core/db/consumers/scanSince');
 var groups = require('app/db/groups');
-var activity = require('app/db/activity');
 
 var UserPlaylists = require('app/components/user-playlists');
 
@@ -30,33 +29,31 @@ require('app/styles/group-layout.styl');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
-    this.activity = new Atom(Atom.value(activity).filter(v => v.owner === -this.props.group.id));
-
     return {
-      activity: Atom.value(this.activity)
+      activity: ISet()
     };
   },
 
   componentWillMount: function () {
     var gid = this.props.group.id;
 
-    this.uninstall = db.install(this.activity, function (acc, v) {
+    var stream = db3.install(scanSince(0, ISet(), function(acc, v) {
       if (tagOf(v) === ':app/activity') {
         return acc.union(v[1].filter(v => v.owner === -gid));
       }
 
       return acc;
-    });
+    }));
+
+    this.uninstall = onValue(stream, v => this.setState({ activity: v }));
 
     var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));
 
-    this.unsub1 = Atom.listen(this.activity, (v) => this.setState({ activity: v }));
     this.unsub2 = plug(vbus, out);
   },
 
   componentWillUnmount: function () {
-    this.unsub1();
     this.unsub2();
     this.uninstall();
   },
@@ -107,12 +104,10 @@ var GroupLayout = React.createClass({
     this.usubscribe = onValue(nfChannel.scan((acc, next) => acc.merge(next), newsfeed),
       v => this.setState({ newsfeed: v }));
 
-    this.uninstallGroups = db.install(groups, addToSet(':app/groups'));
     this.unsub = Atom.listen(groups, v => this.setState({ groups: v }));
   },
 
   componentWillUnmount: function() {
-    this.uninstallGroups();
     this.usubscribe();
     this.unsub();
   },

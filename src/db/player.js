@@ -1,6 +1,7 @@
 var Kefir = require('kefir');
-var Atom = require('app/core/atom');
 var player = require('app/values/player');
+var db = require('app/core/db3');
+var tagOf = require('app/utils/tagOf');
 
-module.exports = new Atom(player);
+module.exports = db.scanEntity(player, (acc, v) => tagOf(v) === ':app/player' ? v : acc);
 module.exports.changes = Kefir.fromEvent(module.exports, 'change');
