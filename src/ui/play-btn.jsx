@@ -1,6 +1,6 @@
 var React = require('react/addons');
 var Impulse = require('impulse');
-var Icon = require('app/components/icon');
+var Icon = require('app/ui/icon');
 var cx = require('classnames');
 
 var PlayBtn = React.createClass({

@@ -5,9 +5,9 @@ var React = require('react');
 var moment = require('moment');
 var dom = require('app/core/dom');
 var vbus = require('app/core/vbus');
-var PlayBtn = React.createFactory(require('app/components/play-btn'));
-var AudioProgressLine = React.createFactory(require('app/components/audio-progress-line'));
-var Tabs = React.createFactory(require('app/components/tabs'));
+var PlayBtn = React.createFactory(require('app/ui/play-btn'));
+var AudioProgressLine = React.createFactory(require('app/ui/audio-progress-line'));
+var Tabs = React.createFactory(require('app/ui/tabs'));
 var formatDuration = require('app/utils/duration');
 
 module.exports = React.createClass({

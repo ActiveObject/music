@@ -2,7 +2,7 @@ require('app/styles/tracklist.styl');
 
 var React = require('react');
 var vbus = require('app/core/vbus');
-var Track = require('app/components/track');
+var Track = require('app/ui/track');
 
 var Tracklist = React.createClass({
   propTypes: {

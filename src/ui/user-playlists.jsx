@@ -4,7 +4,7 @@ var Atom = require('app/core/atom');
 var Playlist = require('app/values/playlist');
 var GenreTracklist = require('app/values/tracklists/genre-tracklist');
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
-var PlaylistView = require('app/components/playlist-view');
+var PlaylistView = require('app/ui/playlist-view');
 
 var tracks = require('app/db/tracks');
 var albums = require('app/db/albums');

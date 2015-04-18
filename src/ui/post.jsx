@@ -1,7 +1,7 @@
 require('app/styles/post.styl');
 
 var React = require('react/addons');
-var Tracklist = require('app/components/tracklist');
+var Tracklist = require('app/ui/tracklist');
 
 var PostHeader = React.createClass({
   mixins: [React.addons.PureRenderMixin],

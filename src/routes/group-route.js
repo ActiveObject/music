@@ -1,5 +1,5 @@
 var React = require('react');
-var GroupRouteCmp = React.createFactory(require('app/components/group-layout'));
+var GroupRouteCmp = React.createFactory(require('app/ui/group-layout'));
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 var DateRange = require('app/values/date-range');
 

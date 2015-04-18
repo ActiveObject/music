@@ -5,7 +5,7 @@ var React = require('react');
 var throttle = require('underscore').throttle;
 var IScroll = require('iscroll/build/iscroll-probe');
 var vbus = require('app/core/vbus');
-var Track = require('app/components/track');
+var Track = require('app/ui/track');
 var Cursor = require('app/values/cursor');
 
 var TrackContainer = React.createClass({

@@ -1,5 +1,5 @@
 var React = require('react');
-var MainRouteCmp = React.createFactory(require('app/components/main-layout'));
+var MainRouteCmp = React.createFactory(require('app/ui/main-layout'));
 var DateRange = require('app/values/date-range');
 
 function MainRoute(attrs) {

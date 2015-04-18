@@ -4,12 +4,12 @@ var Atom = require('app/core/atom');
 var addToSet = require('app/utils/addToSet');
 var isValue = require('app/utils/isValue');
 
-var App = require('app/components/app');
-var Box = require('app/components/box');
-var IScrollLayer = require('app/components/iscroll-layer');
-var GroupActivityCard = require('app/components/group-activity-card');
-var PlayerContainer = require('app/components/player-container');
-var UserPlaylists = require('app/components/user-playlists');
+var App = require('app/ui/app');
+var Box = require('app/ui/box');
+var IScrollLayer = require('app/ui/iscroll-layer');
+var GroupActivityCard = require('app/ui/group-activity-card');
+var PlayerContainer = require('app/ui/player-container');
+var UserPlaylists = require('app/ui/user-playlists');
 
 var groups = require('app/db/groups');
 

@@ -1,5 +1,5 @@
 var React = require('react');
-var AuthView = React.createFactory(require('app/components/auth'));
+var AuthView = React.createFactory(require('app/ui/auth'));
 
 function AuthRoute(attrs) {
   this.vkAccount = attrs.vkAccount;

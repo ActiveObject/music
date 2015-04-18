@@ -2,7 +2,7 @@ require('app/styles/auth.styl');
 require('app/styles/element.styl');
 
 var React = require('react');
-var Icon = require('app/components/icon');
+var Icon = require('app/ui/icon');
 
 var Auth = React.createClass({
   render: function () {

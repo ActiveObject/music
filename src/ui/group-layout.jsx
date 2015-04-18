@@ -1,11 +1,11 @@
 var React = require('react/addons');
 var ISet = require('immutable').Set;
-var App = require('app/components/app');
-var Newsfeed = require('app/components/newsfeed');
-var IScrollLayer = require('app/components/iscroll-layer');
-var ActivityChart = require('app/components/activity-chart');
-var Box = require('app/components/box');
-var PlayerContainer = require('app/components/player-container');
+var App = require('app/ui/app');
+var Newsfeed = require('app/ui/newsfeed');
+var IScrollLayer = require('app/ui/iscroll-layer');
+var ActivityChart = require('app/ui/activity-chart');
+var Box = require('app/ui/box');
+var PlayerContainer = require('app/ui/player-container');
 
 var go = require('app/core/go');
 var vbus = require('app/core/vbus');
@@ -23,7 +23,7 @@ var db3 = require('app/core/db3');
 var scanSince = require('app/core/db/consumers/scanSince');
 var groups = require('app/db/groups');
 
-var UserPlaylists = require('app/components/user-playlists');
+var UserPlaylists = require('app/ui/user-playlists');
 
 require('app/styles/group-layout.styl');
 

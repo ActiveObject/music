@@ -2,7 +2,7 @@ require('app/styles/activity-card.styl');
 require('app/styles/element.styl');
 
 var React = require('react/addons');
-var ActivityChart = require('app/components/activity-chart');
+var ActivityChart = require('app/ui/activity-chart');
 var vbus = require('app/core/vbus');
 
 var ActivityCard = React.createClass({

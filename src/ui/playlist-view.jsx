@@ -1,6 +1,6 @@
 var Atom = require('app/core/atom');
 var player = require('app/db/player');
-var Tracklist = require('app/components/tracklist');
+var Tracklist = require('app/ui/tracklist');
 
 var PlaylistView = React.createClass({
   getInitialState: function () {
