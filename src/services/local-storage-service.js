@@ -12,28 +12,49 @@ var groups = require('app/db/groups');
 var tracks = require('app/db/tracks');
 var albums = require('app/db/albums');
 var activity = db.scanEntity(ISet(), addToSet(':app/activity'));
+var Storage = require('app/Storage');
 
-module.exports = function (setValueToStore) {
+module.exports = function (vbus) {
   var unsub1 = onValue(player
     .changes
     .map(player => player.track)
     .skipDuplicates()
-    .map(JSON.stringify), v => setValueToStore({ ':player/track': v }));
+    .map(JSON.stringify), v => Storage.setItem({ ':player/track': v }));
 
   var unsub2 = Atom.listen(activity, function(activity) {
-    setValueToStore({ ':app/activity': JSON.stringify({ activities: activity }) });
+    Storage.setItem({ ':app/activity': JSON.stringify({ activities: activity }) });
   });
 
   var unsub3 = Atom.listen(groups, function(groups) {
-    setValueToStore({ ':app/groups': JSON.stringify({ groups: groups }) });
+    Storage.setItem({ ':app/groups': JSON.stringify({ groups: groups }) });
   });
 
   var unsub4 = Atom.listen(tracks, function(tracks) {
-    setValueToStore({ ':app/tracks': JSON.stringify({ tracks: tracks }) });
+    Storage.setItem({ ':app/tracks': JSON.stringify({ tracks: tracks }) });
   });
 
   var unsub5 = Atom.listen(albums, function(albums) {
-    setValueToStore({ ':app/albums': JSON.stringify({ albums: albums }) });
+    Storage.setItem({ ':app/albums': JSON.stringify({ albums: albums }) });
+  });
+
+  Storage.getItem(':player/track', function (track) {
+    vbus.emit(Atom.value(player).useTrack(firstValue(JSON.parse(track, revive))));
+  });
+
+  Storage.getItem(':app/activity', function (activity) {
+    vbus.emit([':app/activity', JSON.parse(activity, revive).activities]);
+  });
+
+  Storage.getItem(':app/tracks', function (tracks) {
+    vbus.emit([':app/tracks', JSON.parse(tracks, revive).tracks]);
+  });
+
+  Storage.getItem(':app/groups', function (groups) {
+    vbus.emit([':app/groups', JSON.parse(groups, revive).groups]);
+  });
+
+  Storage.getItem(':app/albums', function (albums) {
+    vbus.emit([':app/albums', JSON.parse(albums, revive).albums]);
   });
 
   return function() {
@@ -43,26 +64,4 @@ module.exports = function (setValueToStore) {
     unsub4();
     unsub5();
   };
-};
-
-module.exports.read = function(getStoredValue) {
-  getStoredValue(':player/track', function (track) {
-    vbus.emit(Atom.value(player).useTrack(firstValue(JSON.parse(track, revive))));
-  });
-
-  getStoredValue(':app/activity', function (activity) {
-    vbus.emit([':app/activity', JSON.parse(activity, revive).activities]);
-  });
-
-  getStoredValue(':app/tracks', function (tracks) {
-    vbus.emit([':app/tracks', JSON.parse(tracks, revive).tracks]);
-  });
-
-  getStoredValue(':app/groups', function (groups) {
-    vbus.emit([':app/groups', JSON.parse(groups, revive).groups]);
-  });
-
-  getStoredValue(':app/albums', function (albums) {
-    vbus.emit([':app/albums', JSON.parse(albums, revive).albums]);
-  });
 };

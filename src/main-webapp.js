@@ -7,16 +7,20 @@ var db = require('app/core/db3');
 var vbus = require('app/core/vbus');
 var onValue = require('app/fn/onValue');
 var seq = require('app/core/db/producers/seq');
+var app = require('app');
+var { IGetItem, ISetItem } = require('app/Storage');
 
-function getFromLocalStorage(key, fn) {
-  if (localStorage.hasOwnProperty(key)) {
-    fn(localStorage.getItem(key));
+app.use({
+  [IGetItem]: function (key, fn) {
+    if (localStorage.hasOwnProperty(key)) {
+      fn(localStorage.getItem(key));
+    }
+  },
+
+  [ISetItem]: function (item) {
+    each(item, (value, key) => localStorage.setItem(key, value));
   }
-}
-
-function setToLocalStorage(item) {
-  each(item, (value, key) => localStorage.setItem(key, value));
-}
+});
 
 var app = {
   uninstallList: [],
@@ -33,7 +37,7 @@ var app = {
     app.uninstallList.push(require('app/services/vk-service')(vbus));
     app.uninstallList.push(require('app/services/auth-service')(vbus));
     app.uninstallList.push(require('app/services/soundmanager-service')(vbus));
-    app.uninstallList.push(require('app/services/local-storage-service')(setToLocalStorage));
+    app.uninstallList.push(require('app/services/local-storage-service')(vbus));
   }
 };
 
@@ -61,5 +65,3 @@ if (process.env.NODE_ENV === 'development') {
 app.start();
 
 vbus.emit(Auth.readFromLs());
-
-require('app/services/local-storage-service').read(getFromLocalStorage);
