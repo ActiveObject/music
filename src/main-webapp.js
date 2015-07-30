@@ -9,46 +9,47 @@ var onValue = require('app/fn/onValue');
 var seq = require('app/core/db/producers/seq');
 var app = require('app');
 var { IGetItem, ISetItem } = require('app/Storage');
+var { IHttpRequest } = require('app/Http');
+var jsonpRequest = require('jsonp');
 
-app.use({
-  [IGetItem]: function (key, fn) {
-    if (localStorage.hasOwnProperty(key)) {
-      fn(localStorage.getItem(key));
-    }
-  },
+function System() {
+  this.uninstallList = [];
+}
 
-  [ISetItem]: function (item) {
-    each(item, (value, key) => localStorage.setItem(key, value));
-  }
-});
-
-var app = {
-  uninstallList: [],
-
-  stop: function() {
-    app.uninstallList.forEach(uninstall => uninstall());
-    app.uninstallList = [];
-  },
-
-  start: function() {
-    app.uninstallList.push(onValue(vbus.map(seq(0)), (produce) => db.modify(produce)));
-    app.uninstallList.push(require('app/services/vk-indexing-service')(vbus));
-    app.uninstallList.push(require('app/services/router-service')(vbus));
-    app.uninstallList.push(require('app/services/vk-service')(vbus));
-    app.uninstallList.push(require('app/services/auth-service')(vbus));
-    app.uninstallList.push(require('app/services/soundmanager-service')(vbus));
-    app.uninstallList.push(require('app/services/local-storage-service')(vbus));
+System.prototype[IGetItem] = function (key, fn) {
+  if (localStorage.hasOwnProperty(key)) {
+    fn(localStorage.getItem(key));
   }
 };
 
-if (Auth.hasToken(location.hash)) {
-  Auth.storeToLs(location.hash);
-  location.hash = '';
-}
+System.prototype[ISetItem] = function (item) {
+  each(item, (value, key) => localStorage.setItem(key, value));
+};
+
+System.prototype[IHttpRequest] = function (url, callback) {
+  return jsonpRequest(url, callback);
+};
+
+System.prototype.start = function () {
+  if (Auth.hasToken(location.hash)) {
+    Auth.storeToLs(location.hash);
+    location.hash = '';
+  }
+
+  this.uninstallList.push(onValue(vbus.map(seq(0)), (produce) => db.modify(produce)));
+  this.uninstallList.push(require('app/services/vk-indexing-service')(vbus));
+  this.uninstallList.push(require('app/services/router-service')(vbus));
+  this.uninstallList.push(require('app/services/vk-service')(vbus));
+  this.uninstallList.push(require('app/services/auth-service')(vbus));
+  this.uninstallList.push(require('app/services/soundmanager-service')(vbus));
+  this.uninstallList.push(require('app/services/local-storage-service')(vbus));
+};
+
+System.prototype.stop = function() {
+  this.uninstallList.forEach(uninstall => uninstall());
+};
 
 Atom.listen(router, render);
-
-require('app/core/request').useJsonp();
 
 if (process.env.NODE_ENV === 'development') {
   window.app = app;
@@ -62,6 +63,8 @@ if (process.env.NODE_ENV === 'development') {
   vbus.log();
 }
 
-app.start();
+app
+  .use(new System())
+  .start();
 
 vbus.emit(Auth.readFromLs());

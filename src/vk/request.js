@@ -1,5 +1,5 @@
 var Url = require('url');
-var request = require('app/core/request');
+var Http = require('app/Http');
 var merge = require('app/fn/merge');
 
 var Request = function (attrs) {
@@ -23,7 +23,7 @@ var Request = function (attrs) {
 };
 
 Request.prototype.send = function (callback) {
-  request(this.url, function (err, data) {
+  Http.request(this.url, function (err, data) {
     if (err) {
       return callback(err);
     }
