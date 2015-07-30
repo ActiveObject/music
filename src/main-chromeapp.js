@@ -4,8 +4,6 @@ var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var vbus = require('app/core/vbus');
-var onValue = require('app/fn/onValue');
-var addToSet = require('app/fn/addToSet');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');
 
