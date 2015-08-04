@@ -51,7 +51,7 @@ module.exports = function (vbus) {
       vbus.emit(p.modify({ seekToPosition: null, position: p.seekToPosition }));
       sm.setPosition(p.seekToPosition);
     }
-  })
+  });
 
   return function() {
     unsub1();
