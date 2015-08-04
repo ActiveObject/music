@@ -46,6 +46,13 @@ module.exports = function (vbus) {
     }
   });
 
+  var unsub7 = onValue(player.changes, function (p) {
+    if (p.seekToPosition) {
+      vbus.emit(p.modify({ seekToPosition: null, position: p.seekToPosition }));
+      sm.setPosition(p.seekToPosition);
+    }
+  })
+
   return function() {
     unsub1();
     unsub2();
@@ -53,6 +60,7 @@ module.exports = function (vbus) {
     unsub4();
     unsub5();
     unsub6();
+    unsub7();
   };
 };
 

@@ -20,6 +20,7 @@ function Player(attrs) {
   this.bytesTotal = attrs.bytesTotal;
   this.seeking = attrs.seeking;
   this.seekPosition = attrs.seekPosition;
+  this.seekToPosition = attrs.seekToPosition;
 
   this.recentTracklists = this.makeRecent(attrs.recentTracklists, attrs.tracklist, isTracklistChanged);
 }
@@ -132,7 +133,7 @@ Player.prototype.seek = function (position) {
 
 Player.prototype.seekTo = function (position) {
   return this.modify({
-    position: this.track.audio.duration * position * 1000
+    seekToPosition: this.track.audio.duration * position * 1000
   });
 };
 
