@@ -43,6 +43,7 @@ System.prototype.start = function () {
   this.uninstallList.push(require('app/services/auth-service')(vbus));
   this.uninstallList.push(require('app/services/soundmanager-service')(vbus));
   this.uninstallList.push(require('app/services/local-storage-service')(vbus));
+  this.uninstallList.push(require('app/services/audio-key-control')(vbus));
 };
 
 System.prototype.stop = function() {

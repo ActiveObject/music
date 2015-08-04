@@ -47,7 +47,7 @@ module.exports = function (vbus) {
   });
 
   var unsub7 = onValue(player.changes, function (p) {
-    if (p.seekToPosition) {
+    if (typeof p.seekToPosition === 'number') {
       vbus.emit(p.modify({ seekToPosition: null, position: p.seekToPosition }));
       sm.setPosition(p.seekToPosition);
     }

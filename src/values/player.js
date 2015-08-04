@@ -137,6 +137,26 @@ Player.prototype.seekTo = function (position) {
   });
 };
 
+Player.prototype.forward = function (amount) {
+  if (!this.isPlaying) {
+    return this;
+  }
+
+  return this.modify({
+    seekToPosition: this.position + amount
+  });
+};
+
+Player.prototype.rewind = function (amount) {
+  if (!this.isPlaying || this.position === 0) {
+    return this;
+  }
+
+  return this.modify({
+    seekToPosition: this.position > amount ? this.position - amount : 0
+  });
+};
+
 Player.prototype.startSeeking = function (v) {
   return this.modify({
     seekPosition: this.position,
