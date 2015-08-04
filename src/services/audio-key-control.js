@@ -13,5 +13,6 @@ module.exports = function (vbus) {
 
   return function () {
     key.unbind('left');
+    key.unbind('right');
   };
 };
