@@ -31,7 +31,6 @@ module.exports = {
     'sound-manager': 'soundManager',
     'firebase': 'Firebase'
   },
-  watchDelay: 200,
   plugins: [
     definePlugin,
     new webpack.IgnorePlugin(/vertx/),
