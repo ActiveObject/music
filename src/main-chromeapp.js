@@ -61,7 +61,8 @@ System.prototype.start = function () {
     require('app/services/vk-service')(vbus),
     require('app/services/soundmanager-service')(vbus),
     require('app/chromeapp/router-service'),
-    require('app/services/local-storage-service')(vbus)
+    require('app/services/local-storage-service')(vbus),
+    require('app/services/audio-key-control')(vbus)
   ];
 };
 
