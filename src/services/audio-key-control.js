@@ -11,6 +11,10 @@ module.exports = function (vbus) {
     vbus.emit(playerAtom.value.forward(5000));
   });
 
+  key('space', function () {
+    vbus.emit(playerAtom.value.togglePlay());
+  });
+
   return function () {
     key.unbind('left');
     key.unbind('right');
