@@ -1,7 +1,6 @@
 var querystring = require('querystring');
 var each = require('underscore').each;
 var Atom = require('app/core/atom');
-var Auth = require('app/core/auth');
 var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var db = require('app/core/db3');
@@ -51,7 +50,15 @@ System.prototype.stop = function() {
 };
 
 System.prototype.auth = function (hash) {
-  if (Auth.hasToken(hash)) {
+  function hasToken(hash) {
+    return hash && querystring.parse(hash.slice(1)).access_token;
+  }
+
+  function isUserInStorage() {
+    return localStorage.getItem('user_id') && localStorage.getItem('access_token');
+  }
+
+  if (hasToken(hash)) {
     var credentials = querystring.parse(hash.slice(1));
     var user = new User.Authenticated({
       id: credentials.user_id,
@@ -64,7 +71,7 @@ System.prototype.auth = function (hash) {
     return vbus.emit(user);
   }
 
-  if (Auth.isUserInStorage()) {
+  if (isUserInStorage()) {
     var user = new User.Authenticated({
       id: localStorage.getItem('user_id'),
       accessToken: localStorage.getItem('access_token')
