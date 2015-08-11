@@ -7,6 +7,12 @@ var IScrollLayer = React.createClass({
       mouseWheel: true,
       scrollX: false
     });
+
+    this.interval = setInterval(() => this.scroll.refresh(), 100);
+  },
+
+  componentWillUnmount: function () {
+    clearInterval(this.interval);
   },
 
   componentDidUpdate: function () {
