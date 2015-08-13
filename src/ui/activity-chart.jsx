@@ -2,7 +2,7 @@ require('app/styles/activity-chart.styl');
 
 var React = require('react');
 var moment = require('moment');
-var dom = require('app/core/dom');
+var classnames = require('classnames');
 
 var ActivityChart = React.createClass({
   propTypes: {
@@ -21,14 +21,14 @@ var ActivityChart = React.createClass({
   render: function () {
     var achart = this.makeActivityChart(this.props.size, this.props.margin, this.props.activity);
 
-    var weekdays = dom.div()
-      .key('weekdays')
-      .className('activity-chart-weekdays')
-      .attr('style', { width: this.props.size })
-      .append([1, 3, 5].map(this.makeWeekday))
-      .make();
+    var weekdays = (
+      <div
+        key='weekdays'
+        className='activity-chart-weekdays'
+        style={{ width: this.props.size }} >{[1, 3, 5].map(this.makeWeekday)}</div>
+    );
 
-    var months = this.makeMonthLegend(this.props.activity).make();
+    var months = this.makeMonthLegend(this.props.activity);
 
     return (
       <div key='content' className='activity-chart-content'>
@@ -42,20 +42,22 @@ var ActivityChart = React.createClass({
   makeActivityChart: function(size, margin, activity) {
     var dowSlices = [0, 1, 2, 3, 4, 5, 6].map(function (dow) {
       var items = activity.sliceForDayOfWeek(dow).map(function (item, i) {
-        return dom.rect()
-          .key(item.date.toISOString())
-          .attr('width', size)
-          .attr('height', size)
-          .attr('x', i * (size + margin))
-          .attr('y', 0)
-          .attr('className', makeFillColor(item.news));
+        return (
+          <rect
+            key={item.date.toISOString()}
+            width={size}
+            height={size}
+            x={i * (size + margin)}
+            y={0}
+            className={makeFillColor(item.news)} />
+        );
       });
 
-      return dom.g()
-        .key(dow)
-        .attr('transform', 'translate(' + [0, (size + margin) * dow].join(',') + ')')
-        .append(items.toArray())
-        .make();
+      return (
+        <g key={dow} transform={'translate(' + [0, (size + margin) * dow].join(',') + ')'} >
+          {items}
+        </g>
+      )
     });
 
     return (
@@ -69,30 +71,37 @@ var ActivityChart = React.createClass({
 
   makeMonthLegend: function (activity) {
     var months = activity.months().map(function (v) {
-      return dom.div()
-        .key(v.year + ':' + v.month)
-        .className('activity-chart-month')
-        .className('activity-chart-month-hidden', v.size < 3)
-        .attr('style', { width: v.size * (this.props.size + this.props.margin) })
-        .append(moment.monthsShort(v.month));
+      var cx = classnames({
+        'activity-chart-month': true,
+        'activity-chart-month-hidden': v.size < 3
+      });
+
+      var monthStyle = {
+        width: v.size * (this.props.size + this.props.margin)
+      };
+
+      return (
+        <div key={v.year + ':' + v.month} className={cx} style={monthStyle} >
+          {moment.monthsShort(v.month)}
+        </div>
+      );
     }, this);
 
-    return dom.div()
-      .key('months')
-      .className('activity-chart-months')
-      .append(months.toArray());
+    return <div key='months' className='activity-chart-months'>{months}</div>;
   },
 
   makeWeekday: function (n) {
-    return dom.div()
-      .key(n)
-      .className('activity-chart-weekday')
-      .attr('style', {
-        height: this.props.size,
-        top: (this.props.size + this.props.margin) * n,
-        lineHeight: this.props.size + 'px'
-      })
-      .append(moment.weekdaysMin(n).slice(0, 1));
+    var weekdayStyle = {
+      height: this.props.size,
+      top: (this.props.size + this.props.margin) * n,
+      lineHeight: this.props.size + 'px'
+    };
+
+    return (
+      <div className='activity-chart-weekday' key={n} style={weekdayStyle} >
+        {moment.weekdaysMin(n).slice(0, 1)}
+      </div>
+    );
   }
 });
 
