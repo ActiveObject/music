@@ -1,14 +1,12 @@
 require('app/styles/audio-progress-line.styl');
 
 var React = require('react');
-var dom = require('app/core/dom');
 var vbus = require('app/core/vbus');
 var Player = require('app/values/player');
 var hasTag = require('app/fn/hasTag');
+var classnames = require('classnames');
 
-var AudioProgressLine = React.createClass({
-  displayName: 'AudioProgressLine',
-
+module.exports = React.createClass({
   getInitialState: function () {
     return {
       seekStart: 0,
@@ -27,37 +25,31 @@ var AudioProgressLine = React.createClass({
   },
 
   render: function () {
-    var bgLine = dom.div()
-      .key('apl-bg-line')
-      .className('apl-bg-line');
+    var progressLineClassName = classnames({
+      'apl': true,
+      'apl-seek-active': hasTag(this.props.player, ':player/seeking')
+    });
 
-    var loadLine = dom.div()
-      .key('apl-load-line')
-      .className('apl-load-line')
-      .attr('style', { width: this.trackLoaded() + '%' });
+    var seekClassName = classnames({
+      'apl-seek': true,
+      'apl-seek-hidden': !this.state.seekIsVisible
+    });
 
-    var fgLine = dom.div()
-      .key('apl-fg-line')
-      .className('apl-fg-line')
-      .attr('style', { width: this.trackProgress() + '%' });
+    return (
+      <div
+        className={progressLineClassName}
+        ref='progressLine'
+        onMouseOver={this.showSeekIndicator}
+        onMouseOut={this.hideSeekIndicator}
+        onMouseLeave={this.moveSeekIndicator}
+        onClick={this.seekToPosition} >
 
-    var seek = dom.div()
-      .key('apl-seek')
-      .className('apl-seek')
-      .className('apl-seek-hidden', !this.state.seekIsVisible)
-      .attr('onMouseDown', this.dragStart)
-      .attr('style', { left: this.trackProgress() + '%' });
-
-    return dom.div()
-      .className('apl')
-      .className('apl-seek-active', hasTag(this.props.player, ':player/seeking'))
-      .append(bgLine, loadLine, fgLine, seek)
-      .attr('ref', 'progressLine')
-      .attr('onMouseOver', this.showSeekIndicator)
-      .attr('onMouseOut', this.hideSeekIndicator)
-      .attr('onMouseLeave', this.moveSeekIndicator)
-      .attr('onClick', this.seekToPosition)
-      .make();
+        <div className='apl-bg-line' />
+        <div className='apl-load-line' style={{ width: this.trackLoaded() + '%' }} />
+        <div className='apl-fg-line' style={{ width: this.trackProgress() + '%' }} />
+        <div className={seekClassName} onMouseDown={this.dragStart} style={{ left: this.trackProgress() + '%' }} />
+      </div>
+    );
   },
 
   showSeekIndicator: function (e) {
@@ -140,5 +132,3 @@ var AudioProgressLine = React.createClass({
     return 0;
   }
 });
-
-module.exports = AudioProgressLine;
