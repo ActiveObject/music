@@ -1,18 +1,19 @@
 var key = require('keymaster');
 var playerAtom = require('app/db/player');
+var Player = require('app/values/player');
 
 module.exports = function (vbus) {
 
   key('left', function () {
-    vbus.emit(playerAtom.value.rewind(5000));
+    vbus.emit(Player.rewind(playerAtom.value, 5000));
   });
 
   key('right', function () {
-    vbus.emit(playerAtom.value.forward(5000));
+    vbus.emit(Player.forward(playerAtom.value, 5000));
   });
 
   key('space', function () {
-    vbus.emit(playerAtom.value.togglePlay());
+    vbus.emit(Player.togglePlay(playerAtom.value));
   });
 
   return function () {

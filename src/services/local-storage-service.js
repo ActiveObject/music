@@ -13,6 +13,7 @@ var tracks = require('app/db/tracks');
 var albums = require('app/db/albums');
 var activity = db.scanEntity(ISet(), addToSet(':app/activity'));
 var Storage = require('app/Storage');
+var merge = require('app/fn/merge');
 
 module.exports = function (vbus) {
   var unsub1 = onValue(player
@@ -38,7 +39,7 @@ module.exports = function (vbus) {
   });
 
   Storage.getItem(':player/track', function (track) {
-    vbus.emit(Atom.value(player).useTrack(firstValue(JSON.parse(track, revive))));
+    vbus.emit(merge(Atom.value(player), { track: firstValue(JSON.parse(track, revive)) }));
   });
 
   Storage.getItem(':app/activity', function (activity) {

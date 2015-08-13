@@ -9,6 +9,8 @@ var PlayBtn = React.createFactory(require('app/ui/play-btn'));
 var AudioProgressLine = React.createFactory(require('app/ui/audio-progress-line'));
 var Tabs = React.createFactory(require('app/ui/tabs'));
 var formatDuration = require('app/fn/duration');
+var hasTag = require('app/fn/hasTag');
+var Player = require('app/values/player');
 
 module.exports = React.createClass({
   displayName: 'ActiveTrack',
@@ -23,7 +25,7 @@ module.exports = React.createClass({
 
     var playBtn = new PlayBtn({
       key: 'play-btn',
-      isPlaying: this.props.player.isPlaying,
+      isPlaying: hasTag(this.props.player, ':player/is-playing'),
       isActive: true,
       onClick: this.togglePlay
     });
@@ -81,10 +83,6 @@ module.exports = React.createClass({
   },
 
   togglePlay: function () {
-    vbus.emit(this.props.player.togglePlay());
-  },
-
-  changePlaylist: function (id) {
-    vbus.emit(this.props.player.switchToTracklist(id));
+    vbus.emit(Player.togglePlay(this.props.player));
   }
 });

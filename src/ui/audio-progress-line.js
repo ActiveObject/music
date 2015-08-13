@@ -3,6 +3,8 @@ require('app/styles/audio-progress-line.styl');
 var React = require('react');
 var dom = require('app/core/dom');
 var vbus = require('app/core/vbus');
+var Player = require('app/values/player');
+var hasTag = require('app/fn/hasTag');
 
 var AudioProgressLine = React.createClass({
   displayName: 'AudioProgressLine',
@@ -48,7 +50,7 @@ var AudioProgressLine = React.createClass({
 
     return dom.div()
       .className('apl')
-      .className('apl-seek-active', this.props.player.seeking)
+      .className('apl-seek-active', hasTag(this.props.player, ':player/seeking'))
       .append(bgLine, loadLine, fgLine, seek)
       .attr('ref', 'progressLine')
       .attr('onMouseOver', this.showSeekIndicator)
@@ -65,26 +67,26 @@ var AudioProgressLine = React.createClass({
 
   hideSeekIndicator: function (e) {
     e.stopPropagation();
-    if (!this.props.player.seeking) {
+    if (!hasTag(this.props.player, ':player/seeking')) {
       this.setState({ seekIsVisible: false });
     }
   },
 
   dragStart: function (e) {
     this.setState({ seekStart: e.clientX });
-    vbus.emit(this.props.player.startSeeking());
+    vbus.emit(Player.startSeeking(this.props.player));
   },
 
   dragEnd: function (e) {
-    if (this.props.player.seeking) {
+    if (hasTag(this.props.player, ':player/seeking')) {
       this.setState({ seekStart: 0 });
-      vbus.emit(this.props.player.stopSeeking());
+      vbus.emit(Player.stopSeeking(this.props.player));
     }
   },
 
   moveSeekIndicator: function (e) {
-    if (this.props.player.seeking) {
-      vbus.emit(this.props.player.seek(this.seekPosition(e.clientX)));
+    if (hasTag(this.props.player, ':player/seeking')) {
+      vbus.emit(Player.seek(this.props.player, this.seekPosition(e.clientX)));
     }
   },
 
@@ -107,19 +109,19 @@ var AudioProgressLine = React.createClass({
   },
 
   seekToPosition: function (e) {
-    vbus.emit(this.props.player.seekTo(this.seekPosition(e.clientX)));
+    vbus.emit(Player.seekTo(this.props.player, this.seekPosition(e.clientX)));
   },
 
   trackProgress: function () {
-    if (this.props.player.seeking) {
-      return this.props.player.relativeSeekPosition() * 100;
+    if (hasTag(this.props.player, ':player/seeking')) {
+      return Player.relativeSeekPosition(this.props.player) * 100;
     } else {
-      return this.props.player.relativePosition() * 100;
+      return Player.relativePosition(this.props.player) * 100;
     }
   },
 
   trackLoaded: function () {
-    return this.props.player.relativeLoaded() * 100;
+    return Player.relativeLoaded(this.props.player) * 100;
   },
 
   lineWidth: function () {

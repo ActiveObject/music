@@ -13,6 +13,10 @@ module.exports = function tagOf(v) {
     return v.tag();
   }
 
+  if (v.tag) {
+    return v.tag;
+  }
+
   if (isDatom(v)) {
     return v.a;
   }

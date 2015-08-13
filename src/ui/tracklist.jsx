@@ -3,6 +3,8 @@ require('app/styles/tracklist.styl');
 var React = require('react');
 var vbus = require('app/core/vbus');
 var Track = require('app/ui/track');
+var Player = require('app/values/player');
+var hasTag = require('app/fn/hasTag');
 
 var Tracklist = React.createClass({
   propTypes: {
@@ -20,7 +22,7 @@ var Tracklist = React.createClass({
   render: function() {
     var tracks = this.props.tracklist.playlist.tracks.slice(0, this.state.count).map(function (track) {
       var isActive = track.id === this.props.player.track.id;
-      var isPlaying = isActive && this.props.player.isPlaying;
+      var isPlaying = isActive && hasTag(this.props.player, ':player/is-playing');
 
       return (
         <Track
@@ -42,7 +44,7 @@ var Tracklist = React.createClass({
   },
 
   togglePlay: function (track) {
-    vbus.emit(this.props.player.togglePlay(track, this.props.tracklist));
+    vbus.emit(Player.togglePlay(this.props.player, track, this.props.tracklist));
   },
 
   next: function() {
