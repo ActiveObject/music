@@ -11,7 +11,6 @@ var app = require('app');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');
 var jsonpRequest = require('jsonp');
-var User = require('app/values/user');
 var AuthRoute = require('app/routes/auth-route');
 var vkAccount = require('app/values/accounts/vk');
 
@@ -60,24 +59,23 @@ System.prototype.auth = function (hash) {
 
   if (hasToken(hash)) {
     var credentials = querystring.parse(hash.slice(1));
-    var user = new User.Authenticated({
-      id: credentials.user_id,
-      accessToken: credentials.access_token
-    });
 
     localStorage.setItem('user_id', credentials.user_id);
     localStorage.setItem('access_token', credentials.access_token);
 
-    return vbus.emit(user);
+    return vbus.emit({
+      tag: [':app/user', ':user/authenticated'],
+      id: credentials.user_id,
+      accessToken: credentials.access_token
+    });
   }
 
   if (isUserInStorage()) {
-    var user = new User.Authenticated({
+    return vbus.emit({
+      tag: [':app/user', ':user/authenticated'],
       id: localStorage.getItem('user_id'),
       accessToken: localStorage.getItem('access_token')
     });
-
-    return vbus.emit(user);
   }
 
   return vbus.emit(new AuthRoute({ vkAccount: vkAccount }))

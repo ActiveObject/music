@@ -11,7 +11,6 @@ var querystring = require('querystring');
 var VError = require('verror');
 var router = require('app/core/router');
 var AuthRoute = require('app/routes/auth-route');
-var User = require('app/values/user');
 var vbus = require('app/core/vbus');
 var vk = require('app/values/accounts/vk');
 
@@ -111,18 +110,20 @@ System.prototype.auth = function () {
     try {
       var hash = Url.parse(redirectUrl).hash.slice(1);
       var qs = querystring.parse(hash);
-      var user = new User.Authenticated({
+      var user = {
+      });
+
+      vbus.emit({
+        tag: [':app/user', ':user/authenticated'],
         id: qs.user_id,
         accessToken: qs.access_token
       });
-
-      vbus.emit(user);
     } catch (e) {
       console.log(e);
     }
   });
 
-  vbus.emit(new User.Unauthenticated());
+  vbus.emit({ tag: ':app/user' });
 };
 
 Atom.listen(router, render);

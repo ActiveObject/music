@@ -121,9 +121,7 @@ VkApi.prototype.nextTick = function() {
 };
 
 VkApi.prototype.authorize = function(user) {
-  if (user.isAuthenticated()) {
-    Atom.update(this, state => state.authorize(user));
-  }
+  Atom.update(this, state => state.authorize(user));
 };
 
 VkApi.prototype.request = function (method, options, done) {

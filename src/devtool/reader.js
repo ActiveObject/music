@@ -10,7 +10,6 @@ var Group = require('app/values/group');
 var Album = require('app/values/album');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var LastNWeekDrange = require('app/values/last-nweeks-drange');
-var User = require('app/values/user');
 var player = require('app/values/player');
 
 module.exports = function createReader(type) {
@@ -39,8 +38,6 @@ module.exports = function createReader(type) {
       ':app/player': v => player.fromTransit(v),
       'main-route': MainRoute,
       'group-route': GroupRoute,
-      ':app/authenticated-user': User.Authenticated,
-      ':app/unauthenticated-user': User.Unauthenticated,
       'group': Group,
       ':app/album': Album,
       'newsfeed-activity': NewsfeedActivity,

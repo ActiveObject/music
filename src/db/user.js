@@ -1,11 +1,6 @@
 var db = require('app/core/db3');
-var User = require('app/values/user');
-var tagOf = require('app/fn/tagOf');
+var hasTag = require('app/fn/hasTag');
 
-module.exports = db.scanEntity(new User.Unauthenticated(), function (currentUser, v) {
-  if (tagOf(v) === ':app/authenticated-user' || tagOf(v) === ':app/unauthenticated-user') {
-    return v;
-  }
-
-  return currentUser;
+module.exports = db.scanEntity({ tag: ':app/user' }, function (currentUser, v) {
+  return hasTag(v, ':app/user') ? v : currentUser;
 });

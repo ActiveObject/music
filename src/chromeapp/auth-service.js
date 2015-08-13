@@ -3,7 +3,6 @@ var VError = require('verror');
 var Auth = require('app/core/auth');
 var router = require('app/core/router');
 var AuthRoute = require('app/routes/auth-route');
-var User = require('app/values/user');
 var vbus = require('app/core/vbus');
 var vk = require('app/values/accounts/vk');
 
@@ -41,4 +40,4 @@ chrome.identity.launchWebAuthFlow({
   }
 });
 
-vbus.emit(new User.Unauthenticated());
+vbus.emit({ tag: ':app/user' });

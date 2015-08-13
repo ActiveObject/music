@@ -11,7 +11,6 @@ var Group = require('app/values/group');
 var Album = require('app/values/album');
 var NewsfeedActivity = require('app/values/newsfeed-activity');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
-var User = require('app/values/user');
 var player = require('app/values/player');
 
 module.exports = function createWriter(type) {
@@ -27,8 +26,6 @@ module.exports = function createWriter(type) {
       player.constructor, (new AppCachedHandler(':app/player')),
       MainRoute, (new AppCachedHandler('main-route')),
       GroupRoute, (new AppCachedHandler('group-route')),
-      User.Authenticated, (new AppCachedHandler(':app/authenticated-user')),
-      User.Unauthenticated, (new AppCachedHandler(':app/unauthenticated-user')),
       Group, (new AppCachedHandler('group')),
       Album, (new AppCachedHandler(':app/album')),
       NewsfeedActivity, (new AppCachedHandler('newsfeed-activity')),

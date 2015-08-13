@@ -5,11 +5,11 @@ var GroupsLoader = require('app/processes/groups-loader');
 var TracksLoader = require('app/processes/tracks-loader');
 var AlbumsLoader = require('app/processes/albums-loader');
 var addTag = require('app/fn/addTag');
-var tagOf = require('app/fn/tagOf');
+var hasTag = require('app/fn/hasTag');
 var onValue = require('app/fn/onValue');
 
 module.exports = function(vbus) {
-  var user = vbus.filter(v => tagOf(v) === ':app/authenticated-user');
+  var user = vbus.filter(v => hasTag(v, ':user/authenticated'));
 
   var unsub1 = onValue(user, function (user) {
     var tout = go(new TracksLoader(user))
