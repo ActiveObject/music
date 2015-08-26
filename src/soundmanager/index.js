@@ -12,7 +12,6 @@ var PausedState = require('./paused-state');
 
 
 function Soundmanager(attrs) {
-  this.mountPoint = attrs.mountPoint;
   this.atom = attrs.atom;
   this.volumeImpulse = Impulse(function(x, y) {
     this.atom.value.sound.setVolume(x);
@@ -106,6 +105,5 @@ Soundmanager.prototype.setPosition = function (position) {
 };
 
 module.exports = new Soundmanager({
-  mountPoint: 'soundmanager',
   atom: new Atom(UninitializedState.create({}))
 });
