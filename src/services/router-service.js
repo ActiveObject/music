@@ -1,7 +1,7 @@
 var page = require('page');
-var Atom = require('app/core/atom');
 var router = require('app/core/router');
 var layout = require('app/db/layout');
+var onValue = require('app/fn/onValue');
 
 var GroupRoute = require('app/routes/group-route');
 var ArtistRoute = require('app/routes/artist-route');
@@ -10,7 +10,7 @@ var MainRoute = require('app/routes/main-route');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 module.exports = function(vbus) {
-  var unsub1 = Atom.listen(layout, function (layout) {
+  var unsub1 = onValue(layout, function (layout) {
     router.transitionTo(layout);
 
     if (layout.url) {
