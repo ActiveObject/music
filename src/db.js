@@ -1,4 +1,5 @@
 var vbus = require('app/core/vbus');
+var Atom = require('app/core/atom');
 var { Map, Set, List } = require('immutable');
 var tagOf = require('app/fn/tagOf');
 var hasTag = require('app/fn/hasTag');
@@ -31,7 +32,8 @@ var initialDbValue = Map({
   ':db/activity': Set(),
   ':db/layout': emptyRoute,
   ':db/player': player,
-  ':db/user': { tag: ':app/user' }
+  ':db/user': { tag: ':app/user' },
+  ':db/visibleGroups': []
 });
 
 function reducer(state, v) {
@@ -44,7 +46,13 @@ function reducer(state, v) {
   }
 
   if (tagOf(v) === ':app/groups') {
-    return state.update(':db/groups', groups => groups.union(v[1]))
+    var groups = state.get(':db/groups').union(v[1]);
+    var visibleGroups = groups.slice(0, 10).map(v => v.id);
+
+    return state.merge({
+      ':db/groups': groups,
+      ':db/visibleGroups': visibleGroups.toJS()
+    });
   }
 
   if (tagOf(v) === ':app/activity') {
@@ -66,4 +74,10 @@ function reducer(state, v) {
   return state;
 }
 
-module.exports = vbus.scan(reducer, initialDbValue);
+var db = new Atom(initialDbValue);
+var changes = vbus.scan(reducer, initialDbValue);
+
+changes.onValue(v => Atom.swap(db, v));
+
+module.exports = changes;
+module.exports.atom = db;

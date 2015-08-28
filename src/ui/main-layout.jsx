@@ -3,6 +3,7 @@ var Immutable = require('immutable');
 var Atom = require('app/core/atom');
 var addToSet = require('app/fn/addToSet');
 var isValue = require('app/fn/isValue');
+var onValue = require('app/fn/onValue');
 
 var App = require('app/ui/app');
 var Box = require('app/ui/box');
@@ -10,6 +11,7 @@ var IScrollLayer = require('app/ui/iscroll-layer');
 var GroupActivityCard = require('app/ui/group-activity-card');
 var PlayerContainer = require('app/ui/player-container');
 var UserPlaylists = require('app/ui/user-playlists');
+var db = require('app/db');
 
 var groups = require('app/db/groups');
 
@@ -45,13 +47,24 @@ var ActivityList = React.createClass({
 var MainLayout = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
+  componentDidMount: function () {
+    var stream = db.map(v => v.get(':db/visibleGroups')).skipDuplicates();
+    this.unsub = onValue(stream, () => this.forceUpdate());
+  },
+
+  componentWillUnmount: function () {
+    this.unsub();
+  },
+
   render: function() {
+    var visibleGroups = db.atom.value.get(':db/visibleGroups');
+
     return (
       <App layout={['two-region', 'main-layout']}>
         <Box prefix='ra-' key='region-a'>
           <IScrollLayer>
             <span className='main-section-title'>Спільноти</span>
-            <ActivityList visibleGroups={this.props.visibleGroups} period={this.props.period} />
+            <ActivityList visibleGroups={visibleGroups} period={this.props.period} />
           </IScrollLayer>
         </Box>
 
