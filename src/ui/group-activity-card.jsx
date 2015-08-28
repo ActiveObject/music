@@ -10,8 +10,7 @@ var addTag = require('app/fn/addTag');
 var tagOf = require('app/fn/tagOf');
 var onValue = require('app/fn/onValue');
 var plug = require('app/fn/plug');
-var db3 = require('app/core/db3');
-var scanSince = require('app/core/db/consumers/scanSince');
+var db = require('app/db');
 
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
@@ -23,15 +22,12 @@ var GroupActivityCard = React.createClass({
   componentWillMount: function () {
     var gid = this.props.group.id;
 
-    var stream = db3.install(scanSince(0, ISet(), function(acc, v) {
-      if (tagOf(v) === ':app/activity') {
-        return acc.union(v[1].filter(v => v.owner === -gid));
-      }
+    var stream = db
+      .filter(v => v.has(':db/activity'))
+      .map(v => v.get(':db/activity'))
+      .skipDuplicates()
 
-      return acc;
-    }));
-
-    this.uninstall = onValue(stream.skipDuplicates(), v => this.setState({ activity: v }));
+    this.uninstall = onValue(stream, v => this.setState({ activity: v.filter(item => item.owner === -gid ) }));
 
     var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));

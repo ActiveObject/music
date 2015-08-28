@@ -1,6 +1,11 @@
-var db = require('app/core/db3');
-var hasTag = require('app/fn/hasTag');
+var db = require('app/db');
+var Atom = require('app/core/atom');
+var user = new Atom({ tag: ':app/user' });
 
-module.exports = db.scanEntity({ tag: ':app/user' }, function (currentUser, v) {
-  return hasTag(v, ':app/user') ? v : currentUser;
-});
+db
+  .map(v => v.get(':db/user'))
+  .filter(Boolean)
+  .skipDuplicates()
+  .onValue(v => Atom.swap(user, v));
+
+module.exports = user;

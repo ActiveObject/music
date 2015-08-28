@@ -1,9 +1,7 @@
 var querystring = require('querystring');
 var each = require('underscore').each;
-var db = require('app/core/db3');
 var vbus = require('app/core/vbus');
 var onValue = require('app/fn/onValue');
-var seq = require('app/core/db/producers/seq');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');
 var jsonpRequest = require('jsonp');
@@ -30,7 +28,6 @@ System.prototype[IHttpRequest] = function (url, callback) {
 
 System.prototype.start = function () {
   var hash = location.hash;
-  this.uninstallList.push(onValue(vbus.map(seq(0)), (produce) => db.modify(produce)));
   this.uninstallList.push(require('app/services/vk-indexing-service')(vbus));
   this.uninstallList.push(require('app/services/router-service')(vbus));
   this.uninstallList.push(require('app/services/vk-service')(vbus));

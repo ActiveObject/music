@@ -19,9 +19,8 @@ var NewsfeedLoader = require('app/processes/newsfeed-loader');
 var ActivityLoader = require('app/processes/activity-loader');
 var Activity = require('app/values/activity');
 var newsfeed = require('app/values/newsfeed');
-var db3 = require('app/core/db3');
-var scanSince = require('app/core/db/consumers/scanSince');
 var groups = require('app/db/groups');
+var db = require('app/db');
 
 var UserPlaylists = require('app/ui/user-playlists');
 
@@ -37,15 +36,12 @@ var GroupActivityCard = React.createClass({
   componentWillMount: function () {
     var gid = this.props.group.id;
 
-    var stream = db3.install(scanSince(0, ISet(), function(acc, v) {
-      if (tagOf(v) === ':app/activity') {
-        return acc.union(v[1].filter(v => v.owner === -gid));
-      }
+    var stream = db
+      .filter(v => v.has(':db/activity'))
+      .map(v => v.get(':db/activity'))
+      .skipDuplicates()
 
-      return acc;
-    }));
-
-    this.uninstall = onValue(stream, v => this.setState({ activity: v }));
+    this.uninstall = onValue(stream, v => this.setState({ activity: v.filter(item => item.owner === -gid ) }));
 
     var out = go(new ActivityLoader(-this.props.group.id, this.props.period))
       .map(addTag(':app/activity'));

@@ -1,11 +1,11 @@
-var db = require('app/core/db3');
-var emptyRoute = require('app/routes/empty-route');
-var tagOf = require('app/fn/tagOf');
+var db = require('app/db');
+var Atom = require('app/core/atom');
+var layout = new Atom(require('app/routes/empty-route'));
 
-module.exports = db.scanEntity(emptyRoute, function(layout, v) {
-  if (tagOf(v) === 'main-route' || tagOf(v) === 'group-route' || tagOf(v) === 'auth-route') {
-    return v;
-  }
+db
+  .map(v => v.get(':db/layout'))
+  .filter(Boolean)
+  .skipDuplicates()
+  .onValue(v => Atom.swap(layout, v));
 
-  return layout;
-});
+module.exports = layout;

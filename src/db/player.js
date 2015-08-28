@@ -1,7 +1,6 @@
-var Kefir = require('kefir');
-var db = require('app/core/db3');
+var db = require('app/db');
+var Atom = require('app/core/atom');
 var List = require('immutable').List;
-var hasTag = require('app/fn/hasTag');
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 var Playlist = require('app/values/playlist');
 
@@ -24,5 +23,14 @@ var player = {
   })
 };
 
-module.exports = db.scanEntity(player, (acc, v) => hasTag(v, ':app/player') ? v : acc);
-module.exports.changes = Kefir.fromEvent(module.exports, 'change');
+var playerStream = db
+  .map(v => v.get(':db/player'))
+  .filter(Boolean)
+  .skipDuplicates();
+
+var playerAtom = new Atom(player);
+
+playerStream.onValue(v => Atom.swap(playerAtom, v));
+
+module.exports = playerAtom;
+module.exports.changes = playerStream;

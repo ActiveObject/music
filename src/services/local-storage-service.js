@@ -1,6 +1,6 @@
 var Kefir = require('kefir');
 var ISet = require('immutable').Set;
-var db = require('app/core/db3');
+var db = require('app/db');
 var Atom = require('app/core/atom');
 var vbus = require('app/core/vbus');
 var revive = require('app/core/revive');
@@ -11,7 +11,14 @@ var player = require('app/db/player');
 var groups = require('app/db/groups');
 var tracks = require('app/db/tracks');
 var albums = require('app/db/albums');
-var activity = db.scanEntity(ISet(), addToSet(':app/activity'));
+var activity = new Atom(ISet());
+
+db
+  .map(v => v.get(':db/activity'))
+  .filter(Boolean)
+  .skipDuplicates()
+  .onValue(v => Atom.swap(activity, v));
+
 var Storage = require('app/Storage');
 var merge = require('app/fn/merge');
 
