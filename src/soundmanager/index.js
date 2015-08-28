@@ -14,7 +14,9 @@ var PausedState = require('./paused-state');
 function Soundmanager(attrs) {
   this.atom = attrs.atom;
   this.volumeImpulse = Impulse(function(x, y) {
-    this.atom.value.sound.setVolume(x);
+    if (this.atom.value.sound) {
+      this.atom.value.sound.setVolume(x);
+    }
   }.bind(this));
 }
 
@@ -75,8 +77,12 @@ Soundmanager.prototype.pause = function () {
 Soundmanager.prototype.useTrack = function (track) {
   var stm = this;
 
+  if (Object.keys(track.audio).length === 0) {
+    return;
+  }
+
   var sound = sm.createSound({
-    id: track.audio.toString(),
+    id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
     url: track.audio.url,
     autoLoad: false,
     autoPlay: false,

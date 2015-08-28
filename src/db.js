@@ -15,7 +15,6 @@ var player = {
   seekPosition: 0,
   bytesTotal: 0,
   bytesLoaded: 0,
-  recentTracklists: [],
   tracklist: new LibraryTracklist({
     playlist: new Playlist({
       tracks: List(),
@@ -25,34 +24,46 @@ var player = {
   })
 };
 
-module.exports = vbus.scan(function (state, v) {
+var initialDbValue = Map({
+  ':db/albums': Set(),
+  ':db/tracks': Set(),
+  ':db/groups': Set(),
+  ':db/activity': Set(),
+  ':db/layout': emptyRoute,
+  ':db/player': player,
+  ':db/user': { tag: ':app/user' }
+});
+
+function reducer(state, v) {
   if (tagOf(v) === ':app/albums') {
-    return state.update(':db/albums', Set(), albums => albums.union(v[1]))
+    return state.update(':db/albums', albums => albums.union(v[1]))
   }
 
   if (tagOf(v) === ':app/tracks') {
-    return state.update(':db/tracks', Set(), tracks => tracks.union(v[1]))
+    return state.update(':db/tracks', tracks => tracks.union(v[1]))
   }
 
   if (tagOf(v) === ':app/groups') {
-    return state.update(':db/groups', Set(), groups => groups.union(v[1]))
+    return state.update(':db/groups', groups => groups.union(v[1]))
   }
 
   if (tagOf(v) === ':app/activity') {
-    return state.update(':db/activity', Set(), activity => activity.union(v[1]))
+    return state.update(':db/activity', activity => activity.union(v[1]))
   }
 
   if (tagOf(v) === 'main-route' || tagOf(v) === 'group-route' || tagOf(v) === 'auth-route') {
-    return state.update(':db/layout', emptyRoute, () => v);
+    return state.update(':db/layout', () => v);
   }
 
   if (hasTag(v, ':app/player')) {
-    return state.update(':db/player', player, () => v);
+    return state.update(':db/player', () => v);
   }
 
   if (hasTag(v, ':app/user')) {
-    return state.update(':db/user', { tag: ':app/user' }, () => v);
+    return state.update(':db/user', () => v);
   }
 
   return state;
-}, Map());
+}
+
+module.exports = vbus.scan(reducer, initialDbValue);

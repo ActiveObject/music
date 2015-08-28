@@ -46,7 +46,7 @@ module.exports = function (vbus) {
   });
 
   Storage.getItem(':player/track', function (track) {
-    vbus.emit(merge(Atom.value(player), { track: firstValue(JSON.parse(track, revive)) }));
+    vbus.emit(merge(Atom.value(player), { track: JSON.parse(track) }));
   });
 
   Storage.getItem(':app/activity', function (activity) {
