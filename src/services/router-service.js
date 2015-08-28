@@ -10,13 +10,7 @@ var MainRoute = require('app/routes/main-route');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 module.exports = function(vbus) {
-  var unsub1 = onValue(layout, function (layout) {
-    router.transitionTo(layout);
-
-    if (layout.url) {
-      window.history.pushState(null, 'TEst', layout.url());
-    }
-  });
+  var unsub1 = onValue(layout, v => router.transitionTo(v));
 
   page('/', function () {
     var groups = [41293763, 32211876, 34110702, 28152291];
