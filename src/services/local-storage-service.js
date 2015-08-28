@@ -27,6 +27,7 @@ module.exports = function (vbus) {
     .changes
     .map(player => player.track)
     .skipDuplicates()
+    .filter(track => Object.keys(track.audio).length > 0)
     .map(JSON.stringify), v => Storage.setItem({ ':player/track': v }));
 
   var unsub2 = Atom.listen(activity, function(activity) {
@@ -46,7 +47,7 @@ module.exports = function (vbus) {
   });
 
   Storage.getItem(':player/track', function (track) {
-    vbus.emit(merge(Atom.value(player), { track: JSON.parse(track) }));
+    vbus.emit(merge(Atom.value(player), { track: firstValue(JSON.parse(track, revive)) }));
   });
 
   Storage.getItem(':app/activity', function (activity) {
