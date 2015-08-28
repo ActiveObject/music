@@ -11,7 +11,7 @@ Atom.listen(router, render);
 if (process.env.NODE_ENV === 'development') {
   window.app = app;
   window.db = db;
-  // window.vbus = require('app/core/vbus');
+  window.vbus = vbus;
   // window.dev = require('app/devtool')(vbus)();
   // window.TimeRecord = require('app/devtool/time-record');
   // window.Perf = require('react/addons').addons.Perf;

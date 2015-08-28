@@ -45,17 +45,6 @@ var ActivityList = React.createClass({
 });
 
 var MainLayout = React.createClass({
-  mixins: [React.addons.PureRenderMixin],
-
-  componentDidMount: function () {
-    var stream = db.map(v => v.get(':db/visibleGroups')).skipDuplicates();
-    this.unsub = onValue(stream, () => this.forceUpdate());
-  },
-
-  componentWillUnmount: function () {
-    this.unsub();
-  },
-
   render: function() {
     var visibleGroups = db.atom.value.get(':db/visibleGroups');
 
@@ -82,4 +71,21 @@ var MainLayout = React.createClass({
   }
 });
 
-module.exports = MainLayout;
+function updateOn(ComposedComponent, dbKey) {
+  return React.createClass({
+    componentDidMount: function () {
+      var stream = db.map(v => v.get(dbKey)).skipDuplicates();
+      this.unsub = onValue(stream, () => this.forceUpdate());
+    },
+
+    componentWillUnmount: function () {
+      this.unsub();
+    },
+
+    render: function () {
+      return <ComposedComponent {...this.props} />;
+    }
+  });
+}
+
+module.exports = updateOn(MainLayout, ':db/visibleGroups');
