@@ -46,11 +46,11 @@ System.prototype[IHttpRequest] = function (url, callback) {
 
 System.prototype.start = function () {
   this.uninstallList = [
-    require('app/services/vk-indexing-service')(vbus),
-    require('app/services/vk-service')(vbus),
-    require('app/services/soundmanager-service')(vbus),
-    require('app/services/local-storage-service')(vbus),
-    require('app/services/audio-key-control')(vbus)
+    require('app/drivers/vk-indexing-driver')(vbus),
+    require('app/drivers/vk-driver')(vbus),
+    require('app/drivers/soundmanager-driver')(vbus),
+    require('app/drivers/local-storage-driver')(vbus),
+    require('app/drivers/audio-key-control-driver')(vbus)
   ];
 
   this.auth();

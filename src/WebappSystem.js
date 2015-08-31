@@ -27,12 +27,12 @@ System.prototype[IHttpRequest] = function (url, callback) {
 
 System.prototype.start = function () {
   var hash = location.hash;
-  this.uninstallList.push(require('app/services/vk-indexing-service')(vbus));
-  this.uninstallList.push(require('app/services/router-service')(vbus));
-  this.uninstallList.push(require('app/services/vk-service')(vbus));
-  this.uninstallList.push(require('app/services/soundmanager-service')(vbus));
-  this.uninstallList.push(require('app/services/local-storage-service')(vbus));
-  this.uninstallList.push(require('app/services/audio-key-control')(vbus));
+  this.uninstallList.push(require('app/drivers/vk-indexing-driver')(vbus));
+  this.uninstallList.push(require('app/drivers/route-driver')(vbus));
+  this.uninstallList.push(require('app/drivers/vk-driver')(vbus));
+  this.uninstallList.push(require('app/drivers/soundmanager-driver')(vbus));
+  this.uninstallList.push(require('app/drivers/local-storage-driver')(vbus));
+  this.uninstallList.push(require('app/drivers/audio-key-control-driver')(vbus));
   this.auth(hash);
 };
 
