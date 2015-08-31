@@ -75,16 +75,17 @@ function reducer(state, v) {
   return state;
 }
 
-var dbAtom = new Atom(initialDbValue);
-var changes = vbus.scan(reducer, initialDbValue);
+var db = new Atom(initialDbValue);
 
-var dbInput = Kefir.stream(function (emitter) {
-  return Atom.listen(dbAtom, function (nextDbValue) {
+vbus
+  .scan(reducer, initialDbValue)
+  .onValue(v => Atom.swap(db, v));
+
+var changes = Kefir.stream(function (emitter) {
+  return Atom.listen(db, function (nextDbValue) {
     emitter.emit(nextDbValue);
   });
 });
 
-changes.onValue(v => Atom.swap(dbAtom, v));
-
-module.exports = dbInput;
-module.exports.atom = dbAtom;
+module.exports = db;
+module.exports.changes = changes;

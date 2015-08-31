@@ -1,10 +1,8 @@
-var ISet = require('immutable').Set;
 var db = require('app/db');
 var Atom = require('app/core/atom');
+var albums = new Atom(db.value.get(':db/albums'));
 
-var albums = new Atom(ISet());
-
-db
+db.changes
   .map(v => v.get(':db/albums'))
   .filter(Boolean)
   .skipDuplicates()

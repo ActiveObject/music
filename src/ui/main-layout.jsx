@@ -46,7 +46,7 @@ var ActivityList = React.createClass({
 
 var MainLayout = React.createClass({
   render: function() {
-    var visibleGroups = db.atom.value.get(':db/visibleGroups');
+    var visibleGroups = db.value.get(':db/visibleGroups');
 
     return (
       <App layout={['two-region', 'main-layout']}>
@@ -74,7 +74,7 @@ var MainLayout = React.createClass({
 function updateOn(ComposedComponent, dbKey) {
   return React.createClass({
     componentDidMount: function () {
-      var stream = db.map(v => v.get(dbKey)).skipDuplicates();
+      var stream = db.changes.map(v => v.get(dbKey)).skipDuplicates();
       this.unsub = onValue(stream, () => this.forceUpdate());
     },
 

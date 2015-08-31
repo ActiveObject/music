@@ -1,8 +1,8 @@
 var db = require('app/db');
 var Atom = require('app/core/atom');
-var user = new Atom({ tag: ':app/user' });
+var user = new Atom(db.value.get(':db/user'));
 
-db
+db.changes
   .map(v => v.get(':db/user'))
   .filter(Boolean)
   .skipDuplicates()

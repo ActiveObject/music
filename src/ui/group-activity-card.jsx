@@ -22,7 +22,7 @@ var GroupActivityCard = React.createClass({
   componentWillMount: function () {
     var gid = this.props.group.id;
 
-    var stream = db
+    var stream = db.changes
       .filter(v => v.has(':db/activity'))
       .map(v => v.get(':db/activity'))
       .skipDuplicates()

@@ -13,7 +13,7 @@ var tracks = require('app/db/tracks');
 var albums = require('app/db/albums');
 var activity = new Atom(ISet());
 
-db
+db.changes
   .map(v => v.get(':db/activity'))
   .filter(Boolean)
   .skipDuplicates()
