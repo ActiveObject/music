@@ -2,7 +2,6 @@ var PSet = require('immutable').Set;
 var PMap = require('immutable').Map;
 
 var soundmanager = require('app/soundmanager');
-var routes = require('app/routes');
 var Track = require('app/values/track');
 var Group = require('app/values/group');
 var Album = require('app/values/album');
@@ -13,10 +12,6 @@ var firstValue = require('app/fn/firstValue');
 module.exports = function revive(key, value) {
   if (key === 'soundmanager') {
     return soundmanager.fromJSON(value);
-  }
-
-  if (key === 'activeRoute') {
-    return routes.fromJSON(value);
   }
 
   if (key === 'app/values/track') {

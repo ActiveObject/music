@@ -5,7 +5,6 @@ var onValue = require('app/fn/onValue');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');
 var jsonpRequest = require('jsonp');
-var AuthRoute = require('app/routes/auth-route');
 var vkAccount = require('app/values/accounts/vk');
 
 function System() {
@@ -71,7 +70,7 @@ System.prototype.auth = function (hash) {
     });
   }
 
-  return vbus.emit(new AuthRoute({ vkAccount: vkAccount }))
+  return vbus.emit({ tag: [':app/route', ':route/auth'], authUrl: vkAccount.url });
 };
 
 module.exports = System;

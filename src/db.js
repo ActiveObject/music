@@ -1,10 +1,9 @@
 var Kefir = require('kefir');
+var { Map, Set, List } = require('immutable');
 var vbus = require('app/core/vbus');
 var Atom = require('app/core/atom');
-var { Map, Set, List } = require('immutable');
 var tagOf = require('app/fn/tagOf');
 var hasTag = require('app/fn/hasTag');
-var emptyRoute = require('app/routes/empty-route');
 var LibraryTracklist = require('app/values/tracklists/library-tracklist');
 var Playlist = require('app/values/playlist');
 
@@ -31,10 +30,17 @@ var initialDbValue = Map({
   ':db/tracks': Set(),
   ':db/groups': Set(),
   ':db/activity': Set(),
-  ':db/layout': emptyRoute,
   ':db/player': player,
-  ':db/user': { tag: ':app/user' },
-  ':db/visibleGroups': []
+
+  ':db/user': {
+    tag: ':app/user'
+  },
+
+  ':db/visibleGroups': [],
+
+  ':db/route': {
+    tag: [':app/route', ':route/empty']
+  }
 });
 
 function reducer(state, v) {
@@ -60,16 +66,16 @@ function reducer(state, v) {
     return state.update(':db/activity', activity => activity.union(v[1]))
   }
 
-  if (tagOf(v) === 'main-route' || tagOf(v) === 'group-route' || tagOf(v) === 'auth-route') {
-    return state.update(':db/layout', () => v);
-  }
-
   if (hasTag(v, ':app/player')) {
     return state.update(':db/player', () => v);
   }
 
   if (hasTag(v, ':app/user')) {
     return state.update(':db/user', () => v);
+  }
+
+  if (hasTag(v, ':app/route')) {
+    return state.update(':db/route', () => v);
   }
 
   return state;

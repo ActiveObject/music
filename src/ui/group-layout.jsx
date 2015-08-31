@@ -36,7 +36,7 @@ var GroupActivityCard = React.createClass({
   componentWillMount: function () {
     var gid = this.props.group.id;
 
-    var stream = db
+    var stream = db.changes
       .filter(v => v.has(':db/activity'))
       .map(v => v.get(':db/activity'))
       .skipDuplicates()
@@ -85,8 +85,7 @@ var GroupLayout = React.createClass({
 
   getInitialState: function () {
     return {
-      newsfeed: newsfeed,
-      groups: Atom.value(groups)
+      newsfeed: newsfeed
     };
   },
 
@@ -100,7 +99,7 @@ var GroupLayout = React.createClass({
     this.usubscribe = onValue(nfChannel.scan((acc, next) => acc.merge(next), newsfeed),
       v => this.setState({ newsfeed: v }));
 
-    this.unsub = Atom.listen(groups, v => this.setState({ groups: v }));
+    this.unsub = Atom.listen(groups, () => this.forceUpdate());
   },
 
   componentWillUnmount: function() {
@@ -109,7 +108,7 @@ var GroupLayout = React.createClass({
   },
 
   render: function () {
-    var group = this.state.groups.find(g => g.id === this.props.id);
+    var group = db.value.get(':db/groups').find(g => g.id === this.props.id);
 
     return (
       <App layout={['two-region', 'group-layout']}>

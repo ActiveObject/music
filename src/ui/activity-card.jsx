@@ -4,19 +4,17 @@ require('app/styles/element.styl');
 var React = require('react/addons');
 var ActivityChart = require('app/ui/activity-chart');
 var vbus = require('app/core/vbus');
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 var ActivityCard = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
-  componentWillMount: function() {
-    var GroupRoute = require('app/routes/group-route');
-    this.route = new GroupRoute({ id: this.props.id });
-  },
-
   render: function() {
+    var href = `/groups/${this.props.id}`;
+
     return (
       <div className='activity'>
-        <a className='element-link activity-name' href={this.route.url()} onClick={this.goToGroup}>{this.props.name}</a>
+        <a className='element-link activity-name' href={href} onClick={this.goToGroup}>{this.props.name}</a>
         <ActivityChart activity={this.props.activity} />
       </div>
     );
@@ -24,7 +22,11 @@ var ActivityCard = React.createClass({
 
   goToGroup: function(e) {
     e.preventDefault();
-    vbus.emit(this.route);
+    vbus.emit({
+      tag: [':app/route', ':route/group'],
+      id: this.props.id,
+      period: new LastNWeeksDRange(32, new Date())
+    });
   }
 });
 

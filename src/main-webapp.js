@@ -1,12 +1,13 @@
 var Atom = require('app/core/atom');
-var router = require('app/core/router');
+var router = require('app/db/route');
 var render = require('app/core/renderer')(document.getElementById('app'));
+var dispatch = require('app/core/dispatch');
 var app = require('app');
 var WebappSystem = require('app/WebappSystem');
 var db = require('app/db');
 var vbus = require('app/core/vbus');
 
-Atom.listen(router, render);
+Atom.listen(router, r => render(dispatch(r)));
 
 if (process.env.NODE_ENV === 'development') {
   window.app = app;
@@ -21,7 +22,6 @@ if (process.env.NODE_ENV === 'development') {
   // vbus.log();
   // db.skipDuplicates().onValue(v => console.log(v.toJS()))
 }
-
 
 app
   .use(new WebappSystem())

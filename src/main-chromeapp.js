@@ -1,7 +1,6 @@
 var app = require('app');
 var has = require('underscore').has;
 var Atom = require('app/core/atom');
-var router = require('app/core/router');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var vbus = require('app/core/vbus');
 var { IGetItem, ISetItem } = require('app/Storage');
@@ -9,20 +8,21 @@ var { IHttpRequest } = require('app/Http');
 var Url = require('url');
 var querystring = require('querystring');
 var VError = require('verror');
-var router = require('app/core/router');
-var AuthRoute = require('app/routes/auth-route');
 var vbus = require('app/core/vbus');
 var vk = require('app/values/accounts/vk');
-
+var dispatch = require('app/core/dispatch');
+var router = require('app/db/route');
+var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 if (process.env.NODE_ENV === 'development') {
   window.vbus = require('app/core/vbus');
-  window.dev = require('app/devtool')(app);
-  window.TimeRecord = require('app/devtool/time-record');
-  window.Perf = require('react/addons').addons.Perf;
-  window.stats = require('app/core/stats');
+  window.db = require('app/db');
+  // window.dev = require('app/devtool')(app);
+  // window.TimeRecord = require('app/devtool/time-record');
+  // window.Perf = require('react/addons').addons.Perf;
+  // window.stats = require('app/core/stats');
 
-  Perf.start();
+  // Perf.start();
   vbus.log();
 }
 
@@ -67,12 +67,16 @@ System.prototype.start = function () {
     require('app/services/vk-indexing-service')(vbus),
     require('app/services/vk-service')(vbus),
     require('app/services/soundmanager-service')(vbus),
-    require('app/chromeapp/router-service'),
     require('app/services/local-storage-service')(vbus),
     require('app/services/audio-key-control')(vbus)
   ];
 
   this.auth();
+  vbus.emit({
+    tag: [':app/route', ':route/main'],
+    groups: [41293763, 32211876, 34110702, 28152291],
+    period: new LastNWeeksDRange(32, new Date())
+  });
 };
 
 System.prototype.stop = function () {
@@ -110,8 +114,6 @@ System.prototype.auth = function () {
     try {
       var hash = Url.parse(redirectUrl).hash.slice(1);
       var qs = querystring.parse(hash);
-      var user = {
-      });
 
       vbus.emit({
         tag: [':app/user', ':user/authenticated'],
@@ -126,7 +128,7 @@ System.prototype.auth = function () {
   vbus.emit({ tag: ':app/user' });
 };
 
-Atom.listen(router, render);
+Atom.listen(router, r => render(dispatch(r)));
 
 app
   .use(new System())
