@@ -1,3 +1,4 @@
+var Kefir = require('kefir');
 var vbus = require('app/core/vbus');
 var Atom = require('app/core/atom');
 var { Map, Set, List } = require('immutable');
@@ -74,10 +75,16 @@ function reducer(state, v) {
   return state;
 }
 
-var db = new Atom(initialDbValue);
+var dbAtom = new Atom(initialDbValue);
 var changes = vbus.scan(reducer, initialDbValue);
 
-changes.onValue(v => Atom.swap(db, v));
+var dbInput = Kefir.stream(function (emitter) {
+  return Atom.listen(dbAtom, function (nextDbValue) {
+    emitter.emit(nextDbValue);
+  });
+});
 
-module.exports = changes;
-module.exports.atom = db;
+changes.onValue(v => Atom.swap(dbAtom, v));
+
+module.exports = dbInput;
+module.exports.atom = dbAtom;
