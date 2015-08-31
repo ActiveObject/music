@@ -7,7 +7,6 @@ var Playlist = require('app/values/playlist');
 var playerAtom = new Atom(db.value.get(':db/player'));
 var playerStream = db.changes
   .map(v => v.get(':db/player'))
-  .filter(Boolean)
   .skipDuplicates();
 
 playerStream.onValue(v => Atom.swap(playerAtom, v));

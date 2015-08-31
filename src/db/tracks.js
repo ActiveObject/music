@@ -4,7 +4,6 @@ var tracks = new Atom(db.value.get(':db/tracks'));
 
 db.changes
   .map(v => v.get(':db/tracks'))
-  .filter(Boolean)
   .skipDuplicates()
   .onValue(v => Atom.swap(tracks, v));
 
