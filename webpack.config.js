@@ -20,7 +20,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /src\/(.*)\.(js|jsx)$/, loader: 'babel-loader' },
-      { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' },
+      { test: /\.css$/, loader: 'style-loader!css-loader!postcss-loader' },
       { test: require.resolve('react'), loader: 'expose?React' }
     ]
   },
