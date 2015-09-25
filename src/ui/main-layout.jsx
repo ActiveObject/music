@@ -14,6 +14,12 @@ import IScrollLayer from 'app/ui/iscroll-layer';
 import hasTag from 'app/fn/hasTag';
 
 var PlaylistUI = updateOn(React.createClass({
+  getInitialState: function () {
+    return {
+      command: this.props.name
+    };
+  },
+
   render: function () {
     var player = db.value.get(':db/player');
     var rows = this.props.tracks.slice(0, 100).map(function (track) {
@@ -22,20 +28,22 @@ var PlaylistUI = updateOn(React.createClass({
 
       return <Track
         track={track}
-        isPlaying={isActive}
-        isActive={isPlaying}
+        isPlaying={isPlaying}
+        isActive={isActive}
         onTogglePlay={this.togglePlay}
       />
     }, this);
 
     return (
       <div className='playlist'>
-        <div className='playlist__header'>{this.props.name}</div>
+        <div className='playlist__header'>
+          <input type='text' className='command-palette' value={this.state.command} onChange={this.executeCommand} />
+        </div>
         <div className='playlist__content'>
           <div className='playlist__columns'>
             <div className='track__index'>#</div>
             <div className='track__artist'>artist</div>
-            <div className='track__title'>title</div>
+            <div className='track__title'>track</div>
             <div className='track__duration'>time</div>
           </div>
           <div className='playlist__table'>
@@ -49,6 +57,10 @@ var PlaylistUI = updateOn(React.createClass({
 
   togglePlay: function (track) {
     vbus.emit(Player.togglePlay(db.value.get(':db/player'), track));
+  },
+
+  executeCommand: function (e) {
+    this.setState({ command: e.target.value });
   }
 }), ':db/player');
 
