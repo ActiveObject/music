@@ -4,6 +4,7 @@ import 'app/styles/track.css';
 import 'app/styles/playlist.css';
 
 import React from 'react/addons';
+import { Spring } from 'react-motion';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
 import onValue from 'app/fn/onValue';
@@ -16,7 +17,8 @@ import hasTag from 'app/fn/hasTag';
 var PlaylistUI = updateOn(React.createClass({
   getInitialState: function () {
     return {
-      command: this.props.name
+      command: this.props.name,
+      opened: false
     };
   },
 
@@ -37,19 +39,29 @@ var PlaylistUI = updateOn(React.createClass({
     return (
       <div className='playlist'>
         <div className='playlist__header'>
-          <input type='text' className='command-palette' value={this.state.command} onChange={this.executeCommand} />
+          <input
+            type='text'
+            className='command-palette'
+            value={this.state.command}
+            onChange={this.executeCommand}
+            onFocus={() => this.setState({ opened: true })}
+            onBlur={() => this.setState({ opened: false })} />
         </div>
-        <div className='playlist__content'>
-          <div className='playlist__columns'>
-            <div className='track__index'>#</div>
-            <div className='track__artist'>artist</div>
-            <div className='track__title'>track</div>
-            <div className='track__duration'>time</div>
-          </div>
-          <div className='playlist__table'>
-            <IScrollLayer>{rows}</IScrollLayer>
-          </div>
-        </div>
+        <Spring defaultValue={{ val: 100 }} endValue={{ val: this.state.opened ? 70 : 100 }}>
+          {interpolated =>
+            <div className='playlist__content' style={{ transform: `scale(${interpolated.val / 100})`}}>
+              <div className='playlist__columns'>
+                <div className='track__index'>#</div>
+                <div className='track__artist'>artist</div>
+                <div className='track__title'>track</div>
+                <div className='track__duration'>time</div>
+              </div>
+              <div className='playlist__table'>
+                <IScrollLayer>{rows}</IScrollLayer>
+              </div>
+            </div>
+          }
+        </Spring>
         <div className='playlist__paginator'></div>
       </div>
     )
