@@ -29,7 +29,7 @@ var Track = React.createClass({
     });
 
     return (
-      <div className={classSet}>
+      <div className={classSet} onClick={() => this.props.onTogglePlay(this.props.track)}>
         <div className='track__index'>{audio.index + 1}</div>
         <div className='track__artist'>{audio.artist}</div>
         <div className='track__title'>{audio.title}</div>

@@ -5,20 +5,28 @@ import 'app/styles/playlist.css';
 
 import React from 'react/addons';
 import db from 'app/db';
+import vbus from 'app/core/vbus';
 import onValue from 'app/fn/onValue';
+import * as Player from 'app/values/player';
 import App from 'app/ui/app';
 import Track from 'app/ui/track';
 import IScrollLayer from 'app/ui/iscroll-layer';
+import hasTag from 'app/fn/hasTag';
 
-var PlaylistUI = React.createClass({
+var PlaylistUI = updateOn(React.createClass({
   render: function () {
+    var player = db.value.get(':db/player');
     var rows = this.props.tracks.slice(0, 100).map(function (track) {
+      var isActive = track.id === player.track.id;
+      var isPlaying = isActive && hasTag(player, ':player/is-playing');
+
       return <Track
         track={track}
-        isPlaying={false}
-        isActive={false}
+        isPlaying={isActive}
+        isActive={isPlaying}
+        onTogglePlay={this.togglePlay}
       />
-    });
+    }, this);
 
     return (
       <div className='playlist'>
@@ -37,8 +45,12 @@ var PlaylistUI = React.createClass({
         <div className='playlist__paginator'></div>
       </div>
     )
+  },
+
+  togglePlay: function (track) {
+    vbus.emit(Player.togglePlay(db.value.get(':db/player'), track));
   }
-});
+}), ':db/player');
 
 var MainLayout = React.createClass({
   render: function() {

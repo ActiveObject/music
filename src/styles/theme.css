@@ -36,6 +36,11 @@ $accent-color: $accent-violet;
   color: $base-color-3;
 }
 
+.track--active .track__index,
+.track--active:nth-child(odd) .track__index {
+  color: $base-color-3;
+}
+
 .playlist__columns {
   color: $base-color-1;
   border-bottom: 1px solid #eee;
