@@ -1,6 +1,3 @@
-require('app/styles/active-track.styl');
-require('app/styles/play-btn.styl');
-
 var React = require('react');
 var vbus = require('app/core/vbus');
 var PlayBtn = require('app/ui/play-btn');

@@ -1,5 +1,3 @@
-require('app/styles/activity-chart.styl');
-
 var React = require('react');
 var moment = require('moment');
 var classnames = require('classnames');

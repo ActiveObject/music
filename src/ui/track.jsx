@@ -1,6 +1,3 @@
-require('app/styles/track.styl');
-require('app/styles/element.styl');
-
 var React = require('react/addons');
 var cx = require('classnames');
 var duration = require('app/fn/duration');

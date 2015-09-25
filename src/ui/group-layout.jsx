@@ -24,8 +24,6 @@ var db = require('app/db');
 
 var UserPlaylists = require('app/ui/user-playlists');
 
-require('app/styles/group-layout.styl');
-
 var GroupActivityCard = React.createClass({
   getInitialState: function () {
     return {

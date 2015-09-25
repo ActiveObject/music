@@ -1,5 +1,3 @@
-require('app/styles/audio-progress-line.styl');
-
 var React = require('react');
 var vbus = require('app/core/vbus');
 var Player = require('app/values/player');

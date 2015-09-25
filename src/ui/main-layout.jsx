@@ -15,8 +15,6 @@ var db = require('app/db');
 
 var groups = require('app/db/groups');
 
-require('app/styles/main-layout.styl');
-
 var ActivityList = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 

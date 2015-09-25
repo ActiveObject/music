@@ -1,6 +1,3 @@
-require('app/styles/main.styl');
-require('app/styles/two-region.styl');
-
 var _ = require('underscore');
 var React = require('react');
 var cx = require('classnames');

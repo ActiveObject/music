@@ -1,5 +1,3 @@
-require('app/styles/post.styl');
-
 var React = require('react/addons');
 var Tracklist = require('app/ui/tracklist');
 

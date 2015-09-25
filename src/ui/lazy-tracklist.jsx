@@ -1,6 +1,3 @@
-require('app/styles/tracklist.styl');
-require('app/styles/lazy-tracklist.styl');
-
 var React = require('react');
 var throttle = require('underscore').throttle;
 var IScroll = require('iscroll/build/iscroll-probe');

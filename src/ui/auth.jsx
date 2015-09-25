@@ -1,6 +1,3 @@
-require('app/styles/auth.styl');
-require('app/styles/element.styl');
-
 var React = require('react');
 var Icon = require('app/ui/icon');
 
