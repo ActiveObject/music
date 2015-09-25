@@ -30,12 +30,8 @@ var Track = React.createClass({
 
     return (
       <div className={classSet}>
-        <PlayBtnCell
-          isPlaying={this.props.isPlaying}
-          isActive={this.props.isActive}
-          onClick={v => this.props.onTogglePlay(this.props.track)} />
-
-        <div className='track__artist'><span>{audio.artist}</span></div>
+        <div className='track__index'>{audio.index + 1}</div>
+        <div className='track__artist'>{audio.artist}</div>
         <div className='track__title'>{audio.title}</div>
         <div className='track__duration'>{duration(audio.duration)}</div>
       </div>

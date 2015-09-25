@@ -19,15 +19,28 @@ $accent-green: #859900;
 $accent-color: $accent-violet;
 
 .track {
-  color: $base-color-0;
+  color: $base-color-00;
 }
 
 .track:nth-child(odd) {
   background-color: #F2F2F2;
 }
 
+.track__index {
+  color: $base-color-1;
+}
+
 .track--active,
 .track--active:nth-child(odd) {
   background-color: $accent-color;
   color: $base-color-3;
+}
+
+.playlist__columns {
+  color: $base-color-1;
+  border-bottom: 1px solid #eee;
+}
+
+.playlist__header {
+  color: $base-color-01;
 }

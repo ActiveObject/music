@@ -6,7 +6,7 @@
   padding: 0 5px;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
-  font-size: 0.9em;
+  font-size: .75rem;
   transition: background-color 0.1s ease-in;
 }
 
@@ -23,27 +23,20 @@
   overflow: hidden;
 }
 
+.track__index {
+  width: 3rem;
+  text-align: center;
+}
+
 .track__title {
-  width: 60%;
+  width: 58%;
 }
 
 .track__artist {
-  width: 30%;
+  width: 25%;
 }
 
 .track__duration {
-  width: 10%;
+  width: 3rem;
   text-align: right;
-}
-
-.play-btn-cell {
-  cursor: pointer;
-  user-select: none;
-}
-
-.play-btn-cell .icon {
-  width: 40px;
-  height: 40px;
-  padding: 10px;
-  transition: fill 0.2s;
 }

@@ -8,10 +8,11 @@ import db from 'app/db';
 import onValue from 'app/fn/onValue';
 import App from 'app/ui/app';
 import Track from 'app/ui/track';
+import IScrollLayer from 'app/ui/iscroll-layer';
 
 var PlaylistUI = React.createClass({
   render: function () {
-    var tracks = this.props.tracks.slice(0, 10).map(function (track) {
+    var rows = this.props.tracks.slice(0, 100).map(function (track) {
       return <Track
         track={track}
         isPlaying={false}
@@ -21,13 +22,23 @@ var PlaylistUI = React.createClass({
 
     return (
       <div className='playlist'>
-        <h3 className='playlist__header'>{this.props.name}</h3>
-        <div className='playlist__content'>{tracks}</div>
+        <div className='playlist__header'>{this.props.name}</div>
+        <div className='playlist__content'>
+          <div className='playlist__columns'>
+            <div className='track__index'>#</div>
+            <div className='track__artist'>artist</div>
+            <div className='track__title'>title</div>
+            <div className='track__duration'>time</div>
+          </div>
+          <div className='playlist__table'>
+            <IScrollLayer>{rows}</IScrollLayer>
+          </div>
+        </div>
         <div className='playlist__paginator'></div>
       </div>
     )
   }
-})
+});
 
 var MainLayout = React.createClass({
   render: function() {
