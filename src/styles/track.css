@@ -1,0 +1,48 @@
+.track {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+  padding: 0 5px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9em;
+  transition: background-color 0.1s ease-in;
+}
+
+.track__title,
+.track__artist,
+.track__duration {
+  margin: 0 5px;
+}
+
+.track__title,
+.track__artist {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.track__title {
+  width: 60%;
+}
+
+.track__artist {
+  width: 30%;
+}
+
+.track__duration {
+  width: 10%;
+  text-align: right;
+}
+
+.play-btn-cell {
+  cursor: pointer;
+  user-select: none;
+}
+
+.play-btn-cell .icon {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  transition: fill 0.2s;
+}

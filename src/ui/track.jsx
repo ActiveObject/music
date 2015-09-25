@@ -35,9 +35,9 @@ var Track = React.createClass({
           isActive={this.props.isActive}
           onClick={v => this.props.onTogglePlay(this.props.track)} />
 
-        <div className='track-title'>{audio.title}</div>
-        <div className='track-artist'><span>{audio.artist}</span></div>
-        <div className='track-duration'>{duration(audio.duration)}</div>
+        <div className='track__artist'><span>{audio.artist}</span></div>
+        <div className='track__title'>{audio.title}</div>
+        <div className='track__duration'>{duration(audio.duration)}</div>
       </div>
     );
   }
