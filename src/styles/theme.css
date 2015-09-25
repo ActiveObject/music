@@ -1,0 +1,33 @@
+$base-color-03: #002b36;
+$base-color-02: #073642;
+$base-color-01: #586e75;
+$base-color-00: #657b83;
+$base-color-0: #839496;
+$base-color-1: #93a1a1;
+$base-color-2: #eee8d5;
+$base-color-3: #fdf6e3;
+
+$accent-yellow: #b58900;
+$accent-orange: #cb4b16;
+$accent-red: #dc322f;
+$accent-magenta: #d33682;
+$accent-violet: #6c71c4;
+$accent-blue: #268bd2;
+$accent-cyan: #2aa198;
+$accent-green: #859900;
+
+$accent-color: $accent-violet;
+
+.track {
+  color: $base-color-0;
+}
+
+.track:nth-child(odd) {
+  background-color: #F2F2F2;
+}
+
+.track--active,
+.track--active:nth-child(odd) {
+  background-color: $accent-color;
+  color: $base-color-3;
+}

@@ -35,5 +35,7 @@ module.exports = {
     definePlugin,
     new webpack.IgnorePlugin(/vertx/),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-  ]
+  ],
+
+  postcss: [require('postcss-simple-vars')]
 };

@@ -1,26 +1,23 @@
-var React = require('react/addons');
-var App = require('app/ui/app');
-var db = require('app/db');
-var onValue = require('app/fn/onValue');
+import 'app/styles/base.css';
+import 'app/styles/theme.css';
+import 'app/styles/track.css';
+import 'app/styles/playlist.css';
 
-var Track = require('app/ui/track');
-
-require('app/styles/track.css');
-require('app/styles/playlist.css');
+import React from 'react/addons';
+import db from 'app/db';
+import onValue from 'app/fn/onValue';
+import App from 'app/ui/app';
+import Track from 'app/ui/track';
 
 var PlaylistUI = React.createClass({
   render: function () {
-    var tracks = db.value.get(':db/tracks')
-      .toList()
-      .sortBy(t => t.audio.index)
-      .slice(0, 10)
-      .map(function (track) {
-        return <Track
-          track={track}
-          isPlaying={false}
-          isActive={false}
-        />
-      });
+    var tracks = this.props.tracks.slice(0, 10).map(function (track) {
+      return <Track
+        track={track}
+        isPlaying={false}
+        isActive={false}
+      />
+    });
 
     return (
       <div className='playlist'>
@@ -34,9 +31,13 @@ var PlaylistUI = React.createClass({
 
 var MainLayout = React.createClass({
   render: function() {
+    var tracks = db.value.get(':db/tracks')
+      .toList()
+      .sortBy(t => t.audio.index);
+
     return (
       <App>
-        <PlaylistUI />
+        <PlaylistUI name='All tracks' tracks={tracks} />
       </App>
     );
   }
@@ -59,4 +60,4 @@ function updateOn(ComposedComponent, dbKey) {
   });
 }
 
-module.exports = updateOn(MainLayout, ':db/tracks');
+export default updateOn(MainLayout, ':db/tracks');
