@@ -33,7 +33,6 @@ module.exports = {
   },
   plugins: [
     definePlugin,
-    new webpack.IgnorePlugin(/vertx/),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ],
 
