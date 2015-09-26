@@ -57,3 +57,7 @@ $accent-color: $accent-violet;
 .play-btn .icon {
   fill: white
 }
+
+.command-palette__todo {
+  color: $accent-color;
+}

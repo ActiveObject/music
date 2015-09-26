@@ -1,7 +1,8 @@
 .command-palette {
-  font-size: 2rem;
   width: 100%;
-  font-size: 1.5em;
+  font-size: 2rem;
+  font-weight: 100;
+  font-family: 'Roboto';
   padding-left: 4rem;
   height: 80px;
   line-height: 80px;
@@ -11,8 +12,23 @@
 .command-palette__input {
   border: none;
   outline: none;
-  font-weight: 100;
-  font-family: 'Roboto';
   width: 100%;
   font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  padding: 0;
+  background-color: transparent;
+}
+
+.command-palette__complete {
+  position: absolute;
+  padding-left: 4rem;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  z-index: -1000;
 }
