@@ -31,12 +31,3 @@ body,
   height: 100%;
   overflow: hidden;
 }
-
-.command-palette {
-  border: none;
-  outline: none;
-  font-size: 2rem;
-  font-weight: 100;
-  font-family: 'Roboto';
-  width: 100%;
-}

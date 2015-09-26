@@ -1,0 +1,13 @@
+.command-palette {
+  font-size: 2rem;
+  width: 100%;
+}
+
+.command-palette__input {
+  border: none;
+  outline: none;
+  font-weight: 100;
+  font-family: 'Roboto';
+  width: 100%;
+  font-size: inherit;
+}

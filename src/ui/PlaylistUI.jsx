@@ -6,6 +6,7 @@ import Track from 'app/ui/track';
 import IScrollLayer from 'app/ui/iscroll-layer';
 import hasTag from 'app/fn/hasTag';
 import updateOnKey from 'app/fn/updateOnKey'
+import CommandPalette from 'app/ui/CommandPalette';
 
 var PlaylistUI = React.createClass({
   getInitialState: function () {
@@ -47,19 +48,15 @@ var PlaylistUI = React.createClass({
 
         {interpolated =>
           <div className='playlist'>
-            <div className='playlist__header'>
-              <input
-                type='text'
-                className='command-palette'
-                value={this.state.command}
-                onChange={this.executeCommand}
-                style={{
-                  transform: `translate(0, ${interpolated.iy.val}px)`,
-                  fontSize: `${interpolated.fontSize.val}rem`
-                }}
-                onFocus={() => this.setState({ opened: true })}
-                onBlur={() => this.setState({ opened: false })} />
-            </div>
+            <CommandPalette
+              command={this.state.command}
+              style={{
+                transform: `translate(0, ${interpolated.iy.val}px)`,
+                fontSize: `${interpolated.fontSize.val}rem`
+              }}
+              onChange={this.executeCommand}
+              onFocus={() => this.setState({ opened: true })}
+              onBlur={() => this.setState({ opened: false })} />
             <div className='playlist__content' style={{ transform: `scale(${interpolated.zoom.val / 100}) translate(0, ${interpolated.y.val}px)`}}>
               <div className='playlist__columns'>
                 <div className='track__index'>#</div>

@@ -2,6 +2,7 @@ import 'app/styles/base.css';
 import 'app/styles/theme.css';
 import 'app/styles/track.css';
 import 'app/styles/playlist.css';
+import 'app/styles/command-palette.css'
 
 import React from 'react';
 import db from 'app/db';
