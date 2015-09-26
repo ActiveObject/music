@@ -20,12 +20,11 @@ import PlayBtn from 'app/ui/PlayBtn';
 
 var MainLayoutPlayBtn = updateOnKey(React.createClass({
   render: function () {
+    var isPlaying = hasTag(db.value.get(':db/player'), ':player/is-playing');
+
     return (
       <div className='main-layout__play-btn'>
-        <PlayBtn
-          isActive={true}
-          isPlaying={hasTag(db.value.get(':db/player'), ':player/is-playing')}
-          onClick={this.togglePlay} />
+        <PlayBtn isPlaying={isPlaying} onClick={this.togglePlay} />
       </div>
     );
   },
