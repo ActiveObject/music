@@ -1,17 +1,6 @@
 .playlist {
-  display: flex;
-  flex-direction: column;
   width: 800px;
   height: 100%;
-}
-
-.playlist__header {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 100;
-  font-size: 1.5em;
-  padding-left: 4rem;
-  height: 80px;
-  line-height: 80px;
 }
 
 .playlist__content {

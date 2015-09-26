@@ -1,6 +1,11 @@
 .command-palette {
   font-size: 2rem;
   width: 100%;
+  font-size: 1.5em;
+  padding-left: 4rem;
+  height: 80px;
+  line-height: 80px;
+  width: 800px;
 }
 
 .command-palette__input {

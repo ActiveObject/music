@@ -7,10 +7,10 @@ export default React.createClass({
         <input
           type='text'
           className='command-palette__input'
-          value={this.props.command}
+          value={this.props.cmd}
           onFocus={this.props.onFocus}
           onBlur={this.props.onBlur}
-          onChange={this.props.onChange} />
+          onChange={(e) => this.props.onChange(e.target.value)} />
       </div>
     );
   }
