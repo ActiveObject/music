@@ -31,7 +31,7 @@ var PlayBtn = React.createClass({
   render: function () {
     var classes = cx({
       'play-btn': true,
-      'active': this.props.isActive
+      'play-btn--active': this.props.isActive
     });
 
     return (

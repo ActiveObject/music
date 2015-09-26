@@ -49,3 +49,11 @@ $accent-color: $accent-violet;
 .playlist__header {
   color: $base-color-01;
 }
+
+.play-btn {
+  background-color: $accent-color
+}
+
+.play-btn .icon {
+  fill: white
+}

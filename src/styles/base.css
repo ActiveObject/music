@@ -39,3 +39,10 @@ body,
   width: 100%;
   height: 100%;
 }
+
+.main-layout__play-btn {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 30px;
+}
