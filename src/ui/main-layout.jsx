@@ -37,19 +37,37 @@ var PlaylistUI = updateOn(React.createClass({
     }, this);
 
     return (
-      <div className='playlist'>
-        <div className='playlist__header'>
-          <input
-            type='text'
-            className='command-palette'
-            value={this.state.command}
-            onChange={this.executeCommand}
-            onFocus={() => this.setState({ opened: true })}
-            onBlur={() => this.setState({ opened: false })} />
-        </div>
-        <Spring defaultValue={{ val: 100 }} endValue={{ val: this.state.opened ? 70 : 100 }}>
-          {interpolated =>
-            <div className='playlist__content' style={{ transform: `scale(${interpolated.val / 100})`}}>
+      <Spring
+        defaultValue={{
+          zoom: { val: 100 },
+          y: { val: 0 },
+          fontSize: { val: 2 },
+          iy: { val: 0 }
+        }}
+
+        endValue={{
+          zoom: { val: this.state.opened ? 80 : 100 },
+          y: { val: this.state.opened ? 500 : 0 },
+          fontSize: { val: this.state.opened ? 3 : 2 },
+          iy: { val: this.state.opened ? 300 : 0 }
+        }}>
+
+        {interpolated =>
+          <div className='playlist'>
+            <div className='playlist__header'>
+              <input
+                type='text'
+                className='command-palette'
+                value={this.state.command}
+                onChange={this.executeCommand}
+                style={{
+                  transform: `translate(0, ${interpolated.iy.val}px)`,
+                  fontSize: `${interpolated.fontSize.val}rem`
+                }}
+                onFocus={() => this.setState({ opened: true })}
+                onBlur={() => this.setState({ opened: false })} />
+            </div>
+            <div className='playlist__content' style={{ transform: `scale(${interpolated.zoom.val / 100}) translate(0, ${interpolated.y.val}px)`}}>
               <div className='playlist__columns'>
                 <div className='track__index'>#</div>
                 <div className='track__artist'>artist</div>
@@ -60,10 +78,10 @@ var PlaylistUI = updateOn(React.createClass({
                 <IScrollLayer>{rows}</IScrollLayer>
               </div>
             </div>
-          }
-        </Spring>
-        <div className='playlist__paginator'></div>
-      </div>
+            <div className='playlist__paginator'></div>
+          </div>
+        }
+      </Spring>
     )
   },
 
