@@ -93,7 +93,7 @@
     "webpack:webapp-dev": "webpack-dev-server --entry=./src/main-webapp.js --progress --colors --port=5003 --content-base=$npm_package_config_webapp_output --debug --devtool eval-source-map --output-pathinfo --inline",
     "webpack:chromeapp": "MUSIC_APP_ID=4812383 NODE_ENV=production webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --debug --devtool source-map --progress",
     "webpack:chromeapp-dev": "MUSIC_APP_ID=4812383 webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --watch --debug --devtool source-map --progress",
-    "deploy:divshot": "MUSIC_APP_ID=4656659 npm run build:webpack && divshot push production",
+    "deploy:divshot": "MUSIC_APP_ID=4656659 npm run build:webapp && divshot push production",
     "deploy:divshot:dev": "MUSIC_APP_ID=4656659 npm run build:webapp && divshot push development"
   }
 }
