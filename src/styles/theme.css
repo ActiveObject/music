@@ -22,8 +22,14 @@ $accent-color: $accent-violet;
   color: $base-color-00;
 }
 
-.track:nth-child(odd) {
+.track:nth-child(odd),
+.track-container:nth-child(odd) .track {
   background-color: #F2F2F2;
+}
+
+.track:nth-child(even),
+.track-container:nth-child(even) .track {
+  background-color: white;
 }
 
 .track__index {
@@ -31,7 +37,9 @@ $accent-color: $accent-violet;
 }
 
 .track--active,
-.track--active:nth-child(odd) {
+.track--active:nth-child(odd),
+.track-container .track--active:nth-child(odd),
+.track-container .track--active:nth-child(even) {
   background-color: $accent-color;
   color: $base-color-3;
 }

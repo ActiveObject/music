@@ -2,26 +2,14 @@ import React from 'react';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
 import * as Player from 'app/values/player';
-import Track from 'app/ui/track';
-import IScrollLayer from 'app/ui/iscroll-layer';
 import hasTag from 'app/fn/hasTag';
 import updateOnKey from 'app/fn/updateOnKey';
 
+import IScrollLayer from 'app/ui/iscroll-layer';
+import LazyTracklist from 'app/ui/LazyTracklist';
+
 var PlaylistUI = React.createClass({
   render: function () {
-    var player = db.value.get(':db/player');
-    var rows = this.props.tracks.slice(0, 100).map(function (track) {
-      var isActive = track.id === player.track.id;
-      var isPlaying = isActive && hasTag(player, ':player/is-playing');
-
-      return <Track
-        track={track}
-        isPlaying={isPlaying}
-        isActive={isActive}
-        onTogglePlay={this.togglePlay}
-      />
-    }, this);
-
     return (
       <div className='playlist' style={{ transform: `scale(${this.props.zoom / 100}) translate(0, ${this.props.y}px)`}}>
         <div className='playlist__content'>
@@ -32,7 +20,10 @@ var PlaylistUI = React.createClass({
             <div className='track__duration'>time</div>
           </div>
           <div className='playlist__table'>
-            <IScrollLayer>{rows}</IScrollLayer>
+            <LazyTracklist
+              player={db.value.get(':db/player')}
+              tracks={this.props.tracks}
+              onTogglePlay={this.togglePlay} />
           </div>
         </div>
         <div className='playlist__paginator'></div>
