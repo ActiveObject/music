@@ -21,6 +21,7 @@
 }
 
 .command-palette__complete {
+  display: none;
   position: absolute;
   padding-left: 4rem;
   left: 0;
