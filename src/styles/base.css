@@ -21,6 +21,7 @@ body,
   justify-content: center;
   align-items: center;
   padding: 70px 0;
+  overflow: hidden;
 }
 
 .icon {
