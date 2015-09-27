@@ -4,27 +4,16 @@ import IScroll from 'iscroll/build/iscroll-probe';
 import Cursor from 'app/values/cursor';
 import TrackCtrl from 'app/ui/TrackCtrl';
 
-var TrackContainer = React.createClass({
-  propTypes: {
-    y: React.PropTypes.number.isRequired
-  },
-
-  render: function () {
-    var style = {
-      transform: `translate(0, ${this.props.y}px)`,
-      position: 'absolute',
-      left: 0,
-      width: '100%'
-    };
-
-    return <div className='track-container' style={style}>{this.props.children}</div>;
-  }
-});
-
 var LazyTracklist = React.createClass({
   propTypes: {
     tracks: React.PropTypes.object.isRequired,
     itemHeight: React.PropTypes.number
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    return nextProps.tracks !== this.props.tracks
+      || nextState.cursor.position === this.state.cursor.position
+      || nextState.cursor.page() !== this.state.cursor.page();
   },
 
   getInitialState: function () {
@@ -73,10 +62,17 @@ var LazyTracklist = React.createClass({
 
   render: function() {
     var tracks = this.state.cursor.selection().map(function (track) {
+      var style = {
+        transform: `translate(0, ${track.yOffset}px)`,
+        position: 'absolute',
+        left: 0,
+        width: '100%'
+      };
+
       return (
-        <TrackContainer key={track.value.id} y={track.yOffset}>
+        <div key={track.value.id} className='track-container' style={style}>
           <TrackCtrl track={track.value} />
-        </TrackContainer>
+        </div>
       );
     });
 

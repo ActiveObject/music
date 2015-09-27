@@ -78,4 +78,8 @@ Cursor.prototype.range = function () {
   return r;
 };
 
+Cursor.prototype.page = function () {
+  return Math.abs(Math.floor(this.position / (this.itemHeight * this.pageSize)));
+};
+
 module.exports = Cursor;
