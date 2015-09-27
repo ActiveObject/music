@@ -1,9 +1,8 @@
 import React from 'react';
 import { throttle } from 'underscore';
 import IScroll from 'iscroll/build/iscroll-probe';
-import Track from 'app/ui/track';
 import Cursor from 'app/values/cursor';
-import hasTag from 'app/fn/hasTag';
+import TrackCtrl from 'app/ui/TrackCtrl';
 
 var TrackContainer = React.createClass({
   propTypes: {
@@ -24,9 +23,7 @@ var TrackContainer = React.createClass({
 
 var LazyTracklist = React.createClass({
   propTypes: {
-    player: React.PropTypes.object.isRequired,
     tracks: React.PropTypes.object.isRequired,
-    onTogglePlay: React.PropTypes.func.isRequired,
     itemHeight: React.PropTypes.number
   },
 
@@ -76,19 +73,12 @@ var LazyTracklist = React.createClass({
 
   render: function() {
     var tracks = this.state.cursor.selection().map(function (track) {
-      var isActive = track.value.id === this.props.player.track.id;
-      var isPlaying = isActive && hasTag(this.props.player, ':player/is-playing');
-
       return (
         <TrackContainer key={track.value.id} y={track.yOffset}>
-          <Track
-            track={track.value}
-            isActive={isActive}
-            isPlaying={isPlaying}
-            onTogglePlay={this.props.onTogglePlay} />
+          <TrackCtrl track={track.value} />
         </TrackContainer>
       );
-    }, this);
+    });
 
     var style = {
       height: this.props.tracks.count() * this.props.itemHeight
