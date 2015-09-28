@@ -40,6 +40,12 @@ var initialDbValue = Map({
 
   ':db/route': {
     tag: [':app/route', ':route/empty']
+  },
+
+  ':db/cmd': 'All tracks',
+
+  ':db/command-palette': {
+    tag: []
   }
 });
 
@@ -76,6 +82,14 @@ function reducer(state, v) {
 
   if (hasTag(v, ':app/route')) {
     return state.update(':db/route', () => v);
+  }
+
+  if (hasTag(v, ':app/cmd')) {
+    return state.set(':db/cmd', v.value);
+  }
+
+  if (hasTag(v, ':app/command-palette')) {
+    return state.set(':db/command-palette', v);
   }
 
   return state;

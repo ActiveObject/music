@@ -2,7 +2,7 @@ import React from 'react';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
 import hasTag from 'app/fn/hasTag';
-import updateOn from 'app/fn/updateOn';
+import updateOnKey from 'app/fn/updateOnKey';
 import * as Player from 'app/values/player';
 import Track from 'app/ui/track';
 
@@ -26,6 +26,6 @@ var TrackCtrl = React.createClass({
   }
 });
 
-export default updateOn(TrackCtrl, function (db) {
-  return db.get(':db/player').track.id;
+export default updateOnKey(TrackCtrl, function (dbVal) {
+  return dbVal.get(':db/player').track.id;
 });

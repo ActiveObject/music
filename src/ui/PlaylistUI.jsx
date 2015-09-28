@@ -2,26 +2,45 @@ import React from 'react';
 
 import IScrollLayer from 'app/ui/iscroll-layer';
 import LazyTracklist from 'app/ui/LazyTracklist';
+import { Spring } from 'react-motion';
+import hasTag from 'app/fn/hasTag';
+import updateOnKey from 'app/fn/updateOnKey';
 
-var PlaylistUI = React.createClass({
+var PlaylistUI = updateOnKey(React.createClass({
   render: function () {
+    var isCmdActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
+
     return (
-      <div className='playlist' style={{ transform: `scale(${this.props.zoom / 100}) translate(0, ${this.props.y}px)`}}>
-        <div className='playlist__content'>
-          <div className='playlist__columns'>
-            <div className='track__index'>#</div>
-            <div className='track__artist'>artist</div>
-            <div className='track__title'>track</div>
-            <div className='track__duration'>time</div>
+      <Spring
+        defaultValue={{
+          zoom: { val: 100 },
+          y: { val: 0 },
+        }}
+
+        endValue={{
+          zoom: { val: isCmdActivated ? 80 : 100 },
+          y: { val: isCmdActivated ? 300 : 0 },
+        }}>
+
+        {interpolated =>
+          <div className='playlist' style={{ transform: `scale(${interpolated.zoom.val / 100}) translate(0, ${interpolated.y.val}px)`}}>
+            <div className='playlist__content'>
+              <div className='playlist__columns'>
+                <div className='track__index'>#</div>
+                <div className='track__artist'>artist</div>
+                <div className='track__title'>track</div>
+                <div className='track__duration'>time</div>
+              </div>
+              <div className='playlist__table'>
+                <LazyTracklist tracks={this.props.tracks} />
+              </div>
+            </div>
+            <div className='playlist__paginator'></div>
           </div>
-          <div className='playlist__table'>
-            <LazyTracklist tracks={this.props.tracks} />
-          </div>
-        </div>
-        <div className='playlist__paginator'></div>
-      </div>
+        }
+      </Spring>
     )
   }
-});
+}), ':db/command-palette');
 
 export default PlaylistUI;

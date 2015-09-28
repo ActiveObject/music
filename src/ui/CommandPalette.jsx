@@ -1,21 +1,68 @@
 import React from 'react';
+import { Spring } from 'react-motion';
+import db from 'app/db';
+import vbus from 'app/core/vbus';
+import hasTag from 'app/fn/hasTag';
+import updateOnKey from 'app/fn/updateOnKey';
 
-export default React.createClass({
+var CommandPalette = React.createClass({
   render: function () {
+    var cmd = db.value.get(':db/cmd');
+    var isActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
+
     return (
-      <div className='command-palette' style={this.props.style} >
-        <input
-          type='text'
-          className='command-palette__input'
-          value={this.props.cmd}
-          onFocus={this.props.onFocus}
-          onBlur={this.props.onBlur}
-          onChange={(e) => this.props.onChange(e.target.value)} />
-        <div className='command-palette__complete'>
-          <span>All tracks</span>
-          <span className='command-palette__todo'>{' #breaks'}</span>
-        </div>
-      </div>
+      <Spring
+        defaultValue={{
+          fontSize: { val: 2 },
+          y: { val: 0 }
+        }}
+
+        endValue={{
+          fontSize: { val: isActivated ? 3 : 2 },
+          y: { val: isActivated ? 100 : 0 }
+        }}>
+        {interpolated =>
+          <div
+              className='command-palette'
+              style={{
+                transform: `translate(0, ${interpolated.y.val}px)`,
+                fontSize: `${interpolated.fontSize.val}rem`
+              }} >
+            <input
+              type='text'
+              className='command-palette__input'
+              value={cmd}
+              onFocus={this.activate}
+              onBlur={this.deactivate}
+              onChange={(e) => this.executeCommand(e.target.value)} />
+            <div className='command-palette__complete'>
+              <span>All tracks</span>
+              <span className='command-palette__todo'>{' #breaks'}</span>
+            </div>
+          </div>
+        }
+      </Spring>
     );
+  },
+
+  executeCommand: function (cmd) {
+    vbus.emit({
+      tag: ':app/cmd',
+      value: cmd
+    });
+  },
+
+  activate: function () {
+    vbus.emit({
+      tag: [':app/command-palette', ':cmd/is-activated']
+    });
+  },
+
+  deactivate: function () {
+    vbus.emit({
+      tag: [':app/command-palette']
+    });
   }
 });
+
+export default updateOnKey(CommandPalette, [':db/command-palette', ':db/cmd']);
