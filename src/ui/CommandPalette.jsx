@@ -7,6 +7,15 @@ import hasTag from 'app/fn/hasTag';
 import updateOnKey from 'app/fn/updateOnKey';
 
 var CommandPalette = React.createClass({
+  componentDidUpdate: function () {
+    var isActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
+    var input = this._input.getDOMNode();
+
+    if (isActivated && document.activeElement !== input) {
+      input.select();
+    }
+  },
+
   render: function () {
     var cmd = db.value.get(':db/cmd');
     var isActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
@@ -30,6 +39,7 @@ var CommandPalette = React.createClass({
                 fontSize: `${interpolated.fontSize.val}rem`
               }} >
             <input
+              ref={(c) => this._input = c}
               type='text'
               className='command-palette__input'
               value={cmd}

@@ -2,7 +2,7 @@ import merge from 'app/fn/merge';
 
 export default function toggleTag(x, tag) {
   if (typeof x !== 'object' || x === null) {
-    throw new TypeError('addTag does not support non-object values');
+    throw new TypeError('toggleTag does not support non-object values');
   }
 
   if (!x.tag) {

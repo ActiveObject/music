@@ -1,6 +1,8 @@
 var key = require('keymaster');
+var db = require('app/db');
 var playerAtom = require('app/db/player');
 var Player = require('app/values/player');
+var toggleTag = require('app/fn/toggleTag');
 
 module.exports = function (vbus) {
 
@@ -16,9 +18,14 @@ module.exports = function (vbus) {
     vbus.emit(Player.togglePlay(playerAtom.value));
   });
 
+  key('command+shift+p', function () {
+    vbus.emit(toggleTag(db.value.get(':db/command-palette'), ':cmd/is-activated'));
+  });
+
   return function () {
     key.unbind('left');
     key.unbind('right');
     key.unbind('space');
+    key.unbind('command+shift+l');
   };
 };

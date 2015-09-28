@@ -37,7 +37,7 @@ var initialDbValue = Map({
   ':db/cmd': 'All tracks',
 
   ':db/command-palette': {
-    tag: []
+    tag: [':app/command-palette']
   }
 });
 
