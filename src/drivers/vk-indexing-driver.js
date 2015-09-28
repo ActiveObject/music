@@ -8,14 +8,17 @@ var addTag = require('app/fn/addTag');
 var addTag2 = require('app/fn/addTag-v2');
 var hasTag = require('app/fn/hasTag');
 var subscribeWith = require('app/fn/subscribeWith');
+var onValue = require('app/fn/onValue');
 var vk = require('app/vk');
 var merge = require('app/fn/merge');
 var db = require('app/db');
+var userAtom = require('app/db/user');
+var Atom = require('app/core/atom');
 
 module.exports = function(vbus) {
   var user = vbus.filter(v => hasTag(v, ':user/authenticated'));
 
-  return subscribeWith(function (onValue) {
+  return subscribeWith(onValue, Atom.listen, function (onValue, listen) {
     onValue(user, function (user) {
       var tout = go(new TracksLoader(user))
         .reduce((acc, v) => acc.union(v), ISet())
@@ -58,7 +61,11 @@ module.exports = function(vbus) {
       vbus.plug(out);
     });
 
-    onValue(user, function (user) {
+    listen(userAtom, function (user) {
+      if (!hasTag(user, ':user/authenticated')) {
+        return;
+      }
+
       vk.users.get({
         user_ids: user.id,
         fields: ['photo_50']

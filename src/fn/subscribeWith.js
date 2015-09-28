@@ -1,11 +1,15 @@
 import onValue from 'app/fn/onValue';
 
-export default function subscribeWith(subscriber) {
+export default function subscribeWith(...fns) {
   var subs = [];
-
-  subscriber(function (...args) {
-    subs.push(onValue(...args));
+  var subscriber = fns[fns.length - 1];
+  var wrapped = fns.slice(0, -1).map(function (fn) {
+    return function (...args) {
+      subs.push(fn(...args));
+    };
   });
+
+  subscriber(...wrapped);
 
   return function () {
     subs.forEach(function (unsubscribe) {

@@ -37,6 +37,7 @@
     "colors": "^0.6.2",
     "curry": "^1.2.0",
     "debug": "^1.0.4",
+    "deep-equal": "^1.0.1",
     "immutable": "^3.5.0",
     "impulse": "^0.1.0",
     "iscroll": "^5.1.2",
