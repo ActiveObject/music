@@ -22,7 +22,7 @@ var TrackCtrl = React.createClass({
   },
 
   togglePlay: function (track) {
-    vbus.emit(Player.togglePlay(db.value.get(':db/player'), track));
+    vbus.emit(Player.togglePlay(db.value.get(':db/player'), track, this.props.tracklist));
   }
 });
 

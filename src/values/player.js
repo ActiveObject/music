@@ -77,18 +77,18 @@ export function stopSeeking(p) {
 }
 
 export function nextTrack(p) {
-  if (p.tracklist.playlist.isLastTrack(p.track)) {
+  if (isLastTrack(p.tracklist, p.track)) {
     return stop(p);
   }
 
   return merge(p, {
-    track: p.tracklist.playlist.nextAfter(p.track)
+    track: nextAfter(p.tracklist, p.track)
   });
 }
 
 export function useTracklist(p, tracklist) {
-  if (Object.keys(p.track).length === 0 && tracklist.playlist.tracks.size > 0) {
-    return merge(p, { track: tracklist.playlist.tracks.first() });
+  if (Object.keys(p.track).length === 0 && tracklist.size > 0) {
+    return merge(p, { track: tracklist.first() });
   }
 
   return merge(p, { tracklist: tracklist });
@@ -116,4 +116,20 @@ export function relativeLoaded(p) {
   }
 
   return p.bytesLoaded / p.bytesTotal;
+}
+
+function isLastTrack(tracklist, track) {
+  var activeIndex = tracklist.findIndex(function (t) {
+    return t.id === track.id;
+  });
+
+  return (activeIndex + 1) === tracklist.size;
+}
+
+function nextAfter(tracklist, track) {
+  var activeIndex = tracklist.findIndex(function (t) {
+    return t.id === track.id;
+  });
+
+  return tracklist.get(activeIndex + 1);
 }

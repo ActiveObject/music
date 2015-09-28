@@ -71,10 +71,10 @@ var LazyTracklist = React.createClass({
 
       return (
         <div key={track.value.id} className='track-container' style={style}>
-          <TrackCtrl track={track.value} />
+          <TrackCtrl track={track.value} tracklist={this.props.tracks} />
         </div>
       );
-    });
+    }, this);
 
     var style = {
       height: this.props.tracks.count() * this.props.itemHeight
