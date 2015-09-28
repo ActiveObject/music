@@ -1,10 +1,11 @@
 import React from 'react';
+import { Spring } from 'react-motion';
+import db from 'app/db';
+import hasTag from 'app/fn/hasTag';
+import updateOnKey from 'app/fn/updateOnKey';
 
 import IScrollLayer from 'app/ui/iscroll-layer';
 import LazyTracklist from 'app/ui/LazyTracklist';
-import { Spring } from 'react-motion';
-import hasTag from 'app/fn/hasTag';
-import updateOnKey from 'app/fn/updateOnKey';
 
 var PlaylistUI = updateOnKey(React.createClass({
   render: function () {
