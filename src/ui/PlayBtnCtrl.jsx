@@ -10,7 +10,7 @@ var PlayBtnCtrl = React.createClass({
   render: function () {
     var isPlaying = hasTag(db.value.get(':db/player'), ':player/is-playing');
 
-    return <PlayBtn isPlaying={isPlaying} togglePlay={this.togglePlay} />;
+    return <PlayBtn isPlaying={isPlaying} onClick={this.togglePlay} />;
   },
 
   togglePlay: function () {
