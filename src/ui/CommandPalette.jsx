@@ -1,5 +1,6 @@
 import React from 'react';
 import { Spring } from 'react-motion';
+import { throttle } from 'underscore';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
 import hasTag from 'app/fn/hasTag';
@@ -34,7 +35,7 @@ var CommandPalette = React.createClass({
               value={cmd}
               onFocus={this.activate}
               onBlur={this.deactivate}
-              onChange={(e) => this.executeCommand(e.target.value)} />
+              onChange={throttle((e) => this.executeCommand(e.target.value), 200)} />
             <div className='command-palette__complete'>
               <span>All tracks</span>
               <span className='command-palette__todo'>{' #breaks'}</span>
