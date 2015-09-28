@@ -4,8 +4,6 @@ var vbus = require('app/core/vbus');
 var Atom = require('app/core/atom');
 var tagOf = require('app/fn/tagOf');
 var hasTag = require('app/fn/hasTag');
-var LibraryTracklist = require('app/values/tracklists/library-tracklist');
-var Playlist = require('app/values/playlist');
 
 var player = {
   tag: [':app/player'],
@@ -16,13 +14,7 @@ var player = {
   seekPosition: 0,
   bytesTotal: 0,
   bytesLoaded: 0,
-  tracklist: new LibraryTracklist({
-    playlist: new Playlist({
-      tracks: List(),
-      isShuffled: false,
-      isRepeated: false
-    })
-  })
+  tracklist: List()
 };
 
 var initialDbValue = Map({
