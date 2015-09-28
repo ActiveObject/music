@@ -45,12 +45,12 @@ body,
   position: absolute;
   left: 0;
   bottom: 0;
-  padding: 30px;
+  padding: 20px 30px;
 }
 
 .main-layout__profile {
   position: absolute;
   right: 0;
   top: 0;
-  padding: 20px;
+  padding: 20px 30px;
 }
