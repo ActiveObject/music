@@ -4,6 +4,7 @@ import 'app/styles/track.css';
 import 'app/styles/playlist.css';
 import 'app/styles/command-palette.css';
 import 'app/styles/play-btn.css';
+import 'app/styles/profile.css';
 
 import React from 'react';
 import db from 'app/db';
@@ -16,6 +17,7 @@ import App from 'app/ui/app';
 import PlaylistUI from 'app/ui/PlaylistUI';
 import CommandPalette from 'app/ui/CommandPalette';
 import PlayBtn from 'app/ui/PlayBtn';
+import Profile from 'app/ui/Profile';
 
 var MainLayoutPlayBtn = updateOnKey(React.createClass({
   render: function () {
@@ -54,6 +56,9 @@ export default React.createClass({
       <App>
         <MainLayoutContent />
         <MainLayoutPlayBtn />
+        <div className='main-layout__profile'>
+          <Profile />
+        </div>
       </App>
     );
   }

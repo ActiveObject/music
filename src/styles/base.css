@@ -47,3 +47,10 @@ body,
   bottom: 0;
   padding: 30px;
 }
+
+.main-layout__profile {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 20px;
+}

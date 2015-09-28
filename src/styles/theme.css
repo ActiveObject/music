@@ -69,3 +69,7 @@ $accent-color: $accent-violet;
 .command-palette__todo {
   color: $accent-color;
 }
+
+.profile__name {
+  color: $base-color-0;
+}
