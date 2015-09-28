@@ -32,7 +32,7 @@ System.prototype.start = function () {
   this.uninstallList.push(require('app/drivers/vk-driver')(vbus));
   this.uninstallList.push(require('app/drivers/soundmanager-driver')(vbus));
   this.uninstallList.push(require('app/drivers/local-storage-driver')(vbus));
-  this.uninstallList.push(require('app/drivers/audio-key-control-driver')(vbus));
+  this.uninstallList.push(require('app/drivers/key-control-driver')(vbus));
   this.auth(hash);
 };
 

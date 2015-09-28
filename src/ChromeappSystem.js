@@ -50,7 +50,7 @@ System.prototype.start = function () {
     require('app/drivers/vk-driver')(vbus),
     require('app/drivers/soundmanager-driver')(vbus),
     require('app/drivers/local-storage-driver')(vbus),
-    require('app/drivers/audio-key-control-driver')(vbus)
+    require('app/drivers/key-control-driver')(vbus)
   ];
 
   this.auth();
