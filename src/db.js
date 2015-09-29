@@ -1,9 +1,13 @@
 var Kefir = require('kefir');
 var { Map, Set, List } = require('immutable');
+var { omit } = require('underscore');
 var vbus = require('app/core/vbus');
 var Atom = require('app/core/atom');
 var tagOf = require('app/fn/tagOf');
 var hasTag = require('app/fn/hasTag');
+var addTag = require('app/fn/addTag-v2');
+var removeTag = require('app/fn/removeTag');
+var merge = require('app/fn/merge');
 
 var player = {
   tag: [':app/player'],
@@ -38,10 +42,14 @@ var initialDbValue = Map({
 
   ':db/command-palette': {
     tag: [':app/command-palette']
+  },
+
+  ':db/context': {
+    tag: [':context/playlist']
   }
 });
 
-function reducer(state, v) {
+function commonReducer(state, v) {
   if (tagOf(v) === ':app/albums') {
     return state.update(':db/albums', albums => albums.union(v[1]))
   }
@@ -87,7 +95,49 @@ function reducer(state, v) {
   return state;
 }
 
+function detectArtistFilter(state, v) {
+  if (!hasTag(v, ':app/cmd')) {
+    return state;
+  }
+
+  var isCmdActivated = hasTag(state.get(':db/command-palette'), ':cmd/is-activated');
+  var cmd = state.get(':db/cmd');
+
+  if (!isCmdActivated) {
+    return state;
+  }
+
+  if (cmd.indexOf(':artist') === -1) {
+    return state;
+  }
+
+  var artist = cmd.slice(cmd.indexOf(':artist') + ':artist'.length).trim();
+
+  if (!artist) {
+    return state.update(':db/context', function (ctx) {
+      return omit(removeTag(ctx, ':context/filter-by-artist'), 'filter');
+    });
+  }
+
+  return state.update(':db/context', function (ctx) {
+    return merge(addTag(ctx, ':context/filter-by-artist'), {
+      filter: {
+        value: artist
+      }
+    });
+  });
+}
+
+function pipeThroughReducers(...reducers) {
+  return function (initialDbValue, v) {
+    return reducers.reduce(function (dbVal, reducer) {
+      return reducer(dbVal, v);
+    }, initialDbValue);
+  };
+}
+
 var db = new Atom(initialDbValue);
+var reducer = pipeThroughReducers(commonReducer, detectArtistFilter);
 
 vbus
   .scan(reducer, initialDbValue)
@@ -98,6 +148,7 @@ var changes = Kefir.stream(function (emitter) {
     emitter.emit(nextDbValue);
   });
 });
+
 
 module.exports = db;
 module.exports.changes = changes;

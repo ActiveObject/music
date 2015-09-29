@@ -9,9 +9,9 @@ import LazyTracklist from 'app/ui/LazyTracklist';
 
 var PlaylistUI = updateOnKey(React.createClass({
   render: function () {
+    var ctx = db.value.get(':db/context');
     var isCmdActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
-    var cmd = db.value.get(':db/cmd');
-    var tracks = this.filterTracks(cmd);
+    var tracks = this.tracks(ctx);
 
     return (
       <Spring
@@ -45,21 +45,19 @@ var PlaylistUI = updateOnKey(React.createClass({
     )
   },
 
-  filterTracks: function (cmd) {
-    if (cmd.indexOf(':artist') === -1) {
-      return this.props.tracks;
+  tracks: function (ctx) {
+    if (hasTag(ctx, ':context/filter-by-artist')) {
+      return this.props.tracks.filter(matchByArtist(ctx.filter.value));
     }
 
-    var artist = cmd.slice(cmd.indexOf(':artist') + ':artist'.length).trim();
-
-    if (!artist) {
-      return this.props.tracks;
-    }
-
-    return this.props.tracks.filter(function (track) {
-      return track.audio.artist.toLowerCase().indexOf(artist.toLowerCase()) !== -1;
-    });
+    return this.props.tracks;
   }
-}), [':db/command-palette', ':db/cmd']);
+}), [':db/context', ':db/command-palette']);
+
+function matchByArtist(artist) {
+  return function match(track) {
+    return track.audio.artist.toLowerCase().indexOf(artist.toLowerCase()) !== -1;
+  };
+}
 
 export default PlaylistUI;

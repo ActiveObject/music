@@ -21,6 +21,7 @@ if (process.env.NODE_ENV === 'development') {
   // Perf.start();
   // vbus.log();
   // db.skipDuplicates().onValue(v => console.log(v.toJS()))
+  require('kefir').DEPRECATION_WARNINGS = false;
 }
 
 app
