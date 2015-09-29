@@ -1,7 +1,7 @@
 import React from 'react';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
-import hasTag from 'app/fn/hasTag';
+import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
 import * as Player from 'app/values/player';
 import PlayBtn from 'app/ui/PlayBtn';

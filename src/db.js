@@ -3,10 +3,8 @@ var { Map, Set, List } = require('immutable');
 var { omit } = require('underscore');
 var vbus = require('app/core/vbus');
 var Atom = require('app/core/atom');
+var { hasTag, addTag, removeTag } = require('app/Tag');
 var tagOf = require('app/fn/tagOf');
-var hasTag = require('app/fn/hasTag');
-var addTag = require('app/fn/addTag-v2');
-var removeTag = require('app/fn/removeTag');
 var merge = require('app/fn/merge');
 
 var player = {

@@ -1,4 +1,4 @@
-var hasTag = require('app/fn/hasTag');
+var { hasTag } = require('app/Tag');
 var onValue = require('app/fn/onValue');
 var vk = require('app/vk');
 

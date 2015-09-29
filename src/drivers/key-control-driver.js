@@ -2,7 +2,7 @@ var key = require('keymaster');
 var db = require('app/db');
 var playerAtom = require('app/db/player');
 var Player = require('app/values/player');
-var toggleTag = require('app/fn/toggleTag');
+var { toggleTag } = require('app/Tag');
 
 module.exports = function (vbus) {
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spring } from 'react-motion';
 import db from 'app/db';
-import hasTag from 'app/fn/hasTag';
+import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
 
 import IScrollLayer from 'app/ui/iscroll-layer';

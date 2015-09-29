@@ -3,11 +3,10 @@ var sm = require('app/soundmanager');
 var player = require('app/db/player');
 var onValue = require('app/fn/onValue');
 var on = require('app/fn/on');
-var hasTag = require('app/fn/hasTag');
-var removeTag = require('app/fn/removeTag');
+var { hasTag, removeTag } = require('app/Tag');
 var merge = require('app/fn/merge');
 var Player = require('app/values/player');
-var omit = require('underscore').omit;
+var { omit } = require('underscore');
 
 sm.setup({
   url: 'swf',

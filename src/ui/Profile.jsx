@@ -3,7 +3,7 @@ import db from 'app/db';
 import { Spring } from 'react-motion';
 
 import updateOnKey from 'app/fn/updateOnKey';
-import hasTag from 'app/fn/hasTag';
+import { hasTag } from 'app/Tag';
 
 var Profile = React.createClass({
   render: function () {

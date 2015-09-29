@@ -3,7 +3,7 @@ import { Spring } from 'react-motion';
 import { throttle } from 'underscore';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
-import hasTag from 'app/fn/hasTag';
+import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
 
 var CommandPalette = React.createClass({

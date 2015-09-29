@@ -1,7 +1,7 @@
 var React = require('react');
 var MainLayout = require('app/ui/main-layout');
 var AuthView = require('app/ui/auth');
-var hasTag = require('app/fn/hasTag');
+var { hasTag } = require('app/Tag');
 
 module.exports = function dispatch(route) {
   if (hasTag(route, ':route/main')) {
