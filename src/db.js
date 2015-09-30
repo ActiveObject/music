@@ -126,6 +126,22 @@ function detectArtistFilter(state, v) {
   });
 }
 
+function fallbackCmdToDefault(state, v) {
+  if (!hasTag(v, ':app/command-palette')) {
+    return state;
+  }
+
+  if (hasTag(v, ':cmd/is-activated')) {
+    return state;
+  }
+
+  if (state.get(':db/cmd').trim()) {
+    return state;
+  }
+
+  return state.set(':db/cmd', 'All tracks');
+}
+
 function pipeThroughReducers(...reducers) {
   return function (initialDbValue, v) {
     return reducers.reduce(function (dbVal, reducer) {
@@ -135,7 +151,7 @@ function pipeThroughReducers(...reducers) {
 }
 
 var db = new Atom(initialDbValue);
-var reducer = pipeThroughReducers(commonReducer, detectArtistFilter);
+var reducer = pipeThroughReducers(commonReducer, detectArtistFilter, fallbackCmdToDefault);
 
 vbus
   .scan(reducer, initialDbValue)
