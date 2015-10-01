@@ -54,6 +54,10 @@ var PlaylistUI = updateOnKey(React.createClass({
       return this.props.tracks.filter(matchByAlbum(ctx.filter.value, ctx.filter.albums));
     }
 
+    if (hasTag(ctx, ':context/filter-by-track')) {
+      return this.props.tracks.filter(matchByTrackTitle(ctx.filter.value));
+    }
+
     return this.props.tracks;
   }
 }), [':db/context', ':db/command-palette']);
@@ -75,5 +79,12 @@ function matchByAlbum(albumName, albums) {
     return ids.includes(track.album);
   };
 }
+
+function matchByTrackTitle(title) {
+  return function match(track) {
+    return track.audio.title.toLowerCase().indexOf(title.toLowerCase()) !== -1;
+  };
+}
+
 
 export default PlaylistUI;

@@ -160,6 +160,39 @@ function detectAlbumFilter(state, v) {
   });
 }
 
+function detectTrackFilter(state, v) {
+  if (!hasTag(v, ':app/cmd')) {
+    return state;
+  }
+
+  var isCmdActivated = hasTag(state.get(':db/command-palette'), ':cmd/is-activated');
+  var cmd = state.get(':db/cmd');
+
+  if (!isCmdActivated) {
+    return state;
+  }
+
+  if (cmd.indexOf(':track') === -1) {
+    return state;
+  }
+
+  var track = cmd.slice(cmd.indexOf(':track') + ':track'.length).trim();
+
+  if (!track) {
+    return state.update(':db/context', function (ctx) {
+      return omit(removeTag(ctx, ':context/filter-by-track'), 'filter');
+    });
+  }
+
+  return state.update(':db/context', function (ctx) {
+    return merge(addTag(ctx, ':context/filter-by-track'), {
+      filter: {
+        value: track
+      }
+    });
+  });
+}
+
 function fallbackCmdToDefault(state, v) {
   if (!hasTag(v, ':app/command-palette')) {
     return state;
@@ -185,7 +218,7 @@ function pipeThroughReducers(...reducers) {
 }
 
 var db = new Atom(initialDbValue);
-var reducer = pipeThroughReducers(commonReducer, detectArtistFilter, detectAlbumFilter, fallbackCmdToDefault);
+var reducer = pipeThroughReducers(commonReducer, detectArtistFilter, detectAlbumFilter, detectTrackFilter, fallbackCmdToDefault);
 
 vbus
   .scan(reducer, initialDbValue)
