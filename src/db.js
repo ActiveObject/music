@@ -126,6 +126,40 @@ function detectArtistFilter(state, v) {
   });
 }
 
+function detectAlbumFilter(state, v) {
+  if (!hasTag(v, ':app/cmd')) {
+    return state;
+  }
+
+  var isCmdActivated = hasTag(state.get(':db/command-palette'), ':cmd/is-activated');
+  var cmd = state.get(':db/cmd');
+
+  if (!isCmdActivated) {
+    return state;
+  }
+
+  if (cmd.indexOf(':album') === -1) {
+    return state;
+  }
+
+  var album = cmd.slice(cmd.indexOf(':album') + ':album'.length).trim();
+
+  if (!album) {
+    return state.update(':db/context', function (ctx) {
+      return omit(removeTag(ctx, ':context/filter-by-album'), 'filter');
+    });
+  }
+
+  return state.update(':db/context', function (ctx) {
+    return merge(addTag(ctx, ':context/filter-by-album'), {
+      filter: {
+        value: album,
+        albums: state.get(':db/albums')
+      }
+    });
+  });
+}
+
 function fallbackCmdToDefault(state, v) {
   if (!hasTag(v, ':app/command-palette')) {
     return state;
@@ -151,7 +185,7 @@ function pipeThroughReducers(...reducers) {
 }
 
 var db = new Atom(initialDbValue);
-var reducer = pipeThroughReducers(commonReducer, detectArtistFilter, fallbackCmdToDefault);
+var reducer = pipeThroughReducers(commonReducer, detectArtistFilter, detectAlbumFilter, fallbackCmdToDefault);
 
 vbus
   .scan(reducer, initialDbValue)
