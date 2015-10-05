@@ -138,23 +138,23 @@ function detectAlbumFilter(state, v) {
     return state;
   }
 
-  if (cmd.indexOf(':album') === -1) {
+  if (cmd.indexOf(':tag') === -1) {
     return state;
   }
 
-  var album = cmd.slice(cmd.indexOf(':album') + ':album'.length).trim();
+  var tag = cmd.slice(cmd.indexOf(':tag') + ':tag'.length).trim();
 
-  if (!album) {
+  if (!tag) {
     return state.update(':db/context', function (ctx) {
-      return omit(removeTag(ctx, ':context/filter-by-album'), 'filter');
+      return omit(removeTag(ctx, ':context/filter-by-tag'), 'filter');
     });
   }
 
   return state.update(':db/context', function (ctx) {
-    return merge(addTag(ctx, ':context/filter-by-album'), {
+    return merge(addTag(ctx, ':context/filter-by-tag'), {
       filter: {
-        value: album,
-        albums: state.get(':db/albums')
+        value: tag,
+        tags: state.get(':db/albums')
       }
     });
   });

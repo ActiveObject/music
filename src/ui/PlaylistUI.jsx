@@ -50,8 +50,8 @@ var PlaylistUI = updateOnKey(React.createClass({
       return this.props.tracks.filter(matchByArtist(ctx.filter.value));
     }
 
-    if (hasTag(ctx, ':context/filter-by-album')) {
-      return this.props.tracks.filter(matchByAlbum(ctx.filter.value, ctx.filter.albums));
+    if (hasTag(ctx, ':context/filter-by-tag')) {
+      return this.props.tracks.filter(matchByTag(ctx.filter.value, ctx.filter.tags));
     }
 
     if (hasTag(ctx, ':context/filter-by-track')) {
@@ -68,8 +68,8 @@ function matchByArtist(artist) {
   };
 }
 
-function matchByAlbum(albumName, albums) {
-  var ids = albums
+function matchByTag(albumName, tags) {
+  var ids = tags
     .filter(function (album) {
       return album.title.toLowerCase().indexOf(albumName.toLowerCase()) !== -1;
     })
