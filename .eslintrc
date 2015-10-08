@@ -1,0 +1,23 @@
+{
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "destructuring": true,
+    "defaultParams": true,
+    "restParams": true,
+    "spread": true,
+    "forOf": true,
+    "jsx": true,
+    "modules": true,
+    "templateStrings": true
+  },
+
+  "rules": {
+    "semi": 0
+  },
+
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}

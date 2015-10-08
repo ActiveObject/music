@@ -18,6 +18,10 @@ module.exports = {
     filename: 'app.js'
   },
   module: {
+    preLoaders: [
+      { test: /src\/(.*)\.(js|jsx)$/, loader: 'eslint' }
+    ],
+
     loaders: [
       { test: /src\/(.*)\.(js|jsx)$/, loader: 'babel-loader' },
       { test: /\.css$/, loader: 'style-loader!css-loader!postcss-loader' },
