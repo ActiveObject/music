@@ -39,7 +39,7 @@ module.exports = function revive(key, value) {
   }
 
   if (key === 'tracks') {
-    return PSet(value.map(firstValue));
+    return PMap(value);
   }
 
   if (key === 'groups') {

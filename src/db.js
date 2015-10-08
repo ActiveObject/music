@@ -21,7 +21,7 @@ var player = {
 
 var initialDbValue = Map({
   ':db/albums': Set(),
-  ':db/tracks': Set(),
+  ':db/tracks': Map(),
   ':db/groups': Set(),
   ':db/activity': Set(),
   ':db/player': player,
@@ -50,10 +50,6 @@ var initialDbValue = Map({
 function commonReducer(state, v) {
   if (tagOf(v) === ':app/albums') {
     return state.update(':db/albums', albums => albums.union(v[1]))
-  }
-
-  if (tagOf(v) === ':app/tracks') {
-    return state.update(':db/tracks', tracks => tracks.union(v[1]))
   }
 
   if (tagOf(v) === ':app/groups') {
@@ -209,6 +205,18 @@ function fallbackCmdToDefault(state, v) {
   return state.set(':db/cmd', 'All tracks');
 }
 
+function embodyTracks(state, v) {
+  if (tagOf(v) === ':app/tracks') {
+    var newTracks = v[1].reduce(function (result, track) {
+      return result.set(track.id, track);
+    }, Map().asMutable()).asImmutable();
+
+    return state.update(':db/tracks', existingTracks => existingTracks.merge(newTracks));
+  }
+
+  return state;
+}
+
 function pipeThroughReducers(...reducers) {
   return function (initialDbValue, v) {
     return reducers.reduce(function (dbVal, reducer) {
@@ -218,7 +226,7 @@ function pipeThroughReducers(...reducers) {
 }
 
 var db = new Atom(initialDbValue);
-var reducer = pipeThroughReducers(commonReducer, detectArtistFilter, detectAlbumFilter, detectTrackFilter, fallbackCmdToDefault);
+var reducer = pipeThroughReducers(commonReducer, embodyTracks, detectArtistFilter, detectAlbumFilter, detectTrackFilter, fallbackCmdToDefault);
 
 vbus
   .scan(reducer, initialDbValue)
