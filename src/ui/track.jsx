@@ -1,6 +1,6 @@
-var React = require('react');
-var cx = require('classnames');
-var duration = require('app/fn/duration');
+import React from 'react';
+import cx from 'classnames';
+import duration from 'app/fn/duration';
 
 var Track = React.createClass({
   propTypes: {
@@ -36,4 +36,4 @@ var Track = React.createClass({
   }
 });
 
-module.exports = Track;
+export default Track;
