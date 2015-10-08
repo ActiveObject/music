@@ -1,7 +1,6 @@
 var React = require('react');
 var cx = require('classnames');
 var duration = require('app/fn/duration');
-var PlayBtnCell = require('app/ui/play-btn-cell');
 
 var Track = React.createClass({
   propTypes: {
