@@ -1,6 +1,4 @@
-var Immutable = require('immutable');
 var vk = require('app/vk');
-var Track = require('app/values/track');
 var merge = require('app/fn/merge');
 
 function TracksLoader(user) {
@@ -18,9 +16,9 @@ TracksLoader.prototype.go = function (input, output) {
         return output.error(err);
       }
 
-      output.emit(Immutable.Set(res.response.items.map(function (data, i) {
-        return Track.fromVk(merge(data, { index: msg.offset + i }));
-      })));
+      output.emit(res.response.items.map(function (data, i) {
+        return merge(data, { index: msg.offset + i });
+      }));
 
       if (res.response.count > 0 && res.response.count > msg.offset + msg.count) {
         input.emit({

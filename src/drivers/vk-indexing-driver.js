@@ -19,9 +19,7 @@ module.exports = function(vbus) {
 
   return subscribeWith(onValue, Atom.listen, function (onValue, listen) {
     onValue(user, function (user) {
-      var tout = go(new TracksLoader(user))
-        .reduce((acc, v) => acc.union(v), ISet())
-        .map(addTag(':app/tracks'));
+      var tout = go(new TracksLoader(user)).map(addTag(':vk/tracks'));
 
       var gout = go(new GroupsLoader(user))
         .reduce((acc, v) => acc.union(v), ISet())
@@ -37,9 +35,7 @@ module.exports = function(vbus) {
     });
 
     onValue(user.toProperty().sampledBy(Kefir.interval(2 * 60 * 1000)), function (user) {
-      var out = go(new TracksLoader(user))
-        .reduce((acc, v) => acc.union(v), ISet())
-        .map(addTag(':app/tracks'));
+      var out = go(new TracksLoader(user)).map(addTag(':vk/tracks'));
 
       vbus.plug(out);
     });

@@ -2,7 +2,7 @@ import merge from 'app/fn/merge';
 
 export function fromVk(data) {
   return {
-    id: Number(data.id),
+    id: String(data.id),
     owner: data.owner_id,
     album: data.album_id,
     audio: {

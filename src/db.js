@@ -6,6 +6,7 @@ var Atom = require('app/core/atom');
 var { hasTag, addTag, removeTag } = require('app/Tag');
 var tagOf = require('app/fn/tagOf');
 var merge = require('app/fn/merge');
+var Track = require('app/values/track');
 
 var player = {
   tag: [':app/player'],
@@ -207,8 +208,13 @@ function fallbackCmdToDefault(state, v) {
 
 function embodyTracks(state, v) {
   if (tagOf(v) === ':app/tracks') {
+    return state.set(':db/tracks', v[1]);
+  }
+
+  if (tagOf(v) === ':vk/tracks') {
     var newTracks = v[1].reduce(function (result, track) {
-      return result.set(track.id, track);
+      var t = Track.fromVk(track);
+      return result.set(t.id, t);
     }, Map().asMutable()).asImmutable();
 
     return state.update(':db/tracks', existingTracks => existingTracks.merge(newTracks));
