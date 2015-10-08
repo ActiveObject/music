@@ -1,9 +1,9 @@
-var React = require('react');
+var ReactDOM = require('react-dom');
 
 module.exports = function render(mountNode) {
   return function renderRoot(root) {
     if (!document.hidden) {
-      React.render(root, mountNode);
+      ReactDOM.render(root, mountNode);
     }
   };
 };

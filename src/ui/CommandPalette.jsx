@@ -9,10 +9,9 @@ import updateOnKey from 'app/fn/updateOnKey';
 var CommandPalette = React.createClass({
   componentDidUpdate: function () {
     var isActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
-    var input = this._input.getDOMNode();
 
-    if (isActivated && document.activeElement !== input) {
-      input.select();
+    if (isActivated && document.activeElement !== this._input) {
+      this._input.select();
     }
   },
 

@@ -35,7 +35,7 @@ var LazyTracklist = React.createClass({
   componentDidMount: function () {
     var component = this;
 
-    this.scroll = new IScroll(this.getDOMNode(), {
+    this.scroll = new IScroll(this.refs.wrapper, {
       mouseWheel: true,
       scrollX: false,
       probeType: 3
@@ -81,7 +81,7 @@ var LazyTracklist = React.createClass({
     };
 
     return (
-      <div className='tracklist scroll-wrapper lazy-tracklist' key='tracklist-wrapper'>
+      <div className='tracklist scroll-wrapper lazy-tracklist' key='tracklist-wrapper' ref='wrapper'>
         <div className='tracklist-body' style={style}>{tracks}</div>
       </div>
     );

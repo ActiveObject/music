@@ -3,7 +3,7 @@ var IScroll = require('iscroll/build/iscroll');
 
 var IScrollLayer = React.createClass({
   componentDidMount: function() {
-    this.scroll = new IScroll(this.refs.view.getDOMNode(), {
+    this.scroll = new IScroll(this.refs.view, {
       mouseWheel: true,
       scrollX: false
     });

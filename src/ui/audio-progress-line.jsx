@@ -116,7 +116,7 @@ module.exports = React.createClass({
 
   lineWidth: function () {
     if (this.refs.progressLine) {
-      return this.refs.progressLine.getDOMNode().offsetWidth;
+      return this.refs.progressLine.offsetWidth;
     }
 
     return 0;
@@ -124,7 +124,7 @@ module.exports = React.createClass({
 
   leftX: function () {
     if (this.refs.progressLine) {
-      return this.refs.progressLine.getDOMNode().getBoundingClientRect().left;
+      return this.refs.progressLine.getBoundingClientRect().left;
     }
 
     return 0;

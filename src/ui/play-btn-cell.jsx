@@ -1,10 +1,8 @@
-var React = require('react/addons');
+var React = require('react');
 var Icon = require('app/ui/icon');
 var cx = require('classnames');
 
 var PlayBtnCell = React.createClass({
-  mixins: [React.addons.PureRenderMixin],
-
   render: function () {
     var classes = cx({
       'play-btn-cell': true,
