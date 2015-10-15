@@ -18,6 +18,11 @@ $accent-green: #859900;
 
 $accent-color: $accent-violet;
 
+::selection {
+  background-color: $accent-green;
+  color: $base-color-3;
+}
+
 .track {
   color: $base-color-00;
 }
