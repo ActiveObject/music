@@ -9,7 +9,8 @@
     "forOf": true,
     "jsx": true,
     "modules": true,
-    "templateStrings": true
+    "templateStrings": true,
+    "classes": true
   },
 
   "rules": {

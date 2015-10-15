@@ -8,31 +8,45 @@ import 'app/styles/profile.css';
 
 import React from 'react';
 
-import App from 'app/ui/app';
+import Layer from 'app/ui/Layer';
 import CommandPalette from 'app/ui/CommandPalette';
 import PlaylistCtrl from 'app/ui/PlaylistCtrl';
 import PlayBtnCtrl from 'app/ui/PlayBtnCtrl';
 import Profile from 'app/ui/Profile';
 
-var MainLayout = React.createClass({
-  render: function() {
+import updateOnKey from 'app/fn/updateOnKey';
+import { hasTag } from 'app/Tag';
+
+class MainLayout extends React.Component {
+  render() {
+    var isCmdActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
+
     return (
-      <App>
-        <div className='main-layout'>
+      <Layer>
+        <Layer className='app-container'>
+          <div className='main-layout'>
+            <PlaylistCtrl />
+          </div>
+
+          <div className='main-layout__play-btn'>
+            <PlayBtnCtrl />
+          </div>
+
+          <div className='main-layout__profile'>
+            <Profile />
+          </div>
+        </Layer>
+
+        <Layer style={{ transform: `translate(0, ${isCmdActivated ? 0 : 100}%)` }}>
+          <div className='test'>Test</div>
+        </Layer>
+
+        <div className='app-cmd'>
           <CommandPalette />
-          <PlaylistCtrl />
         </div>
-
-        <div className='main-layout__play-btn'>
-          <PlayBtnCtrl />
-        </div>
-
-        <div className='main-layout__profile'>
-          <Profile />
-        </div>
-      </App>
+      </Layer>
     );
   }
-});
+}
 
-export default MainLayout;
+export default updateOnKey(MainLayout, ':db/command-palette');
