@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spring } from 'react-motion';
+import { Motion, spring } from 'react-motion';
 import { throttle } from 'underscore';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
@@ -20,22 +20,15 @@ var CommandPalette = React.createClass({
     var isActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
 
     return (
-      <Spring
-        defaultValue={{
-          fontSize: { val: 2 },
-          y: { val: 0 }
-        }}
-
-        endValue={{
-          fontSize: { val: isActivated ? 3 : 2 },
-          y: { val: isActivated ? 100 : 0 }
-        }}>
+      <Motion
+        defaultStyle={{ fontSize: 2, y: 0 }}
+        style={{ fontSize: spring(isActivated ? 3 : 2), y: spring(isActivated ? 100 : 0) }}>
         {interpolated =>
           <div
               className='command-palette'
               style={{
-                transform: `translate(0, ${interpolated.y.val}px)`,
-                fontSize: `${interpolated.fontSize.val}rem`
+                transform: `translate(0, ${interpolated.y}px)`,
+                fontSize: `${interpolated.fontSize}rem`
               }} >
             <input
               ref={(c) => this._input = c}
@@ -51,7 +44,7 @@ var CommandPalette = React.createClass({
             </div>
           </div>
         }
-      </Spring>
+      </Motion>
     );
   },
 

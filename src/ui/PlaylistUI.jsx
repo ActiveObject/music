@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spring } from 'react-motion';
+import { Motion, spring } from 'react-motion';
 import db from 'app/db';
 import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
@@ -14,19 +14,11 @@ var PlaylistUI = updateOnKey(React.createClass({
     var tracks = this.tracks(ctx);
 
     return (
-      <Spring
-        defaultValue={{
-          zoom: { val: 100 },
-          y: { val: 0 }
-        }}
-
-        endValue={{
-          zoom: { val: isCmdActivated ? 100 : 100 },
-          y: { val: isCmdActivated ? 200 : 0 }
-        }}>
-
+      <Motion
+        defaultStyle={{ zoom: 100, y: 0 }}
+        style={{ zoom: spring(isCmdActivated ? 100 : 100), y: spring(isCmdActivated ? 200 : 0) }}>
         {interpolated =>
-          <div className='playlist' style={{ transform: `scale(${interpolated.zoom.val / 100}) translate(0, ${interpolated.y.val}px)` }}>
+          <div className='playlist' style={{ transform: `scale(${interpolated.zoom / 100}) translate(0, ${interpolated.y}px)` }}>
             <div className='playlist__content'>
               <div className='playlist__columns'>
                 <div className='track__index'>#</div>
@@ -41,7 +33,7 @@ var PlaylistUI = updateOnKey(React.createClass({
             <div className='playlist__paginator'></div>
           </div>
         }
-      </Spring>
+      </Motion>
     )
   },
 
