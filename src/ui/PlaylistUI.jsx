@@ -15,10 +15,19 @@ var PlaylistUI = updateOnKey(React.createClass({
 
     return (
       <Motion
-        defaultStyle={{ zoom: 100, y: 0 }}
-        style={{ zoom: spring(isCmdActivated ? 100 : 100), y: spring(isCmdActivated ? 200 : 0) }}>
+        defaultStyle={{
+          zoom: 100,
+          y: 0,
+          opacity: 100
+        }}
+
+        style={{
+          zoom: spring(isCmdActivated ? 80 : 100),
+          y: spring(isCmdActivated ? 200 : 0),
+          opacity: spring(isCmdActivated ? 0 : 100)
+        }}>
         {interpolated =>
-          <div className='playlist' style={{ transform: `scale(${interpolated.zoom / 100}) translate(0, ${interpolated.y}px)` }}>
+          <div className='playlist' style={{ transform: `scale(${interpolated.zoom / 100}) translate(0, ${interpolated.y}px)`, opacity: `${interpolated.opacity / 100}` }}>
             <div className='playlist__content'>
               <div className='playlist__columns'>
                 <div className='track__index'>#</div>
