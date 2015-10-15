@@ -23,7 +23,7 @@ class MainLayout extends React.Component {
 
     return (
       <Layer>
-        <Layer className='app-container'>
+        <Layer className='app-container' style={{ padding: '70px 0' }}>
           <div className='main-layout'>
             <PlaylistCtrl />
           </div>
