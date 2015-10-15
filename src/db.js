@@ -137,17 +137,13 @@ function detectAlbumFilter(state, v) {
     return state;
   }
 
-  if (cmd.indexOf(':tag') === -1) {
-    return state;
-  }
-
-  var tag = cmd.slice(cmd.indexOf(':tag') + ':tag'.length).trim();
-
-  if (!tag) {
+  if (cmd.indexOf('#') === -1) {
     return state.update(':db/context', function (ctx) {
       return omit(removeTag(ctx, ':context/filter-by-tag'), 'filter');
     });
   }
+
+  var tag = cmd.slice(cmd.indexOf('#') + 1).trim();
 
   return state.update(':db/context', function (ctx) {
     return merge(addTag(ctx, ':context/filter-by-tag'), {

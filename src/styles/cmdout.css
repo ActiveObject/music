@@ -1,0 +1,15 @@
+.cmdout {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.cmdout__content {
+  padding: 290px 0 0 4rem;
+  width: 800px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 3rem;
+}

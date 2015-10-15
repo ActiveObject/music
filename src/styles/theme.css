@@ -78,3 +78,7 @@ $accent-color: $accent-violet;
 .profile__name {
   color: $base-color-0;
 }
+
+.cmdout__item {
+  color: $base-color-00;
+}

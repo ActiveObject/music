@@ -5,6 +5,7 @@ import 'app/styles/playlist.css';
 import 'app/styles/command-palette.css';
 import 'app/styles/play-btn.css';
 import 'app/styles/profile.css';
+import 'app/styles/cmdout.css';
 
 import React from 'react';
 
@@ -13,6 +14,7 @@ import CommandPalette from 'app/ui/CommandPalette';
 import PlaylistCtrl from 'app/ui/PlaylistCtrl';
 import PlayBtnCtrl from 'app/ui/PlayBtnCtrl';
 import Profile from 'app/ui/Profile';
+import CmdOut from 'app/ui/CmdOut';
 
 import updateOnKey from 'app/fn/updateOnKey';
 import { hasTag } from 'app/Tag';
@@ -38,7 +40,7 @@ class MainLayout extends React.Component {
         </Layer>
 
         <Layer style={{ transform: `translate(0, ${isCmdActivated ? 0 : 100}%)` }}>
-          <div className='test'>Test</div>
+          <CmdOut />
         </Layer>
 
         <div className='app-cmd'>
