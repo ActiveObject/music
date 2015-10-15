@@ -52,7 +52,7 @@ var PlaylistUI = updateOnKey(React.createClass({
     }
 
     if (hasTag(ctx, ':context/filter-by-tag')) {
-      return this.props.tracks.filter(matchByTag(ctx.filter.value, ctx.filter.tags));
+      return this.props.tracks.filter(matchByTag(ctx.filter.value));
     }
 
     if (hasTag(ctx, ':context/filter-by-track')) {
@@ -69,15 +69,11 @@ function matchByArtist(artist) {
   };
 }
 
-function matchByTag(albumName, tags) {
-  var ids = tags
-    .filter(function (album) {
-      return album.title.toLowerCase().indexOf(albumName.toLowerCase()) !== -1;
-    })
-    .map(v => v.id);
-
+function matchByTag(tag) {
   return function match(track) {
-    return ids.includes(track.album);
+    return track.audioTags.some(function (audioTag) {
+      return audioTag.toLowerCase().includes(tag.toLowerCase());
+    });
   };
 }
 
