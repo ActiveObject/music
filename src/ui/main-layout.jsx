@@ -46,9 +46,15 @@ class MainLayout extends React.Component {
             }
           </Motion>
 
-          <div className='main-layout__play-btn'>
-            <PlayBtnCtrl />
-          </div>
+          <Motion
+            defaultStyle={{ opacity: 0 }}
+            style={{ opacity: spring(isCmdActivated ? 0 : 100) }} >
+            {interpolated =>
+              <div className='main-layout__play-btn' style={{ opacity: `${interpolated.opacity / 100}` }}>
+                <PlayBtnCtrl />
+              </div>
+            }
+          </Motion>
 
           <div className='main-layout__profile'>
             <Profile />
