@@ -65,9 +65,20 @@ class MainLayout extends React.Component {
           <CmdOut />
         </Layer>
 
-        <div className='app-cmd'>
-          <CommandPalette />
-        </div>
+        <Motion
+          defaultStyle={{ fontSize: 2, y: 0 }}
+          style={{ fontSize: spring(isCmdActivated ? 3 : 2), y: spring(isCmdActivated ? 100 : 0) }}>
+          {interpolated =>
+            <div
+              className='app-cmd'
+              style={{
+                transform: `translate(0, ${interpolated.y}px)`,
+                fontSize: `${interpolated.fontSize}rem`
+              }}>
+              <CommandPalette />
+            </div>
+          }
+        </Motion>
       </Layer>
     );
   }

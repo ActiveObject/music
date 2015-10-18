@@ -1,6 +1,6 @@
 .command-palette {
   width: 100%;
-  font-size: 2rem;
+  font-size: inherit;
   font-weight: 100;
   font-family: 'Roboto';
   padding-left: 4rem;

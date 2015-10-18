@@ -1,5 +1,4 @@
 import React from 'react';
-import { Motion, spring } from 'react-motion';
 import { throttle } from 'underscore';
 import db from 'app/db';
 import vbus from 'app/core/vbus';
@@ -17,35 +16,23 @@ class CommandPalette extends React.Component {
 
   render() {
     var cmd = db.value.get(':db/cmd');
-    var isActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
 
     return (
-      <Motion
-        defaultStyle={{ fontSize: 2, y: 0 }}
-        style={{ fontSize: spring(isActivated ? 3 : 2), y: spring(isActivated ? 100 : 0) }}>
-        {interpolated =>
-          <div
-              className='command-palette'
-              style={{
-                transform: `translate(0, ${interpolated.y}px)`,
-                fontSize: `${interpolated.fontSize}rem`
-              }} >
-            <input
-              ref={(c) => this._input = c}
-              type='text'
-              className='command-palette__input'
-              value={cmd}
-              onFocus={this.activate}
-              onBlur={this.deactivate}
-              onKeyUp={this.onKeyUp}
-              onChange={throttle((e) => this.executeCommand(e.target.value), 200)} />
-            <div className='command-palette__complete'>
-              <span>All tracks</span>
-              <span className='command-palette__todo'>{' #breaks'}</span>
-            </div>
-          </div>
-        }
-      </Motion>
+      <div className='command-palette'>
+        <input
+          ref={(c) => this._input = c}
+          type='text'
+          className='command-palette__input'
+          value={cmd}
+          onFocus={this.activate}
+          onBlur={this.deactivate}
+          onKeyUp={this.onKeyUp}
+          onChange={throttle((e) => this.executeCommand(e.target.value), 200)} />
+        <div className='command-palette__complete'>
+          <span>All tracks</span>
+          <span className='command-palette__todo'>{' #breaks'}</span>
+        </div>
+      </div>
     );
   }
 
@@ -79,4 +66,4 @@ class CommandPalette extends React.Component {
   }
 }
 
-export default updateOnKey(CommandPalette, [':db/command-palette', ':db/cmd']);
+export default updateOnKey(CommandPalette, ':db/cmd');
