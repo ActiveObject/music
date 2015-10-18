@@ -1,5 +1,5 @@
 var React = require('react');
-var MainLayout = require('app/ui/main-layout');
+var MainLayout = require('app/ui/MainLayout');
 var AuthView = require('app/ui/auth');
 var { hasTag } = require('app/Tag');
 
