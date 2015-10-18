@@ -1,46 +1,28 @@
 import React from 'react';
-import { Motion, spring } from 'react-motion';
 import db from 'app/db';
 import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
 
-import IScrollLayer from 'app/ui/iscroll-layer';
 import LazyTracklist from 'app/ui/LazyTracklist';
 
 function PlaylistUI({ tracks }) {
   var ctx = db.value.get(':db/context');
-  var isCmdActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
 
   return (
-    <Motion
-      defaultStyle={{
-        zoom: 100,
-        y: 0,
-        opacity: 100
-      }}
-
-      style={{
-        zoom: spring(isCmdActivated ? 80 : 100),
-        y: spring(isCmdActivated ? 200 : 0),
-        opacity: spring(isCmdActivated ? 0 : 100)
-      }}>
-      {interpolated =>
-        <div className='playlist' style={{ transform: `scale(${interpolated.zoom / 100}) translate(0, ${interpolated.y}px)`, opacity: `${interpolated.opacity / 100}` }}>
-          <div className='playlist__content'>
-            <div className='playlist__columns'>
-              <div className='track__index'>#</div>
-              <div className='track__artist'>artist</div>
-              <div className='track__title'>track</div>
-              <div className='track__duration'>time</div>
-            </div>
-            <div className='playlist__table'>
-              <LazyTracklist tracks={filterTracksWithGivenCtx(tracks, ctx)} />
-            </div>
-          </div>
-          <div className='playlist__paginator'></div>
+    <div className='playlist'>
+      <div className='playlist__content'>
+        <div className='playlist__columns'>
+          <div className='track__index'>#</div>
+          <div className='track__artist'>artist</div>
+          <div className='track__title'>track</div>
+          <div className='track__duration'>time</div>
         </div>
-      }
-    </Motion>
+        <div className='playlist__table'>
+          <LazyTracklist tracks={filterTracksWithGivenCtx(tracks, ctx)} />
+        </div>
+      </div>
+      <div className='playlist__paginator'></div>
+    </div>
   );
 }
 
@@ -80,4 +62,4 @@ function matchByTrackTitle(title) {
   };
 }
 
-export default updateOnKey(PlaylistUI, [':db/context', ':db/command-palette']);
+export default updateOnKey(PlaylistUI, ':db/context');

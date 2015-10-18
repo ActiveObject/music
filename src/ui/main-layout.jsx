@@ -8,6 +8,7 @@ import 'app/styles/profile.css';
 import 'app/styles/cmdout.css';
 
 import React from 'react';
+import { Motion, spring } from 'react-motion';
 
 import Layer from 'app/ui/Layer';
 import CommandPalette from 'app/ui/CommandPalette';
@@ -26,9 +27,24 @@ class MainLayout extends React.Component {
     return (
       <Layer>
         <Layer className='app-container' style={{ padding: '70px 0' }}>
-          <div className='main-layout'>
-            <PlaylistCtrl />
-          </div>
+          <Motion
+            defaultStyle={{
+              zoom: 100,
+              y: 0,
+              opacity: 100
+            }}
+
+            style={{
+              zoom: spring(isCmdActivated ? 80 : 100),
+              y: spring(isCmdActivated ? 200 : 0),
+              opacity: spring(isCmdActivated ? 0 : 100)
+            }}>
+            {interpolated =>
+              <div className='main-layout' style={{ transform: `scale(${interpolated.zoom / 100}) translate(0, ${interpolated.y}px)`, opacity: `${interpolated.opacity / 100}` }}>
+                <PlaylistCtrl />
+              </div>
+            }
+          </Motion>
 
           <div className='main-layout__play-btn'>
             <PlayBtnCtrl />
