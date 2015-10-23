@@ -5,6 +5,8 @@ import { Motion, spring } from 'react-motion';
 import updateOnKey from 'app/fn/updateOnKey';
 import { hasTag } from 'app/Tag';
 
+import './profile.css';
+
 var Profile = React.createClass({
   render: function () {
     var user = db.value.get(':db/user');

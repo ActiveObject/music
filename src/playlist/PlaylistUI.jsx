@@ -3,7 +3,8 @@ import db from 'app/db';
 import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
 
-import LazyTracklist from 'app/ui/LazyTracklist';
+import LazyTracklist from './LazyTracklist';
+import './playlist.css';
 
 function PlaylistUI({ tracks }) {
   var ctx = db.value.get(':db/context');

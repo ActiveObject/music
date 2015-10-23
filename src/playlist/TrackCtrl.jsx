@@ -4,7 +4,7 @@ import vbus from 'app/core/vbus';
 import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
 import * as Player from 'app/values/player';
-import Track from 'app/ui/track';
+import Track from './track';
 
 var TrackCtrl = React.createClass({
   render: function () {

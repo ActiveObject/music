@@ -1,7 +1,7 @@
 var React = require('react');
 var Icon = require('app/ui/icon');
 
-var Auth = React.createClass({
+var AuthView = React.createClass({
   render: function () {
     return (
       <div className='auth'>
@@ -16,4 +16,4 @@ var Auth = React.createClass({
   }
 });
 
-module.exports = Auth;
+module.exports = AuthView;

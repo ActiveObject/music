@@ -4,7 +4,7 @@ import vbus from 'app/core/vbus';
 import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
 import * as Player from 'app/values/player';
-import PlayBtn from 'app/ui/PlayBtn';
+import PlayBtn from './PlayBtn';
 
 function PlayBtnCtrl() {
   var isPlaying = hasTag(db.value.get(':db/player'), ':player/is-playing');

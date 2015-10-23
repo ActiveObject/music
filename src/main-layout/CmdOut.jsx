@@ -3,6 +3,8 @@ import db from 'app/db';
 import updateOnKey from 'app/fn/updateOnKey';
 import { hasTag } from 'app/Tag';
 
+import './cmdout.css';
+
 function CmdOut() {
   var ctx = db.value.get(':db/context');
   var tags = db.value.get(':db/tags');

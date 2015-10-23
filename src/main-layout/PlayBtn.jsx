@@ -4,6 +4,8 @@ import Icon from 'app/ui/icon';
 import cx from 'classnames';
 import { hasTag } from 'app/Tag';
 
+import './play-btn.css';
+
 export default function PlayBtn({ isPlaying, onClick }) {
   var classes = cx({
     'play-btn': true,

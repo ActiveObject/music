@@ -1,8 +1,8 @@
 import React from 'react';
 import { throttle } from 'underscore';
 import IScroll from 'iscroll/build/iscroll-probe';
-import Cursor from 'app/values/cursor';
-import TrackCtrl from 'app/ui/TrackCtrl';
+import Cursor from './cursor';
+import TrackCtrl from './TrackCtrl';
 
 var LazyTracklist = React.createClass({
   propTypes: {

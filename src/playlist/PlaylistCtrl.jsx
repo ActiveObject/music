@@ -1,7 +1,7 @@
 import React from 'react';
 import db from 'app/db';
 import updateOnKey from 'app/fn/updateOnKey';
-import PlaylistUI from 'app/ui/PlaylistUI';
+import PlaylistUI from './PlaylistUI';
 
 var PlaylistCtrl = React.createClass({
   render: function () {

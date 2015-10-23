@@ -1,21 +1,15 @@
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
-import 'app/styles/track.css';
-import 'app/styles/playlist.css';
-import 'app/styles/command-palette.css';
-import 'app/styles/play-btn.css';
-import 'app/styles/profile.css';
-import 'app/styles/cmdout.css';
 
 import React from 'react';
 import { Motion, spring } from 'react-motion';
 
-import Layer from 'app/ui/Layer';
-import CommandPalette from 'app/ui/CommandPalette';
-import PlaylistCtrl from 'app/ui/PlaylistCtrl';
-import PlayBtnCtrl from 'app/ui/PlayBtnCtrl';
-import Profile from 'app/ui/Profile';
-import CmdOut from 'app/ui/CmdOut';
+import CommandPalette from 'app/command-palette/CommandPalette';
+import PlaylistCtrl from 'app/playlist/PlaylistCtrl';
+import Layer from './Layer';
+import PlayBtnCtrl from './PlayBtnCtrl';
+import Profile from './Profile';
+import CmdOut from './CmdOut';
 
 import updateOnKey from 'app/fn/updateOnKey';
 import { hasTag } from 'app/Tag';

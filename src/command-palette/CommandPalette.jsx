@@ -4,6 +4,7 @@ import db from 'app/db';
 import vbus from 'app/core/vbus';
 import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
+import './command-palette.css';
 
 class CommandPalette extends React.Component {
   componentDidUpdate() {

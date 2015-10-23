@@ -1,6 +1,6 @@
 var React = require('react');
-var MainLayout = require('app/ui/MainLayout');
-var AuthView = require('app/ui/auth');
+var MainLayout = require('app/main-layout/MainLayout');
+var AuthView = require('app/auth/AuthView');
 var { hasTag } = require('app/Tag');
 
 module.exports = function dispatch(route) {
