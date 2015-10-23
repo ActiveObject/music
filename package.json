@@ -29,6 +29,7 @@
     "postcss-loader": "^0.6.0",
     "postcss-simple-vars": "^1.0.1",
     "style-loader": "^0.8.0",
+    "surge": "^0.16.0",
     "webpack": "^1.7.3",
     "webpack-dev-server": "^1.7.0"
   },
@@ -71,7 +72,8 @@
     "test": "npm run build:test && mocha test/app.js",
     "build": "npm run build:webapp",
     "dev": "npm run dev:webapp",
-    "deploy": "npm run deploy:divshot",
+    "predeploy": "MUSIC_APP_ID=4656659 npm run build:webapp",
+    "deploy": "surge -p $npm_package_config_webapp_output -d music.activeobject.me",
     "lint": "eslint src/**",
     "test-server": "mocha -w test/app.js -R dot",
     "test-build-server": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js --watch",
@@ -95,8 +97,6 @@
     "webpack:webapp": "NODE_ENV=production webpack --entry=./src/main-webapp.js -p --debug --devtool source-map --progress --output-path=$npm_package_config_webapp_output",
     "webpack:webapp-dev": "webpack-dev-server --entry=./src/main-webapp.js --progress --colors --port=5003 --content-base=$npm_package_config_webapp_output --debug --devtool eval-source-map --output-pathinfo --inline",
     "webpack:chromeapp": "MUSIC_APP_ID=4812383 NODE_ENV=production webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --debug --devtool source-map --progress",
-    "webpack:chromeapp-dev": "MUSIC_APP_ID=4812383 webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --watch --debug --devtool source-map --progress",
-    "deploy:divshot": "MUSIC_APP_ID=4656659 npm run build:webapp && divshot push production",
-    "deploy:divshot:dev": "MUSIC_APP_ID=4656659 npm run build:webapp && divshot push development"
+    "webpack:chromeapp-dev": "MUSIC_APP_ID=4812383 webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --watch --debug --devtool source-map --progress"
   }
 }
