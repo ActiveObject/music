@@ -32,7 +32,7 @@ module.exports = {
     extensions: ['', '.js', '.jsx']
   },
   externals: {
-    'sound-manager': 'soundManager',
+    'soundmanager': 'soundManager',
     'firebase': 'Firebase'
   },
   plugins: [
