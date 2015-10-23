@@ -3,6 +3,9 @@ import 'app/styles/theme.css';
 
 import React from 'react';
 import { Motion, spring } from 'react-motion';
+import db from 'app/db';
+import updateOnKey from 'app/fn/updateOnKey';
+import { hasTag } from 'app/Tag';
 
 import CommandPalette from 'app/command-palette/CommandPalette';
 import PlaylistCtrl from 'app/playlist/PlaylistCtrl';
@@ -10,9 +13,6 @@ import Layer from './Layer';
 import PlayBtnCtrl from './PlayBtnCtrl';
 import Profile from './Profile';
 import CmdOut from './CmdOut';
-
-import updateOnKey from 'app/fn/updateOnKey';
-import { hasTag } from 'app/Tag';
 
 class MainLayout extends React.Component {
   render() {
