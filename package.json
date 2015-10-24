@@ -39,7 +39,7 @@
     "immutable": "^3.5.0",
     "iscroll": "^5.1.2",
     "jsonp": "0.0.4",
-    "kefir": "^2.8.1",
+    "kefir": "^3.1.0",
     "keymaster": "^1.6.2",
     "mime": "^1.2.11",
     "newrelic": "^1.11.3",
