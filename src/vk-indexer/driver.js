@@ -1,5 +1,4 @@
 import Kefir from 'kefir';
-import go from 'app/core/go';
 import TracksLoader from './tracks-loader';
 import AlbumsLoader from './albums-loader';
 import { addTag, hasTag } from 'app/Tag';
@@ -10,6 +9,7 @@ import merge from 'app/fn/merge';
 import db from 'app/db';
 import userAtom from 'app/db/user';
 import Atom from 'app/core/atom';
+import go from './go';
 
 export default function(vbus) {
   var user = vbus.filter(v => hasTag(v, ':user/authenticated'));
