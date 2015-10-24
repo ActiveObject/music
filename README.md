@@ -6,7 +6,7 @@
 The app has next requirements:
   - Node.js v0.10.x or v0.12.x
   - registered [vk.com] application
-  - account on [divshot] static web hosting
+  - account on [surge.sh] static web hosting
 
 ### Installation
 
@@ -31,12 +31,12 @@ npm run dev
 Then open [http://localhost:5003](http://localhost:5003)
 
 ### Deploy
-Divshot is the default deploy target:
+[surge.sh] is the default deploy target:
 
 ```
 npm run deploy
 ```
 
 
-[divshot]: https://divshot.com
+[surge.sh]: https://surge.sh
 [vk.com]: http://vk.com/dev
