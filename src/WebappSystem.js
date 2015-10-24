@@ -1,6 +1,6 @@
 var querystring = require('querystring');
 var each = require('underscore').each;
-var vbus = require('app/core/vbus');
+var vbus = require('app/vbus');
 var onValue = require('app/fn/onValue');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');

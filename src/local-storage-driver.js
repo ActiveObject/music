@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 import Atom from 'app/Atom';
-import vbus from 'app/core/vbus';
+import vbus from 'app/vbus';
 import onValue from 'app/fn/onValue';
 import player from 'app/db/player';
 import tracks from 'app/db/tracks';

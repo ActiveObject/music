@@ -5,7 +5,7 @@ var dispatch = require('app/core/dispatch');
 var app = require('app');
 var WebappSystem = require('app/WebappSystem');
 var db = require('app/db');
-var vbus = require('app/core/vbus');
+var vbus = require('app/vbus');
 
 Atom.listen(router, r => render(dispatch(r)));
 

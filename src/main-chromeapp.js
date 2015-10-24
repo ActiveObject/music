@@ -6,7 +6,7 @@ var router = require('app/db/route');
 var ChromeappSystem = require('app/ChromeappSystem');
 
 if (process.env.NODE_ENV === 'development') {
-  window.vbus = require('app/core/vbus');
+  window.vbus = require('app/vbus');
   window.db = require('app/db');
   // window.dev = require('app/devtool')(app);
   // window.TimeRecord = require('app/devtool/time-record');
