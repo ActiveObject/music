@@ -17,7 +17,7 @@ function TrackCtrl({ track, tracklist }) {
 }
 
 function togglePlay(track, tracklist) {
-  vbus.emit(Player.togglePlay(db.value.get(':db/player'), track, tracklist));
+  vbus.push(Player.togglePlay(db.value.get(':db/player'), track, tracklist));
 }
 
 export default updateOnKey(TrackCtrl, function (dbVal) {

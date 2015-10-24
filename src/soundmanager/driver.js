@@ -1,3 +1,4 @@
+import Kefir from 'kefir'
 import db from 'app/db';
 import sm from 'app/soundmanager';
 import onValue from 'app/onValue';
@@ -22,20 +23,20 @@ sm.setup({
 });
 
 export default function (vbus) {
-  var playerChanges = db.changes.map(dbVal => dbVal.get(':db/player'));
+  var playerChanges = Kefir.fromEvents(db, 'change').map(dbVal => dbVal.get(':db/player'));
 
   var unsub4 = on(sm, 'finish', function (track) {
-    vbus.emit(Player.play(Player.nextTrack(db.value.get(':db/player'))));
+    vbus.push(Player.play(Player.nextTrack(db.value.get(':db/player'))));
   });
 
   var unsub5 = on(sm, 'whileplaying', function (position) {
     if (!db.value.get(':db/player').seeking) {
-      vbus.emit(merge(db.value.get(':db/player'), { position: position }));
+      vbus.push(merge(db.value.get(':db/player'), { position: position }));
     }
   });
 
   var unsub6 = on(sm, 'whileloading', function (bytesLoaded, bytesTotal) {
-    vbus.emit(merge(db.value.get(':db/player'), { bytesLoaded, bytesTotal }));
+    vbus.push(merge(db.value.get(':db/player'), { bytesLoaded, bytesTotal }));
   });
 
   var unsub1 = onValue(playerChanges.map(p => p.track).skipDuplicates(), function (track) {
@@ -59,7 +60,7 @@ export default function (vbus) {
 
   var unsub7 = onValue(playerChanges, function (p) {
     if (hasTag(p, ':player/seek-to-position')) {
-      vbus.emit(merge(omit(removeTag(p, ':player/seek-to-position'), 'seekToPosition'), { position: p.seekToPosition }));
+      vbus.push(merge(omit(removeTag(p, ':player/seek-to-position'), 'seekToPosition'), { position: p.seekToPosition }));
       sm.setPosition(p.seekToPosition);
     }
   });

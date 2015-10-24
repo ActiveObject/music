@@ -1,11 +1,12 @@
 import React from 'react';
+import Kefir from 'kefir';
 import db from 'app/db';
 import onValue from 'app/onValue';
 
 function updateOn(ComposedComponent, compare) {
   return React.createClass({
     componentDidMount: function () {
-      var stream = db.changes.skipDuplicates(compare);
+      var stream = Kefir.fromEvents(db, 'change').skipDuplicates(compare);
       this.unsub = onValue(stream, () => this.forceUpdate());
     },
 

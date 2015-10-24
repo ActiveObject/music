@@ -1,4 +1,5 @@
 import { Map } from 'immutable';
+import Kefir from 'kefir';
 import db from 'app/db';
 import Atom from 'app/Atom';
 import vbus from 'app/vbus';
@@ -31,7 +32,7 @@ function revive(key, value) {
 }
 
 export default function (vbus) {
-  var unsub1 = onValue(db.changes
+  var unsub1 = onValue(Kefir.fromEvents(db, 'change')
     .map(v => v.get(':db/player').track)
     .skipDuplicates()
     .filter(track => Object.keys(track.audio).length > 0)
@@ -46,15 +47,15 @@ export default function (vbus) {
   });
 
   Storage.getItem(':player/track', function (track) {
-    vbus.emit(merge(db.value.get(':db/player'), { track: JSON.parse(track) }));
+    vbus.push(merge(db.value.get(':db/player'), { track: JSON.parse(track) }));
   });
 
   Storage.getItem(':app/tracks', function (tracks) {
-    vbus.emit(addTag(JSON.parse(tracks, revive), ':app/tracks'));
+    vbus.push(addTag(JSON.parse(tracks, revive), ':app/tracks'));
   });
 
   Storage.getItem(':app/albums', function (albums) {
-    vbus.emit(addTag(JSON.parse(albums, revive), ':app/albums'));
+    vbus.push(addTag(JSON.parse(albums, revive), ':app/albums'));
   });
 
   return function() {

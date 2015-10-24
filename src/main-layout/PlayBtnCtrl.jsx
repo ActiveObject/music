@@ -12,7 +12,7 @@ function PlayBtnCtrl() {
 }
 
 function togglePlay() {
-  vbus.emit(Player.togglePlay(db.value.get(':db/player')));
+  vbus.push(Player.togglePlay(db.value.get(':db/player')));
 }
 
 export default updateOnKey(PlayBtnCtrl, ':db/player');

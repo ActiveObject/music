@@ -253,21 +253,17 @@ function pipeThroughReducers(...reducers) {
 
 var db = new Atom(initialDbValue);
 var reducer = pipeThroughReducers(commonReducer, embodyTracks, embodyAlbums, detectArtistFilter, detectAlbumFilter, detectTrackFilter, fallbackCmdToDefault, embodyTags);
+var vbusStream = Kefir.fromEvents(vbus, 'value');
+var dbChanges = Kefir.fromEvents(db, 'change');
 
-vbus
+vbusStream
   .scan(reducer, initialDbValue)
   .onValue(v => Atom.swap(db, v));
-
-db.changes = Kefir.stream(function (emitter) {
-  return Atom.listen(db, function (nextDbValue) {
-    emitter.emit(nextDbValue);
-  });
-});
 
 db.view = function (key, equal) {
   var x = new Atom(db.value.get(key));
 
-  db.changes
+  dbChanges
     .map(v => v.get(key))
     .skipDuplicates(equal)
     .onValue(v => Atom.swap(x, v));

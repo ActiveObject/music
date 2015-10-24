@@ -55,7 +55,7 @@ System.prototype.auth = function (hash) {
     localStorage.setItem('user_id', credentials.user_id);
     localStorage.setItem('access_token', credentials.access_token);
 
-    return vbus.emit({
+    return vbus.push({
       tag: [':app/user', ':user/authenticated'],
       id: credentials.user_id,
       accessToken: credentials.access_token
@@ -63,14 +63,14 @@ System.prototype.auth = function (hash) {
   }
 
   if (isUserInStorage()) {
-    return vbus.emit({
+    return vbus.push({
       tag: [':app/user', ':user/authenticated'],
       id: localStorage.getItem('user_id'),
       accessToken: localStorage.getItem('access_token')
     });
   }
 
-  return vbus.emit({ tag: [':app/route', ':route/auth'], authUrl: vkAccount.url });
+  return vbus.push({ tag: [':app/route', ':route/auth'], authUrl: vkAccount.url });
 };
 
 module.exports = System;

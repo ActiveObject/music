@@ -39,7 +39,7 @@ class CommandPalette extends React.Component {
 
   onKeyUp(e) {
     if (e.keyCode === 27) {
-      vbus.emit({
+      vbus.push({
         tag: [':app/command-palette']
       });
     }
@@ -48,20 +48,20 @@ class CommandPalette extends React.Component {
   }
 
   executeCommand(cmd) {
-    vbus.emit({
+    vbus.push({
       tag: ':app/cmd',
       value: cmd
     });
   }
 
   activate() {
-    vbus.emit({
+    vbus.push({
       tag: [':app/command-palette', ':cmd/is-activated']
     });
   }
 
   deactivate() {
-    vbus.emit({
+    vbus.push({
       tag: [':app/command-palette']
     });
   }

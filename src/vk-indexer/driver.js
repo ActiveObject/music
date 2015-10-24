@@ -12,21 +12,30 @@ import Atom from 'app/Atom';
 import go from './go';
 
 export default function(vbus) {
-  var user = vbus.filter(v => hasTag(v, ':user/authenticated'));
+  var user = Kefir.fromEvents(vbus).filter(v => hasTag(v, ':user/authenticated'));
   var userAtom = db.view(':db/user', equal);
 
   return subscribeWith(onValue, Atom.listen, function (onValue, listen) {
     onValue(user, function (user) {
-      vbus.plug(go(new TracksLoader(user)).map(v => addTag({ tracks: v }, ':vk/tracks')));
-      vbus.plug(go(new AlbumsLoader(user)).map(v => addTag({ albums: v }, ':vk/albums')));
+      onValue(go(new TracksLoader(user)).map(v => addTag({ tracks: v }, ':vk/tracks')), function (tracks) {
+        vbus.push(tracks);
+      });
+
+      onValue(go(new AlbumsLoader(user)).map(v => addTag({ albums: v }, ':vk/albums')), function (albums) {
+        vbus.push(albums);
+      })
     });
 
     onValue(user.toProperty().sampledBy(Kefir.interval(2 * 60 * 1000)), function (user) {
-      vbus.plug(go(new TracksLoader(user)).map(v => addTag({ tracks: v }, ':vk/tracks')));
+      onValue(go(new TracksLoader(user)).map(v => addTag({ tracks: v }, ':vk/tracks')), function (tracks) {
+        vbus.push(tracks)
+      })
     });
 
     onValue(user.toProperty().sampledBy(Kefir.interval(10 * 60 * 1000)), function (user) {
-      vbus.plug(go(new AlbumsLoader(user)).map(v => addTag({ albums: v }, ':vk/albums')));
+      onValue(go(new AlbumsLoader(user)).map(v => addTag({ albums: v }, ':vk/albums')), function (albums) {
+        vbus.push(albums)
+      });
     });
 
     listen(userAtom, function (user) {
@@ -50,7 +59,7 @@ export default function(vbus) {
           lastName: res.last_name
         });
 
-        vbus.emit(addTag(u, ':user/is-loaded'));
+        vbus.push(addTag(u, ':user/is-loaded'));
       });
     });
   });
