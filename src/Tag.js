@@ -2,14 +2,14 @@ import merge from 'app/fn/merge';
 
 export default { hasTag, addTag, removeTag, toggleTag };
 
-export default function hasTag(x, desiredTag) {
+export function hasTag(x, desiredTag) {
   var tag = tagOf(x);
   var tags = Array.isArray(tag) ? tag : [tag];
   var desiredTags = Array.isArray(desiredTag) ? desiredTag : [desiredTag];
   return desiredTags.every(t => tags.indexOf(t) !== -1);
 }
 
-export default function addTag(x, tag) {
+export function addTag(x, tag) {
   if (typeof x !== 'object' || x === null) {
     throw new TypeError('addTag does not support non-object values');
   }
@@ -29,7 +29,7 @@ export default function addTag(x, tag) {
   });
 }
 
-export default function removeTag(x, tag) {
+export function removeTag(x, tag) {
   if (typeof x !== 'object' || x === null) {
     throw new TypeError('removeTag does not support non-object values');
   }
@@ -49,7 +49,7 @@ export default function removeTag(x, tag) {
   });
 }
 
-export default function toggleTag(x, tag) {
+export function toggleTag(x, tag) {
   if (typeof x !== 'object' || x === null) {
     throw new TypeError('toggleTag does not support non-object values');
   }
