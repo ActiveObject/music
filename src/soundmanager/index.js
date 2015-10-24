@@ -1,5 +1,4 @@
 var EventEmitter = require('events').EventEmitter;
-var Impulse = require('impulse');
 var _ = require('underscore');
 var sm = require('soundmanager');
 var merge = require('app/fn/merge');
@@ -13,11 +12,6 @@ var PausedState = require('./paused-state');
 
 function Soundmanager(attrs) {
   this.atom = attrs.atom;
-  this.volumeImpulse = Impulse(function(x, y) {
-    if (this.atom.value.sound) {
-      this.atom.value.sound.setVolume(x);
-    }
-  }.bind(this));
 }
 
 Soundmanager.prototype = Object.create(EventEmitter.prototype, {
@@ -51,27 +45,11 @@ Soundmanager.prototype.setup = function (options) {
 };
 
 Soundmanager.prototype.play = function () {
-  this.volumeImpulse.decelerate({
-    bounce: false,
-    deceleration: 100,
-    damping: 0.4
-  })
-    .velocity(150)
-    .from(0)
-    .to(100).start();
-
   Atom.update(this, v => v.play());
 };
 
 Soundmanager.prototype.pause = function () {
-  this.volumeImpulse.decelerate({
-    bounce: false,
-    deceleration: 100,
-    damping: 0.4
-  })
-    .velocity(200)
-    .from(100)
-    .to(0).start().then(() => Atom.update(this, v => v.pause()));
+  Atom.update(this, v => v.pause());
 };
 
 Soundmanager.prototype.useTrack = function (track) {
