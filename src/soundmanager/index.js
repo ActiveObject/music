@@ -2,7 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
 var sm = require('soundmanager');
 var merge = require('app/fn/merge');
-var Atom = require('app/core/atom');
+var Atom = require('app/Atom');
 
 var UninitializedState = require('./uninitialized-state');
 var ReadyState = require('./ready-state');

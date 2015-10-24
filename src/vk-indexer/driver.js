@@ -8,7 +8,7 @@ import vk from 'app/vk';
 import merge from 'app/fn/merge';
 import db from 'app/db';
 import userAtom from 'app/db/user';
-import Atom from 'app/core/atom';
+import Atom from 'app/Atom';
 import go from './go';
 
 export default function(vbus) {

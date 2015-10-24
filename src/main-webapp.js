@@ -1,4 +1,4 @@
-var Atom = require('app/core/atom');
+var Atom = require('app/Atom');
 var router = require('app/db/route');
 var render = require('app/core/renderer')(document.getElementById('app'));
 var dispatch = require('app/core/dispatch');

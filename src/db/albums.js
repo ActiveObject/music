@@ -1,5 +1,5 @@
 var db = require('app/db');
-var Atom = require('app/core/atom');
+var Atom = require('app/Atom');
 var albums = new Atom(db.value.get(':db/albums'));
 
 db.changes

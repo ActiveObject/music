@@ -1,5 +1,5 @@
 var db = require('app/db');
-var Atom = require('app/core/atom');
+var Atom = require('app/Atom');
 var route = new Atom(db.value.get(':db/route'));
 
 db.changes

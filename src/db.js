@@ -2,7 +2,7 @@ import Kefir from 'kefir';
 import { Map, Set, List } from 'immutable';
 import { omit, union } from 'underscore';
 import vbus from 'app/core/vbus';
-import Atom from 'app/core/atom';
+import Atom from 'app/Atom';
 import { hasTag, addTag, removeTag } from 'app/Tag';
 import merge from 'app/fn/merge';
 import Track from 'app/Track';

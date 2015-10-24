@@ -1,7 +1,6 @@
-var assert = require('assert');
-var EventEmitter = require('events').EventEmitter;
-var isObject = require('underscore').isObject;
-var isFunction = require('underscore').isFunction;
+import assert from 'assert';
+import { EventEmitter } from 'events';
+import { isObject, isFunction } from 'underscore';
 
 function Atom(initialValue) {
   this.value = initialValue;
@@ -59,4 +58,4 @@ Atom.value = function (x) {
   return x.atom.value;
 };
 
-module.exports = Atom;
+export default Atom;

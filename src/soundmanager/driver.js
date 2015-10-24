@@ -1,4 +1,4 @@
-import Atom from 'app/core/atom';
+import Atom from 'app/Atom';
 import sm from 'app/soundmanager';
 import player from 'app/db/player';
 import onValue from 'app/fn/onValue';

@@ -3,7 +3,7 @@ var _ = require('underscore');
 var merge = require('app/fn/merge');
 var Request = require('./request');
 var Response = require('./response');
-var Atom = require('app/core/atom');
+var Atom = require('app/Atom');
 
 var methods = require('./methods').methods.map(function (m) {
   return m.split('.');

@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import Atom from 'app/core/atom';
+import Atom from 'app/Atom';
 import vbus from 'app/core/vbus';
 import onValue from 'app/fn/onValue';
 import player from 'app/db/player';

@@ -1,6 +1,6 @@
 var equal = require('deep-equal');
 var db = require('app/db');
-var Atom = require('app/core/atom');
+var Atom = require('app/Atom');
 var user = new Atom(db.value.get(':db/user'));
 
 db.changes
