@@ -48,7 +48,7 @@ System.prototype.start = function () {
   this.uninstallList = [
     require('app/vk-indexer/driver')(vbus),
     require('app/vk/driver')(vbus),
-    require('app/drivers/soundmanager-driver')(vbus),
+    require('app/drivers/soundmanager/driver')(vbus),
     require('app/drivers/local-storage-driver')(vbus),
     require('app/drivers/key-control-driver')(vbus)
   ];

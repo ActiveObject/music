@@ -1,12 +1,12 @@
-var Atom = require('app/core/atom');
-var sm = require('app/soundmanager');
-var player = require('app/db/player');
-var onValue = require('app/fn/onValue');
-var on = require('app/fn/on');
-var { hasTag, removeTag } = require('app/Tag');
-var merge = require('app/fn/merge');
-var Player = require('app/Player');
-var { omit } = require('underscore');
+import Atom from 'app/core/atom';
+import sm from 'app/soundmanager';
+import player from 'app/db/player';
+import onValue from 'app/fn/onValue';
+import on from 'app/fn/on';
+import { hasTag, removeTag } from 'app/Tag';
+import merge from 'app/fn/merge';
+import * as Player from 'app/Player';
+import { omit } from 'underscore';
 
 sm.setup({
   url: 'swf',
@@ -15,7 +15,7 @@ sm.setup({
   debugMode: false
 });
 
-module.exports = function (vbus) {
+export default function (vbus) {
   var unsub4 = on(sm, 'finish', function (track) {
     vbus.emit(Player.play(Player.nextTrack(Atom.value(player))));
   });
@@ -66,5 +66,4 @@ module.exports = function (vbus) {
     unsub6();
     unsub7();
   };
-};
-
+}
