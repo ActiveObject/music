@@ -1,6 +1,5 @@
-var Immutable = require('immutable');
-var vk = require('app/vk');
-var Album = require('app/Album');
+import vk from 'app/vk';
+import Album from 'app/Album';
 
 function AlbumsLoader(user) {
   this.user = user;
@@ -17,7 +16,7 @@ AlbumsLoader.prototype.go = function (input, output) {
         return output.error(err);
       }
 
-      output.emit(Immutable.Set(res.response.items.map(Album.fromVk)));
+      output.emit(res.response.items.map(Album.fromVk));
 
       if (res.response.count > 0 && res.response.count > msg.offset + msg.count) {
         input.emit({
@@ -42,4 +41,4 @@ AlbumsLoader.prototype.toString = function () {
   return 'AlbumsLoader(' + this.user.toString() + ')';
 };
 
-module.exports = AlbumsLoader;
+export default AlbumsLoader;

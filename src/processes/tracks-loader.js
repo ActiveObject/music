@@ -1,5 +1,5 @@
-var vk = require('app/vk');
-var merge = require('app/fn/merge');
+import vk from 'app/vk';
+import merge from 'app/fn/merge';
 
 function TracksLoader(user) {
   this.user = user;
@@ -43,4 +43,4 @@ TracksLoader.prototype.toString = function () {
   return 'TracksLoader(' + this.user.toString() + ')';
 };
 
-module.exports = TracksLoader;
+export default TracksLoader;
