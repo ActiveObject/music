@@ -4,7 +4,6 @@ var { omit, union } = require('underscore');
 var vbus = require('app/core/vbus');
 var Atom = require('app/core/atom');
 var { hasTag, addTag, removeTag } = require('app/Tag');
-var tagOf = require('app/fn/tagOf');
 var merge = require('app/fn/merge');
 var Track = require('app/Track');
 var Album = require('app/Album');
@@ -186,11 +185,11 @@ function fallbackCmdToDefault(state, v) {
 }
 
 function embodyTracks(state, v) {
-  if (tagOf(v) === ':app/tracks') {
+  if (hasTag(v, ':app/tracks')) {
     return state.set(':db/tracks', v.tracks);
   }
 
-  if (tagOf(v) === ':vk/tracks') {
+  if (hasTag(v, ':vk/tracks')) {
     var newTracks = v.tracks.reduce(function (result, track) {
       var t = Track.fromVk(track, state.get(':db/albums'));
       return result.set(t.id, t);
@@ -203,11 +202,11 @@ function embodyTracks(state, v) {
 }
 
 function embodyAlbums(state, v) {
-  if (tagOf(v) === ':app/albums') {
+  if (hasTag(v, ':app/albums')) {
     return state.set(':db/albums', v.albums);
   }
 
-  if (tagOf(v) === ':vk/albums') {
+  if (hasTag(v, ':vk/albums')) {
     var newAlbums = v.albums.reduce(function (result, track) {
       var t = Album.fromVk(track, state.get(':db/albums'));
       return result.set(t.id, t);
