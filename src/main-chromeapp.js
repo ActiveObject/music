@@ -1,7 +1,7 @@
 var app = require('app');
 var Atom = require('app/Atom');
-var render = require('app/core/renderer')(document.getElementById('app'));
-var dispatch = require('app/core/dispatch');
+var render = require('app/renderer')(document.getElementById('app'));
+var dispatch = require('app/dispatch');
 var router = require('app/db/route');
 var ChromeappSystem = require('app/ChromeappSystem');
 

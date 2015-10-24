@@ -1,9 +1,9 @@
-var React = require('react');
-var MainLayout = require('app/main-layout/MainLayout');
-var AuthView = require('app/auth/AuthView');
-var { hasTag } = require('app/Tag');
+import React from 'react';
+import MainLayout from 'app/main-layout/MainLayout';
+import AuthView from 'app/auth/AuthView';
+import { hasTag } from 'app/Tag';
 
-module.exports = function dispatch(route) {
+export default function dispatch(route) {
   if (hasTag(route, ':route/main')) {
     return React.createElement(MainLayout, {
       visibleGroups: route.groups,
@@ -18,4 +18,4 @@ module.exports = function dispatch(route) {
   }
 
   return React.createElement('div', { className: 'empty-view' }, '404');
-};
+}
