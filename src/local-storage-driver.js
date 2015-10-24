@@ -1,13 +1,14 @@
 import { Map } from 'immutable';
+import db from 'app/db';
 import Atom from 'app/Atom';
 import vbus from 'app/vbus';
 import onValue from 'app/fn/onValue';
-import player from 'app/db/player';
-import tracks from 'app/db/tracks';
-import albums from 'app/db/albums';
 import * as Storage from 'app/Storage';
 import merge from 'app/fn/merge';
 import { addTag } from 'app/Tag';
+
+var albums = db.view(':db/albums');
+var tracks = db.view(':db/tracks');
 
 function firstValue(x) {
   return x[Object.keys(x)[0]];
@@ -30,9 +31,8 @@ function revive(key, value) {
 }
 
 export default function (vbus) {
-  var unsub1 = onValue(player
-    .changes
-    .map(player => player.track)
+  var unsub1 = onValue(db.changes
+    .map(v => v.get(':db/player').track)
     .skipDuplicates()
     .filter(track => Object.keys(track.audio).length > 0)
     .map(JSON.stringify), v => Storage.setItem({ ':player/track': v }));
@@ -46,7 +46,7 @@ export default function (vbus) {
   });
 
   Storage.getItem(':player/track', function (track) {
-    vbus.emit(merge(Atom.value(player), { track: JSON.parse(track) }));
+    vbus.emit(merge(db.value.get(':db/player'), { track: JSON.parse(track) }));
   });
 
   Storage.getItem(':app/tracks', function (tracks) {

@@ -264,4 +264,15 @@ db.changes = Kefir.stream(function (emitter) {
   });
 });
 
+db.view = function (key, equal) {
+  var x = new Atom(db.value.get(key));
+
+  db.changes
+    .map(v => v.get(key))
+    .skipDuplicates(equal)
+    .onValue(v => Atom.swap(x, v));
+
+  return x;
+};
+
 export default db;

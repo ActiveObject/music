@@ -1,21 +1,19 @@
-var key = require('keymaster');
-var db = require('app/db');
-var playerAtom = require('app/db/player');
-var Player = require('app/Player');
-var { toggleTag } = require('app/Tag');
+import key from 'keymaster';
+import db from 'app/db';
+import * as Player from 'app/Player';
+import { toggleTag } from 'app/Tag';
 
-module.exports = function (vbus) {
-
+export default function (vbus) {
   key('left', function () {
-    vbus.emit(Player.rewind(playerAtom.value, 5000));
+    vbus.emit(Player.rewind(db.value.get(':db/player'), 5000));
   });
 
   key('right', function () {
-    vbus.emit(Player.forward(playerAtom.value, 5000));
+    vbus.emit(Player.forward(db.value.get(':db/player'), 5000));
   });
 
   key('space', function () {
-    vbus.emit(Player.togglePlay(playerAtom.value));
+    vbus.emit(Player.togglePlay(db.value.get(':db/player')));
   });
 
   key('command+shift+p', function () {
@@ -26,6 +24,6 @@ module.exports = function (vbus) {
     key.unbind('left');
     key.unbind('right');
     key.unbind('space');
-    key.unbind('command+shift+l');
+    key.unbind('command+shift+p');
   };
-};
+}

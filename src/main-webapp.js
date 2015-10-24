@@ -1,5 +1,5 @@
 var Atom = require('app/Atom');
-var router = require('app/db/route');
+var db = require('app/db');
 var render = require('app/renderer')(document.getElementById('app'));
 var dispatch = require('app/dispatch');
 var app = require('app');
@@ -7,7 +7,7 @@ var WebappSystem = require('app/WebappSystem');
 var db = require('app/db');
 var vbus = require('app/vbus');
 
-Atom.listen(router, r => render(dispatch(r)));
+Atom.listen(db.view(':db/route'), r => render(dispatch(r)));
 
 if (process.env.NODE_ENV === 'development') {
   window._app = app;
