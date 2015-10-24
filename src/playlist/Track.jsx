@@ -1,39 +1,13 @@
-import React from 'react';
 import cx from 'classnames';
 import duration from 'app/fn/duration';
 import './track.css';
 
-var Track = React.createClass({
-  propTypes: {
-    track: React.PropTypes.object.isRequired,
-    isPlaying: React.PropTypes.bool,
-    isActive: React.PropTypes.bool,
-    onTogglePlay: React.PropTypes.func.isRequired
-  },
-
-  getInitialProps: function () {
-    return {
-      isPlaying: false,
-      isActive: false
-    };
-  },
-
-  render: function() {
-    var audio = this.props.track.audio;
-    var classSet = cx({
-      'track': true,
-      'track--active': this.props.isActive
-    });
-
-    return (
-      <div className={classSet} onClick={() => this.props.onTogglePlay(this.props.track)}>
-        <div className='track__index'>{audio.index + 1}</div>
-        <div className='track__artist'>{audio.artist}</div>
-        <div className='track__title'>{audio.title}</div>
-        <div className='track__duration'>{duration(audio.duration)}</div>
-      </div>
-    );
-  }
-});
+const Track = ({ track, isActive = false, onTogglePlay }) =>
+  <div className={ cx({ 'track': true, 'track--active': isActive }) } onClick={ () => onTogglePlay(track) }>
+    <div className='track__index'>{track.audio.index + 1}</div>
+    <div className='track__artist'>{track.audio.artist}</div>
+    <div className='track__title'>{track.audio.title}</div>
+    <div className='track__duration'>{duration(track.audio.duration)}</div>
+  </div>
 
 export default Track;
