@@ -3,7 +3,7 @@ import { throttle } from 'underscore';
 import db from 'app/db';
 import vbus from 'app/vbus';
 import { hasTag } from 'app/Tag';
-import updateOnKey from 'app/fn/updateOnKey';
+import updateOnKey from 'app/updateOnKey';
 import './command-palette.css';
 
 class CommandPalette extends React.Component {

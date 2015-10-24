@@ -4,7 +4,7 @@ import { omit, union } from 'underscore';
 import vbus from 'app/vbus';
 import Atom from 'app/Atom';
 import { hasTag, addTag, removeTag } from 'app/Tag';
-import merge from 'app/fn/merge';
+import merge from 'app/merge';
 import Track from 'app/Track';
 import Album from 'app/Album';
 

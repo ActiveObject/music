@@ -2,7 +2,7 @@ import React from 'react';
 import db from 'app/db';
 import { Motion, spring } from 'react-motion';
 
-import updateOnKey from 'app/fn/updateOnKey';
+import updateOnKey from 'app/updateOnKey';
 import { hasTag } from 'app/Tag';
 
 import './profile.css';

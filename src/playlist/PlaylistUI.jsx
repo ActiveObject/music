@@ -1,7 +1,7 @@
 import React from 'react';
 import db from 'app/db';
 import { hasTag } from 'app/Tag';
-import updateOnKey from 'app/fn/updateOnKey';
+import updateOnKey from 'app/updateOnKey';
 
 import LazyTracklist from './LazyTracklist';
 import './playlist.css';

@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
-var merge = require('app/fn/merge');
+var merge = require('app/merge');
 var Request = require('./request');
 var Response = require('./response');
 var Atom = require('app/Atom');

@@ -1,5 +1,5 @@
 import { hasTag } from 'app/Tag';
-import onValue from 'app/fn/onValue';
+import onValue from 'app/onValue';
 import vk from 'app/vk';
 
 export default function (vbus) {

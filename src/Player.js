@@ -1,4 +1,4 @@
-var merge = require('app/fn/merge');
+var merge = require('app/merge');
 var { hasTag, toggleTag, removeTag, addTag } = require('app/Tag');
 
 export function play(p) {

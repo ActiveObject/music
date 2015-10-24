@@ -4,7 +4,7 @@ import 'app/styles/theme.css';
 import React from 'react';
 import { Motion, spring } from 'react-motion';
 import db from 'app/db';
-import updateOnKey from 'app/fn/updateOnKey';
+import updateOnKey from 'app/updateOnKey';
 import { hasTag } from 'app/Tag';
 
 import CommandPalette from 'app/command-palette/CommandPalette';

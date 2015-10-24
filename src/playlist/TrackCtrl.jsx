@@ -1,6 +1,6 @@
 import db from 'app/db';
 import vbus from 'app/vbus';
-import updateOnKey from 'app/fn/updateOnKey';
+import updateOnKey from 'app/updateOnKey';
 import * as Player from 'app/Player';
 import Track from './track';
 

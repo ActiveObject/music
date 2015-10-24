@@ -1,11 +1,18 @@
 import db from 'app/db';
 import sm from 'app/soundmanager';
-import onValue from 'app/fn/onValue';
-import on from 'app/fn/on';
+import onValue from 'app/onValue';
 import { hasTag, removeTag } from 'app/Tag';
-import merge from 'app/fn/merge';
+import merge from 'app/merge';
 import * as Player from 'app/Player';
 import { omit } from 'underscore';
+
+function on(emitter, event, fn) {
+  emitter.on(event, fn);
+
+  return function() {
+    emitter.removeListener(event, fn);
+  };
+}
 
 sm.setup({
   url: 'swf',

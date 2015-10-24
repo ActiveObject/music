@@ -2,9 +2,9 @@ import { Map } from 'immutable';
 import db from 'app/db';
 import Atom from 'app/Atom';
 import vbus from 'app/vbus';
-import onValue from 'app/fn/onValue';
+import onValue from 'app/onValue';
 import * as Storage from 'app/Storage';
-import merge from 'app/fn/merge';
+import merge from 'app/merge';
 import { addTag } from 'app/Tag';
 
 var albums = db.view(':db/albums');

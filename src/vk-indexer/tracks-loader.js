@@ -1,5 +1,5 @@
 import vk from 'app/vk';
-import merge from 'app/fn/merge';
+import merge from 'app/merge';
 
 function TracksLoader(user) {
   this.user = user;

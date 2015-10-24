@@ -1,4 +1,4 @@
-import merge from 'app/fn/merge';
+import merge from 'app/merge';
 
 export default { fromVk };
 
