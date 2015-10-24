@@ -1,5 +1,7 @@
 import merge from 'app/fn/merge';
 
+export default { fromVk };
+
 export function fromVk(data, existingAlbums) {
   var albumIds = existingAlbums.map(v => v.id).toArray();
   var albumNames = existingAlbums.map(v => v.title).toArray();

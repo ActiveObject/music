@@ -1,12 +1,12 @@
-var Kefir = require('kefir');
-var { Map, Set, List } = require('immutable');
-var { omit, union } = require('underscore');
-var vbus = require('app/core/vbus');
-var Atom = require('app/core/atom');
-var { hasTag, addTag, removeTag } = require('app/Tag');
-var merge = require('app/fn/merge');
-var Track = require('app/Track');
-var Album = require('app/Album');
+import Kefir from 'kefir';
+import { Map, Set, List } from 'immutable';
+import { omit, union } from 'underscore';
+import vbus from 'app/core/vbus';
+import Atom from 'app/core/atom';
+import { hasTag, addTag, removeTag } from 'app/Tag';
+import merge from 'app/fn/merge';
+import Track from 'app/Track';
+import Album from 'app/Album';
 
 var player = {
   tag: [':app/player'],
@@ -258,12 +258,10 @@ vbus
   .scan(reducer, initialDbValue)
   .onValue(v => Atom.swap(db, v));
 
-var changes = Kefir.stream(function (emitter) {
+db.changes = Kefir.stream(function (emitter) {
   return Atom.listen(db, function (nextDbValue) {
     emitter.emit(nextDbValue);
   });
 });
 
-
-module.exports = db;
-module.exports.changes = changes;
+export default db;

@@ -1,3 +1,5 @@
+export default { fromVk };
+
 export function fromVk(data) {
   return {
     id: String(data.id),
