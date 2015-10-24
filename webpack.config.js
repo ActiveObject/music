@@ -14,9 +14,12 @@ var definePlugin = new webpack.DefinePlugin({
 });
 
 module.exports = {
+  entry: './src/main.js',
+
   output: {
     filename: 'app.js'
   },
+
   module: {
     preLoaders: [
       { test: /src\/(.*)\.(js|jsx)$/, loader: 'eslint' }

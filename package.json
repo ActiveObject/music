@@ -57,37 +57,21 @@
   "engines": {
     "node": "4.2.x"
   },
-  "config": {
-    "webapp:output": "_public",
-    "chromeapp:output": "_chromeapp",
-    "chromeapp:id": "aallbkpffjkpkhkjbflbimoedmfnmlel"
-  },
   "scripts": {
     "start": "node server.js",
-    "build": "npm run build:webapp",
-    "dev": "npm run dev:webapp",
-    "predeploy": "MUSIC_APP_ID=4656659 npm run build:webapp",
-    "deploy": "surge -p $npm_package_config_webapp_output -d music.activeobject.me",
+    "build": "npm run copy && npm run webpack",
+    "predeploy": "MUSIC_APP_ID=4656659 npm run build",
+    "deploy": "surge -p _public -d music.activeobject.me",
     "lint": "eslint src/**",
-    "dev:webapp": "npm run prebuild:webapp && npm run copy:webapp:dev && npm run webpack:webapp-dev",
-    "dev:chromeapp": "npm run prebuild:chromeapp && npm run copy:chromeapp:dev && npm run webpack:chromeapp-dev",
-    "build:webapp": "npm run copy:webapp && npm run webpack:webapp",
-    "build:chromeapp": "npm run copy:chromeapp && MUSIC_CHROME_APP_ID=$npm_package_config_chromeapp_id npm run webpack:chromeapp && zip -r chromeapp.zip $npm_package_config_chromeapp_output",
-    "build:test": "webpack --entry=./test/index.js --target node --output-path=test --output-file=app.js",
-    "prebuild:webapp": "npm run clean:webapp && mkdir $npm_package_config_webapp_output",
-    "prebuild:chromeapp": "npm run clean:chromeapp && mkdir $npm_package_config_chromeapp_output",
-    "clean:webapp": "rm -rf $npm_package_config_webapp_output",
-    "clean:chromeapp": "rm -rf $npm_package_config_chromeapp_output",
-    "copy:assets": "cp -R src/assets/* $COPY_DEST",
-    "copy:vendor:dev": "cp vendor/soundmanager2.js $COPY_DEST/soundmanager2.js",
-    "copy:vendor:prod": "cp vendor/soundmanager2-nodebug-jsmin.js $COPY_DEST/soundmanager2.js",
-    "copy:webapp": "COPY_DEST=$npm_package_config_webapp_output npm run copy:vendor:prod && COPY_DEST=$npm_package_config_webapp_output npm run copy:assets",
-    "copy:webapp:dev": "COPY_DEST=$npm_package_config_webapp_output npm run copy:vendor:dev && COPY_DEST=$npm_package_config_webapp_output npm run copy:assets",
-    "copy:chromeapp": "COPY_DEST=$npm_package_config_chromeapp_output npm run copy:vendor:prod && COPY_DEST=$npm_package_config_chromeapp_output npm run copy:assets && cp -R src/chromeapp/assets/* $npm_package_config_chromeapp_output",
-    "copy:chromeapp:dev": "COPY_DEST=$npm_package_config_chromeapp_output npm run copy:vendor:dev && COPY_DEST=$npm_package_config_chromeapp_output npm run copy:assets &&  cp -R src/chromeapp/assets/* $npm_package_config_chromeapp_output",
-    "webpack:webapp": "NODE_ENV=production webpack --entry=./src/main-webapp.js -p --debug --devtool source-map --progress --output-path=$npm_package_config_webapp_output",
-    "webpack:webapp-dev": "webpack-dev-server --entry=./src/main-webapp.js --progress --colors --port=5003 --content-base=$npm_package_config_webapp_output --debug --devtool eval-source-map --output-pathinfo --inline",
-    "webpack:chromeapp": "MUSIC_APP_ID=4812383 NODE_ENV=production webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --debug --devtool source-map --progress",
-    "webpack:chromeapp-dev": "MUSIC_APP_ID=4812383 webpack --entry=./src/main-chromeapp.js --output-path=$npm_package_config_chromeapp_output --watch --debug --devtool source-map --progress"
+    "dev": "npm run clean && npm run copy-dev && npm run webpack-dev",
+    "prebuild": "npm run clean",
+    "clean": "rm -rf _public && mkdir _public",
+    "copy": "npm run copy-vendor-prod && npm run copy-assets",
+    "copy-assets": "cp -R src/assets/* _public",
+    "copy-vendor-dev": "cp vendor/soundmanager2.js _public/soundmanager2.js",
+    "copy-vendor-prod": "cp vendor/soundmanager2-nodebug-jsmin.js _public/soundmanager2.js",
+    "copy-dev": "npm run copy-vendor-dev && npm run copy-assets",
+    "webpack": "NODE_ENV=production webpack -p --debug --devtool source-map --progress --output-path=_public",
+    "webpack-dev": "webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline"
   }
 }
