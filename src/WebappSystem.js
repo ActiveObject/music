@@ -27,9 +27,9 @@ System.prototype[IHttpRequest] = function (url, callback) {
 
 System.prototype.start = function () {
   var hash = location.hash;
-  this.uninstallList.push(require('app/drivers/vk-indexing-driver')(vbus));
+  this.uninstallList.push(require('app/vk-indexer/driver')(vbus));
   this.uninstallList.push(require('app/drivers/route-driver')(vbus));
-  this.uninstallList.push(require('app/drivers/vk-driver')(vbus));
+  this.uninstallList.push(require('app/vk/driver')(vbus));
   this.uninstallList.push(require('app/drivers/soundmanager-driver')(vbus));
   this.uninstallList.push(require('app/drivers/local-storage-driver')(vbus));
   this.uninstallList.push(require('app/drivers/key-control-driver')(vbus));

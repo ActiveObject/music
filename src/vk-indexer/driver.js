@@ -1,18 +1,17 @@
-var ISet = require('immutable').Set;
-var Kefir = require('kefir');
-var go = require('app/core/go');
-var TracksLoader = require('app/processes/tracks-loader');
-var AlbumsLoader = require('app/processes/albums-loader');
-var { addTag, hasTag } = require('app/Tag');
-var subscribeWith = require('app/fn/subscribeWith');
-var onValue = require('app/fn/onValue');
-var vk = require('app/vk');
-var merge = require('app/fn/merge');
-var db = require('app/db');
-var userAtom = require('app/db/user');
-var Atom = require('app/core/atom');
+import Kefir from 'kefir';
+import go from 'app/core/go';
+import TracksLoader from './tracks-loader';
+import AlbumsLoader from './albums-loader';
+import { addTag, hasTag } from 'app/Tag';
+import subscribeWith from 'app/fn/subscribeWith';
+import onValue from 'app/fn/onValue';
+import vk from 'app/vk';
+import merge from 'app/fn/merge';
+import db from 'app/db';
+import userAtom from 'app/db/user';
+import Atom from 'app/core/atom';
 
-module.exports = function(vbus) {
+export default function(vbus) {
   var user = vbus.filter(v => hasTag(v, ':user/authenticated'));
 
   return subscribeWith(onValue, Atom.listen, function (onValue, listen) {
@@ -54,4 +53,4 @@ module.exports = function(vbus) {
       });
     });
   });
-};
+}
