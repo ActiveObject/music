@@ -1,19 +1,15 @@
-var Kefir = require('kefir');
-var ISet = require('immutable').Set;
-var db = require('app/db');
-var Atom = require('app/core/atom');
-var vbus = require('app/core/vbus');
-var revive = require('app/core/revive');
-var firstValue = require('app/fn/firstValue');
-var addToSet = require('app/fn/addToSet');
-var onValue = require('app/fn/onValue');
-var player = require('app/db/player');
-var tracks = require('app/db/tracks');
-var albums = require('app/db/albums');
-var Storage = require('app/Storage');
-var merge = require('app/fn/merge');
+import Atom from 'app/core/atom';
+import vbus from 'app/core/vbus';
+import revive from 'app/core/revive';
+import onValue from 'app/fn/onValue';
+import player from 'app/db/player';
+import tracks from 'app/db/tracks';
+import albums from 'app/db/albums';
+import * as Storage from 'app/Storage';
+import merge from 'app/fn/merge';
+import { addTag } from 'app/Tag';
 
-module.exports = function (vbus) {
+export default function (vbus) {
   var unsub1 = onValue(player
     .changes
     .map(player => player.track)
@@ -34,11 +30,11 @@ module.exports = function (vbus) {
   });
 
   Storage.getItem(':app/tracks', function (tracks) {
-    vbus.emit([':app/tracks', JSON.parse(tracks, revive).tracks]);
+    vbus.emit(addTag(JSON.parse(tracks, revive), ':app/tracks'));
   });
 
   Storage.getItem(':app/albums', function (albums) {
-    vbus.emit([':app/albums', JSON.parse(albums, revive).albums]);
+    vbus.emit(addTag(JSON.parse(albums, revive), ':app/albums'));
   });
 
   return function() {

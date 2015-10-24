@@ -1,5 +1,5 @@
 import vk from 'app/vk';
-import Album from 'app/Album';
+import * as Album from 'app/Album';
 
 function AlbumsLoader(user) {
   this.user = user;

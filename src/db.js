@@ -187,11 +187,11 @@ function fallbackCmdToDefault(state, v) {
 
 function embodyTracks(state, v) {
   if (tagOf(v) === ':app/tracks') {
-    return state.set(':db/tracks', v[1]);
+    return state.set(':db/tracks', v.tracks);
   }
 
   if (tagOf(v) === ':vk/tracks') {
-    var newTracks = v[1].reduce(function (result, track) {
+    var newTracks = v.tracks.reduce(function (result, track) {
       var t = Track.fromVk(track, state.get(':db/albums'));
       return result.set(t.id, t);
     }, Map().asMutable()).asImmutable();
@@ -204,11 +204,11 @@ function embodyTracks(state, v) {
 
 function embodyAlbums(state, v) {
   if (tagOf(v) === ':app/albums') {
-    return state.set(':db/albums', v[1]);
+    return state.set(':db/albums', v.albums);
   }
 
   if (tagOf(v) === ':vk/albums') {
-    var newAlbums = v[1].reduce(function (result, track) {
+    var newAlbums = v.albums.reduce(function (result, track) {
       var t = Album.fromVk(track, state.get(':db/albums'));
       return result.set(t.id, t);
     }, Map().asMutable()).asImmutable();
@@ -221,8 +221,8 @@ function embodyAlbums(state, v) {
 
 function embodyTags(state, v) {
   if (hasTag(v, ':app/albums')) {
-    var updatedTags = v[1].map(v => v.title).toArray();
-    var updatedTagIds = v[1].map(v => v.id).toArray();
+    var updatedTags = v.albums.map(x => x.title).toArray();
+    var updatedTagIds = v.albums.map(x => x.id).toArray();
 
     return state
       .update(':db/tags', tags => union(tags, updatedTags))
