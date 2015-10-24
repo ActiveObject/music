@@ -1,6 +1,6 @@
+import { Map } from 'immutable';
 import Atom from 'app/core/atom';
 import vbus from 'app/core/vbus';
-import revive from 'app/core/revive';
 import onValue from 'app/fn/onValue';
 import player from 'app/db/player';
 import tracks from 'app/db/tracks';
@@ -8,6 +8,26 @@ import albums from 'app/db/albums';
 import * as Storage from 'app/Storage';
 import merge from 'app/fn/merge';
 import { addTag } from 'app/Tag';
+
+function firstValue(x) {
+  return x[Object.keys(x)[0]];
+}
+
+function revive(key, value) {
+  if (key === 'player') {
+    return firstValue(value);
+  }
+
+  if (key === 'tracks') {
+    return Map(value);
+  }
+
+  if (key === 'albums') {
+    return Map(value);
+  }
+
+  return value;
+}
 
 export default function (vbus) {
   var unsub1 = onValue(player
