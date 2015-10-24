@@ -6,7 +6,6 @@ var vbus = require('app/core/vbus');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');
 var vk = require('app/vkConfig');
-var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 function System() {
   this.uninstallList = [];
@@ -48,9 +47,9 @@ System.prototype.start = function () {
   this.uninstallList = [
     require('app/vk-indexer/driver')(vbus),
     require('app/vk/driver')(vbus),
-    require('app/drivers/soundmanager/driver')(vbus),
-    require('app/drivers/local-storage-driver')(vbus),
-    require('app/drivers/key-control-driver')(vbus)
+    require('app/soundmanager/driver')(vbus),
+    require('app/local-storage-driver')(vbus),
+    require('app/key-control-driver')(vbus)
   ];
 
   this.auth();
