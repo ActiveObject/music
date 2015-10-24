@@ -1,10 +1,12 @@
-var Atom = require('app/Atom');
-var db = require('app/db');
-var render = require('app/renderer')(document.getElementById('app'));
-var dispatch = require('app/dispatch');
-var app = require('app');
-var WebappSystem = require('app/WebappSystem');
-var vbus = require('app/vbus');
+import Atom from 'app/Atom';
+import db from 'app/db';
+import renderer from 'app/renderer';
+import dispatch from 'app/dispatch';
+import app from 'app';
+import WebappSystem from 'app/WebappSystem';
+import vbus from 'app/vbus';
+
+var render = renderer(document.getElementById('app'));
 
 Atom.listen(db.view(':db/route'), r => render(dispatch(r)));
 

@@ -1,22 +1,22 @@
-var Url = require('url');
+import Url from 'url';
 
-exports.API_BASE = 'https://api.vk.com/method';
-exports.AUTH_URL = 'https://oauth.vk.com/authorize';
-exports.REDIRECT_URI = window.location.origin;
-exports.API_VERSION = '5.29';
-exports.APP_ID = process.env.MUSIC_APP_ID;
-exports.PERMISSIONS = ['audio', 'groups', 'wall', 'offline'];
-exports.DISPLAY = 'popup';
+var API_BASE = 'https://api.vk.com/method';
+var AUTH_URL = 'https://oauth.vk.com/authorize';
+var REDIRECT_URI = window.location.origin;
+var API_VERSION = '5.29';
+var APP_ID = process.env.MUSIC_APP_ID;
+var PERMISSIONS = ['audio', 'groups', 'wall', 'offline'];
+var DISPLAY = 'popup';
 
-exports.url = Url.format({
-  host: Url.parse(exports.AUTH_URL).host,
-  pathname: Url.parse(exports.AUTH_URL).pathname,
+export var url = Url.format({
+  host: Url.parse(AUTH_URL).host,
+  pathname: Url.parse(AUTH_URL).pathname,
   query: {
-    client_id: exports.APP_ID,
-    scope: exports.PERMISSIONS.join(','),
-    redirect_uri: exports.REDIRECT_URI,
-    display: exports.DISPLAY,
-    v: exports.API_VERSION,
+    client_id: APP_ID,
+    scope: PERMISSIONS.join(','),
+    redirect_uri: REDIRECT_URI,
+    display: DISPLAY,
+    v: API_VERSION,
     response_type: 'token'
   }
 });

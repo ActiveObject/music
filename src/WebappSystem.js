@@ -1,11 +1,11 @@
-var querystring = require('querystring');
-var each = require('underscore').each;
-var vbus = require('app/vbus');
-var onValue = require('app/onValue');
-var { IGetItem, ISetItem } = require('app/Storage');
-var { IHttpRequest } = require('app/Http');
-var jsonpRequest = require('jsonp');
-var vkAccount = require('app/vkConfig');
+import querystring from 'querystring';
+import { each } from 'underscore';
+import vbus from 'app/vbus';
+import onValue from 'app/onValue';
+import { IGetItem, ISetItem } from 'app/Storage';
+import { IHttpRequest } from 'app/Http';
+import jsonpRequest from 'jsonp';
+import vkAccount from 'app/vkConfig';
 
 function System() {
   this.uninstallList = [];
@@ -73,4 +73,4 @@ System.prototype.auth = function (hash) {
   return vbus.push({ tag: [':app/route', ':route/auth'], authUrl: vkAccount.url });
 };
 
-module.exports = System;
+export default System;
