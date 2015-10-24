@@ -5,7 +5,7 @@ import onValue from 'app/onValue';
 import { IGetItem, ISetItem } from 'app/Storage';
 import { IHttpRequest } from 'app/Http';
 import jsonpRequest from 'jsonp';
-import vkAccount from 'app/vkConfig';
+import * as vkAccount from 'app/vkConfig';
 
 function System() {
   this.uninstallList = [];

@@ -1,7 +1,5 @@
 import Kefir from 'kefir';
 import equal from 'deep-equal';
-import TracksLoader from './tracks-loader';
-import AlbumsLoader from './albums-loader';
 import { addTag, hasTag } from 'app/Tag';
 import subscribeWith from 'app/subscribeWith';
 import onValue from 'app/onValue';
@@ -9,32 +7,32 @@ import vk from 'app/vk';
 import merge from 'app/merge';
 import db from 'app/db';
 import Atom from 'app/Atom';
-import go from './go';
+import * as Album from 'app/Album';
 
 export default function(vbus) {
-  var user = Kefir.fromEvents(vbus).filter(v => hasTag(v, ':user/authenticated'));
+  var user = Kefir.fromEvents(vbus, 'value').filter(v => hasTag(v, ':user/authenticated'));
   var userAtom = db.view(':db/user', equal);
 
   return subscribeWith(onValue, Atom.listen, function (onValue, listen) {
     onValue(user, function (user) {
-      onValue(go(new TracksLoader(user)).map(v => addTag({ tracks: v }, ':vk/tracks')), function (tracks) {
-        vbus.push(tracks);
+      onValue(loadTracks(user), function (v) {
+        vbus.push(addTag({ tracks: v }, ':vk/tracks'));
       });
 
-      onValue(go(new AlbumsLoader(user)).map(v => addTag({ albums: v }, ':vk/albums')), function (albums) {
-        vbus.push(albums);
-      })
+      onValue(loadAlbums(user), function (v) {
+        vbus.push(addTag({ albums: v }, ':vk/albums'));
+      });
     });
 
     onValue(user.toProperty().sampledBy(Kefir.interval(2 * 60 * 1000)), function (user) {
-      onValue(go(new TracksLoader(user)).map(v => addTag({ tracks: v }, ':vk/tracks')), function (tracks) {
-        vbus.push(tracks)
-      })
+      onValue(loadTracks(user), function (v) {
+        vbus.push(addTag({ tracks: v }, ':vk/tracks'));
+      });
     });
 
     onValue(user.toProperty().sampledBy(Kefir.interval(10 * 60 * 1000)), function (user) {
-      onValue(go(new AlbumsLoader(user)).map(v => addTag({ albums: v }, ':vk/albums')), function (albums) {
-        vbus.push(albums)
+      onValue(loadAlbums(user), function (v) {
+        vbus.push(addTag({ albums: v }, ':vk/albums'));
       });
     });
 
@@ -62,5 +60,61 @@ export default function(vbus) {
         vbus.push(addTag(u, ':user/is-loaded'));
       });
     });
+  });
+}
+
+function loadTracks(user) {
+  function load(offset, count, callback) {
+    vk.audio.get({
+      user_id: user.id,
+      offset: offset,
+      count: count
+    }, callback);
+  }
+
+  function parse(res, offset) {
+    return res.response.items.map(function (data, i) {
+      return merge(data, { index: offset + i });
+    });
+  }
+
+  return loadAll(load, parse);
+}
+
+function loadAlbums(user) {
+  function load(offset, count, callback) {
+    vk.audio.getAlbums({
+      user_id: user.id,
+      offset: offset,
+      count: count
+    }, callback);
+  }
+
+  function parse(res) {
+    return res.response.items.map(Album.fromVk);
+  }
+
+  return loadAll(load, parse);
+}
+
+function loadAll(loadResource, parseResponse) {
+  return Kefir.stream(function (emitter) {
+    function load(offset, count) {
+      loadResource(offset, count, function(err, res) {
+        if (err) {
+          return emitter.error(err);
+        }
+
+        emitter.emit(parseResponse(res, offset, count));
+
+        if (res.response.count > 0 && res.response.count > offset + count) {
+          return load(offset + count, count);
+        }
+
+        emitter.end();
+      });
+    }
+
+    load(0, 1000);
   });
 }
