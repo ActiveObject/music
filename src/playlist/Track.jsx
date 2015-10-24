@@ -5,11 +5,10 @@ import './track.css';
 
 var Track = React.createClass({
   propTypes: {
-    tracklist: React.PropTypes.object.isRequired,
     track: React.PropTypes.object.isRequired,
-    onTogglePlay: React.PropTypes.func.isRequired,
     isPlaying: React.PropTypes.bool,
-    isActive: React.PropTypes.bool
+    isActive: React.PropTypes.bool,
+    onTogglePlay: React.PropTypes.func.isRequired
   },
 
   getInitialProps: function () {
