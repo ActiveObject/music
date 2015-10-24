@@ -7,7 +7,9 @@ function PlaylistCtrl() {
     .toList()
     .sortBy(t => t.audio.index);
 
-  return <PlaylistUI tracks={tracks} />;
+  var ctx = db.value.get(':db/context');
+
+  return <PlaylistUI tracks={tracks} ctx={ctx} />;
 }
 
-export default updateOnKey(PlaylistCtrl, ':db/tracks');
+export default updateOnKey(PlaylistCtrl, [':db/tracks', ':db/context']);

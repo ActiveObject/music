@@ -1,31 +1,24 @@
-import React from 'react';
 import db from 'app/db';
 import { hasTag } from 'app/Tag';
-import updateOnKey from 'app/updateOnKey';
 
 import LazyTracklist from './LazyTracklist';
 import './playlist.css';
 
-function PlaylistUI({ tracks }) {
-  var ctx = db.value.get(':db/context');
-
-  return (
-    <div className='playlist'>
-      <div className='playlist__content'>
-        <div className='playlist__columns'>
-          <div className='track__index'>#</div>
-          <div className='track__artist'>artist</div>
-          <div className='track__title'>track</div>
-          <div className='track__duration'>time</div>
-        </div>
-        <div className='playlist__table'>
-          <LazyTracklist tracks={filterTracksWithGivenCtx(tracks, ctx)} />
-        </div>
+const PlaylistUI = ({ tracks, ctx }) =>
+  <div className='playlist'>
+    <div className='playlist__content'>
+      <div className='playlist__columns'>
+        <div className='track__index'>#</div>
+        <div className='track__artist'>artist</div>
+        <div className='track__title'>track</div>
+        <div className='track__duration'>time</div>
       </div>
-      <div className='playlist__paginator'></div>
+      <div className='playlist__table'>
+        <LazyTracklist tracks={filterTracksWithGivenCtx(tracks, ctx)} />
+      </div>
     </div>
-  );
-}
+    <div className='playlist__paginator'></div>
+  </div>
 
 function filterTracksWithGivenCtx(tracks, ctx) {
   if (hasTag(ctx, ':context/filter-by-artist')) {
@@ -63,4 +56,4 @@ function matchByTrackTitle(title) {
   };
 }
 
-export default updateOnKey(PlaylistUI, ':db/context');
+export default PlaylistUI;
