@@ -6,7 +6,8 @@ var Atom = require('app/core/atom');
 var { hasTag, addTag, removeTag } = require('app/Tag');
 var tagOf = require('app/fn/tagOf');
 var merge = require('app/fn/merge');
-var Track = require('app/values/track');
+var Track = require('app/Track');
+var Album = require('app/Album');
 
 var player = {
   tag: [':app/player'],
@@ -21,10 +22,8 @@ var player = {
 };
 
 var initialDbValue = Map({
-  ':db/albums': Set(),
+  ':db/albums': Map(),
   ':db/tracks': Map(),
-  ':db/groups': Set(),
-  ':db/activity': Set(),
   ':db/player': player,
 
   ':db/user': {
@@ -51,24 +50,6 @@ var initialDbValue = Map({
 });
 
 function commonReducer(state, v) {
-  if (tagOf(v) === ':app/albums') {
-    return state.update(':db/albums', albums => albums.union(v[1]))
-  }
-
-  if (tagOf(v) === ':app/groups') {
-    var groups = state.get(':db/groups').union(v[1]);
-    var visibleGroups = groups.slice(0, 10).map(v => v.id);
-
-    return state.merge({
-      ':db/groups': groups,
-      ':db/visibleGroups': visibleGroups.toJS()
-    });
-  }
-
-  if (tagOf(v) === ':app/activity') {
-    return state.update(':db/activity', activity => activity.union(v[1]))
-  }
-
   if (hasTag(v, ':app/player')) {
     return state.update(':db/player', () => v);
   }
@@ -221,6 +202,23 @@ function embodyTracks(state, v) {
   return state;
 }
 
+function embodyAlbums(state, v) {
+  if (tagOf(v) === ':app/albums') {
+    return state.set(':db/albums', v[1]);
+  }
+
+  if (tagOf(v) === ':vk/albums') {
+    var newAlbums = v[1].reduce(function (result, track) {
+      var t = Album.fromVk(track, state.get(':db/albums'));
+      return result.set(t.id, t);
+    }, Map().asMutable()).asImmutable();
+
+    return state.update(':db/albums', existingAlbums => existingAlbums.merge(newAlbums));
+  }
+
+  return state;
+}
+
 function embodyTags(state, v) {
   if (hasTag(v, ':app/albums')) {
     var updatedTags = v[1].map(v => v.title).toArray();
@@ -255,7 +253,7 @@ function pipeThroughReducers(...reducers) {
 }
 
 var db = new Atom(initialDbValue);
-var reducer = pipeThroughReducers(commonReducer, embodyTracks, detectArtistFilter, detectAlbumFilter, detectTrackFilter, fallbackCmdToDefault, embodyTags);
+var reducer = pipeThroughReducers(commonReducer, embodyTracks, embodyAlbums, detectArtistFilter, detectAlbumFilter, detectTrackFilter, fallbackCmdToDefault, embodyTags);
 
 vbus
   .scan(reducer, initialDbValue)

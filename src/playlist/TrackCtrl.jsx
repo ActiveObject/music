@@ -3,7 +3,7 @@ import db from 'app/db';
 import vbus from 'app/core/vbus';
 import { hasTag } from 'app/Tag';
 import updateOnKey from 'app/fn/updateOnKey';
-import * as Player from 'app/values/player';
+import * as Player from 'app/Player';
 import Track from './track';
 
 var TrackCtrl = React.createClass({

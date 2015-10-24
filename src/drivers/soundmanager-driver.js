@@ -5,7 +5,7 @@ var onValue = require('app/fn/onValue');
 var on = require('app/fn/on');
 var { hasTag, removeTag } = require('app/Tag');
 var merge = require('app/fn/merge');
-var Player = require('app/values/player');
+var Player = require('app/Player');
 var { omit } = require('underscore');
 
 sm.setup({

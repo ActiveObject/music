@@ -5,7 +5,7 @@ var has = require('underscore').has;
 var vbus = require('app/core/vbus');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');
-var vk = require('app/values/accounts/vk');
+var vk = require('app/vkConfig');
 var LastNWeeksDRange = require('app/values/last-nweeks-drange');
 
 function System() {

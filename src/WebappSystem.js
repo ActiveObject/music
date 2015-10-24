@@ -5,7 +5,7 @@ var onValue = require('app/fn/onValue');
 var { IGetItem, ISetItem } = require('app/Storage');
 var { IHttpRequest } = require('app/Http');
 var jsonpRequest = require('jsonp');
-var vkAccount = require('app/values/accounts/vk');
+var vkAccount = require('app/vkConfig');
 
 function System() {
   this.uninstallList = [];

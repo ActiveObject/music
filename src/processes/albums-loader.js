@@ -1,6 +1,6 @@
 var Immutable = require('immutable');
 var vk = require('app/vk');
-var Album = require('app/values/album');
+var Album = require('app/Album');
 
 function AlbumsLoader(user) {
   this.user = user;
