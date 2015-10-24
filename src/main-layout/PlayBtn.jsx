@@ -5,6 +5,8 @@ import cx from 'classnames';
 import { hasTag } from 'app/Tag';
 
 import './play-btn.css';
+import pauseSvg from './pause.svg';
+import playSvg from './play.svg';
 
 export default function PlayBtn({ isPlaying, onClick }) {
   var classes = cx({
@@ -18,7 +20,7 @@ export default function PlayBtn({ isPlaying, onClick }) {
       style={{ rotate: spring(isPlaying ? 90 : 0, [160, 17]) }}>
       {interpolated =>
         <div key='play-btn' className={classes} onClick={onClick} style={{ transform: `rotate(${interpolated.rotate}deg)` }}>
-          <Icon id={isPlaying ? 'shape-pause' : 'shape-iconmonstr-arrow-37-icon'} />
+          <Icon id={isPlaying ? pauseSvg : playSvg } />
         </div>
       }
     </Motion>
