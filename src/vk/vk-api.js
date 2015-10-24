@@ -1,7 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
 var merge = require('app/fn/merge');
-var not = require('app/fn/not');
 var Request = require('./request');
 var Response = require('./response');
 var Atom = require('app/core/atom');
@@ -10,6 +9,11 @@ var methods = require('./methods').methods.map(function (m) {
   return m.split('.');
 });
 
+function not(predicate, ctx) {
+  return function not() {
+    return !predicate.apply(ctx, arguments);
+  };
+}
 
 function UnathorizedApiState(attrs) {
   this.version = attrs.version;

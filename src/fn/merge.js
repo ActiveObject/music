@@ -1,7 +1,5 @@
-var _ = require('underscore');
+import { extend } from 'underscore';
 
-module.exports = function merge() {
-  var objs = Array.prototype.slice.call(arguments, 0);
-  objs.unshift({});
-  return _.extend.apply(_, objs);
-};
+export default function merge(...objs) {
+  return extend({}, ...objs);
+}

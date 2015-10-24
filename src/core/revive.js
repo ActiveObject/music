@@ -1,5 +1,8 @@
 import { Map } from 'immutable';
-import firstValue from 'app/fn/firstValue';
+
+function firstValue(x) {
+  return x[Object.keys(x)[0]];
+}
 
 export default function revive(key, value) {
   if (key === 'player') {

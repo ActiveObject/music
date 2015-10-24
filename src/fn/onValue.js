@@ -1,7 +1,7 @@
-module.exports = function onValue(stream, fn) {
+export default function onValue(stream, fn) {
   stream.onValue(fn);
 
   return function() {
     stream.offValue(fn);
   };
-};
+}

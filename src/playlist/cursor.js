@@ -1,5 +1,8 @@
 var _ = require('underscore');
-var getOrDefault = require('app/fn/getOrDefault');
+
+function getOrDefault(obj, key, defaultValue) {
+  return _.has(obj, key) ? obj[key] : defaultValue;
+}
 
 function range(page, pageSize, direction) {
   if (direction === 0) {
