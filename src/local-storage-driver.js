@@ -7,6 +7,7 @@ import onValue from 'app/onValue';
 import * as Storage from 'app/Storage';
 import merge from 'app/merge';
 import { addTag } from 'app/Tag';
+import subscribeWith from 'app/subscribeWith';
 
 var albums = db.view(':db/albums');
 var tracks = db.view(':db/tracks');
@@ -32,18 +33,23 @@ function revive(key, value) {
 }
 
 export default function (vbus) {
-  var unsub1 = onValue(Kefir.fromEvents(db, 'change')
+  var playerTracks = Kefir.fromEvents(db, 'change')
     .map(v => v.get(':db/player').track)
     .skipDuplicates()
-    .filter(track => Object.keys(track.audio).length > 0)
-    .map(JSON.stringify), v => Storage.setItem({ ':player/track': v }));
+    .filter(track => Object.keys(track.audio).length > 0);
 
-  var unsub4 = Atom.listen(tracks, function(tracks) {
-    Storage.setItem({ ':app/tracks': JSON.stringify({ tracks: tracks }) });
-  });
+  var unsub = subscribeWith(onValue, Atom.listen, function (onValue, listen) {
+    onValue(playerTracks, function (v) {
+      Storage.setItem({ ':player/track': JSON.stringify(v) });
+    });
 
-  var unsub5 = Atom.listen(albums, function(albums) {
-    Storage.setItem({ ':app/albums': JSON.stringify({ albums: albums }) });
+    listen(tracks, function(tracks) {
+      Storage.setItem({ ':app/tracks': JSON.stringify({ tracks: tracks }) });
+    });
+
+    listen(albums, function(albums) {
+      Storage.setItem({ ':app/albums': JSON.stringify({ albums: albums }) });
+    });
   });
 
   Storage.getItem(':player/track', function (track) {
@@ -58,9 +64,5 @@ export default function (vbus) {
     vbus.push(addTag(JSON.parse(albums, revive), ':app/albums'));
   });
 
-  return function() {
-    unsub1();
-    unsub4();
-    unsub5();
-  };
+  return unsub;
 };
