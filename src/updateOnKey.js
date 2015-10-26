@@ -20,8 +20,8 @@ function updateOn(ComposedComponent, compare) {
   });
 }
 
-export default function updateOnKey(ComposedComponent, dbKey) {
-  return updateOn(ComposedComponent, function (prevDb, nextDb) {
+function compareByGivenKey(prevDb, nextDb) {
+  return function compare(dbKey) {
     if (Array.isArray(dbKey)) {
       return dbKey.every(function (key) {
         return prevDb.get(key) === nextDb.get(key);
@@ -33,5 +33,11 @@ export default function updateOnKey(ComposedComponent, dbKey) {
     }
 
     return prevDb.get(dbKey) === nextDb.get(dbKey);
+  };
+}
+
+export default function updateOnKey(ComposedComponent, ...dbKeys) {
+  return updateOn(ComposedComponent, function (prevDb, nextDb) {
+    return dbKeys.every(compareByGivenKey(prevDb, nextDb));
   });
 }

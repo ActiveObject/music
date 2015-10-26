@@ -10,5 +10,4 @@ function PlaylistCtrl() {
   return <PlaylistUI tracks={player.tracklist} ctx={ctx} />;
 }
 
-
-export default updateOnKey(PlaylistCtrl, [':db/context', ':db/player']);
+export default updateOnKey(PlaylistCtrl, ':db/context', dbVal => dbVal.get(':db/player').tracklist);

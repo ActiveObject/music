@@ -81,4 +81,4 @@ function shuffle() {
   vbus.push(toggleShuffle(db.value.get(':db/player')));
 }
 
-export default updateOnKey(CommandPalette, [':db/cmd', ':db/player']);
+export default updateOnKey(CommandPalette, ':db/cmd', dbVal => dbVal.get(':db/player').tracklist);
