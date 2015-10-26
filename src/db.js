@@ -252,7 +252,18 @@ function pipeThroughReducers(...reducers) {
 }
 
 var db = new Atom(initialDbValue);
-var reducer = pipeThroughReducers(commonReducer, embodyTracks, embodyAlbums, detectArtistFilter, detectAlbumFilter, detectTrackFilter, fallbackCmdToDefault, embodyTags);
+
+var reducer = pipeThroughReducers(
+  commonReducer,
+  embodyTracks,
+  embodyAlbums,
+  detectArtistFilter,
+  detectAlbumFilter,
+  detectTrackFilter,
+  fallbackCmdToDefault,
+  embodyTags
+);
+
 var vbusStream = Kefir.fromEvents(vbus, 'value');
 var dbChanges = Kefir.fromEvents(db, 'change');
 
