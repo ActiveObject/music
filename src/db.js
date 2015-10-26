@@ -243,6 +243,20 @@ function embodyTags(state, v) {
   return state;
 }
 
+function setDefaultPlayerTracklist(state, v) {
+  if (hasTag(':app/tracks') && state.get(':db/player').tracklist.isEmpty()) {
+    return state.update(':db/player', function (player) {
+      return merge(player, {
+        tracklist: db.value.get(':db/tracks')
+          .toList()
+          .sortBy(t => t.audio.index)
+      });
+    });
+  }
+
+  return state;
+}
+
 function pipeThroughReducers(...reducers) {
   return function (initialDbValue, v) {
     return reducers.reduce(function (dbVal, reducer) {
@@ -261,7 +275,8 @@ var reducer = pipeThroughReducers(
   detectAlbumFilter,
   detectTrackFilter,
   fallbackCmdToDefault,
-  embodyTags
+  embodyTags,
+  setDefaultPlayerTracklist
 );
 
 var vbusStream = Kefir.fromEvents(vbus, 'value');

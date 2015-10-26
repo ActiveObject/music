@@ -82,3 +82,17 @@ $accent-color: $accent-violet;
 .cmdout__item {
   color: $base-color-00;
 }
+
+.command-palette__action {
+  color: $base-color-0;
+}
+
+.command-palette__action:hover {
+  color: $accent-color;
+}
+
+.command-palette__action--active,
+.command-palette__action--active:hover {
+  background-color: $accent-color;
+  color: $base-color-3;
+}

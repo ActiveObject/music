@@ -1,11 +1,10 @@
 .command-palette {
+  position: relative;
   width: 100%;
   font-size: inherit;
   font-weight: 100;
   font-family: 'Roboto';
-  padding-left: 4rem;
-  height: 80px;
-  line-height: 80px;
+  padding: 20px 0 20px 4rem;
   width: 800px;
 }
 
@@ -33,3 +32,18 @@
   font-family: inherit;
   z-index: -1000;
 }
+
+.command-palette__actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.command-palette__action {
+  font-weight: 300;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  padding: 2px 5px;
+  font-size: .9rem;
+}
+

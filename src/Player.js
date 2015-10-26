@@ -1,5 +1,7 @@
+import { List } from 'immutable';
 import merge from 'app/merge';
 import { hasTag, toggleTag, removeTag, addTag } from 'app/Tag';
+import { shuffle as shuffleArray } from 'underscore';
 
 export function play(p) {
   return addTag(p, ':player/is-playing');
@@ -113,6 +115,21 @@ export function relativeLoaded(p) {
   }
 
   return p.bytesLoaded / p.bytesTotal;
+}
+
+export function toggleShuffle(p) {
+  if (hasTag(p, ':player/is-shuffled')) {
+    return merge(removeTag(p, ':player/is-shuffled'), {
+      tracklist: p.originalTracklist
+    });
+  }
+
+  var tracklist = [p.track, ...shuffleArray(p.tracklist.filter(t => t.id !== p.track.id).toArray())];
+
+  return merge(addTag(p, ':player/is-shuffled'), {
+    originalTracklist: p.tracklist,
+    tracklist: List(tracklist)
+  });
 }
 
 function isLastTrack(tracklist, track) {
