@@ -6,6 +6,7 @@ import { hasTag, removeTag } from 'app/Tag';
 import merge from 'app/merge';
 import * as Player from 'app/Player';
 import { omit } from 'underscore';
+import subscribeWith from 'app/subscribeWith';
 
 function on(emitter, event, fn) {
   emitter.on(event, fn);
@@ -25,53 +26,45 @@ sm.setup({
 export default function (vbus) {
   var playerChanges = Kefir.fromEvents(db, 'change').map(dbVal => dbVal.get(':db/player'));
 
-  var unsub4 = on(sm, 'finish', function (track) {
-    vbus.push(Player.play(Player.nextTrack(db.value.get(':db/player'))));
-  });
+  return subscribeWith(on, onValue, function (on, onValue) {
+    on(sm, 'finish', function (track) {
+      vbus.push(Player.play(Player.nextTrack(db.value.get(':db/player'))));
+    });
 
-  var unsub5 = on(sm, 'whileplaying', function (position) {
-    if (!db.value.get(':db/player').seeking) {
-      vbus.push(merge(db.value.get(':db/player'), { position: position }));
-    }
-  });
+    on(sm, 'whileplaying', function (position) {
+      if (!db.value.get(':db/player').seeking) {
+        vbus.push(merge(db.value.get(':db/player'), { position: position }));
+      }
+    });
 
-  var unsub6 = on(sm, 'whileloading', function (bytesLoaded, bytesTotal) {
-    vbus.push(merge(db.value.get(':db/player'), { bytesLoaded, bytesTotal }));
-  });
+    on(sm, 'whileloading', function (bytesLoaded, bytesTotal) {
+      vbus.push(merge(db.value.get(':db/player'), { bytesLoaded, bytesTotal }));
+    });
 
-  var unsub1 = onValue(playerChanges.map(p => p.track).skipDuplicates(), function (track) {
-    sm.useTrack(track);
-  });
+    onValue(playerChanges.map(p => p.track).skipDuplicates(), function (track) {
+      sm.useTrack(track);
+    });
 
-  var unsub2 = onValue(playerChanges.map(p => hasTag(p, ':player/is-playing')).skipDuplicates(), function (isPlaying) {
-    if (isPlaying) {
-      sm.play();
-    } else {
-      sm.pause();
-    }
-  });
+    onValue(playerChanges.map(p => hasTag(p, ':player/is-playing')).skipDuplicates(), function (isPlaying) {
+      if (isPlaying) {
+        sm.play();
+      } else {
+        sm.pause();
+      }
+    });
 
-  var unsub3 = onValue(playerChanges.map(p => [hasTag(p, ':player/seeking'), p.seekPosition])
-      .skipDuplicates(([oldValue], [newValue]) => oldValue === newValue), function([isSeeking, seekPosition]) {
-    if (!isSeeking) {
-      sm.setPosition(seekPosition);
-    }
-  });
+    onValue(playerChanges.map(p => [hasTag(p, ':player/seeking'), p.seekPosition])
+        .skipDuplicates(([oldValue], [newValue]) => oldValue === newValue), function([isSeeking, seekPosition]) {
+      if (!isSeeking) {
+        sm.setPosition(seekPosition);
+      }
+    });
 
-  var unsub7 = onValue(playerChanges, function (p) {
-    if (hasTag(p, ':player/seek-to-position')) {
-      vbus.push(merge(omit(removeTag(p, ':player/seek-to-position'), 'seekToPosition'), { position: p.seekToPosition }));
-      sm.setPosition(p.seekToPosition);
-    }
+    onValue(playerChanges, function (p) {
+      if (hasTag(p, ':player/seek-to-position')) {
+        vbus.push(merge(omit(removeTag(p, ':player/seek-to-position'), 'seekToPosition'), { position: p.seekToPosition }));
+        sm.setPosition(p.seekToPosition);
+      }
+    });
   });
-
-  return function() {
-    unsub1();
-    unsub2();
-    unsub3();
-    unsub4();
-    unsub5();
-    unsub6();
-    unsub7();
-  };
 }
