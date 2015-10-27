@@ -1,58 +1,31 @@
-import Kefir from 'kefir';
-import { Map, List } from 'immutable';
 import Atom from 'app/Atom';
+import vbus from 'app/vbus';
 
-var player = {
-  tag: [':app/player'],
-  track: {
-    audio: {}
-  },
-  position: 0,
-  seekPosition: 0,
-  bytesTotal: 0,
-  bytesLoaded: 0,
-  tracklist: List()
-};
-
-var initialAppState = Map({
-  ':db/albums': Map(),
-  ':db/tracks': Map(),
-  ':db/player': player,
-
-  ':db/user': {
-    tag: ':app/user'
-  },
-
-  ':db/visibleGroups': [],
-
-  ':db/route': {
-    tag: [':app/route', ':route/empty']
-  },
-
-  ':db/cmd': 'All tracks',
-
-  ':db/command-palette': {
-    tag: [':app/command-palette']
-  },
-
-  ':db/context': {
-    tag: [':context/playlist']
-  },
-
-  ':db/tags': []
-});
-
-var state = new Atom(initialAppState);
-var stateChanges = Kefir.fromEvents(state, 'change');
+var appState = new Atom(null);
 
 var app = {
   view: function (key, equal) {
     var x = new Atom(app.value.get(key));
+    var prevVal = null;
+    var isFirstRun = true;
 
-    stateChanges
-      .map(v => v.get(key))
-      .skipDuplicates(equal)
-      .onValue(v => Atom.swap(x, v));
+    Atom.listen(appState, function (nextVal) {
+      if (isFirstRun) {
+        isFirstRun = false;
+        prevVal = nextVal;
+        return;
+      }
+
+      if (!equal) {
+        equal = function (x, y) {
+          return x === y;
+        };
+      }
+
+      if (!equal(prevVal.get(key), nextVal.get(key))) {
+        Atom.swap(x, nextVal.get(key));
+      }
+    });
 
     return x;
   },
@@ -63,9 +36,16 @@ var app = {
    * app -> System -> Atom -> EventEmitter -> Object
    */
   use: function (initSystem) {
-    var appProto = Object.create(state);
+    var appProto = Object.create(appState);
     initSystem(appProto);
     Object.setPrototypeOf(app, appProto);
+    return app;
+  },
+
+  run: function (initialState, view, update) {
+    vbus.on('value', v => Atom.swap(app, update(app.value, v)));
+    Atom.listen(app, view);
+    Atom.swap(app, initialState);
     return app;
   }
 };

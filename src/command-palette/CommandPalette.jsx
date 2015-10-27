@@ -4,7 +4,7 @@ import cx from 'classnames';
 import app from 'app';
 import vbus from 'app/vbus';
 import { hasTag } from 'app/Tag';
-import updateOn from 'app/updateOn';
+import { updateOn } from 'app/renderer';
 import './command-palette.css';
 import { toggleShuffle } from 'app/Player';
 

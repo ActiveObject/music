@@ -1,6 +1,6 @@
 import app from 'app';
 import vbus from 'app/vbus';
-import updateOn from 'app/updateOn';
+import { updateOn } from 'app/renderer';
 import * as Player from 'app/Player';
 import Track from './track';
 

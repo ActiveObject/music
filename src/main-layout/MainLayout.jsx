@@ -4,7 +4,7 @@ import 'app/styles/theme.css';
 import React from 'react';
 import { Motion, spring } from 'react-motion';
 import app from 'app';
-import updateOn from 'app/updateOn';
+import { updateOn } from 'app/renderer';
 import { hasTag } from 'app/Tag';
 
 import CommandPalette from 'app/command-palette/CommandPalette';

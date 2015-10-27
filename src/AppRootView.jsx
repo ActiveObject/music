@@ -1,6 +1,6 @@
 import app from 'app';
 import { hasTag } from 'app/Tag';
-import updateOn from 'app/updateOn';
+import { updateOn } from 'app/renderer';
 import MainLayout from 'app/main-layout/MainLayout';
 import AuthView from 'app/auth/AuthView';
 

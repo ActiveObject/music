@@ -1,6 +1,6 @@
 import React from 'react';
 import app from 'app';
-import updateOn from 'app/updateOn';
+import { updateOn } from 'app/renderer';
 import { hasTag } from 'app/Tag';
 
 import './cmdout.css';
