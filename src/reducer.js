@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import { omit, union } from 'underscore';
 import { hasTag, addTag, removeTag } from 'app/Tag';
 import merge from 'app/merge';
