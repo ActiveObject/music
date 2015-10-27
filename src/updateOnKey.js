@@ -1,13 +1,18 @@
 import React from 'react';
-import Kefir from 'kefir';
 import db from 'app/db';
-import onValue from 'app/onValue';
+import Atom from 'app/Atom';
 
-function updateOn(ComposedComponent, compare) {
+function updateOn(ComposedComponent, equals) {
   return React.createClass({
     componentDidMount: function () {
-      var stream = Kefir.fromEvents(db, 'change').skipDuplicates(compare);
-      this.unsub = onValue(stream, () => this.forceUpdate());
+      var prevDbVal = db.value;
+
+      this.unsub = Atom.listen(db, nextDbVal => {
+        if (!equals(prevDbVal, nextDbVal)) {
+          prevDbVal = nextDbVal;
+          this.forceUpdate();
+        }
+      });
     },
 
     componentWillUnmount: function () {
@@ -20,8 +25,8 @@ function updateOn(ComposedComponent, compare) {
   });
 }
 
-function compareByGivenKey(prevDb, nextDb) {
-  return function compare(dbKey) {
+function equalsByGivenKey(prevDb, nextDb) {
+  return function equals(dbKey) {
     if (Array.isArray(dbKey)) {
       return dbKey.every(function (key) {
         return prevDb.get(key) === nextDb.get(key);
@@ -38,6 +43,6 @@ function compareByGivenKey(prevDb, nextDb) {
 
 export default function updateOnKey(ComposedComponent, ...dbKeys) {
   return updateOn(ComposedComponent, function (prevDb, nextDb) {
-    return dbKeys.every(compareByGivenKey(prevDb, nextDb));
+    return dbKeys.every(equalsByGivenKey(prevDb, nextDb));
   });
 }
