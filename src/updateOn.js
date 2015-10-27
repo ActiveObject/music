@@ -1,13 +1,13 @@
 import React from 'react';
-import db from 'app/db';
+import app from 'app';
 import Atom from 'app/Atom';
 
 function updateOnDbChange(ComposedComponent, equals) {
   return React.createClass({
     componentDidMount: function () {
-      var prevDbVal = db.value;
+      var prevDbVal = app.value;
 
-      this.unsub = Atom.listen(db, nextDbVal => {
+      this.unsub = Atom.listen(app, nextDbVal => {
         if (!equals(prevDbVal, nextDbVal)) {
           prevDbVal = nextDbVal;
           this.forceUpdate();

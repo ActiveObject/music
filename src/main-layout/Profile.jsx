@@ -1,5 +1,5 @@
 import React from 'react';
-import db from 'app/db';
+import app from 'app';
 import { Motion, spring } from 'react-motion';
 
 import updateOn from 'app/updateOn';
@@ -9,9 +9,9 @@ import './profile.css';
 
 var Profile = React.createClass({
   render: function () {
-    var user = db.value.get(':db/user');
+    var user = app.value.get(':db/user');
     var isLoaded = hasTag(user, ':user/is-loaded');
-    var isCmdActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
+    var isCmdActivated = hasTag(app.value.get(':db/command-palette'), ':cmd/is-activated');
 
     return (
       <Motion

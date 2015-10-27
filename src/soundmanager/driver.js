@@ -1,5 +1,5 @@
 import Kefir from 'kefir'
-import db from 'app/db';
+import app from 'app';
 import sm from 'app/soundmanager';
 import onValue from 'app/onValue';
 import { hasTag, removeTag } from 'app/Tag';
@@ -24,21 +24,21 @@ sm.setup({
 });
 
 export default function (vbus) {
-  var playerChanges = Kefir.fromEvents(db, 'change').map(dbVal => dbVal.get(':db/player'));
+  var playerChanges = Kefir.fromEvents(app, 'change').map(dbVal => dbVal.get(':db/player'));
 
   return subscribeWith(on, onValue, function (on, onValue) {
     on(sm, 'finish', function (track) {
-      vbus.push(Player.play(Player.nextTrack(db.value.get(':db/player'))));
+      vbus.push(Player.play(Player.nextTrack(app.value.get(':db/player'))));
     });
 
     on(sm, 'whileplaying', function (position) {
-      if (!db.value.get(':db/player').seeking) {
-        vbus.push(merge(db.value.get(':db/player'), { position: position }));
+      if (!app.value.get(':db/player').seeking) {
+        vbus.push(merge(app.value.get(':db/player'), { position: position }));
       }
     });
 
     on(sm, 'whileloading', function (bytesLoaded, bytesTotal) {
-      vbus.push(merge(db.value.get(':db/player'), { bytesLoaded, bytesTotal }));
+      vbus.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
     });
 
     onValue(playerChanges.map(p => p.track).skipDuplicates(), function (track) {

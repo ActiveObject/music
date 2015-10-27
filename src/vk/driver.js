@@ -1,10 +1,10 @@
 import Atom from 'app/Atom';
-import db from 'app/db';
+import app from 'app';
 import vk from 'app/vk';
 import { hasTag } from 'app/Tag';
 
 export default function (vbus) {
-  return Atom.listen(db, function (dbVal) {
+  return Atom.listen(app, function (dbVal) {
     var user = dbVal.get(':db/user');
 
     if (hasTag(user, ':user/authenticated')) {

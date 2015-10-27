@@ -1,7 +1,7 @@
 import React from 'react';
 import { throttle } from 'underscore';
 import cx from 'classnames';
-import db from 'app/db';
+import app from 'app';
 import vbus from 'app/vbus';
 import { hasTag } from 'app/Tag';
 import updateOn from 'app/updateOn';
@@ -10,7 +10,7 @@ import { toggleShuffle } from 'app/Player';
 
 class CommandPalette extends React.Component {
   componentDidUpdate() {
-    var isActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
+    var isActivated = hasTag(app.value.get(':db/command-palette'), ':cmd/is-activated');
 
     if (isActivated && document.activeElement !== this._input) {
       this._input.select();
@@ -18,8 +18,8 @@ class CommandPalette extends React.Component {
   }
 
   render() {
-    var cmd = db.value.get(':db/cmd');
-    var player = db.value.get(':db/player');
+    var cmd = app.value.get(':db/cmd');
+    var player = app.value.get(':db/player');
     var isShuffled = hasTag(player, ':player/is-shuffled');
 
     return (
@@ -78,7 +78,7 @@ class CommandPalette extends React.Component {
 
 
 function shuffle() {
-  vbus.push(toggleShuffle(db.value.get(':db/player')));
+  vbus.push(toggleShuffle(app.value.get(':db/player')));
 }
 
 export default updateOn(CommandPalette, ':db/cmd', dbVal => dbVal.get(':db/player').tracklist);

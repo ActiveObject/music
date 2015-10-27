@@ -1,13 +1,13 @@
 import React from 'react';
-import db from 'app/db';
+import app from 'app';
 import updateOn from 'app/updateOn';
 import { hasTag } from 'app/Tag';
 
 import './cmdout.css';
 
 function CmdOut() {
-  var ctx = db.value.get(':db/context');
-  var tags = db.value.get(':db/tags');
+  var ctx = app.value.get(':db/context');
+  var tags = app.value.get(':db/tags');
   var items = cmdItems(ctx, tags).map(tag => CmdOutItem({ tag }));
 
   return (

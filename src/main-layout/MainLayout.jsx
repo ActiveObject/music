@@ -3,7 +3,7 @@ import 'app/styles/theme.css';
 
 import React from 'react';
 import { Motion, spring } from 'react-motion';
-import db from 'app/db';
+import app from 'app';
 import updateOn from 'app/updateOn';
 import { hasTag } from 'app/Tag';
 
@@ -16,7 +16,7 @@ import CmdOut from './CmdOut';
 
 class MainLayout extends React.Component {
   render() {
-    var isCmdActivated = hasTag(db.value.get(':db/command-palette'), ':cmd/is-activated');
+    var isCmdActivated = hasTag(app.value.get(':db/command-palette'), ':cmd/is-activated');
 
     return (
       <Layer>

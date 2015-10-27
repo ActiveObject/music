@@ -1,4 +1,3 @@
-import db from 'app/db';
 import { hasTag } from 'app/Tag';
 
 import LazyTracklist from './LazyTracklist';

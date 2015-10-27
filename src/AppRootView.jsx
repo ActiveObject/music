@@ -1,11 +1,11 @@
-import db from 'app/db';
+import app from 'app';
 import { hasTag } from 'app/Tag';
 import updateOn from 'app/updateOn';
 import MainLayout from 'app/main-layout/MainLayout';
 import AuthView from 'app/auth/AuthView';
 
 var AppRootView = () => {
-  var route = db.value.get(':db/route');
+  var route = app.value.get(':db/route');
 
   if (hasTag(route, ':route/main')) {
     return <MainLayout />;

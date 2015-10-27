@@ -5,13 +5,13 @@ import subscribeWith from 'app/subscribeWith';
 import onValue from 'app/onValue';
 import vk from 'app/vk';
 import merge from 'app/merge';
-import db from 'app/db';
+import app from 'app';
 import Atom from 'app/Atom';
 import * as Album from 'app/Album';
 
 export default function(vbus) {
   var user = Kefir.fromEvents(vbus, 'value').filter(v => hasTag(v, ':user/authenticated'));
-  var userAtom = db.view(':db/user', equal);
+  var userAtom = app.view(':db/user', equal);
 
   return subscribeWith(onValue, Atom.listen, function (onValue, listen) {
     onValue(user, function (user) {
@@ -51,7 +51,7 @@ export default function(vbus) {
 
         var res = result.response[0];
 
-        var u = merge(db.value.get(':db/user'), {
+        var u = merge(app.value.get(':db/user'), {
           photo50: res.photo_50,
           firstName: res.first_name,
           lastName: res.last_name
