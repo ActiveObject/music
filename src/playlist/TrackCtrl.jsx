@@ -1,6 +1,6 @@
 import db from 'app/db';
 import vbus from 'app/vbus';
-import updateOnKey from 'app/updateOnKey';
+import updateOn from 'app/updateOn';
 import * as Player from 'app/Player';
 import Track from './track';
 
@@ -20,6 +20,4 @@ function togglePlay(track, tracklist) {
   vbus.push(Player.togglePlay(db.value.get(':db/player'), track, tracklist));
 }
 
-export default updateOnKey(TrackCtrl, function (dbVal) {
-  return dbVal.get(':db/player').track.id;
-});
+export default updateOn(TrackCtrl, dbVal => dbVal.get(':db/player').track.id);

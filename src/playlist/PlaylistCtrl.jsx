@@ -1,6 +1,6 @@
 import db from 'app/db';
 import vbus from 'app/vbus';
-import updateOnKey from 'app/updateOnKey';
+import updateOn from 'app/updateOn';
 import PlaylistUI from './PlaylistUI';
 
 function PlaylistCtrl() {
@@ -10,4 +10,4 @@ function PlaylistCtrl() {
   return <PlaylistUI tracks={player.tracklist} ctx={ctx} />;
 }
 
-export default updateOnKey(PlaylistCtrl, ':db/context', dbVal => dbVal.get(':db/player').tracklist);
+export default updateOn(PlaylistCtrl, ':db/context', dbVal => dbVal.get(':db/player').tracklist);

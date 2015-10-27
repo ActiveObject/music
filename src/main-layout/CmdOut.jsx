@@ -1,6 +1,6 @@
 import React from 'react';
 import db from 'app/db';
-import updateOnKey from 'app/updateOnKey';
+import updateOn from 'app/updateOn';
 import { hasTag } from 'app/Tag';
 
 import './cmdout.css';
@@ -33,4 +33,4 @@ function cmdItems(ctx, tags) {
   return [];
 }
 
-export default updateOnKey(CmdOut, ':db/context');
+export default updateOn(CmdOut, ':db/context');

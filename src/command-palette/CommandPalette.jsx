@@ -4,7 +4,7 @@ import cx from 'classnames';
 import db from 'app/db';
 import vbus from 'app/vbus';
 import { hasTag } from 'app/Tag';
-import updateOnKey from 'app/updateOnKey';
+import updateOn from 'app/updateOn';
 import './command-palette.css';
 import { toggleShuffle } from 'app/Player';
 
@@ -81,4 +81,4 @@ function shuffle() {
   vbus.push(toggleShuffle(db.value.get(':db/player')));
 }
 
-export default updateOnKey(CommandPalette, ':db/cmd', dbVal => dbVal.get(':db/player').tracklist);
+export default updateOn(CommandPalette, ':db/cmd', dbVal => dbVal.get(':db/player').tracklist);

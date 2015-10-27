@@ -2,7 +2,7 @@ import React from 'react';
 import db from 'app/db';
 import { Motion, spring } from 'react-motion';
 
-import updateOnKey from 'app/updateOnKey';
+import updateOn from 'app/updateOn';
 import { hasTag } from 'app/Tag';
 
 import './profile.css';
@@ -43,4 +43,4 @@ var Profile = React.createClass({
   }
 });
 
-export default updateOnKey(Profile, [':db/user', ':db/command-palette']);
+export default updateOn(Profile, [':db/user', ':db/command-palette']);

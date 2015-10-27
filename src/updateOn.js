@@ -2,7 +2,7 @@ import React from 'react';
 import db from 'app/db';
 import Atom from 'app/Atom';
 
-function updateOn(ComposedComponent, equals) {
+function updateOnDbChange(ComposedComponent, equals) {
   return React.createClass({
     componentDidMount: function () {
       var prevDbVal = db.value;
@@ -41,8 +41,8 @@ function equalsByGivenKey(prevDb, nextDb) {
   };
 }
 
-export default function updateOnKey(ComposedComponent, ...dbKeys) {
-  return updateOn(ComposedComponent, function (prevDb, nextDb) {
+export default function updateOn(ComposedComponent, ...dbKeys) {
+  return updateOnDbChange(ComposedComponent, function (prevDb, nextDb) {
     return dbKeys.every(equalsByGivenKey(prevDb, nextDb));
   });
 }

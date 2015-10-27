@@ -1,6 +1,6 @@
 import db from 'app/db';
 import { hasTag } from 'app/Tag';
-import updateOnKey from 'app/updateOnKey';
+import updateOn from 'app/updateOn';
 import MainLayout from 'app/main-layout/MainLayout';
 import AuthView from 'app/auth/AuthView';
 
@@ -18,4 +18,4 @@ var AppRootView = () => {
   return <div className='empty-view' />;
 }
 
-export default updateOnKey(AppRootView, ':db/route');
+export default updateOn(AppRootView, ':db/route');

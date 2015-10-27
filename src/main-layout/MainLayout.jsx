@@ -4,7 +4,7 @@ import 'app/styles/theme.css';
 import React from 'react';
 import { Motion, spring } from 'react-motion';
 import db from 'app/db';
-import updateOnKey from 'app/updateOnKey';
+import updateOn from 'app/updateOn';
 import { hasTag } from 'app/Tag';
 
 import CommandPalette from 'app/command-palette/CommandPalette';
@@ -78,4 +78,4 @@ class MainLayout extends React.Component {
   }
 }
 
-export default updateOnKey(MainLayout, ':db/command-palette');
+export default updateOn(MainLayout, ':db/command-palette');
