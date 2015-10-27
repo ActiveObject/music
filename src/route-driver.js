@@ -1,8 +1,9 @@
 var page = require('page');
+var app = require('app');
 
-module.exports = function(vbus) {
+module.exports = function() {
   page('/', function () {
-    vbus.push({
+    app.push({
       tag: [':app/route', ':route/main']
     });
   });

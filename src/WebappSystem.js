@@ -1,6 +1,6 @@
 import querystring from 'querystring';
 import { each } from 'underscore';
-import vbus from 'app/vbus';
+import app from 'app';
 import onValue from 'app/onValue';
 import { IGetItem, ISetItem } from 'app/Storage';
 import { IHttpRequest } from 'app/Http';
@@ -26,12 +26,12 @@ export default function (proto) {
 
   proto.start = function () {
     var hash = location.hash;
-    uninstallList.push(require('app/vk-indexer/driver')(vbus));
-    uninstallList.push(require('app/route-driver')(vbus));
-    uninstallList.push(require('app/vk/driver')(vbus));
-    uninstallList.push(require('app/soundmanager/driver')(vbus));
-    uninstallList.push(require('app/local-storage-driver')(vbus));
-    uninstallList.push(require('app/key-control-driver')(vbus));
+    uninstallList.push(require('app/vk-indexer/driver')());
+    uninstallList.push(require('app/route-driver')());
+    uninstallList.push(require('app/vk/driver')());
+    uninstallList.push(require('app/soundmanager/driver')());
+    uninstallList.push(require('app/local-storage-driver')());
+    uninstallList.push(require('app/key-control-driver')());
     proto.auth(hash);
   };
 
@@ -54,7 +54,7 @@ export default function (proto) {
       localStorage.setItem('user_id', credentials.user_id);
       localStorage.setItem('access_token', credentials.access_token);
 
-      return vbus.push({
+      return app.push({
         tag: [':app/user', ':user/authenticated'],
         id: credentials.user_id,
         accessToken: credentials.access_token
@@ -62,13 +62,13 @@ export default function (proto) {
     }
 
     if (isUserInStorage()) {
-      return vbus.push({
+      return app.push({
         tag: [':app/user', ':user/authenticated'],
         id: localStorage.getItem('user_id'),
         accessToken: localStorage.getItem('access_token')
       });
     }
 
-    return vbus.push({ tag: [':app/route', ':route/auth'], authUrl: vkAccount.url });
+    return app.push({ tag: [':app/route', ':route/auth'], authUrl: vkAccount.url });
   };
 }

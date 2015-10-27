@@ -3,7 +3,7 @@ import app from 'app';
 import vk from 'app/vk';
 import { hasTag } from 'app/Tag';
 
-export default function (vbus) {
+export default function () {
   return Atom.listen(app, function (dbVal) {
     var user = dbVal.get(':db/user');
 

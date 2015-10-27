@@ -1,11 +1,9 @@
+import { Map, List } from 'immutable';
 import app from 'app';
 import WebappSystem from 'app/WebappSystem';
-import Atom from 'app/Atom';
-import vbus from 'app/vbus';
 import reducer from 'app/reducer';
 import { render } from 'app/renderer';
 import AppRootView from 'app/AppRootView';
-import { Map, List } from 'immutable';
 
 var player = {
   tag: [':app/player'],
@@ -47,12 +45,13 @@ var initialAppState = Map({
   ':db/tags': []
 });
 
+var renderApp = render(AppRootView, document.getElementById('app'));
+
 app
   .use(WebappSystem)
-  .run(initialAppState, render(AppRootView, document.getElementById('app')), reducer)
+  .run(initialAppState, renderApp, reducer)
   .start();
 
 if (process.env.NODE_ENV === 'development') {
   window._app = app;
-  window._vbus = vbus;
 }

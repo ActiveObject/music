@@ -1,6 +1,5 @@
 import React from 'react';
 import app from 'app';
-import vbus from 'app/vbus';
 import { hasTag } from 'app/Tag';
 import { updateOn } from 'app/renderer';
 import * as Player from 'app/Player';
@@ -12,7 +11,7 @@ function PlayBtnCtrl() {
 }
 
 function togglePlay() {
-  vbus.push(Player.togglePlay(app.value.get(':db/player')));
+  app.push(Player.togglePlay(app.value.get(':db/player')));
 }
 
 export default updateOn(PlayBtnCtrl, ':db/player');

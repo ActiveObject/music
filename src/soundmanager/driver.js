@@ -23,22 +23,22 @@ sm.setup({
   debugMode: false
 });
 
-export default function (vbus) {
+export default function () {
   var playerChanges = Kefir.fromEvents(app, 'change').map(dbVal => dbVal.get(':db/player'));
 
   return subscribeWith(on, onValue, function (on, onValue) {
     on(sm, 'finish', function (track) {
-      vbus.push(Player.play(Player.nextTrack(app.value.get(':db/player'))));
+      app.push(Player.play(Player.nextTrack(app.value.get(':db/player'))));
     });
 
     on(sm, 'whileplaying', function (position) {
       if (!app.value.get(':db/player').seeking) {
-        vbus.push(merge(app.value.get(':db/player'), { position: position }));
+        app.push(merge(app.value.get(':db/player'), { position: position }));
       }
     });
 
     on(sm, 'whileloading', function (bytesLoaded, bytesTotal) {
-      vbus.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
+      app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
     });
 
     onValue(playerChanges.map(p => p.track).skipDuplicates(), function (track) {
@@ -62,7 +62,7 @@ export default function (vbus) {
 
     onValue(playerChanges, function (p) {
       if (hasTag(p, ':player/seek-to-position')) {
-        vbus.push(merge(omit(removeTag(p, ':player/seek-to-position'), 'seekToPosition'), { position: p.seekToPosition }));
+        app.push(merge(omit(removeTag(p, ':player/seek-to-position'), 'seekToPosition'), { position: p.seekToPosition }));
         sm.setPosition(p.seekToPosition);
       }
     });

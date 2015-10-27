@@ -78,6 +78,6 @@ function addListener(emitter, event, listener) {
   emitter.addListener(event, handleEvent);
 
   return function () {
-    emitter.removeListener();
+    emitter.removeListener(event, handleEvent);
   };
 }

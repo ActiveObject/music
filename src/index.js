@@ -1,7 +1,8 @@
+import { EventEmitter } from 'events';
 import Atom from 'app/Atom';
-import vbus from 'app/vbus';
 
 var appState = new Atom(null);
+var vbus = new EventEmitter();
 
 var app = {
   view: function (key, equal) {
@@ -47,6 +48,10 @@ var app = {
     Atom.listen(app, view);
     Atom.swap(app, initialState);
     return app;
+  },
+
+  push: function (v) {
+    vbus.emit('value', v);
   }
 };
 

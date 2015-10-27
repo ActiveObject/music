@@ -2,7 +2,6 @@ import React from 'react';
 import { throttle } from 'underscore';
 import cx from 'classnames';
 import app from 'app';
-import vbus from 'app/vbus';
 import { hasTag } from 'app/Tag';
 import { updateOn } from 'app/renderer';
 import './command-palette.css';
@@ -48,7 +47,7 @@ class CommandPalette extends React.Component {
 
   onKeyUp(e) {
     if (e.keyCode === 27) {
-      vbus.push({
+      app.push({
         tag: [':app/command-palette']
       });
     }
@@ -57,20 +56,20 @@ class CommandPalette extends React.Component {
   }
 
   executeCommand(cmd) {
-    vbus.push({
+    app.push({
       tag: ':app/cmd',
       value: cmd
     });
   }
 
   activate() {
-    vbus.push({
+    app.push({
       tag: [':app/command-palette', ':cmd/is-activated']
     });
   }
 
   deactivate() {
-    vbus.push({
+    app.push({
       tag: [':app/command-palette']
     });
   }
@@ -78,7 +77,7 @@ class CommandPalette extends React.Component {
 
 
 function shuffle() {
-  vbus.push(toggleShuffle(app.value.get(':db/player')));
+  app.push(toggleShuffle(app.value.get(':db/player')));
 }
 
 export default updateOn(CommandPalette, ':db/cmd', dbVal => dbVal.get(':db/player').tracklist);

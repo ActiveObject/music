@@ -16,22 +16,22 @@ function bindKeys(fn) {
   };
 }
 
-export default function (vbus) {
+export default function () {
   return bindKeys(function (key) {
     key('left', function () {
-      vbus.push(Player.rewind(app.value.get(':db/player'), 5000));
+      app.push(Player.rewind(app.value.get(':db/player'), 5000));
     });
 
     key('right', function () {
-      vbus.push(Player.forward(app.value.get(':db/player'), 5000));
+      app.push(Player.forward(app.value.get(':db/player'), 5000));
     });
 
     key('space', function () {
-      vbus.push(Player.togglePlay(app.value.get(':db/player')));
+      app.push(Player.togglePlay(app.value.get(':db/player')));
     });
 
     key('command+shift+p', function () {
-      vbus.push(toggleTag(app.value.get(':db/command-palette'), ':cmd/is-activated'));
+      app.push(toggleTag(app.value.get(':db/command-palette'), ':cmd/is-activated'));
     });
   });
 }
