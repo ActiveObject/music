@@ -10,7 +10,7 @@ import Atom from 'app/Atom';
 import * as Album from 'app/Album';
 
 export default function () {
-  var user = Kefir.fromEvents(app, 'value').filter(v => hasTag(v, ':user/authenticated'));
+  var user = Kefir.fromEvents(app, 'change').filter(v => hasTag(v.get(':db/user'), ':user/authenticated'));
   var userAtom = app.view(':db/user', equal);
 
   return subscribeWith(onValue, Atom.listen, function (onValue, listen) {

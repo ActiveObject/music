@@ -26,6 +26,8 @@ var app = {
       if (!equal(prevVal.get(key), nextVal.get(key))) {
         Atom.swap(x, nextVal.get(key));
       }
+
+      prevVal = nextVal;
     });
 
     return x;
