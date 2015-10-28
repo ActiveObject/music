@@ -51,8 +51,6 @@ class CommandPalette extends React.Component {
         tag: [':app/command-palette']
       });
     }
-
-    console.log(e.keyCode)
   }
 
   executeCommand(cmd) {
