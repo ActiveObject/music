@@ -42,16 +42,12 @@ function detectArtistFilter(state, v) {
   }
 
   if (cmd.indexOf(':artist') === -1) {
-    return state;
-  }
-
-  var artist = cmd.slice(cmd.indexOf(':artist') + ':artist'.length).trim();
-
-  if (!artist) {
     return state.update(':db/context', function (ctx) {
       return omit(removeTag(ctx, ':context/filter-by-artist'), 'filter');
     });
   }
+
+  var artist = cmd.slice(cmd.indexOf(':artist') + ':artist'.length).trim();
 
   return state.update(':db/context', function (ctx) {
     return merge(addTag(ctx, ':context/filter-by-artist'), {
@@ -228,8 +224,8 @@ export default pipeThroughReducers(
   embodyTracks,
   embodyAlbums,
   detectArtistFilter,
-  detectAlbumFilter,
-  detectTrackFilter,
+  // detectAlbumFilter,
+  // detectTrackFilter,
   fallbackCmdToDefault,
   embodyTags,
   setDefaultPlayerTracklist
