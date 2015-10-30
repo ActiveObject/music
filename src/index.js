@@ -3,34 +3,6 @@ import Atom from 'app/Atom';
 var appState = new Atom(null);
 
 var app = {
-  view: function (key, equal) {
-    var x = new Atom(app.value.get(key));
-    var prevVal = null;
-    var isFirstRun = true;
-
-    Atom.listen(appState, function (nextVal) {
-      if (isFirstRun) {
-        isFirstRun = false;
-        prevVal = nextVal;
-        return;
-      }
-
-      if (!equal) {
-        equal = function (x, y) {
-          return x === y;
-        };
-      }
-
-      if (!equal(prevVal.get(key), nextVal.get(key))) {
-        Atom.swap(x, nextVal.get(key));
-      }
-
-      prevVal = nextVal;
-    });
-
-    return x;
-  },
-
   /**
    * Modifies app prototype chain:
    *

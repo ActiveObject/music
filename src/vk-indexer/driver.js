@@ -10,11 +10,13 @@ import Atom from 'app/Atom';
 import * as Album from 'app/Album';
 
 export default function () {
-  var userAtom = app.view(':db/user', equal);
-  var user = Kefir.fromEvents(userAtom, 'change').filter(v => hasTag(v, ':user/authenticated'));
+  var userStream = Kefir.fromEvents(app, 'change')
+    .map(v => v.get(':db/user'))
+    .skipDuplicates(equal)
+    .filter(v => hasTag(v, ':user/authenticated'));
 
-  return subscribeWith(onValue, Atom.listen, function (onValue, listen) {
-    onValue(user, function (user) {
+  return subscribeWith(onValue, function (onValue) {
+    onValue(userStream, function (user) {
       onValue(loadTracks(user), function (v) {
         app.push(addTag({ tracks: v }, ':vk/tracks'));
       });
@@ -24,23 +26,19 @@ export default function () {
       });
     });
 
-    onValue(user.toProperty().sampledBy(Kefir.interval(2 * 60 * 1000)), function (user) {
+    onValue(userStream.toProperty().sampledBy(Kefir.interval(2 * 60 * 1000)), function (user) {
       onValue(loadTracks(user), function (v) {
         app.push(addTag({ tracks: v }, ':vk/tracks'));
       });
     });
 
-    onValue(user.toProperty().sampledBy(Kefir.interval(10 * 60 * 1000)), function (user) {
+    onValue(userStream.toProperty().sampledBy(Kefir.interval(10 * 60 * 1000)), function (user) {
       onValue(loadAlbums(user), function (v) {
         app.push(addTag({ albums: v }, ':vk/albums'));
       });
     });
 
-    listen(userAtom, function (user) {
-      if (!hasTag(user, ':user/authenticated')) {
-        return;
-      }
-
+    onValue(userStream.filter(user => !hasTag(user, ':user/is-loaded')), function (user) {
       vk.users.get({
         user_ids: user.id,
         fields: ['photo_50']
@@ -115,6 +113,6 @@ function loadAll(loadResource, parseResponse) {
       });
     }
 
-    load(0, 1000);
+    load(0, 100);
   });
 }

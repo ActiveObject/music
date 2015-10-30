@@ -1,15 +1,11 @@
 import { Map } from 'immutable';
 import Kefir from 'kefir';
 import app from 'app';
-import Atom from 'app/Atom';
 import onValue from 'app/onValue';
 import * as Storage from 'app/Storage';
 import merge from 'app/merge';
 import { addTag } from 'app/Tag';
 import subscribeWith from 'app/subscribeWith';
-
-var albums = app.view(':db/albums');
-var tracks = app.view(':db/tracks');
 
 function firstValue(x) {
   return x[Object.keys(x)[0]];
@@ -37,16 +33,26 @@ export default function () {
     .skipDuplicates()
     .filter(track => Object.keys(track.audio).length > 0);
 
-  var unsub = subscribeWith(onValue, Atom.listen, function (onValue, listen) {
+  var albums = Kefir.fromEvents(app, 'change')
+    .skip(1)
+    .map(v => v.get(':db/albums'))
+    .skipDuplicates();
+
+  var tracks = Kefir.fromEvents(app, 'change')
+    .skip(1)
+    .map(v => v.get(':db/tracks'))
+    .skipDuplicates();
+
+  var unsub = subscribeWith(onValue, function (onValue) {
     onValue(playerTracks, function (v) {
       Storage.setItem({ ':player/track': JSON.stringify(v) });
     });
 
-    listen(tracks, function(tracks) {
+    onValue(tracks, function(tracks) {
       Storage.setItem({ ':app/tracks': JSON.stringify({ tracks: tracks }) });
     });
 
-    listen(albums, function(albums) {
+    onValue(albums, function(albums) {
       Storage.setItem({ ':app/albums': JSON.stringify({ albums: albums }) });
     });
   });
