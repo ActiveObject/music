@@ -5,22 +5,18 @@ import reducer from 'app/reducer';
 import { render } from 'app/renderer';
 import AppRootView from 'app/AppRootView';
 
-var player = {
-  tag: [':app/player'],
-  track: {
-    audio: {}
-  },
-  position: 0,
-  seekPosition: 0,
-  bytesTotal: 0,
-  bytesLoaded: 0,
-  tracklist: List()
-};
-
 var initialAppState = Map({
   ':db/albums': Map(),
   ':db/tracks': Map(),
-  ':db/player': player,
+
+  ':db/player': {
+    tag: [':app/player', ':player/empty'],
+    position: 0,
+    seekPosition: 0,
+    bytesTotal: 0,
+    bytesLoaded: 0,
+    tracklist: List()
+  },
 
   ':db/user': {
     tag: ':app/user'

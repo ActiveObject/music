@@ -4,8 +4,9 @@ import app from 'app';
 import onValue from 'app/onValue';
 import * as Storage from 'app/Storage';
 import merge from 'app/merge';
-import { addTag } from 'app/Tag';
+import { addTag, hasTag } from 'app/Tag';
 import subscribeWith from 'app/subscribeWith';
+import * as Player from 'app/Player';
 
 function firstValue(x) {
   return x[Object.keys(x)[0]];
@@ -29,9 +30,11 @@ function revive(key, value) {
 
 export default function () {
   var playerTracks = Kefir.fromEvents(app, 'change')
-    .map(v => v.get(':db/player').track)
+    .map(v => v.get(':db/player'))
     .skipDuplicates()
-    .filter(track => Object.keys(track.audio).length > 0);
+    .filter(p => !hasTag(p, ':player/empty'))
+    .map(p => p.track)
+    .skipDuplicates()
 
   var albums = Kefir.fromEvents(app, 'change')
     .skip(1)
@@ -58,7 +61,7 @@ export default function () {
   });
 
   Storage.getItem(':player/track', function (track) {
-    app.push(merge(app.value.get(':db/player'), { track: JSON.parse(track) }));
+    app.push(Player.useTrack(app.value.get(':db/player'), JSON.parse(track)));
   });
 
   Storage.getItem(':app/tracks', function (tracks) {

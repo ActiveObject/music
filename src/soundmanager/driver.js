@@ -25,6 +25,10 @@ sm.setup({
 
 export default function () {
   var playerChanges = Kefir.fromEvents(app, 'change').map(dbVal => dbVal.get(':db/player'));
+  var tracks = playerChanges
+    .filter(p => !hasTag(p, ':player/empty'))
+    .map(p => p.track)
+    .skipDuplicates();
 
   return subscribeWith(on, onValue, function (on, onValue) {
     on(sm, 'finish', function (track) {
@@ -41,7 +45,7 @@ export default function () {
       app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
     });
 
-    onValue(playerChanges.map(p => p.track).skipDuplicates(), function (track) {
+    onValue(tracks, function (track) {
       sm.useTrack(track);
     });
 

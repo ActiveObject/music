@@ -20,21 +20,25 @@ export function togglePlay(player, track, tracklist) {
     return togglePlayState(player);
   }
 
-  var result = player;
+  var result = useTrack(player, track);
+
+  if (tracklist !== player.tracklist) {
+    result = useTracklist(result, tracklist);
+  }
 
   if (track.id !== player.track.id) {
-    result = play(merge(result, { track: track }));
+    result = play(result);
   }
 
   if (track.id === player.track.id) {
     result = togglePlayState(result);
   }
 
-  if (tracklist !== player.tracklist) {
-    result = useTracklist(result, tracklist);
-  }
-
   return result;
+}
+
+export function useTrack(player, track) {
+  return merge(removeTag(player, ':player/empty'), { track: track });
 }
 
 export function togglePlayState(p) {

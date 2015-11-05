@@ -55,10 +55,6 @@ Soundmanager.prototype.pause = function () {
 Soundmanager.prototype.useTrack = function (track) {
   var stm = this;
 
-  if (Object.keys(track.audio).length === 0) {
-    return;
-  }
-
   var sound = sm.createSound({
     id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
     url: track.audio.url,
