@@ -18,16 +18,6 @@ Soundmanager.prototype = Object.create(EventEmitter.prototype, {
   constructor: { value: Soundmanager, enumerable: false }
 });
 
-Soundmanager.prototype.fromJSON = function (v) {
-  var track = v[Object.keys(v)[0]].track;
-
-  if (track) {
-    this.useTrack(track[Object.keys(track)[0]]);
-  }
-
-  return this.atom.value;
-};
-
 Soundmanager.prototype.setup = function (options) {
   sm.setup(merge(options, {
     onready: function () {

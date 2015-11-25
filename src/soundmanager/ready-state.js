@@ -6,15 +6,6 @@ function ReadyState(attrs) {
   this.sound = attrs.sound;
 }
 
-
-ReadyState.prototype.toJSON = function () {
-  return {
-    'soundmanager:ready-state': {
-      track: this.track
-    }
-  };
-};
-
 ReadyState.prototype.play = function () {
   if (!this.track || !this.sound) {
     return this;

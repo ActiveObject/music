@@ -9,14 +9,6 @@ function PausedState(attrs) {
   }
 }
 
-PausedState.prototype.toJSON = function () {
-  return {
-    'soundmanager:paused-state': {
-      track: this.track.toJSON()
-    }
-  };
-};
-
 PausedState.prototype.useTrack = function (track, sound) {
   this.sound.stop();
   this.sound.unload();

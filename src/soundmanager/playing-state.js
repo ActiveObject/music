@@ -11,14 +11,6 @@ function PlayingState(attrs) {
   }
 }
 
-PlayingState.prototype.toJSON = function () {
-  return {
-    'soundmanager:playing-state': {
-      track: this.track
-    }
-  };
-};
-
 PlayingState.prototype.useTrack = function (track, sound) {
   this.sound.stop();
   this.sound.unload();

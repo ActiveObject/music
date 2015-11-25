@@ -5,14 +5,6 @@ function UninitializedState(attrs) {
   this.sound = attrs.sound;
 }
 
-UninitializedState.prototype.toJSON = function () {
-  return {
-    'soundmanager:uninitialized-state': {
-      track: this.track
-    }
-  };
-};
-
 UninitializedState.prototype.setup = function () {
   return ReadyState.create({
     track: this.track,
