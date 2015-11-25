@@ -2,7 +2,6 @@ var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
 var sm = require('soundmanager');
 var merge = require('app/merge');
-var Atom = require('app/Atom');
 
 var UninitializedState = require('./uninitialized-state');
 var ReadyState = require('./ready-state');
@@ -11,7 +10,7 @@ var PausedState = require('./paused-state');
 
 
 function Soundmanager(attrs) {
-  this.atom = attrs.atom;
+  this.state = attrs.state;
 }
 
 Soundmanager.prototype = Object.create(EventEmitter.prototype, {
@@ -21,25 +20,25 @@ Soundmanager.prototype = Object.create(EventEmitter.prototype, {
 Soundmanager.prototype.setup = function (options) {
   sm.setup(merge(options, {
     onready: function () {
-      if (this.atom.value.track) {
-        this.useTrack(this.atom.value.track);
+      if (this.state.track) {
+        this.useTrack(this.state.track);
       }
 
-      Atom.update(this, v => v.setup());
+      this.state = this.state.setup();
     }.bind(this),
 
     ontimeout: function () {
-      this.atom.swap(UninitializedState.create({}));
+      this.state = UninitializedState.create({});
     }.bind(this)
   }));
 };
 
 Soundmanager.prototype.play = function () {
-  Atom.update(this, v => v.play());
+  this.state = this.state.play();
 };
 
 Soundmanager.prototype.pause = function () {
-  Atom.update(this, v => v.pause());
+  this.state = this.state.pause();
 };
 
 Soundmanager.prototype.useTrack = function (track) {
@@ -67,13 +66,13 @@ Soundmanager.prototype.useTrack = function (track) {
     }, 500)
   });
 
-  Atom.update(this, v => v.useTrack(track, sound));
+  this.state = this.state.useTrack(track, sound);
 };
 
 Soundmanager.prototype.setPosition = function (position) {
-  Atom.update(this, v => v.setPosition(position));
+  this.state = this.state.setPosition(position);
 };
 
 module.exports = new Soundmanager({
-  atom: new Atom(UninitializedState.create({}))
+  state: UninitializedState.create({})
 });
