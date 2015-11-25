@@ -7,6 +7,7 @@ var UninitializedState = require('./uninitialized-state');
 var ReadyState = require('./ready-state');
 var PlayingState = require('./playing-state');
 var PausedState = require('./paused-state');
+var hasTag = require('app/Tag').hasTag;
 
 
 function Soundmanager(attrs) {
@@ -52,7 +53,7 @@ Soundmanager.prototype.useTrack = function (track) {
     volume: 100,
 
     onfinish: function () {
-      stm.emit('finish', stm.atom.value.track);
+      stm.emit('finish', stm.state.track);
     },
 
     whileplaying: _.throttle(function () {
@@ -70,7 +71,9 @@ Soundmanager.prototype.useTrack = function (track) {
 };
 
 Soundmanager.prototype.setPosition = function (position) {
-  this.state = this.state.setPosition(position);
+  if (hasTag(this.state, ':sm/playing') || hasTag(this.state, ':sm/paused')) {
+    this.state.sound.setPosition(position);
+  }
 };
 
 module.exports = new Soundmanager({

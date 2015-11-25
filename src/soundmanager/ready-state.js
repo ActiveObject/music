@@ -4,6 +4,7 @@ var PlayingState = require('./playing-state');
 function ReadyState(attrs) {
   this.track = attrs.track;
   this.sound = attrs.sound;
+  this.tag = ':sm/ready';
 }
 
 ReadyState.prototype.play = function () {
@@ -33,10 +34,6 @@ ReadyState.prototype.useTrack = function (track, sound) {
     track: track,
     sound: sound
   });
-};
-
-ReadyState.prototype.setPosition = function () {
-  return this;
 };
 
 exports.create = function(attrs) {

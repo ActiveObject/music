@@ -3,6 +3,7 @@ var PlayingState = require('./playing-state');
 function PausedState(attrs) {
   this.track = attrs.track;
   this.sound = attrs.sound;
+  this.tag = ':sm/paused';
 
   if (this.sound && !this.sound.paused) {
     this.sound.pause();
@@ -28,11 +29,6 @@ PausedState.prototype.play = function () {
 };
 
 PausedState.prototype.pause = function () {
-  return this;
-};
-
-PausedState.prototype.setPosition = function (v) {
-  this.sound.setPosition(v);
   return this;
 };
 

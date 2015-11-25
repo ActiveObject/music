@@ -27,10 +27,6 @@ UninitializedState.prototype.useTrack = function (track, sound) {
   });
 };
 
-UninitializedState.prototype.setPosition = function () {
-  return this;
-};
-
 exports.create = function (attrs) {
   return new UninitializedState(attrs);
 };
