@@ -17,73 +17,90 @@ Soundmanager.prototype = Object.create(EventEmitter.prototype, {
 Soundmanager.prototype.setup = function (options) {
   sm.setup(merge(options, {
     onready: () => {
-      if (this.state.track) {
-        this.useTrack(this.state.track);
-      }
-
       this.state.tag = ':sm/ready';
     }
   }));
 };
 
-Soundmanager.prototype.play = function () {
+Soundmanager.prototype.play = function (track) {
   if (!hasTag(this.state, ':sm/ready')) {
     return;
   }
 
+  if (!this.state.track) {
+    var sound = sm.createSound({
+      id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
+      url: track.audio.url,
+      autoLoad: false,
+      autoPlay: false,
+      volume: 100,
+
+      onfinish: () => {
+        this.emit('finish', this.state.track);
+      },
+
+      whileplaying: _.throttle(() => {
+        if (sound.readyState !== 0) {
+          this.emit('whileplaying', sound.position);
+        }
+      }, 500),
+
+      whileloading: _.throttle(() => {
+        this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
+      }, 500)
+    });
+
+    this.state.track = track;
+    this.state.sound = sound;
+  }
+
+  if (track.id !== this.state.track.id) {
+    this.state.sound.stop();
+    this.state.sound.destruct();
+
+    var sound = sm.createSound({
+      id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
+      url: track.audio.url,
+      autoLoad: false,
+      autoPlay: false,
+      volume: 100,
+
+      onfinish: () => {
+        this.emit('finish', this.state.track);
+      },
+
+      whileplaying: _.throttle(() => {
+        if (sound.readyState !== 0) {
+          this.emit('whileplaying', sound.position);
+        }
+      }, 500),
+
+      whileloading: _.throttle(() => {
+        this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
+      }, 500)
+    });
+
+    this.state.sound = sound;
+    this.state.track = track;
+  }
+
   if (this.state.sound.playState === 0) {
-    this.state = addTag(this.state, ':sm/playing');
     return this.state.sound.play();
   }
 
   if (this.state.sound.paused) {
-    this.state = addTag(this.state, ':sm/playing');
-    this.state.sound.resume();
+    return this.state.sound.resume();
   }
 };
 
-Soundmanager.prototype.pause = function () {
+Soundmanager.prototype.pause = function (track) {
   if (!hasTag(this.state, ':sm/ready')) {
     return;
   }
 
   if (!this.state.sound.paused) {
-    this.state = addTag(this.state, ':sm/paused');
     this.state.sound.pause();
   }
-};
-
-Soundmanager.prototype.useTrack = function (track) {
-  var sound = sm.createSound({
-    id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
-    url: track.audio.url,
-    autoLoad: false,
-    autoPlay: false,
-    volume: 100,
-
-    onfinish: () => {
-      this.emit('finish', this.state.track);
-    },
-
-    whileplaying: _.throttle(() => {
-      if (sound.readyState !== 0) {
-        this.emit('whileplaying', sound.position);
-      }
-    }, 500),
-
-    whileloading: _.throttle(() => {
-      this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
-    }, 500)
-  });
-
-  if (hasTag(this.state, ':sm/playing') || hasTag(this.state, ':sm/paused')) {
-    this.state.sound.stop();
-    this.state.sound.destruct();
-  }
-
-  this.state.sound = sound;
-  this.state.track = track;
-  this.play();
 };
 
 Soundmanager.prototype.setPosition = function (position) {
