@@ -29,17 +29,26 @@ Soundmanager.prototype.tick = function (player) {
 
   var track = player.track;
 
+
   if (this.track && track.id !== this.track.id) {
     this.sound.destruct();
   }
 
-  if (!this.track || track.id !== this.track.id) {
+  if (!this.track || track.id !== this.track.id || track.audio.url !== this.track.audio.url) {
     var sound = sm.createSound({
       id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
       url: track.audio.url,
       autoLoad: false,
       autoPlay: false,
       volume: 100,
+
+      onload: () => {
+        if (sound.readyState === 2) {
+          var err = new Error(`Can\'t load audio ${this.track.audio.artist} - ${this.track.audio.title}`);
+          err.track = this.track;
+          this.emit('error', err);
+        }
+      },
 
       onfinish: () => {
         this.emit('finish', this.track);

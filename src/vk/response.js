@@ -8,7 +8,7 @@ Response.CAPTCHA_NEEDED = 14;
 
 Response.prototype.send = function(callback) {
   if (this.tooManyRequests() || this.captchaNeeded()) {
-    return this;
+    return callback(this.err);
   }
 
   if (this.err) {

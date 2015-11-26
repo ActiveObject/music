@@ -7,6 +7,7 @@ import merge from 'app/merge';
 import * as Player from 'app/Player';
 import { omit } from 'underscore';
 import subscribeWith from 'app/subscribeWith';
+import vk from 'app/vk';
 
 function on(emitter, event, fn) {
   emitter.on(event, fn);
@@ -39,6 +40,18 @@ export default function () {
 
     on(sm, 'whileloading', function (bytesLoaded, bytesTotal) {
       app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
+    });
+
+    on(sm, 'error', function (err) {
+      vk.audio.getById({
+        audios: [`${err.track.owner}_${err.track.id}`]
+      }, function (err, res) {
+        if (err) {
+          return console.log(err);
+        }
+
+        app.push({ tag: ':vk/tracks', tracks: res.response });
+      });
     });
 
     onValue(playerChanges, player => {
