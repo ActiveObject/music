@@ -2,7 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
 var sm = require('soundmanager');
 var merge = require('app/merge');
-var { hasTag, addTag } = require('app/Tag');
+var { hasTag } = require('app/Tag');
 
 function Soundmanager() {
   this.state = {
@@ -29,7 +29,7 @@ Soundmanager.prototype.tick = function (player) {
 
   var track = player.track;
 
-  if (!this.state.track) {
+  if (!this.track) {
     var sound = sm.createSound({
       id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
       url: track.audio.url,
@@ -38,7 +38,7 @@ Soundmanager.prototype.tick = function (player) {
       volume: 100,
 
       onfinish: () => {
-        this.emit('finish', this.state.track);
+        this.emit('finish', this.track);
       },
 
       whileplaying: _.throttle(() => {
@@ -52,13 +52,13 @@ Soundmanager.prototype.tick = function (player) {
       }, 500)
     });
 
-    this.state.track = track;
-    this.state.sound = sound;
+    this.track = track;
+    this.sound = sound;
   }
 
-  if (track.id !== this.state.track.id) {
-    this.state.sound.stop();
-    this.state.sound.destruct();
+  if (track.id !== this.track.id) {
+    this.sound.stop();
+    this.sound.destruct();
 
     var sound = sm.createSound({
       id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
@@ -68,7 +68,7 @@ Soundmanager.prototype.tick = function (player) {
       volume: 100,
 
       onfinish: () => {
-        this.emit('finish', this.state.track);
+        this.emit('finish', this.track);
       },
 
       whileplaying: _.throttle(() => {
@@ -82,29 +82,25 @@ Soundmanager.prototype.tick = function (player) {
       }, 500)
     });
 
-    this.state.sound = sound;
-    this.state.track = track;
+    this.sound = sound;
+    this.track = track;
   }
 
-  if (!hasTag(player, ':player/is-playing') && !this.state.sound.paused) {
-    return this.state.sound.pause();
+  if (!hasTag(player, ':player/is-playing') && !this.sound.paused) {
+    return this.sound.pause();
   }
 
-  if (hasTag(player, ':player/is-playing') && this.state.sound.playState === 0) {
-    return this.state.sound.play();
+  if (hasTag(player, ':player/is-playing') && this.sound.playState === 0) {
+    return this.sound.play();
   }
 
-  if (hasTag(player, ':player/is-playing') && this.state.sound.paused) {
-    return this.state.sound.resume();
-  }
-};
-
-Soundmanager.prototype.setPosition = function (position) {
-  if (!hasTag(this.state, ':sm/ready')) {
-    return;
+  if (hasTag(player, ':player/is-playing') && this.sound.paused) {
+    return this.sound.resume();
   }
 
-  this.state.sound.setPosition(position);
+  if (hasTag(player, ':player/seek-to-position')) {
+    return this.sound.setPosition(player.seekToPosition);
+  }
 };
 
 module.exports = new Soundmanager();

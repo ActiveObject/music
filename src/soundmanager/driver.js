@@ -41,20 +41,12 @@ export default function () {
       app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
     });
 
-    onValue(playerChanges, player => sm.tick(player));
-
-    onValue(playerChanges.map(p => [hasTag(p, ':player/seeking'), p.seekPosition])
-        .skipDuplicates(([oldValue], [newValue]) => oldValue === newValue), function([isSeeking, seekPosition]) {
-      if (!isSeeking) {
-        sm.setPosition(seekPosition);
+    onValue(playerChanges, player => {
+      if (hasTag(player, ':player/seek-to-position')) {
+        app.push(merge(omit(removeTag(player, ':player/seek-to-position'), 'seekToPosition'), { position: player.seekToPosition }));
       }
-    });
 
-    onValue(playerChanges, function (p) {
-      if (hasTag(p, ':player/seek-to-position')) {
-        app.push(merge(omit(removeTag(p, ':player/seek-to-position'), 'seekToPosition'), { position: p.seekToPosition }));
-        sm.setPosition(p.seekToPosition);
-      }
+      sm.tick(player);
     });
   });
 }
