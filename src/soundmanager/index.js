@@ -2,16 +2,12 @@ var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
 var sm = require('soundmanager');
 var merge = require('app/merge');
+var { hasTag, addTag } = require('app/Tag');
 
-var UninitializedState = require('./uninitialized-state');
-var ReadyState = require('./ready-state');
-var PlayingState = require('./playing-state');
-var PausedState = require('./paused-state');
-var hasTag = require('app/Tag').hasTag;
-
-
-function Soundmanager(attrs) {
-  this.state = attrs.state;
+function Soundmanager() {
+  this.state = {
+    tag: ':sm/uninitialized'
+  };
 }
 
 Soundmanager.prototype = Object.create(EventEmitter.prototype, {
@@ -20,31 +16,44 @@ Soundmanager.prototype = Object.create(EventEmitter.prototype, {
 
 Soundmanager.prototype.setup = function (options) {
   sm.setup(merge(options, {
-    onready: function () {
+    onready: () => {
       if (this.state.track) {
         this.useTrack(this.state.track);
       }
 
-      this.state = this.state.setup();
-    }.bind(this),
-
-    ontimeout: function () {
-      this.state = UninitializedState.create({});
-    }.bind(this)
+      this.state.tag = ':sm/ready';
+    }
   }));
 };
 
 Soundmanager.prototype.play = function () {
-  this.state = this.state.play();
+  if (!hasTag(this.state, ':sm/ready')) {
+    return;
+  }
+
+  if (this.state.sound.playState === 0) {
+    this.state = addTag(this.state, ':sm/playing');
+    return this.state.sound.play();
+  }
+
+  if (this.state.sound.paused) {
+    this.state = addTag(this.state, ':sm/playing');
+    this.state.sound.resume();
+  }
 };
 
 Soundmanager.prototype.pause = function () {
-  this.state = this.state.pause();
+  if (!hasTag(this.state, ':sm/ready')) {
+    return;
+  }
+
+  if (!this.state.sound.paused) {
+    this.state = addTag(this.state, ':sm/paused');
+    this.state.sound.pause();
+  }
 };
 
 Soundmanager.prototype.useTrack = function (track) {
-  var stm = this;
-
   var sound = sm.createSound({
     id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
     url: track.audio.url,
@@ -52,30 +61,37 @@ Soundmanager.prototype.useTrack = function (track) {
     autoPlay: false,
     volume: 100,
 
-    onfinish: function () {
-      stm.emit('finish', stm.state.track);
+    onfinish: () => {
+      this.emit('finish', this.state.track);
     },
 
-    whileplaying: _.throttle(function () {
-      if (this.readyState !== 0) {
-        stm.emit('whileplaying', this.position);
+    whileplaying: _.throttle(() => {
+      if (sound.readyState !== 0) {
+        this.emit('whileplaying', sound.position);
       }
     }, 500),
 
-    whileloading: _.throttle(function () {
-      stm.emit('whileloading', this.bytesLoaded, this.bytesTotal);
+    whileloading: _.throttle(() => {
+      this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
     }, 500)
   });
 
-  this.state = this.state.useTrack(track, sound);
+  if (hasTag(this.state, ':sm/playing') || hasTag(this.state, ':sm/paused')) {
+    this.state.sound.stop();
+    this.state.sound.destruct();
+  }
+
+  this.state.sound = sound;
+  this.state.track = track;
+  this.play();
 };
 
 Soundmanager.prototype.setPosition = function (position) {
-  if (hasTag(this.state, ':sm/playing') || hasTag(this.state, ':sm/paused')) {
-    this.state.sound.setPosition(position);
+  if (!hasTag(this.state, ':sm/ready')) {
+    return;
   }
+
+  this.state.sound.setPosition(position);
 };
 
-module.exports = new Soundmanager({
-  state: UninitializedState.create({})
-});
+module.exports = new Soundmanager();
