@@ -42,11 +42,7 @@ export default function () {
     });
 
     onValue(playerChanges.skipDuplicates((p1, p2) => hasTag(p1, ':player/is-playing') === hasTag(p2, ':player/is-playing') && p1.track.id === p2.track.id), function (player) {
-      if (hasTag(player, ':player/is-playing')) {
-        sm.play(app.value.get(':db/player').track);
-      } else {
-        sm.pause(app.value.get(':db/player').track);
-      }
+      sm.tick(app.value.get(':db/player'));
     });
 
     onValue(playerChanges.map(p => [hasTag(p, ':player/seeking'), p.seekPosition])

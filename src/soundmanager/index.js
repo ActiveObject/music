@@ -22,10 +22,13 @@ Soundmanager.prototype.setup = function (options) {
   }));
 };
 
-Soundmanager.prototype.play = function (track) {
+Soundmanager.prototype.tick = function (player) {
   if (!hasTag(this.state, ':sm/ready')) {
     return;
   }
+
+
+  var track = player.track;
 
   if (!this.state.track) {
     var sound = sm.createSound({
@@ -84,22 +87,16 @@ Soundmanager.prototype.play = function (track) {
     this.state.track = track;
   }
 
+  if (!hasTag(player, ':player/is-playing') && !this.state.sound.paused) {
+    return this.state.sound.pause();
+  }
+
   if (this.state.sound.playState === 0) {
     return this.state.sound.play();
   }
 
   if (this.state.sound.paused) {
     return this.state.sound.resume();
-  }
-};
-
-Soundmanager.prototype.pause = function (track) {
-  if (!hasTag(this.state, ':sm/ready')) {
-    return;
-  }
-
-  if (!this.state.sound.paused) {
-    this.state.sound.pause();
   }
 };
 
