@@ -29,37 +29,11 @@ Soundmanager.prototype.tick = function (player) {
 
   var track = player.track;
 
-  if (!this.track) {
-    var sound = sm.createSound({
-      id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
-      url: track.audio.url,
-      autoLoad: false,
-      autoPlay: false,
-      volume: 100,
-
-      onfinish: () => {
-        this.emit('finish', this.track);
-      },
-
-      whileplaying: throttle(() => {
-        if (sound.readyState !== 0) {
-          this.emit('whileplaying', sound.position);
-        }
-      }, 500),
-
-      whileloading: throttle(() => {
-        this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
-      }, 500)
-    });
-
-    this.track = track;
-    this.sound = sound;
+  if (this.track && track.id !== this.track.id) {
+    this.sound.destruct();
   }
 
-  if (track.id !== this.track.id) {
-    this.sound.stop();
-    this.sound.destruct();
-
+  if (!this.track || track.id !== this.track.id) {
     var sound = sm.createSound({
       id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
       url: track.audio.url,
@@ -82,8 +56,8 @@ Soundmanager.prototype.tick = function (player) {
       }, 500)
     });
 
-    this.sound = sound;
     this.track = track;
+    this.sound = sound;
   }
 
   if (!hasTag(player, ':player/is-playing') && !this.sound.paused) {
