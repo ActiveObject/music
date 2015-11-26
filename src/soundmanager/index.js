@@ -1,8 +1,8 @@
-var EventEmitter = require('events').EventEmitter;
-var _ = require('underscore');
-var sm = require('soundmanager');
-var merge = require('app/merge');
-var { hasTag } = require('app/Tag');
+import { EventEmitter } from 'events';
+import { throttle } from 'underscore';
+import sm from 'soundmanager';
+import merge from 'app/merge';
+import { hasTag } from 'app/Tag';
 
 function Soundmanager() {
   this.state = {
@@ -41,13 +41,13 @@ Soundmanager.prototype.tick = function (player) {
         this.emit('finish', this.track);
       },
 
-      whileplaying: _.throttle(() => {
+      whileplaying: throttle(() => {
         if (sound.readyState !== 0) {
           this.emit('whileplaying', sound.position);
         }
       }, 500),
 
-      whileloading: _.throttle(() => {
+      whileloading: throttle(() => {
         this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
       }, 500)
     });
@@ -71,13 +71,13 @@ Soundmanager.prototype.tick = function (player) {
         this.emit('finish', this.track);
       },
 
-      whileplaying: _.throttle(() => {
+      whileplaying: throttle(() => {
         if (sound.readyState !== 0) {
           this.emit('whileplaying', sound.position);
         }
       }, 500),
 
-      whileloading: _.throttle(() => {
+      whileloading: throttle(() => {
         this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
       }, 500)
     });
@@ -103,4 +103,4 @@ Soundmanager.prototype.tick = function (player) {
   }
 };
 
-module.exports = new Soundmanager();
+export default new Soundmanager();
