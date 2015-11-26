@@ -41,9 +41,7 @@ export default function () {
       app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
     });
 
-    onValue(playerChanges.skipDuplicates((p1, p2) => hasTag(p1, ':player/is-playing') === hasTag(p2, ':player/is-playing') && p1.track.id === p2.track.id), function (player) {
-      sm.tick(app.value.get(':db/player'));
-    });
+    onValue(playerChanges, player => sm.tick(player));
 
     onValue(playerChanges.map(p => [hasTag(p, ':player/seeking'), p.seekPosition])
         .skipDuplicates(([oldValue], [newValue]) => oldValue === newValue), function([isSeeking, seekPosition]) {

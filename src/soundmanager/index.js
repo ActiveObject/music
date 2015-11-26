@@ -27,7 +27,6 @@ Soundmanager.prototype.tick = function (player) {
     return;
   }
 
-
   var track = player.track;
 
   if (!this.state.track) {
@@ -91,11 +90,11 @@ Soundmanager.prototype.tick = function (player) {
     return this.state.sound.pause();
   }
 
-  if (this.state.sound.playState === 0) {
+  if (hasTag(player, ':player/is-playing') && this.state.sound.playState === 0) {
     return this.state.sound.play();
   }
 
-  if (this.state.sound.paused) {
+  if (hasTag(player, ':player/is-playing') && this.state.sound.paused) {
     return this.state.sound.resume();
   }
 };
