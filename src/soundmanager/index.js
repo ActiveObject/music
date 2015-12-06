@@ -27,8 +27,11 @@ Soundmanager.prototype.tick = function (player) {
     return;
   }
 
-  var track = player.track;
+  if (!player.track) {
+    return;
+  }
 
+  var track = player.track;
 
   if (this.track && track.id !== this.track.id) {
     this.sound.destruct();

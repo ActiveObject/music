@@ -16,6 +16,10 @@ export function stop(p) {
 }
 
 export function togglePlay(player, track, tracklist) {
+  if (hasTag(player, ':player/empty')) {
+    return play(useTrack(player, track));
+  }
+
   if (arguments.length === 1) {
     return togglePlayState(player);
   }
