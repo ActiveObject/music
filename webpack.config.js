@@ -32,17 +32,15 @@ module.exports = {
       { test: /\.svg$/, loader: 'svg-sprite' }
     ]
   },
+
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  externals: {
-    'soundmanager': 'soundManager',
-    'firebase': 'Firebase'
-  },
-  plugins: [
-    definePlugin,
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-  ],
 
+  externals: {
+    'soundmanager': 'soundManager'
+  },
+
+  plugins: [definePlugin],
   postcss: [require('postcss-simple-vars')]
 };
