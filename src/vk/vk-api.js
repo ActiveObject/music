@@ -15,30 +15,23 @@ function not(predicate, ctx) {
 }
 
 function UnathorizedApiState(attrs) {
-  this.pending = attrs.pending;
   this.isAuthorized = false;
 }
 
 UnathorizedApiState.prototype.authorize = function (user) {
   return new ProcessingApiState({
     user: user.id,
-    token: user.accessToken,
-    pending: this.pending.map(req => req.modify({ token: user.accessToken }))
+    token: user.accessToken
   });
 };
 
-UnathorizedApiState.prototype.takeResult = function (req, res) {
-  return this;
-};
-
-UnathorizedApiState.prototype.modify = function (attrs) {
-  return new UnathorizedApiState(merge(this, attrs));
+UnathorizedApiState.prototype.process = function (queue) {
+  return queue;
 };
 
 function ProcessingApiState(attrs) {
   this.token = attrs.token;
   this.user = attrs.user;
-  this.pending = attrs.pending;
   this.isAuthorized = true;
 }
 
@@ -46,50 +39,13 @@ ProcessingApiState.prototype.authorize = function (user) {
   return this;
 };
 
-ProcessingApiState.prototype.takeResult = function(req, res) {
-  if (res.tooManyRequests()) {
-    return new ProcessingApiState({
-      token: this.token,
-      user: this.user,
-      pending: this.pending.concat(req.nextAttempt())
-    });
-  }
+ProcessingApiState.prototype.process = function (reqParams, callback) {
+  var req = new Request(merge(reqParams, {
+    token: this.token
+  }));
 
-  if (res.captchaNeeded()) {
-    return new LimitedAccessApiState({
-      token: this.token,
-      user: this.user,
-      pending: this.pending.concat(req.nextAttempt())
-    });
-  }
-
-  return this;
+  req.send((err, data) => callback(err, data, req));
 };
-
-ProcessingApiState.prototype.modify = function (attrs) {
-  return new ProcessingApiState(merge(this, attrs));
-};
-
-function LimitedAccessApiState(attrs) {
-  this.token = attrs.token;
-  this.user = attrs.user;
-  this.pending = attrs.pending;
-  this.isAuthorized = true;
-}
-
-LimitedAccessApiState.prototype.authorize = function (user) {
-  return this;
-};
-
-LimitedAccessApiState.prototype.takeResult = function (req, res) {
-  return this;
-};
-
-LimitedAccessApiState.prototype.modify = function (attrs) {
-  return new LimitedAccessApiState(merge(this, attrs));
-};
-
-
 
 function VkApi(attrs) {
   this.interval = 1000 / attrs.rateLimit;
@@ -123,31 +79,29 @@ VkApi.prototype.authorize = function(user) {
 };
 
 VkApi.prototype.request = function (method, options, done) {
-  var req = new Request({
+  this.queue.push({
     entryPoint: this.entryPoint,
     version: this.version,
-    token: this.atom.value.token,
     method: method,
     params: options,
     attempt: 0,
     callback: done
   });
-
-  this.queue.push(req);
 };
 
 VkApi.prototype.process = function() {
-  if (this.queue.length === 0) {
-    return;
+  if (this.queue.length > 0) {
+    this.atom.value.process(this.queue[0], (err, data, req) => {
+      var res = new Response(err, data);
+
+      if (res.tooManyRequests() || res.captchaNeeded()) {
+        this.queue = this.queue.slice(1).concat(req.nextAttempt());
+      } else {
+        res.send(req.callback);
+        this.queue.shift();
+      }
+    });
   }
-
-  var req = this.queue.shift();
-
-  req.send(function(err, data) {
-    var res = new Response(err, data);
-    res.send(req.callback);
-    Atom.update(this, state => state.takeResult(req, res));
-  }.bind(this));
 };
 
 function setupHelpers(apiObj) {
