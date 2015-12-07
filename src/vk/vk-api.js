@@ -1,4 +1,3 @@
-var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
 var merge = require('app/merge');
 var Request = require('./request');
@@ -16,8 +15,6 @@ function not(predicate, ctx) {
 }
 
 function UnathorizedApiState(attrs) {
-  this.version = attrs.version;
-  this.entryPoint = attrs.entryPoint;
   this.pending = attrs.pending;
   this.isAuthorized = false;
 }
@@ -26,9 +23,7 @@ UnathorizedApiState.prototype.authorize = function (user) {
   return new ProcessingApiState({
     user: user.id,
     token: user.accessToken,
-    entryPoint: this.entryPoint,
-    pending: this.pending.map(req => req.modify({ token: user.accessToken })),
-    version: this.version
+    pending: this.pending.map(req => req.modify({ token: user.accessToken }))
   });
 };
 
@@ -43,8 +38,6 @@ UnathorizedApiState.prototype.modify = function (attrs) {
 function ProcessingApiState(attrs) {
   this.token = attrs.token;
   this.user = attrs.user;
-  this.version = attrs.version;
-  this.entryPoint = attrs.entryPoint;
   this.pending = attrs.pending;
   this.isAuthorized = true;
 }
@@ -58,8 +51,6 @@ ProcessingApiState.prototype.takeResult = function(req, res) {
     return new ProcessingApiState({
       token: this.token,
       user: this.user,
-      entryPoint: this.entryPoint,
-      version: this.version,
       pending: this.pending.concat(req.nextAttempt())
     });
   }
@@ -68,8 +59,6 @@ ProcessingApiState.prototype.takeResult = function(req, res) {
     return new LimitedAccessApiState({
       token: this.token,
       user: this.user,
-      entryPoint: this.entryPoint,
-      version: this.version,
       pending: this.pending.concat(req.nextAttempt())
     });
   }
@@ -81,14 +70,9 @@ ProcessingApiState.prototype.modify = function (attrs) {
   return new ProcessingApiState(merge(this, attrs));
 };
 
-
-
-
 function LimitedAccessApiState(attrs) {
   this.token = attrs.token;
   this.user = attrs.user;
-  this.version = attrs.version;
-  this.entryPoint = attrs.entryPoint;
   this.pending = attrs.pending;
   this.isAuthorized = true;
 }
@@ -110,16 +94,28 @@ LimitedAccessApiState.prototype.modify = function (attrs) {
 function VkApi(attrs) {
   this.interval = 1000 / attrs.rateLimit;
   this.atom = attrs.atom;
-  this.nextTick();
+  this.version = attrs.version;
+  this.entryPoint = attrs.entryPoint;
+  this.queue = [];
+  this.start();
   setupHelpers(this);
 }
 
-VkApi.prototype = Object.create(EventEmitter.prototype, {
-  constructor: { value: VkApi, enumerable: false }
-});
+VkApi.prototype.start = function() {
+  var nextTick = () => {
+    this.timer = setTimeout(() => {
+      this.process();
+      nextTick();
+    }, this.interval);
+  }
 
-VkApi.prototype.nextTick = function() {
-  this.timer = setTimeout(this.process.bind(this), this.interval);
+  nextTick();
+};
+
+VkApi.prototype.stop = function () {
+  if (this.timer) {
+    clearTimeout(this.timer);
+  }
 };
 
 VkApi.prototype.authorize = function(user) {
@@ -128,46 +124,30 @@ VkApi.prototype.authorize = function(user) {
 
 VkApi.prototype.request = function (method, options, done) {
   var req = new Request({
-    entryPoint: this.atom.value.entryPoint,
+    entryPoint: this.entryPoint,
+    version: this.version,
     token: this.atom.value.token,
-    version: this.atom.value.version,
     method: method,
     params: options,
     attempt: 0,
     callback: done
   });
 
-  Atom.update(this, state => state.modify({ pending: state.pending.concat(req) }));
-  this.resume();
+  this.queue.push(req);
 };
 
 VkApi.prototype.process = function() {
-  if (this.atom.value.pending.length === 0) {
-    return this.idle();
+  if (this.queue.length === 0) {
+    return;
   }
 
-  var req = this.atom.value.pending[0];
+  var req = this.queue.shift();
 
   req.send(function(err, data) {
     var res = new Response(err, data);
     res.send(req.callback);
     Atom.update(this, state => state.takeResult(req, res));
   }.bind(this));
-
-  this.emit('process');
-  Atom.update(this, state => state.modify({ pending: state.pending.slice(1) }));
-  this.nextTick();
-};
-
-VkApi.prototype.idle = function() {
-  this.emit('idle');
-  clearTimeout(this.timer);
-};
-
-VkApi.prototype.resume = function() {
-  clearTimeout(this.timer);
-  this.emit('resume');
-  this.nextTick();
 };
 
 function setupHelpers(apiObj) {
@@ -206,9 +186,9 @@ function isGlobal(method) {
 
 module.exports = new VkApi({
   rateLimit: 2,
+  version: '5.29',
+  entryPoint: 'https://api.vk.com/method/',
   atom: new Atom(new UnathorizedApiState({
-    version: '5.29',
-    entryPoint: 'https://api.vk.com/method/',
     pending: []
   }))
 });
