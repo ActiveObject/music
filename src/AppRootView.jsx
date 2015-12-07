@@ -3,9 +3,15 @@ import { hasTag } from 'app/Tag';
 import { updateOn } from 'app/renderer';
 import MainLayout from 'app/main-layout/MainLayout';
 import AuthView from 'app/auth/AuthView';
+import VkCaptchaView from 'app/VkCaptchaView';
 
 var AppRootView = () => {
   var route = app.value.get(':db/route');
+  var vk = app.value.get(':db/vk');
+
+  if (hasTag(vk, ':vk/captcha-needed')) {
+    return <VkCaptchaView url={vk.captchaUrl} />
+  }
 
   if (hasTag(route, ':route/main')) {
     return <MainLayout />;
@@ -18,4 +24,4 @@ var AppRootView = () => {
   return <div className='empty-view' />;
 }
 
-export default updateOn(AppRootView, ':db/route');
+export default updateOn(AppRootView, [':db/route', ':db/vk']);

@@ -38,7 +38,10 @@ var initialAppState = Map({
     tag: [':context/playlist']
   },
 
-  ':db/tags': []
+  ':db/tags': [],
+  ':db/vk': {
+    tag: []
+  }
 });
 
 var renderApp = render(AppRootView, document.getElementById('app'));
