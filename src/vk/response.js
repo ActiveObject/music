@@ -28,4 +28,4 @@ Response.prototype.captchaNeeded = function() {
   return this.err && this.err.error_code === Response.CAPTCHA_NEEDED;
 };
 
-module.exports = Response;
+export default Response;

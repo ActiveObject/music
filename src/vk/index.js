@@ -1,1 +1,2 @@
-module.exports = require('./vk-api');
+import vkApi from './vk-api';
+export default vkApi;

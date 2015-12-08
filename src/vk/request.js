@@ -1,6 +1,6 @@
-var Url = require('url');
-var Http = require('app/Http');
-var merge = require('app/merge');
+import Url from 'url';
+import * as Http from 'app/Http';
+import merge from 'app/merge';
 
 var Request = function (attrs) {
   this.entryPoint = attrs.entryPoint;
@@ -51,4 +51,4 @@ Request.prototype.modify = function(attrs) {
   return new Request(merge(this, attrs));
 };
 
-module.exports = Request;
+export default Request;
