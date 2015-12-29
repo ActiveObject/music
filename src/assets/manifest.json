@@ -1,4 +1,5 @@
 {
   "name": "Music app",
-  "display": "standalone"
+  "display": "standalone",
+  "theme_color": "#6c71c4"
 }
