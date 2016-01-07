@@ -1,6 +1,5 @@
 import querystring from 'querystring';
 import app from 'app';
-import onValue from 'app/onValue';
 import { IGetItem, ISetItem } from 'app/Storage';
 import { IHttpRequest } from 'app/Http';
 import jsonpRequest from 'jsonp';
