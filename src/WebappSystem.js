@@ -1,5 +1,4 @@
 import querystring from 'querystring';
-import { each } from 'underscore';
 import app from 'app';
 import onValue from 'app/onValue';
 import { IGetItem, ISetItem } from 'app/Storage';
@@ -17,7 +16,9 @@ export default function (proto) {
   };
 
   proto[ISetItem] = function (item) {
-    each(item, (value, key) => localStorage.setItem(key, value));
+    Object.keys(item).forEach(key => {
+      localStorage.setItem(key, item[key]);
+    });
   };
 
   proto[IHttpRequest] = function (url, callback) {
