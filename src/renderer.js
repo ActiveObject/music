@@ -5,12 +5,12 @@ import React from 'react';
 var renderQueue = new EventEmitter();
 renderQueue.setMaxListeners(1000);
 
-export function render(RootView, targetEl) {
+export function render(rootElement, targetDOMElement) {
   var isFirstRun = true;
 
   return function (appstate) {
     if (isFirstRun) {
-      ReactDOM.render(<RootView />, targetEl);
+      ReactDOM.render(rootElement, targetDOMElement);
       isFirstRun = false;
     }
 

@@ -44,7 +44,7 @@ var initialAppState = Map({
   }
 });
 
-var renderApp = render(AppRootView, document.getElementById('app'));
+var renderApp = render(<AppRootView />, document.getElementById('app'));
 
 app
   .use(WebappSystem)
