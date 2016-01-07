@@ -7,15 +7,15 @@ import Album from 'app/Album';
 
 function commonReducer(state, v) {
   if (hasTag(v, ':app/player')) {
-    return state.update(':db/player', () => v);
+    return state.set(':db/player', v);
   }
 
   if (hasTag(v, ':app/user')) {
-    return state.update(':db/user', () => v);
+    return state.set(':db/user', v);
   }
 
   if (hasTag(v, ':app/route')) {
-    return state.update(':db/route', () => v);
+    return state.set(':db/route', v);
   }
 
   if (hasTag(v, ':app/cmd')) {
