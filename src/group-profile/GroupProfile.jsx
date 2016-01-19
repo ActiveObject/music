@@ -8,10 +8,10 @@ var GroupImage = ({ group }) => (
 );
 
 var GroupProfile = ({ group }) => (
-  <section className='group-profile'>
+  <div className='group-profile'>
     <GroupImage group={group} />
     <span className='group-name'>{group.name}</span>
-  </section>
+  </div>
 );
 
 export default GroupProfile;

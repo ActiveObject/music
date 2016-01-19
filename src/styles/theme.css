@@ -17,6 +17,7 @@ $accent-cyan: #2aa198;
 $accent-green: #859900;
 
 $accent-color: $accent-violet;
+$primary-color: $accent-violet;
 
 ::selection {
   background-color: $accent-green;
@@ -95,4 +96,20 @@ $accent-color: $accent-violet;
 .command-palette__action--active:hover {
   background-color: $accent-color;
   color: $base-color-3;
+}
+
+.group-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: $primary-color;
+}
+
+.group-page__content {
+  background-color: white;
+  min-height:
+}
+
+header {
+  color: $base-color-00;
 }
