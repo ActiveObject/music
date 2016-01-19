@@ -4,6 +4,7 @@ import WebappSystem from 'app/WebappSystem';
 import reducer from 'app/reducer';
 import { render } from 'app/renderer';
 import AppRootView from 'app/AppRootView';
+import vk from 'app/vk';
 
 var initialAppState = Map({
   ':db/albums': Map(),
@@ -53,4 +54,5 @@ app
 
 if (process.env.NODE_ENV === 'development') {
   window._app = app;
+  window._vk = vk;
 }

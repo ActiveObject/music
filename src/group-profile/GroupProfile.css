@@ -1,0 +1,22 @@
+.group-profile {
+  display: flex;
+  height: 500px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.group-image {
+  width: 200px;
+  height: 200px;
+  border: 2px solid white;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.group-name {
+  margin: 10px 0;
+  font-size: 1rem;
+  font-weight: 100;
+  color: #e6ebf4;
+}
