@@ -16,16 +16,19 @@ $accent-blue: #268bd2;
 $accent-cyan: #2aa198;
 $accent-green: #859900;
 
-$accent-color: $accent-violet;
-$primary-color: $accent-violet;
+$accent-color: #6c71c4;
+$primary-color: #59BAA4;
+$primary-dark-color: #3F9783;
+$primary-text-color: #FFF;
+$base-text-color: #657b83;
 
 ::selection {
-  background-color: $accent-green;
-  color: $base-color-3;
+  background-color: $primary-dark-color;
+  color: $primary-text-color;
 }
 
 .track {
-  color: $base-color-00;
+  color: $base-text-color;
 }
 
 .track:nth-child(odd),
@@ -39,7 +42,7 @@ $primary-color: $accent-violet;
 }
 
 .track__index {
-  color: $base-color-1;
+  color: $base-text-color;
 }
 
 .track--active,
@@ -47,21 +50,21 @@ $primary-color: $accent-violet;
 .track-container .track--active:nth-child(odd),
 .track-container .track--active:nth-child(even) {
   background-color: $accent-color;
-  color: $base-color-3;
+  color: $primary-text-color;
 }
 
 .track--active .track__index,
 .track--active:nth-child(odd) .track__index {
-  color: $base-color-3;
+  color: $primary-text-color;
 }
 
 .playlist__columns {
-  color: $base-color-1;
+  color: $base-text-color;
   border-bottom: 1px solid #eee;
 }
 
 .playlist__header {
-  color: $base-color-01;
+  color: $base-text-color;
 }
 
 .play-btn {
@@ -69,7 +72,7 @@ $primary-color: $accent-violet;
 }
 
 .play-btn .icon {
-  fill: white
+  fill: white;
 }
 
 .command-palette__todo {
@@ -77,15 +80,15 @@ $primary-color: $accent-violet;
 }
 
 .profile__name {
-  color: $base-color-0;
+  color: $base-text-color;
 }
 
 .cmdout__item {
-  color: $base-color-00;
+  color: $base-text-color;
 }
 
 .command-palette__action {
-  color: $base-color-0;
+  color: $base-text-color;
 }
 
 .command-palette__action:hover {
@@ -95,7 +98,7 @@ $primary-color: $accent-violet;
 .command-palette__action--active,
 .command-palette__action--active:hover {
   background-color: $accent-color;
-  color: $base-color-3;
+  color: $base-text-color;
 }
 
 .group-page {
@@ -111,5 +114,9 @@ $primary-color: $accent-violet;
 }
 
 header {
-  color: $base-color-00;
+  color: $base-text-color;
+}
+
+.group-name {
+  color: $primary-text-color;
 }
