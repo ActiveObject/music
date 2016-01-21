@@ -25,10 +25,6 @@ var initialAppState = Map({
 
   ':db/visibleGroups': [],
 
-  ':db/route': {
-    tag: [':app/route', ':route/empty']
-  },
-
   ':db/cmd': 'All tracks',
 
   ':db/command-palette': {
