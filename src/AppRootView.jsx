@@ -36,6 +36,28 @@ var Content = ({ children }) =>
     {children}
   </div>
 
+var GroupPage = () =>
+  <div className='group-page'>
+    <div className='scroll-container'>
+      <Section>
+        <Content>
+          <GroupProfile group={group} />
+        </Content>
+      </Section>
+
+      <Section className='group-page__content'>
+        <Content>
+          <Header>Week top</Header>
+          <GroupTop5Tracks group={group.screen_name} />
+        </Content>
+      </Section>
+    </div>
+
+    <div className='main-layout__play-btn'>
+      <PlayBtnCtrl />
+    </div>
+  </div>
+
 var AppRootView = () => {
   var route = app.value.get(':db/route');
   var vk = app.value.get(':db/vk');
@@ -44,31 +66,12 @@ var AppRootView = () => {
     return <VkCaptchaView url={vk.captchaUrl} />
   }
 
-  return (
-    <div className='group-page'>
-      <div className='scroll-container'>
-        <Section>
-          <Content>
-            <GroupProfile group={group} />
-          </Content>
-        </Section>
-
-        <Section className='group-page__content'>
-          <Content>
-            <Header>Week top</Header>
-            <GroupTop5Tracks group={group.screen_name} />
-          </Content>
-        </Section>
-      </div>
-
-      <div className='main-layout__play-btn'>
-        <PlayBtnCtrl />
-      </div>
-    </div>
-  );
-
   if (hasTag(route, ':route/main')) {
     return <MainLayout />;
+  }
+
+  if (hasTag(route, ':route/group')) {
+    return <GroupPage />;
   }
 
   if (hasTag(route, ':route/auth')) {
