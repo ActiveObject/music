@@ -16,13 +16,13 @@ var app = {
   },
 
   run: function (initialState, view, update) {
-    Atom.swap(app, initialState);
-    view(app.value);
-
     app.push = function (v) {
       Atom.swap(app, update(app.value, v));
       view(app.value);
     };
+
+    Atom.swap(app, initialState);
+    view(app.value);
 
     return app;
   }
