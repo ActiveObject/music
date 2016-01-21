@@ -45,8 +45,7 @@ var renderApp = render(<AppRootView />, document.getElementById('app'));
 
 app
   .use(WebappSystem)
-  .run(initialAppState, renderApp, reducer)
-  .start();
+  .run(initialAppState, renderApp, reducer);
 
 if (process.env.NODE_ENV === 'development') {
   window._app = app;

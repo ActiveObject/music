@@ -22,6 +22,12 @@ export default function () {
     });
   };
 
+  var user = app.value.get(':db/user');
+
+  if (hasTag(user, ':user/authenticated')) {
+    vk.authorize(user);
+  }
+
   return Atom.listen(app, function (dbVal) {
     var user = dbVal.get(':db/user');
 

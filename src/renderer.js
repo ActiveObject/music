@@ -34,6 +34,7 @@ function updateOnDbChange(ComposedComponent, equals) {
       this.unsub = addListener(renderQueue, 'render', nextDbVal => {
         if (!prevDbVal) {
           prevDbVal = nextDbVal;
+          this.forceUpdate();
           return;
         }
 

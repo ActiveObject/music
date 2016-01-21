@@ -7,6 +7,7 @@ import GroupTop5Tracks from 'app/GroupTop5Tracks';
 import PlayBtnCtrl from 'app/main-layout/PlayBtnCtrl';
 import Authenticated from 'app/auth/Authenticated';
 import Layer from 'app/main-layout/Layer';
+import Drivers from 'app/Drivers';
 
 var group = {
   id: 32211876,
@@ -63,6 +64,7 @@ var AppRootView = () =>
     <Layer>
       <MainLayout />
       <VkCaptchaView />
+      <Drivers />
     </Layer>
   </Authenticated>
 

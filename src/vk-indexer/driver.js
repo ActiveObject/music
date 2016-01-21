@@ -15,15 +15,15 @@ export default function () {
     .skipDuplicates(equal)
     .filter(v => hasTag(v, ':user/authenticated'));
 
-  return subscribeWith(onValue, function (onValue) {
-    onValue(userStream, function (user) {
-      onValue(loadTracks(user), function (v) {
-        app.push(addTag({ tracks: v }, ':vk/tracks'));
-      });
+  var user = app.value.get(':db/user');
 
-      onValue(loadAlbums(user), function (v) {
-        app.push(addTag({ albums: v }, ':vk/albums'));
-      });
+  return subscribeWith(onValue, function (onValue) {
+    onValue(loadTracks(user), function (v) {
+      app.push(addTag({ tracks: v }, ':vk/tracks'));
+    });
+
+    onValue(loadAlbums(user), function (v) {
+      app.push(addTag({ albums: v }, ':vk/albums'));
     });
 
     onValue(userStream.toProperty().sampledBy(Kefir.interval(2 * 60 * 1000)), function (user) {
