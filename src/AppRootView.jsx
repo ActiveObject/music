@@ -1,12 +1,12 @@
 import app from 'app';
 import { hasTag } from 'app/Tag';
-import { updateOn } from 'app/renderer';
 import MainLayout from 'app/main-layout/MainLayout';
 import VkCaptchaView from 'app/VkCaptchaView';
 import GroupProfile from 'app/group-profile/GroupProfile';
 import GroupTop5Tracks from 'app/GroupTop5Tracks';
 import PlayBtnCtrl from 'app/main-layout/PlayBtnCtrl';
 import Authenticated from 'app/auth/Authenticated';
+import Layer from 'app/main-layout/Layer';
 
 var group = {
   id: 32211876,
@@ -58,18 +58,12 @@ var GroupPage = () =>
     </div>
   </div>
 
-var AppRootView = () => {
-  var vk = app.value.get(':db/vk');
-
-  if (hasTag(vk, ':vk/captcha-needed')) {
-    return <VkCaptchaView url={vk.captchaUrl} />
-  }
-
-  return (
-    <Authenticated>
+var AppRootView = () =>
+  <Authenticated>
+    <Layer>
       <MainLayout />
-    </Authenticated>
-  );
-}
+      <VkCaptchaView />
+    </Layer>
+  </Authenticated>
 
-export default updateOn(AppRootView, [':db/vk']);
+export default AppRootView;

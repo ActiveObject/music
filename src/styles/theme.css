@@ -120,3 +120,7 @@ header {
 .group-name {
   color: $primary-text-color;
 }
+
+.vk-captcha-view {
+  background-color: $primary-color;
+}

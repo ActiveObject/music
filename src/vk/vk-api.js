@@ -88,7 +88,7 @@ VkApi.prototype.process = function () {
 };
 
 export default new VkApi({
-  rateLimit: 1,
+  rateLimit: 2,
   version: '5.29',
   entryPoint: 'https://api.vk.com/method/'
 });
