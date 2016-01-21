@@ -1,10 +1,25 @@
+import Url from 'url';
 import querystring from 'querystring';
 import React from 'react';
 import app from 'app';
 import AuthView from 'app/auth/AuthView';
-import * as vkAccount from 'app/vkConfig';
 import { hasTag } from 'app/Tag';
 import { updateOn } from 'app/renderer';
+
+const AUTH_URL = Url.format({
+  protocol: 'https',
+  host: 'oauth.vk.com',
+  pathname: '/authorize',
+  query: {
+    client_id: process.env.MUSIC_APP_ID,
+    scope: ['audio', 'groups', 'wall', 'offline'].join(','),
+    redirect_uri: window.location.origin,
+    display: 'popup',
+    v: '5.29',
+    response_type: 'token'
+  }
+});
+
 
 function hasToken(hash) {
   return hash && querystring.parse(hash.slice(1)).access_token;
@@ -42,7 +57,7 @@ class Authenticated extends React.Component {
 
   render() {
     if (!hasTag(app.value.get(':db/user'), ':user/authenticated')) {
-      return <AuthView url={vkAccount.url} />
+      return <AuthView url={AUTH_URL} />
     }
 
     return this.props.children;
