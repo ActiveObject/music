@@ -21,6 +21,21 @@ var group = {
   type: "page"
 };
 
+var Section = ({ children, className }) =>
+  <div className={`section ${className}`}>
+    {children}
+  </div>
+
+var Header = ({ children }) =>
+  <div className='header'>
+    {children}
+  </div>
+
+var Content = ({ children }) =>
+  <div className='content'>
+    {children}
+  </div>
+
 var AppRootView = () => {
   var route = app.value.get(':db/route');
   var vk = app.value.get(':db/vk');
@@ -32,18 +47,18 @@ var AppRootView = () => {
   return (
     <div className='group-page'>
       <div className='scroll-container'>
-        <section>
-          <content>
+        <Section>
+          <Content>
             <GroupProfile group={group} />
-          </content>
-        </section>
+          </Content>
+        </Section>
 
-        <section className='group-page__content'>
-          <content>
-            <header>Week top</header>
+        <Section className='group-page__content'>
+          <Content>
+            <Header>Week top</Header>
             <GroupTop5Tracks group={group.screen_name} />
-          </content>
-        </section>
+          </Content>
+        </Section>
       </div>
 
       <div className='main-layout__play-btn'>

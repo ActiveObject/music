@@ -63,20 +63,17 @@ body,
   margin-top: 70px;
 }
 
-section {
-  display: block;
+.section {
   width: 100%;
 }
 
-content {
-  display: block;
+.content {
   width: 800px;
   margin: 0 auto;
 }
 
-header {
+.header {
   padding: 20px 0;
-  display: block;
   font-size: 2rem;
   font-weight: 100;
 }
