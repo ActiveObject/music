@@ -20,5 +20,4 @@ $size: 40px;
 
 .play-btn--active .icon {
   transform: rotate(-90deg);
-  fill: white;
 }
