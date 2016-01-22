@@ -16,10 +16,11 @@ $accent-blue: #268bd2;
 $accent-cyan: #2aa198;
 $accent-green: #859900;
 
-$accent-color: #6c71c4;
-$primary-color: #59BAA4;
-$primary-dark-color: #3F9783;
-$primary-text-color: #FFF;
+$accent-color: #8386B9;
+$accent-text-color: #FFF;
+$primary-color: #FFD9A8;
+$primary-dark-color: #ECBC80;
+$primary-text-color: #605f5d;
 $base-text-color: #657b83;
 
 ::selection {
@@ -50,12 +51,12 @@ $base-text-color: #657b83;
 .track-container .track--active:nth-child(odd),
 .track-container .track--active:nth-child(even) {
   background-color: $accent-color;
-  color: $primary-text-color;
+  color: $accent-text-color;
 }
 
 .track--active .track__index,
 .track--active:nth-child(odd) .track__index {
-  color: $primary-text-color;
+  color: $accent-text-color;
 }
 
 .playlist__columns {
@@ -68,11 +69,11 @@ $base-text-color: #657b83;
 }
 
 .play-btn {
-  background-color: $accent-color
+  background-color: $accent-color;
 }
 
 .play-btn .icon {
-  fill: white;
+  fill: $accent-text-color;
 }
 
 .command-palette__todo {
@@ -98,7 +99,7 @@ $base-text-color: #657b83;
 .command-palette__action--active,
 .command-palette__action--active:hover {
   background-color: $accent-color;
-  color: $base-text-color;
+  color: $accent-text-color;
 }
 
 .group-page {
@@ -122,5 +123,5 @@ header {
 }
 
 .vk-captcha-view {
-  background-color: $primary-color;
+  background-color: $primary-dark-color;
 }
