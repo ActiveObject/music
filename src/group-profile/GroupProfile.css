@@ -23,7 +23,7 @@
 
 @media screen and (max-aspect-ratio: 3/2) {
   .group-profile {
-    height: 400px;
+    height: 360px;
   }
 
   .group-image {
