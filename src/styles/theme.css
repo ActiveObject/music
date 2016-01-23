@@ -42,20 +42,12 @@ $base-text-color: #657b83;
   background-color: white;
 }
 
-.track__index {
-  color: $base-text-color;
-}
-
 .track--active,
 .track--active:nth-child(odd),
+.track--active:nth-child(even),
 .track-container .track--active:nth-child(odd),
 .track-container .track--active:nth-child(even) {
   background-color: $primary-color;
-  color: $primary-text-color;
-}
-
-.track--active .track__index,
-.track--active:nth-child(odd) .track__index {
   color: $primary-text-color;
 }
 
