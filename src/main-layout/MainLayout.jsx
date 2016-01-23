@@ -1,6 +1,3 @@
-import 'app/styles/base.css';
-import 'app/styles/theme.css';
-
 import React from 'react';
 import { Motion, spring } from 'react-motion';
 import app from 'app';
