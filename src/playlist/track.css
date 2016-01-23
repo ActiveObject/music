@@ -40,3 +40,18 @@
   width: 3rem;
   text-align: right;
 }
+
+@media screen and (max-width: 768px) {
+  .track__index,
+  .track__duration {
+    display: none;
+  }
+
+  .track__artist {
+    width: 40%;
+  }
+
+  .track__title {
+    width: 60%;
+  }
+}
