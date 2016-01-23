@@ -1,9 +1,9 @@
 import React from 'react';
-import vk from 'app/vk';
-import LazyTracklist from 'app/playlist/LazyTracklist';
 import { List } from 'immutable';
-import { fromVk } from 'app/Track';
 import app from 'app';
+import vk from 'app/vk';
+import { fromVk } from 'app/Track';
+import TrackCtrl from 'app/playlist/TrackCtrl';
 import merge from 'app/merge';
 import './TracklistPreview.css';
 
@@ -81,6 +81,11 @@ var TracklistPreview = () => (
   </div>
 )
 
+const Tracklist = ({ tracks, limit }) =>
+  <div>
+    {tracks.slice(0, limit).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
+  </div>
+
 class GroupTop5Tracks extends React.Component {
   constructor() {
     super();
@@ -120,11 +125,7 @@ class GroupTop5Tracks extends React.Component {
         .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
     );
 
-    return (
-      <div style={{ height: 200 }}>
-        <LazyTracklist tracks={tracks} />
-      </div>
-    );
+    return <Tracklist tracks={tracks} limit={5} />;
   }
 }
 
