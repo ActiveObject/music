@@ -16,11 +16,11 @@ $accent-blue: #268bd2;
 $accent-cyan: #2aa198;
 $accent-green: #859900;
 
-$accent-color: #8386B9;
+$accent-color: #72ADA0;
 $accent-text-color: #FFF;
-$primary-color: #FFD9A8;
-$primary-dark-color: #ECBC80;
-$primary-text-color: #605f5d;
+$primary-color: #8386B9;
+$primary-dark-color: #5A5D9C;
+$primary-text-color: #FFF;
 $base-text-color: #657b83;
 
 ::selection {
@@ -50,13 +50,13 @@ $base-text-color: #657b83;
 .track--active:nth-child(odd),
 .track-container .track--active:nth-child(odd),
 .track-container .track--active:nth-child(even) {
-  background-color: $accent-color;
-  color: $accent-text-color;
+  background-color: $primary-color;
+  color: $primary-text-color;
 }
 
 .track--active .track__index,
 .track--active:nth-child(odd) .track__index {
-  color: $accent-text-color;
+  color: $primary-text-color;
 }
 
 .playlist__columns {
