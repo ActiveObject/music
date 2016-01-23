@@ -72,13 +72,6 @@ body,
   margin: 0 auto;
 }
 
-@media screen and (max-width: 768px) {
-  .content {
-    width: 100%;
-    padding: 0 15px;
-  }
-}
-
 .header {
   padding: 20px 0;
   font-size: 2rem;
@@ -99,4 +92,19 @@ body,
   overflow: auto;
   width: 100%;
   height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  .group-page__content {
+    padding-top: 15px;
+  }
+
+  .header {
+    font-size: 1.5rem;
+  }
 }
