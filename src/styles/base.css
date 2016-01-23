@@ -72,6 +72,12 @@ body,
   margin: 0 auto;
 }
 
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
+  }
+}
+
 .header {
   padding: 20px 0;
   font-size: 2rem;

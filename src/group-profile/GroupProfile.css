@@ -12,10 +12,25 @@
   border: 2px solid white;
   border-radius: 50%;
   overflow: hidden;
+  transform: scale(1);
 }
 
 .group-name {
   margin: 10px 0;
   font-size: 1.5rem;
   font-weight: 100;
+}
+
+@media screen and (max-aspect-ratio: 3/2) {
+  .group-profile {
+    height: 400px;
+  }
+
+  .group-image {
+    transform: scale(.9);
+  }
+
+  .group-name {
+    font-size: 1.2rem;
+  }
 }
