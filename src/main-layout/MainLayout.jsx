@@ -8,7 +8,7 @@ import CommandPalette from 'app/command-palette/CommandPalette';
 import PlaylistCtrl from 'app/playlist/PlaylistCtrl';
 import Layer from './Layer';
 import PlayBtnCtrl from './PlayBtnCtrl';
-import Profile from './Profile';
+import ProfileCtrl from './ProfileCtrl';
 import CmdOut from './CmdOut';
 
 const MainLayout = () => {
@@ -46,9 +46,7 @@ const MainLayout = () => {
           }
         </Motion>
 
-        <div className='main-layout__profile'>
-          <Profile />
-        </div>
+        <ProfileCtrl />
       </Layer>
 
       <Layer style={{ transform: `translate(0, ${isCmdActivated ? 0 : 100}%)` }}>
