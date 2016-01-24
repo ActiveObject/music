@@ -4,7 +4,7 @@ import MainLayout from 'app/main-layout/MainLayout';
 import VkCaptchaView from 'app/VkCaptchaView';
 import GroupProfile from 'app/group-profile/GroupProfile';
 import GroupTop5Tracks from 'app/GroupTop5Tracks';
-import PlayBtnCtrl from 'app/main-layout/PlayBtnCtrl';
+import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import Authenticated from 'app/auth/Authenticated';
 import Layer from 'app/main-layout/Layer';
 import Drivers from 'app/Drivers';

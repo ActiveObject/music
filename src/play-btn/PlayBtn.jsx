@@ -4,11 +4,11 @@ import Icon from 'app/ui/icon';
 import cx from 'classnames';
 import { hasTag } from 'app/Tag';
 
-import './play-btn.css';
+import './PlayBtn.css';
 import pauseSvg from './pause.svg';
 import playSvg from './play.svg';
 
-export default function PlayBtn({ isPlaying, onClick }) {
+const PlayBtn = ({ isPlaying, onClick }) => {
   var classes = cx({
     'play-btn': true,
     'play-btn--active': isPlaying
@@ -26,3 +26,5 @@ export default function PlayBtn({ isPlaying, onClick }) {
     </Motion>
   );
 }
+
+export default PlayBtn;

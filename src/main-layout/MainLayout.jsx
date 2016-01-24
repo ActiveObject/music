@@ -7,7 +7,7 @@ import { hasTag } from 'app/Tag';
 import CommandPalette from 'app/command-palette/CommandPalette';
 import PlaylistCtrl from './PlaylistCtrl';
 import Layer from './Layer';
-import PlayBtnCtrl from './PlayBtnCtrl';
+import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import CmdOut from './CmdOut';
 
