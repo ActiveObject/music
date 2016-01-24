@@ -1,7 +1,7 @@
 import React from 'react';
 import app from 'app';
 
-import './profile.css';
+import './Profile.css';
 
 const Profile = ({ user, opacity, rotationAngle, zoom }) =>
   <div className='profile'>

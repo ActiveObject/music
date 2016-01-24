@@ -8,7 +8,7 @@ import CommandPalette from 'app/command-palette/CommandPalette';
 import PlaylistCtrl from './PlaylistCtrl';
 import Layer from './Layer';
 import PlayBtnCtrl from './PlayBtnCtrl';
-import ProfileCtrl from './ProfileCtrl';
+import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import CmdOut from './CmdOut';
 
 const MainLayout = () => {
