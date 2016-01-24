@@ -36,16 +36,7 @@ const MainLayout = () => {
           }
         </Motion>
 
-        <Motion
-          defaultStyle={{ opacity: 0 }}
-          style={{ opacity: spring(isCmdActivated ? 0 : 100) }} >
-          {interpolated =>
-            <div className='main-layout__play-btn' style={{ opacity: `${interpolated.opacity / 100}` }}>
-              <PlayBtnCtrl />
-            </div>
-          }
-        </Motion>
-
+        <PlayBtnCtrl />
         <ProfileCtrl />
       </Layer>
 
