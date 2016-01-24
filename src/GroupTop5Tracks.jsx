@@ -3,7 +3,7 @@ import { List } from 'immutable';
 import app from 'app';
 import vk from 'app/vk';
 import { fromVk } from 'app/Track';
-import TrackCtrl from 'app/playlist/TrackCtrl';
+import StaticTracklist from 'app/tracklist/StaticTracklist';
 import merge from 'app/merge';
 import './TracklistPreview.css';
 
@@ -81,11 +81,6 @@ var TracklistPreview = () => (
   </div>
 )
 
-const Tracklist = ({ tracks, limit }) =>
-  <div>
-    {tracks.slice(0, limit).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
-  </div>
-
 class GroupTop5Tracks extends React.Component {
   constructor() {
     super();
@@ -125,7 +120,7 @@ class GroupTop5Tracks extends React.Component {
         .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
     );
 
-    return <Tracklist tracks={tracks} limit={5} />;
+    return <StaticTracklist tracks={tracks} limit={5} />;
   }
 }
 

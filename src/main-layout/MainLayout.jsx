@@ -5,7 +5,7 @@ import { updateOn } from 'app/renderer';
 import { hasTag } from 'app/Tag';
 
 import CommandPalette from 'app/command-palette/CommandPalette';
-import PlaylistCtrl from 'app/playlist/PlaylistCtrl';
+import PlaylistCtrl from './PlaylistCtrl';
 import Layer from './Layer';
 import PlayBtnCtrl from './PlayBtnCtrl';
 import ProfileCtrl from './ProfileCtrl';
@@ -17,25 +17,7 @@ const MainLayout = () => {
   return (
     <Layer>
       <Layer className='app-container' style={{ padding: '70px 0' }}>
-        <Motion
-          defaultStyle={{
-            zoom: 100,
-            y: 0,
-            opacity: 100
-          }}
-
-          style={{
-            zoom: spring(isCmdActivated ? 80 : 100),
-            y: spring(isCmdActivated ? 200 : 0),
-            opacity: spring(isCmdActivated ? 0 : 100)
-          }}>
-          {interpolated =>
-            <div className='main-layout' style={{ transform: `scale(${interpolated.zoom / 100}) translate(0, ${interpolated.y}px)`, opacity: `${interpolated.opacity / 100}` }}>
-              <PlaylistCtrl />
-            </div>
-          }
-        </Motion>
-
+        <PlaylistCtrl />
         <PlayBtnCtrl />
         <ProfileCtrl />
       </Layer>
