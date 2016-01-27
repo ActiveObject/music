@@ -83,11 +83,9 @@ class GroupTop5Tracks extends React.Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <div style={{ height: 200 }}>
-          <TracklistTable>
-            <TracklistPreview />
-          </TracklistTable>
-        </div>
+        <TracklistTable>
+          <TracklistPreview numOfItems={5} />
+        </TracklistTable>
       );
     }
 
