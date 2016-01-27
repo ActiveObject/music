@@ -1,14 +1,13 @@
 import React from 'react';
-import vkDriver from 'app/vk/driver';
 import vkIndexerDriver from 'app/vk-indexer/driver';
 import soundmanagerDriver from 'app/soundmanager/driver';
 import localStorageDriver from 'app/local-storage-driver';
 import keyControlDriver from 'app/key-control-driver';
+import VkDriver from 'app/VkDriver';
 
 class Drivers extends React.Component {
   componentDidMount() {
     this.subscriptions = [
-      vkDriver(),
       vkIndexerDriver(),
       soundmanagerDriver(),
       localStorageDriver(),
@@ -21,7 +20,7 @@ class Drivers extends React.Component {
   }
 
   render() {
-    return <div />;
+    return <VkDriver />;
   }
 }
 

@@ -1,7 +1,6 @@
 import app from 'app';
 import { hasTag } from 'app/Tag';
 import MainLayout from 'app/main-layout/MainLayout';
-import VkCaptchaView from 'app/VkCaptchaView';
 import GroupProfile from 'app/group-profile/GroupProfile';
 import GroupTop5Tracks from 'app/GroupTop5Tracks';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
@@ -66,7 +65,6 @@ var AppRootView = () =>
   <Authenticated>
     <Layer>
       <MainLayout />
-      <VkCaptchaView />
       <Drivers />
     </Layer>
   </Authenticated>
