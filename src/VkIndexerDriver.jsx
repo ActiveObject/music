@@ -67,6 +67,13 @@ function updateTracks() {
     var newTrackIds = difference(updatedIds, existingIds);
     var itemsToLoad = newTrackIds.map(tid => ({ owner: user.id, id: tid }));
 
+    if (outdatedTrackIds.length > 0) {
+      app.push({
+        tag: ':tracks/remove-outdated',
+        ids: outdatedTrackIds
+      });
+    }
+
     console.log('new tracks', newTrackIds);
     console.log('outdated tracks', outdatedTrackIds);
 

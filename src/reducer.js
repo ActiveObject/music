@@ -218,10 +218,20 @@ function pipeThroughReducers(...reducers) {
   };
 }
 
+function removeOutdatedTracks(state, v) {
+  if (hasTag(v, ':tracks/remove-outdated')) {
+    return state.update(':db/tracks', (tracks) => {
+      return v.ids.reduce((res, id) => res.remove(id), tracks);
+    });
+  }
+
+  return state;
+}
 
 export default pipeThroughReducers(
   commonReducer,
   embodyTracks,
+  removeOutdatedTracks,
   embodyAlbums,
   detectArtistFilter,
   // detectAlbumFilter,
