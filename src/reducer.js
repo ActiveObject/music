@@ -197,7 +197,7 @@ function embodyTags(state, v) {
 }
 
 function setDefaultPlayerTracklist(state, v) {
-  if (hasTag(':app/tracks') && state.get(':db/player').tracklist.isEmpty()) {
+  if (state.get(':db/tracklist') === ':tracklist/user-library' && (hasTag(v, ':app/tracks') || hasTag(v, ':vk/tracks') || hasTag(v, ':tracks/remove-outdated'))) {
     return state.update(':db/player', function (player) {
       return merge(player, {
         tracklist: state.get(':db/tracks')

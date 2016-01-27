@@ -19,6 +19,8 @@ var initialAppState = Map({
     tracklist: List()
   },
 
+  ':db/tracklist': ':tracklist/user-library',
+
   ':db/user': {
     tag: ':app/user'
   },
