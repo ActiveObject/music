@@ -75,6 +75,8 @@ VkApi.prototype.process = function () {
                 captcha_sid: err.captcha_sid
               })
             }));
+
+            this.state.isWaitingForCaptcha = false;
           });
 
           this.queue = this.queue.slice(1);
