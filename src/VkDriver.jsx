@@ -4,38 +4,18 @@ import app from 'app';
 import vk from 'app/vk';
 import VkCaptchaView from 'app/VkCaptchaView';
 
-class Transaction extends EventEmitter {
+export default class VkDriver extends React.Component {
   constructor() {
     super();
-    this.state = ':tx/idle';
+    this.state = { inTransaction: false };
   }
-
-  isActive() {
-    return this.state !== ':tx/idle';
-  }
-
-  start(captchaUrl) {
-    if (this.state === ':tx/idle') {
-      this.state = ':tx/active';
-      this.captchaUrl = captchaUrl;
-    }
-  }
-
-  commit(captchaKey) {
-    this.state = ':tx/idle';
-    this.emit('commit', captchaKey);
-  }
-}
-
-export default class VkDriver extends React.Component {
+  
   componentWillMount() {
-    this.tx = new Transaction();
-    this.tx.on('commit', () => this.forceUpdate());
+    this.tx = new EventEmitter();
 
     vk.authorize(app.value.get(':db/user'));
     vk.onCaptcha = (captchaUrl) => {
-      this.tx.start(captchaUrl);
-      this.forceUpdate();
+      this.startTransaction(captchaUrl);
 
       return new Promise((resolve, reject) => {
         this.tx.once('commit', (captchaKey) => resolve(captchaKey));
@@ -48,10 +28,24 @@ export default class VkDriver extends React.Component {
   }
 
   render() {
-    if (this.tx.isActive()) {
-      return <VkCaptchaView captchaUrl={this.tx.captchaUrl} onEnter={(v) => this.tx.commit(v)} />;
+    if (this.state.inTransaction) {
+      return <VkCaptchaView captchaUrl={this.state.captchaUrl} onEnter={(v) => this.commitTransaction(v)} />;
     }
 
     return <div />;
+  }
+
+  startTransaction(captchaUrl) {
+    if (!this.state.inTransaction) {
+      this.setState({
+        inTransaction: true,
+        captchaUrl
+      });
+    }
+  }
+
+  commitTransaction(captchaKey) {
+    this.tx.emit('commit', captchaKey);
+    this.setState({ inTransaction: false, captchaUrl: '' });
   }
 }
