@@ -3,9 +3,10 @@ import { List } from 'immutable';
 import app from 'app';
 import vk from 'app/vk';
 import { fromVk } from 'app/Track';
-import StaticTracklist from 'app/tracklist/StaticTracklist';
 import merge from 'app/merge';
-import './TracklistPreview.css';
+import StaticTracklist from 'app/tracklist/StaticTracklist';
+import TracklistTable from 'app/tracklist/TracklistTable';
+import TracklistPreview from 'app/tracklist/TracklistPreview';
 
 function loadLastWeekPosts(domain, offset, count, postsSoFar, time, callback) {
   vk.wall.get({
@@ -54,33 +55,6 @@ function topAudios(posts) {
   return audios;
 }
 
-var TrackPreview = () => (
-  <div className='trackpreview'>
-    <div className='trackpreview__order'>
-      <div className='trackpreview__block' style={{ width: 10 }}></div>
-    </div>
-    <div className='trackpreview__artist'>
-      <div className='trackpreview__block' style={{ width: 100 }}></div>
-    </div>
-    <div className='trackpreview__title'>
-      <div className='trackpreview__block' style={{ width: 200 }}></div>
-    </div>
-    <div className='trackpreview__time'>
-      <div className='trackpreview__block' style={{ width: 40 }}></div>
-    </div>
-  </div>
-)
-
-var TracklistPreview = () => (
-  <div>
-    <TrackPreview />
-    <TrackPreview />
-    <TrackPreview />
-    <TrackPreview />
-    <TrackPreview />
-  </div>
-)
-
 class GroupTop5Tracks extends React.Component {
   constructor() {
     super();
@@ -110,7 +84,9 @@ class GroupTop5Tracks extends React.Component {
     if (this.state.isLoading) {
       return (
         <div style={{ height: 200 }}>
-          <TracklistPreview />
+          <TracklistTable>
+            <TracklistPreview />
+          </TracklistTable>
         </div>
       );
     }
@@ -120,7 +96,11 @@ class GroupTop5Tracks extends React.Component {
         .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
     );
 
-    return <StaticTracklist tracks={tracks} limit={5} />;
+    return (
+      <TracklistTable>
+        <StaticTracklist tracks={tracks} limit={5} />
+      </TracklistTable>
+    );
   }
 }
 
