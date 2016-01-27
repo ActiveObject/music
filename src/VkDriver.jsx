@@ -2,6 +2,8 @@ import { EventEmitter } from 'events';
 import React from 'react';
 import app from 'app';
 import vk from 'app/vk';
+import merge from 'app/merge';
+import { addTag } from 'app/Tag';
 import VkCaptchaView from 'app/VkCaptchaView';
 
 export default class VkDriver extends React.Component {
@@ -9,11 +11,12 @@ export default class VkDriver extends React.Component {
     super();
     this.state = { inTransaction: false };
   }
-  
+
   componentWillMount() {
     this.tx = new EventEmitter();
+    var user = app.value.get(':db/user');
 
-    vk.authorize(app.value.get(':db/user'));
+    vk.authorize(user);
     vk.onCaptcha = (captchaUrl) => {
       this.startTransaction(captchaUrl);
 
@@ -21,6 +24,25 @@ export default class VkDriver extends React.Component {
         this.tx.once('commit', (captchaKey) => resolve(captchaKey));
       });
     };
+
+    vk.users.get({
+      user_ids: user.id,
+      fields: ['photo_50']
+    }, function (err, result) {
+      if (err) {
+        return console.log(err);
+      }
+
+      var res = result.response[0];
+
+      var u = merge(app.value.get(':db/user'), {
+        photo50: res.photo_50,
+        firstName: res.first_name,
+        lastName: res.last_name
+      });
+
+      app.push(addTag(u, ':user/is-loaded'));
+    });
   }
 
   componentWillUnmount() {
