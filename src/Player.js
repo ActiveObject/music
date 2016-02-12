@@ -83,13 +83,13 @@ export function stopSeeking(p) {
   return merge(removeTag(p, ':player/seeking'), { position: p.seekPosition });
 }
 
-export function nextTrack(p) {
-  if (isLastTrack(p.tracklist, p.track)) {
+export function nextTrack(p, tracklist) {
+  if (isLastTrack(tracklist, p.track)) {
     return stop(p);
   }
 
   return merge(p, {
-    track: nextAfter(p.tracklist, p.track)
+    track: nextAfter(tracklist, p.track)
   });
 }
 

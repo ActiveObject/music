@@ -20,10 +20,6 @@ class SoundDriver extends React.Component {
     });
 
     this.unsubscribe = subscribeWith(on, onValue, (on, onValue) => {
-      on(sm, 'finish', function (track) {
-        app.push(Player.play(Player.nextTrack(app.value.get(':db/player'))));
-      });
-
       on(sm, 'whileplaying', function (position) {
         if (!app.value.get(':db/player').seeking) {
           app.push(merge(app.value.get(':db/player'), { position: position }));

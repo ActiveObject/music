@@ -8,6 +8,8 @@ function Soundmanager() {
   this.state = {
     tag: ':sm/uninitialized'
   };
+
+  this.setMaxListeners(100);
 }
 
 Soundmanager.prototype = Object.create(EventEmitter.prototype, {
