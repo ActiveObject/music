@@ -67,7 +67,7 @@
     "dev": "npm run clean && npm run copy && npm run webpack-dev",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp -R src/assets/* _public",
-    "webpack": "NODE_ENV=production webpack -p --debug --devtool source-map --progress --output-path=_public",
+    "webpack": "NODE_ENV=production webpack -p --debug --devtool source-map --progress",
     "webpack-dev": "webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline"
   }
 }

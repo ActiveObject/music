@@ -16,6 +16,7 @@ module.exports = {
   entry: './src/main.js',
 
   output: {
+    path: '_public',
     filename: 'app.js'
   },
 
