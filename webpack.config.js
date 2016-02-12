@@ -28,7 +28,7 @@ module.exports = {
 
     loaders: [
       { test: /src\/(.*)\.(js|jsx)$/, loaders: ['react-hot', 'babel-loader'] },
-      { test: /\.css$/, loader: 'style-loader!css-loader!postcss-loader' },
+      { test: /\.css$/, loaders: ['style', 'css', 'postcss'] },
       { test: require.resolve('react'), loader: 'expose?React' },
       { test: /\.svg$/, loader: 'svg-sprite' }
     ]
