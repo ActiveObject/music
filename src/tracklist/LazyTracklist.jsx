@@ -6,7 +6,7 @@ import TrackCtrl from './TrackCtrl';
 
 var LazyTracklist = React.createClass({
   propTypes: {
-    tracks: React.PropTypes.object.isRequired,
+    tracks: React.PropTypes.array.isRequired,
     itemHeight: React.PropTypes.number
   },
 
@@ -18,7 +18,7 @@ var LazyTracklist = React.createClass({
 
   getInitialState: function () {
     return {
-      cursor: new Cursor(this.props.tracks.toJS(), {
+      cursor: new Cursor(this.props.tracks, {
         itemHeight: this.props.itemHeight,
         pageSize: this.props.pageSize
       })
@@ -55,7 +55,7 @@ var LazyTracklist = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     if (this.props.tracks !== nextProps.tracks) {
       this.setState({
-        cursor: this.state.cursor.updateItems(nextProps.tracks.toJS())
+        cursor: this.state.cursor.updateItems(nextProps.tracks)
       });
     }
   },
@@ -77,7 +77,7 @@ var LazyTracklist = React.createClass({
     }, this);
 
     var style = {
-      height: this.props.tracks.count() * this.props.itemHeight
+      height: this.props.tracks.length * this.props.itemHeight
     };
 
     return (

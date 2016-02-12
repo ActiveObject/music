@@ -1,11 +1,11 @@
 import React from 'react';
+import { Map } from 'immutable';
 import { Motion, spring } from 'react-motion';
 import app from 'app';
 import { updateOn } from 'app/renderer';
 import { hasTag } from 'app/Tag';
 import TracklistTable from 'app/tracklist/TracklistTable';
 import LazyTracklist from 'app/tracklist/LazyTracklist';
-import { List, Map } from 'immutable';
 import vk from 'app/vk';
 import merge from 'app/merge';
 import * as Track from 'app/Track';
@@ -67,7 +67,7 @@ class LibraryTracklist extends React.Component {
     return (
       <AnimationContainer>
         <TracklistTable>
-          <LazyTracklist tracks={List(tracks)} />
+          <LazyTracklist tracks={tracks} />
         </TracklistTable>
       </AnimationContainer>
     );

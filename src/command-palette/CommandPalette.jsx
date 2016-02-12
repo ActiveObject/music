@@ -75,7 +75,8 @@ class CommandPalette extends React.Component {
 
 
 function shuffle() {
-  app.push(toggleShuffle(app.value.get(':db/player')));
+  app.push(
+    toggleShuffle(app.value.get(':db/player'), app.value.get(':db/library')));
 }
 
-export default updateOn(CommandPalette, ':db/cmd', dbVal => dbVal.get(':db/player').tracklist);
+export default updateOn(CommandPalette, ':db/cmd', ':db/library');
