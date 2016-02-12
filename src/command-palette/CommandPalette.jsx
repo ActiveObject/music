@@ -2,10 +2,9 @@ import React from 'react';
 import { throttle } from 'underscore';
 import cx from 'classnames';
 import app from 'app';
-import { hasTag } from 'app/Tag';
+import { hasTag, toggleTag } from 'app/Tag';
 import { updateOn } from 'app/renderer';
 import './command-palette.css';
-import { toggleShuffle } from 'app/Player';
 
 class CommandPalette extends React.Component {
   componentDidUpdate() {
@@ -73,10 +72,10 @@ class CommandPalette extends React.Component {
   }
 }
 
-
 function shuffle() {
-  app.push(
-    toggleShuffle(app.value.get(':db/player'), app.value.get(':db/library')));
+  app.push({
+    tag: ':library/toggle-shuffle'
+  });
 }
 
-export default updateOn(CommandPalette, ':db/cmd', ':db/library');
+export default updateOn(CommandPalette, ':db/cmd', db => hasTag(db.get(':db/player'), ':player/is-shuffled'));

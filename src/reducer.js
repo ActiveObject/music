@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { omit, union } from 'underscore';
+import { omit, union, shuffle as shuffleArray } from 'underscore';
 import { hasTag, addTag, removeTag } from 'app/Tag';
 import merge from 'app/merge';
 import Track from 'app/Track';
@@ -241,6 +241,32 @@ function removeOutdatedTracks(state, v) {
   return state;
 }
 
+function toggleShuffle(state, v) {
+  if (hasTag(v, ':library/toggle-shuffle')) {
+    if (hasTag(state.get(':db/player'), ':player/is-shuffled')) {
+      return state
+        .set(':db/player', removeTag(state.get(':db/player'), ':player/is-shuffled'))
+        .set(':db/library', state.get(':db/library-original'));
+    } else {
+      return state
+        .set(':db/player', addTag(state.get(':db/player'), ':player/is-shuffled'))
+        .set(':db/library-original', state.get(':db/library'))
+        .set(':db/library', shuffleLibrary(state.get(':db/player'), state.get(':db/library')));
+    }
+  }
+
+  return state;
+}
+
+function shuffleLibrary(player, library) {
+  var t = {
+    tag: ':track-source/library',
+    trackId: player.track.id
+  };
+
+  return [t, ...shuffleArray(library.filter(t => t.trackId !== player.track.id))];
+}
+
 export default pipeThroughReducers(
   commonReducer,
   embodyTracks,
@@ -251,5 +277,6 @@ export default pipeThroughReducers(
   // detectTrackFilter,
   fallbackCmdToDefault,
   embodyTags,
-  setDefaultPlayerTracklist
+  setDefaultPlayerTracklist,
+  toggleShuffle
 );
