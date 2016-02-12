@@ -1,5 +1,4 @@
 import React from 'react';
-import { List } from 'immutable';
 import app from 'app';
 import vk from 'app/vk';
 import { fromVk } from 'app/Track';
@@ -89,10 +88,9 @@ class GroupTop5Tracks extends React.Component {
       );
     }
 
-    var tracks = List(topAudios(top5(this.state.posts))
+    var tracks = topAudios(top5(this.state.posts))
         .map(x => fromVk(x, app.value.get(':db/albums')))
-        .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
-    );
+        .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}));
 
     return (
       <TracklistTable>
