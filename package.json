@@ -60,12 +60,11 @@
   },
   "scripts": {
     "start": "node server.js",
-    "build": "npm run copy && npm run webpack",
+    "build": "npm run clean && npm run copy && npm run webpack",
     "predeploy": "MUSIC_APP_ID=4656659 npm run build",
     "deploy": "surge -p _public -d music.activeobject.me",
     "lint": "eslint src/**",
     "dev": "npm run clean && npm run copy && npm run webpack-dev",
-    "prebuild": "npm run clean",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp -R src/assets/* _public",
     "webpack": "NODE_ENV=production webpack -p --debug --devtool source-map --progress --output-path=_public",
