@@ -24,6 +24,7 @@
     "mocha": "^1.21.4",
     "postcss-loader": "^0.6.0",
     "postcss-simple-vars": "^1.0.1",
+    "react-hot-loader": "^1.3.0",
     "style-loader": "^0.8.0",
     "surge": "^0.16.0",
     "svg-sprite-loader": "0.0.11",
@@ -64,9 +65,9 @@
     "predeploy": "MUSIC_APP_ID=4656659 npm run build",
     "deploy": "surge -p _public -d music.activeobject.me",
     "lint": "eslint src/**",
-    "dev": "npm run clean && npm run copy && npm run webpack-dev",
+    "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp -R src/assets/* _public",
-    "webpack-dev": "webpack-dev-server --progress --colors --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline"
+    "dev-server": "webpack-dev-server --hot --progress --colors --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline"
   }
 }
