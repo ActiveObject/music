@@ -26,6 +26,10 @@ function commonReducer(state, v) {
     return state.set(':db/command-palette', v);
   }
 
+  if (hasTag(v, ':app/library')) {
+    return state.set(':db/library', v.value);
+  }
+
   return state;
 }
 
