@@ -36,10 +36,6 @@ module.exports = {
     extensions: ['', '.js', '.jsx']
   },
 
-  externals: {
-    'soundmanager': 'soundManager'
-  },
-
   plugins: [definePlugin],
   postcss: [require('postcss-simple-vars')]
 };

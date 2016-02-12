@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { throttle } from 'underscore';
-import sm from 'soundmanager';
+import { soundManager as sm } from 'soundmanager2';
 import merge from 'app/merge';
 import { hasTag } from 'app/Tag';
 

@@ -13,9 +13,6 @@ import vk from 'app/vk';
 class SoundDriver extends React.Component {
   componentWillMount() {
     sm.setup({
-      url: 'swf',
-      flashVersion: 9,
-      preferFlash: false,
       debugMode: false
     });
 
