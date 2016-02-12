@@ -13,6 +13,7 @@ var definePlugin = new webpack.DefinePlugin({
 });
 
 module.exports = {
+  devtool: 'source-map',
   entry: './src/main.js',
 
   output: {
