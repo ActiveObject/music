@@ -15,11 +15,10 @@ var initialAppState = Map({
     position: 0,
     seekPosition: 0,
     bytesTotal: 0,
-    bytesLoaded: 0,
-    tracklist: List()
+    bytesLoaded: 0
   },
 
-  ':db/tracklist': ':tracklist/user-library',
+  ':db/library': [],
 
   ':db/user': {
     tag: ':app/user'

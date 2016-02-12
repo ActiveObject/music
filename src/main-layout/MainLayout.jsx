@@ -5,7 +5,7 @@ import { updateOn } from 'app/renderer';
 import { hasTag } from 'app/Tag';
 
 import CommandPalette from 'app/command-palette/CommandPalette';
-import PlaylistCtrl from './PlaylistCtrl';
+import LibraryTracklist from './LibraryTracklist';
 import Layer from './Layer';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
@@ -17,7 +17,7 @@ const MainLayout = () => {
   return (
     <Layer>
       <Layer className='app-container' style={{ padding: '70px 0' }}>
-        <PlaylistCtrl />
+        <LibraryTracklist />
         <PlayBtnCtrl />
         <ProfileCtrl />
       </Layer>

@@ -197,17 +197,26 @@ function embodyTags(state, v) {
 }
 
 function setDefaultPlayerTracklist(state, v) {
-  if (state.get(':db/tracklist') === ':tracklist/user-library' && (hasTag(v, ':app/tracks') || hasTag(v, ':vk/tracks') || hasTag(v, ':tracks/remove-outdated'))) {
-    return state.update(':db/player', function (player) {
-      return merge(player, {
-        tracklist: state.get(':db/tracks')
-          .toList()
-          .sortBy(t => t.audio.index)
-      });
-    });
+  if (hasTag(v, ':app/tracks') || hasTag(v, ':vk/tracks') || hasTag(v, ':tracks/remove-outdated')) {
+    return state.set(':db/library', createLibrary(state.get(':db/tracks')));
   }
 
   return state;
+}
+
+function createLibrary(db) {
+  return db
+    .toList()
+    .sortBy(t => t.audio.index)
+    .map(createTrackDescriptor)
+    .toJS();
+}
+
+function createTrackDescriptor(track) {
+  return {
+    tag: ':track-source/library',
+    trackId: track.id
+  };
 }
 
 function pipeThroughReducers(...reducers) {
