@@ -200,29 +200,6 @@ function embodyTags(state, v) {
   return state;
 }
 
-function setDefaultPlayerTracklist(state, v) {
-  if (hasTag(v, ':app/tracks') || hasTag(v, ':vk/tracks') || hasTag(v, ':tracks/remove-outdated')) {
-    return state.set(':db/library', createLibrary(state.get(':db/tracks')));
-  }
-
-  return state;
-}
-
-function createLibrary(db) {
-  return db
-    .toList()
-    .sortBy(t => t.audio.index)
-    .map(createTrackDescriptor)
-    .toJS();
-}
-
-function createTrackDescriptor(track) {
-  return {
-    tag: ':track-source/library',
-    trackId: track.id
-  };
-}
-
 function pipeThroughReducers(...reducers) {
   return function (initialDbValue, v) {
     return reducers.reduce(function (dbVal, reducer) {
@@ -277,6 +254,5 @@ export default pipeThroughReducers(
   // detectTrackFilter,
   fallbackCmdToDefault,
   embodyTags,
-  setDefaultPlayerTracklist,
   toggleShuffle
 );
