@@ -87,7 +87,7 @@ class LazyTracklist extends React.Component {
     };
 
     return (
-      <div className='tracklist scroll-wrapper lazy-tracklist' key='tracklist-wrapper' ref='wrapper'>
+      <div className='tracklist scroll-wrapper lazy-tracklist' ref='wrapper'>
         <div className='tracklist-body' style={style}>{tracks}</div>
       </div>
     );
