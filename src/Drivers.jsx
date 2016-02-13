@@ -3,7 +3,6 @@ import localStorageDriver from 'app/local-storage-driver';
 import keyControlDriver from 'app/key-control-driver';
 import VkDriver from 'app/VkDriver';
 import VkIndexerDriver from 'app/VkIndexerDriver';
-import SoundDriver from 'app/SoundDriver';
 
 class Drivers extends React.Component {
   componentDidMount() {
@@ -22,7 +21,6 @@ class Drivers extends React.Component {
       <div>
         <VkDriver />
         <VkIndexerDriver />
-        <SoundDriver />
       </div>
     );
   }
