@@ -1,5 +1,5 @@
 import React from 'react';
-import { throttle } from 'underscore';
+import throttle from 'lodash/throttle';
 import IScroll from 'iscroll/build/iscroll-probe';
 import Cursor from './cursor';
 import TrackCtrl from './TrackCtrl';

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { throttle } from 'underscore';
+import throttle from 'lodash/throttle';
 import { soundManager as sm } from 'soundmanager2';
 import merge from 'app/merge';
 import { hasTag } from 'app/Tag';

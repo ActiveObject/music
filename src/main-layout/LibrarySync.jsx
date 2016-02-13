@@ -1,5 +1,5 @@
 import React from 'react';
-import { difference } from 'underscore';
+import difference from 'lodash/difference';
 import app from 'app';
 import vk from 'app/vk';
 import merge from 'app/merge';

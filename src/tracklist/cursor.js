@@ -1,7 +1,8 @@
-var _ = require('underscore');
+import has from 'lodash/has';
+import omit from 'lodash/omit';
 
 function getOrDefault(obj, key, defaultValue) {
-  return _.has(obj, key) ? obj[key] : defaultValue;
+  return has(obj, key) ? obj[key] : defaultValue;
 }
 
 function range(page, pageSize, direction) {
@@ -28,7 +29,7 @@ function Cursor(items, options) {
 }
 
 Cursor.prototype.modify = function (items, attrs) {
-  return new Cursor(items, _.extend({}, _.omit(this, 'items'), attrs));
+  return new Cursor(items, Object.assign({}, omit(this, 'items'), attrs));
 };
 
 Cursor.prototype.updatePosition = function (pos) {

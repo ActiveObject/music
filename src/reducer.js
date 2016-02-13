@@ -1,5 +1,7 @@
 import { Map } from 'immutable';
-import { omit, union, shuffle as shuffleArray } from 'underscore';
+import omit from 'lodash/omit';
+import union from 'lodash/union';
+import shuffleArray from 'lodash/shuffle';
 import { hasTag, addTag, removeTag } from 'app/Tag';
 import merge from 'app/merge';
 import Track from 'app/Track';

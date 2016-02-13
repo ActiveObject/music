@@ -1,5 +1,5 @@
 import React from 'react';
-import { omit } from 'underscore';
+import omit from 'lodash/omit';
 import app from 'app';
 import subscribeWith from 'app/subscribeWith';
 import emitterOn from 'app/emitterOn';

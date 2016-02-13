@@ -1,4 +1,5 @@
-import { groupBy, head } from 'underscore';
+import groupBy from 'lodash/groupBy';
+import head from 'lodash/head';
 
 var methods = require('./methods').methods.map(function (m) {
   return m.split('.');

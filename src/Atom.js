@@ -1,6 +1,7 @@
 import assert from 'assert';
 import { EventEmitter } from 'events';
-import { isObject, isFunction } from 'underscore';
+import isObject from 'lodash/isObject';
+import isFunction from 'lodash/isFunction';
 
 function Atom(initialValue) {
   this.value = initialValue;

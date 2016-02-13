@@ -1,5 +1,5 @@
 import React from 'react';
-import { throttle } from 'underscore';
+import throttle from 'lodash/throttle';
 import cx from 'classnames';
 import app from 'app';
 import { hasTag, toggleTag } from 'app/Tag';

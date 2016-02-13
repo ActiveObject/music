@@ -36,13 +36,13 @@
     "jsonp": "0.0.4",
     "kefir": "^3.1.0",
     "keymaster": "^1.6.2",
+    "lodash": "^4.3.0",
     "mime": "^1.2.11",
     "node-static": "^0.7.6",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-motion": "^0.3.1",
-    "soundmanager2": "2.97.20150601",
-    "underscore": "^1.8.0"
+    "soundmanager2": "2.97.20150601"
   },
   "engines": {
     "node": "4.2.x"
