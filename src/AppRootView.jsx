@@ -6,11 +6,11 @@ import GroupTop5Tracks from 'app/GroupTop5Tracks';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import Authenticated from 'app/auth/Authenticated';
 import Layer from 'app/main-layout/Layer';
-import Drivers from 'app/Drivers';
 import VkAudioSync from 'app/VkAudioSync';
 import VkDriver from 'app/VkDriver';
 import Soundmanager from 'app/soundmanager/Soundmanager';
 import PlayerSync from 'app/PlayerSync';
+import KeyboardDriver from 'app/KeyboardDriver';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -69,11 +69,11 @@ var AppRootView = () =>
   <Authenticated>
     <Layer>
       <MainLayout />
-      <Drivers />
       <VkAudioSync />
       <VkDriver />
       <Soundmanager />
       <PlayerSync />
+      <KeyboardDriver />
     </Layer>
   </Authenticated>
 
