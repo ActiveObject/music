@@ -2,7 +2,7 @@ import app from 'app';
 import { updateOn } from 'app/renderer';
 import * as Player from 'app/Player';
 import { hasTag } from 'app/Tag';
-import Sound from 'app/Sound';
+import Sound from 'app/soundmanager/Sound';
 import Track from './track';
 
 let TrackCtrl = ({ track, tracklist }) => {
@@ -10,24 +10,14 @@ let TrackCtrl = ({ track, tracklist }) => {
   var isActive = !hasTag(player, ':player/empty') && track.id === player.track.id;
   var index = tracklist.findIndex(t => t.id === track.id) + 1;
 
-  if (isActive) {
-    return (
-      <Sound track={track} onFinish={() => nextTrack(tracklist)}>
-        <Track
-          track={track}
-          index={index}
-          isActive={isActive}
-          onTogglePlay={ (t) => togglePlay(t, tracklist) } />
-      </Sound>
-    );
-  }
-
   return (
-    <Track
-      track={track}
-      index={index}
-      isActive={isActive}
-      onTogglePlay={ (t) => togglePlay(t, tracklist) } />
+    <Sound track={track} onFinish={() => nextTrack(tracklist)}>
+      <Track
+        track={track}
+        index={index}
+        isActive={isActive}
+        onTogglePlay={ (t) => togglePlay(t, tracklist) } />
+    </Sound>
   );
 }
 

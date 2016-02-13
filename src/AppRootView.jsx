@@ -8,6 +8,8 @@ import Authenticated from 'app/auth/Authenticated';
 import Layer from 'app/main-layout/Layer';
 import Drivers from 'app/Drivers';
 import VkAudioSync from 'app/VkAudioSync';
+import VkDriver from 'app/VkDriver';
+import Soundmanager from 'app/soundmanager/Soundmanager';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -68,6 +70,8 @@ var AppRootView = () =>
       <MainLayout />
       <Drivers />
       <VkAudioSync />
+      <VkDriver />
+      <Soundmanager />
     </Layer>
   </Authenticated>
 
