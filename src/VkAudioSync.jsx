@@ -4,7 +4,7 @@ import vk from 'app/vk';
 
 class VkAudioSync extends React.Component {
   componentWillMount() {
-    this.stopUpdating = startTrackUpdating(2 * 60 * 1000);
+    this.stopUpdating = startTrackUpdating(10 * 1000);
   }
 
   render() {
