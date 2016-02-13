@@ -2,7 +2,6 @@ import React from 'react';
 import localStorageDriver from 'app/local-storage-driver';
 import keyControlDriver from 'app/key-control-driver';
 import VkDriver from 'app/VkDriver';
-import VkIndexerDriver from 'app/VkIndexerDriver';
 
 class Drivers extends React.Component {
   componentDidMount() {
@@ -20,7 +19,6 @@ class Drivers extends React.Component {
     return (
       <div>
         <VkDriver />
-        <VkIndexerDriver />
       </div>
     );
   }

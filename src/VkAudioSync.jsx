@@ -2,7 +2,7 @@ import React from 'react';
 import app from 'app';
 import vk from 'app/vk';
 
-class VkIndexerDriver extends React.Component {
+class VkAudioSync extends React.Component {
   componentWillMount() {
     this.stopUpdating = startTrackUpdating(2 * 60 * 1000);
   }
@@ -55,4 +55,4 @@ function loadAllAudioIds(owner, callback) {
   }, callback);
 }
 
-export default VkIndexerDriver;
+export default VkAudioSync;

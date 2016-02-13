@@ -7,6 +7,7 @@ import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import Authenticated from 'app/auth/Authenticated';
 import Layer from 'app/main-layout/Layer';
 import Drivers from 'app/Drivers';
+import VkAudioSync from 'app/VkAudioSync';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -66,6 +67,7 @@ var AppRootView = () =>
     <Layer>
       <MainLayout />
       <Drivers />
+      <VkAudioSync />
     </Layer>
   </Authenticated>
 
