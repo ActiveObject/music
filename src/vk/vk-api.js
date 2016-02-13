@@ -54,7 +54,7 @@ VkApi.prototype.request = function (method, options, done) {
 
 VkApi.prototype.process = function () {
   if (this.state.isAuthorized && !this.state.isWaitingForCaptcha && this.queue.length > 0) {
-    var reqParams = this.queue[0];
+    var reqParams = this.queue.shift();
     var req = new Request(merge(reqParams, {
       token: this.state.token
     }));
@@ -63,7 +63,7 @@ VkApi.prototype.process = function () {
       var res = new Response(err, data);
 
       if (res.tooManyRequests()) {
-        this.queue = this.queue.slice(1).concat(req.nextAttempt());
+        this.queue.push(req.nextAttempt());
       } else if (res.captchaNeeded() && typeof this.onCaptcha === 'function') {
         if (!this.state.isWaitingForCaptcha) {
           this.state.isWaitingForCaptcha = true;
@@ -78,12 +78,9 @@ VkApi.prototype.process = function () {
 
             this.state.isWaitingForCaptcha = false;
           });
-
-          this.queue = this.queue.slice(1);
         }
       } else {
         res.send(req.callback);
-        this.queue.shift();
       }
     });
   }
