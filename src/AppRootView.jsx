@@ -10,6 +10,7 @@ import Drivers from 'app/Drivers';
 import VkAudioSync from 'app/VkAudioSync';
 import VkDriver from 'app/VkDriver';
 import Soundmanager from 'app/soundmanager/Soundmanager';
+import PlayerSync from 'app/PlayerSync';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -72,6 +73,7 @@ var AppRootView = () =>
       <VkAudioSync />
       <VkDriver />
       <Soundmanager />
+      <PlayerSync />
     </Layer>
   </Authenticated>
 
