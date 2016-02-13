@@ -17,7 +17,6 @@ export function fromVk(data, existingAlbums) {
       artist: data.artist,
       title: data.title,
       duration: data.duration,
-      index: data.index,
       url: data.url
     }
   };

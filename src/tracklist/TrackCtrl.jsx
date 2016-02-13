@@ -8,12 +8,14 @@ import Track from './track';
 let TrackCtrl = ({ track, tracklist }) => {
   var player = app.value.get(':db/player');
   var isActive = !hasTag(player, ':player/empty') && track.id === player.track.id;
+  var index = tracklist.findIndex(t => t.id === track.id) + 1;
 
   if (isActive) {
     return (
       <Sound track={track} onFinish={() => nextTrack(tracklist)}>
         <Track
           track={track}
+          index={index}
           isActive={isActive}
           onTogglePlay={ (t) => togglePlay(t, tracklist) } />
       </Sound>
@@ -23,6 +25,7 @@ let TrackCtrl = ({ track, tracklist }) => {
   return (
     <Track
       track={track}
+      index={index}
       isActive={isActive}
       onTogglePlay={ (t) => togglePlay(t, tracklist) } />
   );

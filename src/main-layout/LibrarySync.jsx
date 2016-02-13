@@ -45,11 +45,7 @@ class LibrarySync extends React.Component {
             return console.log(err);
           }
 
-          var tracks = res.response.map(data => {
-            return merge(data, {
-              index: library.findIndex(t => t.trackId === String(data.id))
-            });
-          }).map(t => Track.fromVk(t, albums))
+          var tracks = res.response.map(t => Track.fromVk(t, albums));
 
           cache = tracks.reduce((c, t) => c.set(t.id, t), cache);
 
