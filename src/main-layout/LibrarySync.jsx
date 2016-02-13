@@ -1,4 +1,5 @@
 import React from 'react';
+import { difference } from 'underscore';
 import app from 'app';
 import vk from 'app/vk';
 import merge from 'app/merge';
@@ -21,10 +22,13 @@ class LibrarySync extends React.Component {
     var user = app.value.get(':db/user');
     var albums = app.value.get(':db/albums');
     var library = app.value.get(':db/library');
-    var missingTracks = library.filter(t => !this.props.cache.has(t.trackId));
-    var itemsToLoad = missingTracks.map(t => ({ owner: user.id, id: t.trackId }));
+    var idsInCache = [...this.props.cache.keys()];
+    var idsInLibrary = library.map(t => t.trackId)
+    var outdated = difference(idsInCache, idsInLibrary);
+    var missing = difference(idsInLibrary, idsInCache);
+    var itemsToLoad = missing.map(id => ({ owner: user.id, id }));
 
-    console.log(`missing tracks: ${missingTracks.length}`);
+    console.log(`[LibrarySync] ${missing.length} missing, ${outdated.length} outdated`);
 
     if (itemsToLoad.length > 0) {
       loadTracksById(itemsToLoad.slice(0, 100), (err, res) => {
