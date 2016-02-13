@@ -41,13 +41,10 @@ class LibrarySync extends React.Component {
   }
 }
 
-function chunkify(items, itemsPerGroup) {
-  if (items.length < itemsPerGroup) {
-    return [items];
-  }
-
-  return [items.slice(0, itemsPerGroup), ...chunkify(items.slice(itemsPerGroup), itemsPerGroup)];
-}
+LibrarySync.propTypes = {
+  cache: React.PropTypes.object.isRequired,
+  onSync: React.PropTypes.func.isRequired
+};
 
 function loadTracksById(items, callback) {
   vk.audio.getById({
