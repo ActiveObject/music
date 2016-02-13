@@ -50,11 +50,7 @@ class LibraryTracklist extends React.Component {
   }
 
   render() {
-    var library = app.value.get(':db/library');
-    var cache = this.state.cache;
-    var tracks = library
-      .filter(t => cache.has(t.trackId))
-      .map(t => cache.get(t.trackId));
+    var tracks = makeTracks(this.state.cache);
 
     return (
       <LibrarySync cache={this.state.cache} onSync={(c) => this.updateCache(c)} >
@@ -76,4 +72,17 @@ class LibraryTracklist extends React.Component {
   }
 }
 
-export default updateOn(LibraryTracklist, ':db/library');
+function makeTracks(cache) {
+  var player = app.value.get(':db/player');
+  var tracklist = app.value.get(':db/library');
+
+  if (hasTag(player, ':player/is-shuffled')) {
+    tracklist = app.value.get(':db/shuffled-library');
+  }
+
+  return tracklist
+    .filter(t => cache.has(t.trackId))
+    .map(t => cache.get(t.trackId));
+}
+
+export default updateOn(LibraryTracklist, ':db/library', db => hasTag(db.get(':db/player'), ':player/is-shuffled'));

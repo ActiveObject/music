@@ -190,12 +190,11 @@ function toggleShuffle(state, v) {
     if (hasTag(state.get(':db/player'), ':player/is-shuffled')) {
       return state
         .set(':db/player', removeTag(state.get(':db/player'), ':player/is-shuffled'))
-        .set(':db/library', state.get(':db/library-original'));
+        .remove(':db/shuffled-library');
     } else {
       return state
         .set(':db/player', addTag(state.get(':db/player'), ':player/is-shuffled'))
-        .set(':db/library-original', state.get(':db/library'))
-        .set(':db/library', shuffleLibrary(state.get(':db/player'), state.get(':db/library')));
+        .set(':db/shuffled-library', shuffleLibrary(state.get(':db/player'), state.get(':db/library')));
     }
   }
 
