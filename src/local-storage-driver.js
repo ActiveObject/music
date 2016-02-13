@@ -41,18 +41,9 @@ export default function () {
     .map(v => v.get(':db/albums'))
     .skipDuplicates();
 
-  var tracks = Kefir.fromEvents(app, 'change')
-    .skip(1)
-    .map(v => v.get(':db/tracks'))
-    .skipDuplicates();
-
   var unsub = subscribeWith(onValue, function (onValue) {
     onValue(playerTracks, function (v) {
       Storage.setItem({ ':player/track': JSON.stringify(v) });
-    });
-
-    onValue(tracks, function(tracks) {
-      Storage.setItem({ ':app/tracks': JSON.stringify({ tracks: tracks }) });
     });
 
     onValue(albums, function(albums) {
@@ -62,10 +53,6 @@ export default function () {
 
   Storage.getItem(':player/track', function (track) {
     app.push(Player.useTrack(app.value.get(':db/player'), JSON.parse(track)));
-  });
-
-  Storage.getItem(':app/tracks', function (tracks) {
-    app.push(addTag(JSON.parse(tracks, revive), ':app/tracks'));
   });
 
   Storage.getItem(':app/albums', function (albums) {

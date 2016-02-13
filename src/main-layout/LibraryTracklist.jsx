@@ -9,6 +9,7 @@ import LazyTracklist from 'app/tracklist/LazyTracklist';
 import vk from 'app/vk';
 import merge from 'app/merge';
 import * as Track from 'app/Track';
+import * as Storage from 'app/Storage';
 
 const AnimationContainer = ({ children }) => {
   var isCmdActivated = hasTag(app.value.get(':db/command-palette'), ':cmd/is-activated');
@@ -42,7 +43,44 @@ class LibraryTracklist extends React.Component {
     this.state = {
       cache: Map()
     };
+  }
 
+  componentWillMount() {
+    Storage.getItem(':cache/library', (cache) => {
+      this.setState({ cache: Map(JSON.parse(cache)) });
+    });
+  }
+
+  render() {
+    var library = app.value.get(':db/library');
+    var cache = this.state.cache;
+    var tracks = library
+      .filter(t => cache.has(t.trackId))
+      .map(t => cache.get(t.trackId));
+
+    return (
+      <LibrarySync cache={this.state.cache} onSync={(c) => this.updateCache(c)} >
+        <AnimationContainer>
+          <TracklistTable>
+            <LazyTracklist tracks={tracks} />
+          </TracklistTable>
+        </AnimationContainer>
+      </LibrarySync>
+    );
+  }
+
+  updateCache(c) {
+    this.setState({ cache: c });
+
+    Storage.setItem({
+      ':cache/library': JSON.stringify(c)
+    });
+  }
+}
+
+class LibrarySync extends React.Component {
+  constructor() {
+    super();
     this.isSyncing = false;
   }
 
@@ -59,32 +97,21 @@ class LibraryTracklist extends React.Component {
   }
 
   render() {
-    var library = app.value.get(':db/library');
-    var tracks = library
-      .filter(t => this.state.cache.has(t.trackId))
-      .map(t => this.state.cache.get(t.trackId));
-
-    return (
-      <AnimationContainer>
-        <TracklistTable>
-          <LazyTracklist tracks={tracks} />
-        </TracklistTable>
-      </AnimationContainer>
-    );
+    return this.props.children;
   }
 
   sync() {
+    var cache = this.props.cache;
     var user = app.value.get(':db/user');
     var albums = app.value.get(':db/albums');
     var library = app.value.get(':db/library');
-    var missingTracks = library.filter(t => !this.state.cache.has(t.trackId));
+    var missingTracks = library.filter(t => !cache.has(t.trackId));
     var itemsToLoad = missingTracks.map(t => ({ owner: user.id, id: t.trackId }));
 
     console.log('missing tracks', missingTracks.map(t => t.trackId));
 
     if (missingTracks.length > 0) {
       this.isSyncing = true;
-      var cache = this.state.cache;
 
       chunkify(itemsToLoad, 100).forEach((itemsGroup, i, groups) => {
         loadTracksById(itemsGroup, (err, res) => {
@@ -100,7 +127,7 @@ class LibraryTracklist extends React.Component {
 
           cache = tracks.reduce((c, t) => c.set(t.id, t), cache);
 
-          this.setState({ cache });
+          this.props.onSync(cache);
 
           if (i === groups.length - 1) {
             this.isSyncing = false;
