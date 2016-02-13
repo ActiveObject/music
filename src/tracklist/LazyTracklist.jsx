@@ -30,35 +30,24 @@ let ScrollContainer = ({ yOffset, children }) => {
   );
 }
 
-var LazyTracklist = React.createClass({
-  propTypes: {
-    tracks: React.PropTypes.array.isRequired,
-    itemHeight: React.PropTypes.number
-  },
+class LazyTracklist extends React.Component {
+  constructor(props) {
+    super();
+    this.state = {
+      cursor: new Cursor(props.tracks, {
+        itemHeight: props.itemHeight,
+        pageSize: props.pageSize
+      })
+    };
+  }
 
-  shouldComponentUpdate: function (nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return nextProps.tracks !== this.props.tracks
       || nextState.cursor.position === this.state.cursor.position
       || nextState.cursor.page() !== this.state.cursor.page();
-  },
+  }
 
-  getInitialState: function () {
-    return {
-      cursor: new Cursor(this.props.tracks, {
-        itemHeight: this.props.itemHeight,
-        pageSize: this.props.pageSize
-      })
-    };
-  },
-
-  getDefaultProps: function () {
-    return {
-      itemHeight: 40,
-      pageSize: 10
-    };
-  },
-
-  componentDidMount: function () {
+  componentDidMount() {
     var component = this;
 
     this.scroll = new IScroll(this.refs.wrapper, {
@@ -70,23 +59,23 @@ var LazyTracklist = React.createClass({
     this.scroll.on('scroll', throttle(function () {
       component.setState({ cursor: component.state.cursor.updatePosition(this.y) });
     }), 1000);
-  },
+  }
 
-  componentDidUpdate: function (prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.tracks !== prevProps.tracks) {
       this.scroll.refresh();
     }
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.tracks !== nextProps.tracks) {
       this.setState({
         cursor: this.state.cursor.updateItems(nextProps.tracks)
       });
     }
-  },
+  }
 
-  render: function() {
+  render() {
     var tracks = this.state.cursor.selection().map(track =>
       <ScrollContainer key={track.value.id} yOffset={track.yOffset}>
         <TrackContainer track={track.value} tracklist={this.props.tracks} />
@@ -103,6 +92,16 @@ var LazyTracklist = React.createClass({
       </div>
     );
   }
-});
+}
+
+LazyTracklist.propTypes = {
+  tracks: React.PropTypes.array.isRequired,
+  itemHeight: React.PropTypes.number
+};
+
+LazyTracklist.defaultProps = {
+  itemHeight: 40,
+  pageSize: 10
+};
 
 export default LazyTracklist;
