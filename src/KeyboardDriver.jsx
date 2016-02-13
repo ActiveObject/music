@@ -8,14 +8,17 @@ class KeyboardDriver extends React.Component {
   componentWillMount() {
     this.unsub = bindKeys(function (key) {
       key('left', function () {
+        console.log(`[KeyboardDriver] rewind 5s`);
         app.push(Player.rewind(app.value.get(':db/player'), 5000));
       });
 
       key('right', function () {
+        console.log(`[KeyboardDriver] forward 5s`);
         app.push(Player.forward(app.value.get(':db/player'), 5000));
       });
 
       key('space', function () {
+        console.log(`[KeyboardDriver] toggle play`);
         app.push(Player.togglePlay(app.value.get(':db/player')));
       });
 
