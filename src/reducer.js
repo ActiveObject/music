@@ -141,23 +141,6 @@ function fallbackCmdToDefault(state, v) {
   return state.set(':db/cmd', 'All tracks');
 }
 
-function embodyTracks(state, v) {
-  if (hasTag(v, ':app/tracks')) {
-    return state.set(':db/tracks', v.tracks);
-  }
-
-  if (hasTag(v, ':vk/tracks')) {
-    var newTracks = v.tracks.reduce(function (result, track) {
-      var t = Track.fromVk(track, state.get(':db/albums'));
-      return result.set(t.id, t);
-    }, Map().asMutable()).asImmutable();
-
-    return state.update(':db/tracks', existingTracks => existingTracks.merge(newTracks));
-  }
-
-  return state;
-}
-
 function embodyAlbums(state, v) {
   if (hasTag(v, ':app/albums')) {
     return state.set(':db/albums', v.albums);
@@ -178,23 +161,7 @@ function embodyAlbums(state, v) {
 function embodyTags(state, v) {
   if (hasTag(v, ':app/albums')) {
     var updatedTags = v.albums.map(x => x.title).toArray();
-    var updatedTagIds = v.albums.map(x => x.id).toArray();
-
-    return state
-      .update(':db/tags', tags => union(tags, updatedTags))
-      .update(':db/tracks', function (tracks) {
-        return tracks.map(function (track) {
-          var idx = updatedTagIds.indexOf(track.album);
-
-          if (idx !== -1) {
-            return merge(track, {
-              audioTags: union(track.audioTags, updatedTags[idx])
-            });
-          }
-
-          return track;
-        });
-      });
+    return state.update(':db/tags', tags => union(tags, updatedTags));
   }
 
   return state;
@@ -246,7 +213,6 @@ function shuffleLibrary(player, library) {
 
 export default pipeThroughReducers(
   commonReducer,
-  embodyTracks,
   removeOutdatedTracks,
   embodyAlbums,
   detectArtistFilter,
