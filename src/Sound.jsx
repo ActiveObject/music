@@ -29,15 +29,15 @@ class Sound extends React.Component {
     var player = app.value.get(':db/player');
 
     return sm.createSound({
-      id: 'Audio(' + track.audio.artist + ', ' + track.audio.title + ')',
-      url: track.audio.url,
+      id: 'Audio(' + track.artist + ', ' + track.title + ')',
+      url: track.url,
       autoLoad: false,
       autoPlay: hasTag(player, ':player/is-playing'),
       volume: 100,
 
       onload: () => {
         if (this.sound.readyState === 2) {
-          var err = new Error(`Can\'t load audio ${track.props.audio.artist} - ${this.props.track.audio.title}`);
+          var err = new Error(`Can\'t load audio ${track.props.artist} - ${this.props.track.title}`);
           err.track = this.props.track;
           this.onError(err);
         }

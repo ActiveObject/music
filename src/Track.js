@@ -1,7 +1,5 @@
 import merge from 'app/merge';
 
-export default { fromVk };
-
 export function fromVk(data, existingAlbums) {
   var albumIds = existingAlbums.map(v => v.id).toArray();
   var albumNames = existingAlbums.map(v => v.title).toArray();
@@ -13,11 +11,9 @@ export function fromVk(data, existingAlbums) {
     owner: data.owner_id,
     album: data.album_id,
     audioTags: audioTags,
-    audio: {
-      artist: data.artist,
-      title: data.title,
-      duration: data.duration,
-      url: data.url
-    }
+    artist: data.artist,
+    title: data.title,
+    duration: data.duration,
+    url: data.url
   };
 };

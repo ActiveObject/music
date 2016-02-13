@@ -51,18 +51,18 @@ export function togglePlayState(p) {
 
 export function seek(p, position) {
   return merge(p, {
-    seekPosition: p.track.audio.duration * position * 1000
+    seekPosition: p.track.duration * position * 1000
   });
 }
 
 export function seekTo(p, position) {
   return merge(addTag(p, ':player/seek-to-position'), {
-    seekToPosition: p.track.audio.duration * position * 1000
+    seekToPosition: p.track.duration * position * 1000
   });
 }
 
 export function forward(p, amount) {
-  var duration = p.track.audio.duration * 1000;
+  var duration = p.track.duration * 1000;
 
   return merge(addTag(p, ':player/seek-to-position'), {
     seekToPosition: p.position + amount > duration ? duration : p.position + amount
@@ -102,19 +102,19 @@ export function useTracklist(p, tracklist) {
 }
 
 export function relativePosition(p) {
-  if (p.track.audio.duration === 0) {
+  if (p.track.duration === 0) {
     return 0;
   }
 
-  return p.position / p.track.audio.duration / 1000;
+  return p.position / p.track.duration / 1000;
 }
 
 export function relativeSeekPosition(p) {
-  if (p.track.audio.duration === 0) {
+  if (p.track.duration === 0) {
     return 0;
   }
 
-  return p.seekPosition / p.track.audio.duration / 1000;
+  return p.seekPosition / p.track.duration / 1000;
 }
 
 export function relativeLoaded(p) {
