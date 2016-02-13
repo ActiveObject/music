@@ -5,21 +5,12 @@ import merge from 'app/merge';
 import * as Track from 'app/Track';
 
 class LibrarySync extends React.Component {
-  constructor() {
-    super();
-    this.isSyncing = false;
-  }
-
   componentWillMount() {
-    if (!this.isSyncing) {
-      this.sync();
-    }
+    this.sync();
   }
 
   componentDidUpdate() {
-    if (!this.isSyncing) {
-      this.sync();
-    }
+    this.sync();
   }
 
   render() {
@@ -27,34 +18,24 @@ class LibrarySync extends React.Component {
   }
 
   sync() {
-    var cache = this.props.cache;
     var user = app.value.get(':db/user');
     var albums = app.value.get(':db/albums');
     var library = app.value.get(':db/library');
-    var missingTracks = library.filter(t => !cache.has(t.trackId));
+    var missingTracks = library.filter(t => !this.props.cache.has(t.trackId));
     var itemsToLoad = missingTracks.map(t => ({ owner: user.id, id: t.trackId }));
 
-    console.log('missing tracks', missingTracks.map(t => t.trackId));
+    console.log(`missing tracks: ${missingTracks.length}`);
 
-    if (missingTracks.length > 0) {
-      this.isSyncing = true;
+    if (itemsToLoad.length > 0) {
+      loadTracksById(itemsToLoad.slice(0, 100), (err, res) => {
+        if (err) {
+          return console.log(err);
+        }
 
-      chunkify(itemsToLoad, 100).forEach((itemsGroup, i, groups) => {
-        loadTracksById(itemsGroup, (err, res) => {
-          if (err) {
-            return console.log(err);
-          }
+        var tracks = res.response.map(t => Track.fromVk(t, albums));
+        var cache = tracks.reduce((c, t) => c.set(t.id, t), this.props.cache)
 
-          var tracks = res.response.map(t => Track.fromVk(t, albums));
-
-          cache = tracks.reduce((c, t) => c.set(t.id, t), cache);
-
-          this.props.onSync(cache);
-
-          if (i === groups.length - 1) {
-            this.isSyncing = false;
-          }
-        });
+        this.props.onSync(cache);
       });
     }
   }
