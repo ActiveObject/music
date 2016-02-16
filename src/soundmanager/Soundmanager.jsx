@@ -7,6 +7,9 @@ import { updateOn } from 'app/renderer';
 import { hasTag, removeTag } from 'app/Tag';
 import merge from 'app/merge';
 import driver from './driver';
+import vk from 'app/vk';
+import * as Player from 'app/Player';
+import { toString } from 'app/Track';
 
 class Soundmanager extends React.Component {
   componentWillMount() {
@@ -23,9 +26,7 @@ class Soundmanager extends React.Component {
         app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
       })
 
-      on(driver, 'error', (err) => {
-        console.log(err);
-      });
+      on(driver, 'error', err => reload(err.track));
     });
   }
 
@@ -48,6 +49,30 @@ class Soundmanager extends React.Component {
   render() {
     return <div />;
   }
+}
+
+function reload(track) {
+  console.log(`[TrackCtrl] fetch url for ${toString(track)}`);
+
+  fetchUrl(track, (err, res) => {
+    if (err) {
+      return console.log(err);
+    }
+
+    app.push(
+      Player.play(
+        Player.useTrack(app.value.get(':db/player'), merge(track, {
+          url: res.response
+        }))));
+  });
+}
+
+function fetchUrl(audio, callback) {
+  vk.execute({
+    code: `
+      return API.audio.getById({ audios: "${audio.owner}_${audio.id}" })@.url;
+    `
+  }, callback);
 }
 
 export default updateOn(Soundmanager, ':db/player');
