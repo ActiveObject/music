@@ -1,12 +1,12 @@
 import React from 'react';
 import emitterOn from 'app/emitterOn';
 import subscribeWith from 'app/subscribeWith';
-import driver from './driver';
+import SoundDriver from './SoundDriver';
 
 class Sound extends React.Component {
   componentWillMount() {
     this.unsub = subscribeWith(emitterOn, (emitterOn) => {
-      emitterOn(driver, 'finish', (track) => {
+      emitterOn(SoundDriver, 'finish', (track) => {
         if (track.id === this.props.track.id) {
           if (typeof this.props.onFinish === 'function') {
             this.props.onFinish();
@@ -14,7 +14,7 @@ class Sound extends React.Component {
         }
       });
 
-      emitterOn(driver, 'error', (err) => {
+      emitterOn(SoundDriver, 'error', (err) => {
         if (err.track.id === this.props.track.id) {
           if (typeof this.props.onError === 'function') {
             this.props.onError(err);

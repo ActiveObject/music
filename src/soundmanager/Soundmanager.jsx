@@ -6,27 +6,27 @@ import emitterOn from 'app/emitterOn';
 import { updateOn } from 'app/renderer';
 import { hasTag, removeTag } from 'app/Tag';
 import merge from 'app/merge';
-import driver from './driver';
+import SoundDriver from './SoundDriver';
 import vk from 'app/vk';
 import * as Player from 'app/Player';
 import { toString } from 'app/Track';
 
 class Soundmanager extends React.Component {
   componentWillMount() {
-    driver.setup({ debugMode: false });
+    SoundDriver.setup({ debugMode: false });
 
     this.unsub = subscribeWith(emitterOn, (on) => {
-      on(driver, 'whileplaying', (position) => {
+      on(SoundDriver, 'whileplaying', (position) => {
         if (!app.value.get(':db/player').seeking) {
           app.push(merge(app.value.get(':db/player'), { position: position }));
         }
       })
 
-      on(driver, 'whileloading', (bytesLoaded, bytesTotal) => {
+      on(SoundDriver, 'whileloading', (bytesLoaded, bytesTotal) => {
         app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
       })
 
-      on(driver, 'error', err => reload(err.track));
+      on(SoundDriver, 'error', err => reload(err.track));
     });
   }
 
@@ -43,7 +43,7 @@ class Soundmanager extends React.Component {
       }));
     }
 
-    driver.tick(player);
+    SoundDriver.tick(player);
   }
 
   render() {

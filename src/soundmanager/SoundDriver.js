@@ -5,7 +5,7 @@ import merge from 'app/merge';
 import { hasTag } from 'app/Tag';
 import { toString } from 'app/Track';
 
-function Driver() {
+function SoundDriver() {
   this.state = {
     tag: ':sm/uninitialized'
   };
@@ -13,11 +13,11 @@ function Driver() {
   this.setMaxListeners(100);
 }
 
-Driver.prototype = Object.create(EventEmitter.prototype, {
-  constructor: { value: Driver, enumerable: false }
+SoundDriver.prototype = Object.create(EventEmitter.prototype, {
+  constructor: { value: SoundDriver, enumerable: false }
 });
 
-Driver.prototype.setup = function (options) {
+SoundDriver.prototype.setup = function (options) {
   sm.setup(merge(options, {
     onready: () => {
       this.state.tag = ':sm/ready';
@@ -25,7 +25,7 @@ Driver.prototype.setup = function (options) {
   }));
 };
 
-Driver.prototype.tick = function (player) {
+SoundDriver.prototype.tick = function (player) {
   if (!hasTag(this.state, ':sm/ready')) {
     return;
   }
@@ -62,7 +62,7 @@ Driver.prototype.tick = function (player) {
   }
 };
 
-Driver.prototype.createSound = function (track) {
+SoundDriver.prototype.createSound = function (track) {
   console.log(`[SoundDriver] create sound for ${toString(track)}`);
 
   return sm.createSound({
@@ -96,4 +96,4 @@ Driver.prototype.createSound = function (track) {
   });
 };
 
-export default new Driver();
+export default new SoundDriver();
