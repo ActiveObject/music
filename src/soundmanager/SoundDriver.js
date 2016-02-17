@@ -37,6 +37,7 @@ SoundDriver.prototype.tick = function (player) {
   var track = player.track;
 
   if (this.track && (track.id !== this.track.id || track.url !== this.track.url)) {
+    console.log(`[SoundDriver] destroy sound for ${toString(this.track)}`);
     this.sound.destruct();
   }
 
