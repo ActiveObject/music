@@ -17,3 +17,7 @@ export function fromVk(data, existingAlbums) {
     url: data.url
   };
 };
+
+export function toString(track) {
+  return `${track.artist} - ${track.title} (#${track.id})`;
+};

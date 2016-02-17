@@ -3,6 +3,7 @@ import throttle from 'lodash/throttle';
 import { soundManager as sm } from 'soundmanager2';
 import merge from 'app/merge';
 import { hasTag } from 'app/Tag';
+import { toString } from 'app/Track';
 
 function Driver() {
   this.state = {
@@ -35,43 +36,13 @@ Driver.prototype.tick = function (player) {
 
   var track = player.track;
 
-  if (this.track && track.id !== this.track.id) {
+  if (this.track && (track.id !== this.track.id || track.url !== this.track.url)) {
     this.sound.destruct();
   }
 
   if (!this.track || track.id !== this.track.id || track.url !== this.track.url) {
-    var sound = sm.createSound({
-      id: 'Audio(' + track.artist + ', ' + track.title + ')',
-      url: track.url,
-      autoLoad: false,
-      autoPlay: false,
-      volume: 100,
-
-      onload: () => {
-        if (sound.readyState === 2) {
-          var err = new Error(`Can\'t load audio ${this.track.artist} - ${this.track.title}`);
-          err.track = this.track;
-          this.emit('error', err);
-        }
-      },
-
-      onfinish: () => {
-        this.emit('finish', this.track);
-      },
-
-      whileplaying: throttle(() => {
-        if (sound.readyState !== 0) {
-          this.emit('whileplaying', sound.position);
-        }
-      }, 500),
-
-      whileloading: throttle(() => {
-        this.emit('whileloading', sound.bytesLoaded, sound.bytesTotal);
-      }, 500)
-    });
-
     this.track = track;
-    this.sound = sound;
+    this.sound = this.createSound(track);
   }
 
   if (!hasTag(player, ':player/is-playing') && !this.sound.paused) {
@@ -89,6 +60,40 @@ Driver.prototype.tick = function (player) {
   if (hasTag(player, ':player/seek-to-position')) {
     return this.sound.setPosition(player.seekToPosition);
   }
+};
+
+Driver.prototype.createSound = function (track) {
+  console.log(`[SoundDriver] create sound for ${toString(track)}`);
+
+  return sm.createSound({
+    id: 'Audio(' + track.artist + ', ' + track.title + ')',
+    url: track.url,
+    autoLoad: false,
+    autoPlay: false,
+    volume: 100,
+
+    onload: () => {
+      if (this.sound.readyState === 2) {
+        var err = new Error(`Can\'t load audio ${toString(track)}`);
+        err.track = this.track;
+        this.emit('error', err);
+      }
+    },
+
+    onfinish: () => {
+      this.emit('finish', this.track);
+    },
+
+    whileplaying: throttle(() => {
+      if (this.sound.readyState !== 0) {
+        this.emit('whileplaying', this.sound.position);
+      }
+    }, 500),
+
+    whileloading: throttle(() => {
+      this.emit('whileloading', this.sound.bytesLoaded, this.sound.bytesTotal);
+    }, 500)
+  });
 };
 
 export default new Driver();
