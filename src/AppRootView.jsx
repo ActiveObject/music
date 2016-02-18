@@ -11,6 +11,7 @@ import VkDriver from 'app/VkDriver';
 import Soundmanager from 'app/soundmanager/Soundmanager';
 import PlayerSync from 'app/PlayerSync';
 import KeyboardDriver from 'app/KeyboardDriver';
+import GroupActivity from 'app/GroupActivity';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -49,6 +50,7 @@ var GroupPage = () =>
       <Section>
         <Content>
           <GroupProfile group={group} />
+          <GroupActivity groupId={group.id} />
         </Content>
       </Section>
 

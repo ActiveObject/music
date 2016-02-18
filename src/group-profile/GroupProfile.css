@@ -1,6 +1,6 @@
 .group-profile {
   display: flex;
-  height: 500px;
+  margin: 60px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
