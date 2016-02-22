@@ -17,7 +17,7 @@ $accent-cyan: #2aa198;
 $accent-green: #859900;
 
 $accent-color: #FD76B3;
-$accent-text-color: #FFF;
+$accent-text-color: #FDF6E3;
 $primary-color: #6c71c4;
 $primary-dark-color: #5A5D9C;
 $primary-text-color: #FDF6E3;
@@ -115,4 +115,25 @@ header {
 
 .vk-captcha-view {
   background-color: $primary-dark-color;
+}
+
+.player-bbox {
+  background-color: $accent-color;
+  color: $accent-text-color;
+}
+
+.apl-fg-line {
+  background-color: #cf4885;
+}
+
+.apl-bg-line {
+  background-color: #f6abcc;
+}
+
+.apl-seek {
+  background-color: #cf4885;
+}
+
+.apl-load-line {
+  background-color: #fff;
 }

@@ -1,0 +1,34 @@
+.player-bbox {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.player-cbox {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+.player-desc {
+  margin: 10px 0 0 0;
+}
+
+.player-separator {
+  margin: 0 3px;
+}
+
+.player-time {
+  align-self: flex-end;
+  font-size: 12px;
+}
+
+.player-progress {
+  width: 100%;
+}

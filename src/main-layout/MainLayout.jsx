@@ -10,6 +10,7 @@ import Layer from './Layer';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import CmdOut from './CmdOut';
+import Player from 'app/player/Player';
 
 const MainLayout = () => {
   var isCmdActivated = hasTag(app.value.get(':db/command-palette'), ':cmd/is-activated');
@@ -20,6 +21,7 @@ const MainLayout = () => {
         <LibraryTracklist />
         <PlayBtnCtrl />
         <ProfileCtrl />
+        <Player />
       </Layer>
 
       <Layer style={{ transform: `translate(0, ${isCmdActivated ? 0 : 100}%)` }}>

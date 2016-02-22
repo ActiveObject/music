@@ -1,0 +1,45 @@
+.apl {
+  position: relative;
+  height: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.apl-bg-line,
+.apl-fg-line,
+.apl-load-line {
+  position: absolute;
+  height: 4px;
+  left: 0;
+  top: 50%;
+  margin-top: -2px;
+  border-radius: 3px;
+}
+
+.apl-fg-line {
+  width: 0;
+  transition: width 0.1s;
+}
+
+.apl-bg-line {
+  width: 100%;
+  transition: width 0.1s;
+}
+
+.apl-seek {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  opacity: 1;
+  transition: opacity 0.1s;
+  margin-left: -5px;
+}
+
+.apl-seek-hidden {
+  opacity: 0;
+}
+
+.apl-seek-active .apl-fg-line {
+  transition: none
+}

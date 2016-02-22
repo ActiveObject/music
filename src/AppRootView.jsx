@@ -12,6 +12,8 @@ import Soundmanager from 'app/soundmanager/Soundmanager';
 import PlayerSync from 'app/PlayerSync';
 import KeyboardDriver from 'app/KeyboardDriver';
 import GroupActivity from 'app/GroupActivity';
+import Player from 'app/player/Player';
+import { Section, Header, Content } from 'app/ResponsiveGrid';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -28,21 +30,6 @@ var group = {
   screen_name: "dubstep_vocal",
   type: "page"
 };
-
-var Section = ({ children, className }) =>
-  <div className={`section ${className}`}>
-    {children}
-  </div>
-
-var Header = ({ children }) =>
-  <div className='header'>
-    {children}
-  </div>
-
-var Content = ({ children }) =>
-  <div className='content'>
-    {children}
-  </div>
 
 var GroupPage = () =>
   <div className='group-page'>
@@ -65,6 +52,8 @@ var GroupPage = () =>
     <div className='main-layout__play-btn'>
       <PlayBtnCtrl />
     </div>
+
+    <Player />
   </div>
 
 var AppRootView = () =>
