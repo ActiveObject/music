@@ -1,7 +1,7 @@
 import React from 'react';
 import vk from 'app/vk';
 import './GroupActivity.css';
-import Activity from 'app/Activity';
+import ActivityChart from 'app/ActivityChart';
 
 class GroupActivity extends React.Component {
   constructor() {
@@ -12,7 +12,7 @@ class GroupActivity extends React.Component {
   }
 
   componentWillMount() {
-    loadActivityForLastNWeeks(this.props.groupId, 45, (err, items) => {
+    loadActivityForLastNWeeks(this.props.groupId, 44, (err, items) => {
       if (err) {
         return console.log(err);
       }
@@ -33,7 +33,11 @@ class GroupActivity extends React.Component {
   }
 
   render() {
-    return <Activity value={this.state.activity} />
+    return (
+      <div className='group-activity'>
+        <ActivityChart value={this.state.activity} size={16} margin={2} weeks={44} />
+      </div>
+    );
   }
 }
 

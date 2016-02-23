@@ -47,9 +47,4 @@ function fillColor(n) {
   return 'rgb(91, 95, 176)';
 }
 
-let Activity = ({ value }) =>
-  <div className='activity'>
-    <ActivityChart value={value} size={16} margin={2} weeks={45} />
-  </div>
-
-export default Activity;
+export default ActivityChart;
