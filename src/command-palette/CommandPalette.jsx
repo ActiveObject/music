@@ -22,7 +22,7 @@ class CommandPalette extends React.Component {
 
     return (
       <div className='command-palette'>
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <input
             ref={(c) => this._input = c}
             type='text'
@@ -32,9 +32,7 @@ class CommandPalette extends React.Component {
             onBlur={this.deactivate}
             onKeyUp={this.onKeyUp}
             onChange={throttle((e) => this.executeCommand(e.target.value), 200)} />
-          <div className='command-palette__actions'>
-            <span className={cx({ 'command-palette__action': true, 'command-palette__action--active': isShuffled })} onClick={shuffle}>shuffle</span>
-          </div>
+          <span className={cx({ 'command-palette__action': true, 'command-palette__action--active': isShuffled })} onClick={shuffle}>shuffle</span>
         </div>
         <div className='command-palette__complete'>
           <span>All tracks</span>

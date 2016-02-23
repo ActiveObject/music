@@ -85,7 +85,7 @@ $base-text-color: #657b83;
 }
 
 .command-palette__action:hover {
-  color: $accent-color;
+  background-color: rgba(153, 153, 153, .12);
 }
 
 .command-palette__action--active,

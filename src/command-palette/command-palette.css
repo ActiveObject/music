@@ -43,7 +43,7 @@
   font-weight: 300;
   font-family: 'Roboto', sans-serif;
   cursor: pointer;
-  padding: 2px 5px;
-  font-size: .9rem;
+  padding: 5px 10px;
+  font-size: .7rem;
+  text-transform: uppercase;
 }
-
