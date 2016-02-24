@@ -14,6 +14,8 @@ import KeyboardDriver from 'app/KeyboardDriver';
 import GroupActivity from 'app/GroupActivity';
 import Player from 'app/player/Player';
 import { Section, Header, Content } from 'app/ResponsiveGrid';
+import ProfileCtrl from 'app/user-profile/ProfileCtrl';
+import LibraryStaticTracklist from 'app/main-layout/LibraryStaticTracklist';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -52,14 +54,30 @@ var GroupPage = () =>
     <div className='main-layout__play-btn'>
       <PlayBtnCtrl />
     </div>
+  </div>
 
-    <Player />
+var MainPage = () =>
+  <div className='main-page'>
+    <div className='scroll-container'>
+      <Section>
+        <ProfileCtrl />
+      </Section>
+
+      <Section>
+        <Content>
+          <Header>Library</Header>
+          <LibraryStaticTracklist />
+        </Content>
+      </Section>
+
+      <PlayBtnCtrl />
+    </div>
   </div>
 
 var AppRootView = () =>
   <Authenticated>
     <Layer>
-      <MainLayout />
+      <MainPage />
       <VkAudioSync />
       <VkDriver />
       <Soundmanager />

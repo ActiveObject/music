@@ -48,10 +48,9 @@ body,
 }
 
 .main-layout__profile {
-  position: absolute;
-  right: 0;
-  top: 0;
   padding: 20px 30px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .app-cmd {
@@ -76,6 +75,7 @@ body,
   padding: 20px 0;
   font-size: 2rem;
   font-weight: 100;
+  text-align: center;
 }
 
 .group-page {

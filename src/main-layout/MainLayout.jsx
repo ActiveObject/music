@@ -21,7 +21,6 @@ const MainLayout = () => {
         <LibraryTracklist />
         <PlayBtnCtrl />
         <ProfileCtrl />
-        <Player />
       </Layer>
 
       <Layer style={{ transform: `translate(0, ${isCmdActivated ? 0 : 100}%)` }}>
