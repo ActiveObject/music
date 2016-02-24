@@ -1,6 +1,5 @@
 import app from 'app';
 import { hasTag } from 'app/Tag';
-import MainLayout from 'app/main-layout/MainLayout';
 import GroupProfile from 'app/group-profile/GroupProfile';
 import GroupTop5Tracks from 'app/GroupTop5Tracks';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
@@ -15,7 +14,7 @@ import GroupActivity from 'app/GroupActivity';
 import Player from 'app/player/Player';
 import { Section, Header, Content } from 'app/ResponsiveGrid';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
-import LibraryStaticTracklist from 'app/main-layout/LibraryStaticTracklist';
+import LibraryStaticTracklist from 'app/library/LibraryStaticTracklist';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
