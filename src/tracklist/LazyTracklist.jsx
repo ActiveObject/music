@@ -48,16 +48,16 @@ class LazyTracklist extends React.Component {
   }
 
   componentDidMount() {
-    var component = this;
-
     this.scroll = new IScroll(this.refs.wrapper, {
       mouseWheel: true,
       scrollX: false,
       probeType: 3
     });
 
-    this.scroll.on('scroll', throttle(function () {
-      component.setState({ cursor: component.state.cursor.updatePosition(this.y) });
+    this.scroll.on('scroll', throttle(() => {
+      this.setState({
+        cursor: this.state.cursor.updatePosition(this.scroll.y)
+      });
     }), 1000);
   }
 
