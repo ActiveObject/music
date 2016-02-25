@@ -19,7 +19,10 @@ import { Section, Header, Content } from 'app/ResponsiveGrid';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import LibraryStaticTracklist from 'app/library/LibraryStaticTracklist';
 import GroupsListContainer from 'app/GroupsListContainer';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import Router from 'react-router/lib/Router';
+import Route from 'react-router/lib/Route';
+import IndexRoute from 'react-router/lib/IndexRoute';
+import browserHistory from 'react-router/lib/browserHistory';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
