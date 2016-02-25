@@ -90,8 +90,8 @@ body,
   height: 100%;
 }
 
-.main-page .section:last-child {
-  margin-bottom: 80px;
+.main-page .scroll-container {
+  padding-bottom: 80px;
 }
 
 .group-page__content {
