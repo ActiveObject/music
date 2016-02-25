@@ -27,7 +27,7 @@ let GroupPage = ({ params }) =>
     <div className='scroll-container'>
       <Section>
         <Content>
-          <GroupProfile group={params.id} />
+          <GroupProfile groupId={params.id} />
           <GroupActivity groupId={params.id} />
         </Content>
       </Section>
@@ -35,7 +35,7 @@ let GroupPage = ({ params }) =>
       <Section className='group-page__content'>
         <Content>
           <Header>Week top</Header>
-          <GroupTop5Tracks group={params.id} />
+          <GroupTop5Tracks groupId={params.id} />
         </Content>
       </Section>
     </div>

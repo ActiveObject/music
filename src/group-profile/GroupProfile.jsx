@@ -15,15 +15,22 @@ var GroupProfile = ({ group }) => (
   </div>
 );
 
-let GroupProfilePreview = () =>
-  <div className='group-profile group-profile-preview'>
-    <div className='group-image'>
-      <div className='group-profile-preview__image' />
+let GroupProfilePreview = ({ isActive, children }) => {
+  if (!isActive) {
+    return children;
+  }
+
+  return (
+    <div className='group-profile group-profile-preview'>
+      <div className='group-image'>
+        <div className='group-profile-preview__image' />
+      </div>
+      <span className='group-name'>
+        <div className='group-profile-preview__name' />
+      </span>
     </div>
-    <span className='group-name'>
-      <div className='group-profile-preview__name' />
-    </span>
-  </div>
+  );
+}
 
 class GroupLoader extends React.Component {
   constructor() {
@@ -35,7 +42,7 @@ class GroupLoader extends React.Component {
 
   componentWillMount() {
     vk.groups.getById({
-      group_ids: this.props.group,
+      group_ids: this.props.groupId,
       fields: ['description']
     }, (err, res) => {
       if (err) {
@@ -50,11 +57,11 @@ class GroupLoader extends React.Component {
   }
 
   render() {
-    if (this.state.isLoading) {
-      return <GroupProfilePreview />
-    }
-
-    return <GroupProfile group={this.state.group} />
+    return (
+      <GroupProfilePreview isActive={this.state.isLoading}>
+        <GroupProfile group={this.state.group} />
+      </GroupProfilePreview>
+    );
   }
 }
 
