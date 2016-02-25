@@ -1,11 +1,12 @@
 import React from 'react';
+import './GroupsList.css';
 
 let Group = ({ value }) =>
-  <div className='group track' style={{ height: 50 }}>
-    <div style={{ borderRadius: '50%', margin: '0 10px', overflow: 'hidden', width: 30, height: 30 }}>
+  <div className='track' style={{ height: 50 }}>
+    <div className='GroupsList__image' style={{ width: 30, height: 30 }}>
       <img src={value.photo_50} width={30} height={30} />
     </div>
-    <span>{value.name}</span>
+    <div className='GroupsList__name'>{value.name}</div>
   </div>
 
 let GroupsList = ({ groups }) =>

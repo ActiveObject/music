@@ -5,13 +5,3 @@
   width: 30px;
   border-radius: 50%;
 }
-
-.GroupsListPreview__image {
-  width: 3rem;
-  display: flex;
-  justify-content: center;
-}
-
-.GroupsListPreview__title {
-  width: 60%;
-}
