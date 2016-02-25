@@ -1,16 +1,16 @@
-.playlist {
+.TracklistTable {
   height: 100%;
 }
 
-.playlist__content {
+.TracklistTable__content {
   height: 100%;
 }
 
-.playlist__table {
+.TracklistTable__table {
   height: calc(100% - 41px);
 }
 
-.playlist__columns {
+.TracklistTable__columns {
   display: flex;
   align-items: center;
   height: 30px;
