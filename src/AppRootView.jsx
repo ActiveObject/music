@@ -1,6 +1,8 @@
 import app from 'app';
+import vk from 'app/vk';
 import { hasTag } from 'app/Tag';
 import GroupProfile from 'app/group-profile/GroupProfile';
+import GroupProfilePreview from 'app/group-profile/GroupProfilePreview';
 import GroupTop5Tracks from 'app/GroupTop5Tracks';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import Authenticated from 'app/auth/Authenticated';
@@ -22,28 +24,68 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
 
-let GroupPage = ({ params }) =>
-  <div className='group-page'>
-    <div className='scroll-container'>
-      <Section>
-        <Content>
-          <GroupProfile groupId={params.id} />
-          <GroupActivity groupId={params.id} />
-        </Content>
-      </Section>
+class GroupPage extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      isLoading: false
+    };
+  }
 
-      <Section className='group-page__content'>
-        <Content>
-          <Header>Week top</Header>
-          <GroupTop5Tracks groupId={params.id} />
-        </Content>
-      </Section>
-    </div>
+  componentWillMount() {
+    var cachedGroups = JSON.parse(localStorage.getItem(':cache/groups'));
 
-    <div className='main-layout__play-btn'>
-      <PlayBtnCtrl />
-    </div>
-  </div>
+    if (cachedGroups && cachedGroups[this.props.params.id]) {
+      this.setState({
+        group: cachedGroups[this.props.params.id]
+      });
+    } else {
+      this.setState({ isLoading: true });
+
+      vk.groups.getById({
+        group_ids: this.props.params.id,
+        fields: ['description']
+      }, (err, res) => {
+        if (err) {
+          return console.log(err);
+        }
+
+        this.setState({
+          isLoading: false,
+          group: res.response[0]
+        });
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div className='group-page'>
+        <div className='scroll-container'>
+          <Section>
+            <Content>
+              <GroupProfilePreview isActive={this.state.isLoading}>
+                <GroupProfile group={this.state.group} />
+              </GroupProfilePreview>
+              <GroupActivity groupId={this.props.params.id} />
+            </Content>
+          </Section>
+
+          <Section className='group-page__content'>
+            <Content>
+              <Header>Week top</Header>
+              <GroupTop5Tracks groupId={this.props.params.id} />
+            </Content>
+          </Section>
+        </div>
+
+        <div className='main-layout__play-btn'>
+          <PlayBtnCtrl />
+        </div>
+      </div>
+    )
+  }
+}
 
 let MainPage = () =>
   <div className='main-page'>
