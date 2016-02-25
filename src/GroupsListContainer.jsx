@@ -1,6 +1,7 @@
 import React from 'react';
-import GroupsList from './GroupsList';
 import vk from 'app/vk';
+import GroupsList from './GroupsList';
+import GroupsListPreview from './GroupsListPreview';
 
 class GroupsListContainer extends React.Component {
   constructor() {
@@ -23,6 +24,10 @@ class GroupsListContainer extends React.Component {
   }
 
   render() {
+    if (this.state.groups.length === 0) {
+      return <GroupsListPreview numOfItems={5} />
+    }
+
     return <GroupsList groups={this.state.groups} />
   }
 }
