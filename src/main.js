@@ -15,7 +15,8 @@ var initialAppState = Map({
     position: 0,
     seekPosition: 0,
     bytesTotal: 0,
-    bytesLoaded: 0
+    bytesLoaded: 0,
+    tracklist: []
   },
 
   ':db/library': [],

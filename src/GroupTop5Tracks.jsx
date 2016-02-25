@@ -57,9 +57,10 @@ function topAudios(posts) {
 let TopTracks = ({ posts }) => {
   var tracks = topAudios(top5(posts))
     .map(x => fromVk(x, app.value.get(':db/albums')))
-    .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}));
+    .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
+    .slice(0, 5);
 
-  return <StaticTracklist tracks={tracks} limit={5} />;
+  return <StaticTracklist tracks={tracks} />;
 }
 
 class GroupTop5Tracks extends React.Component {

@@ -3,7 +3,6 @@ import app from 'app';
 import { updateOn } from 'app/renderer';
 import * as Player from 'app/Player';
 import { hasTag } from 'app/Tag';
-import Sound from 'app/soundmanager/Sound';
 import Track from './track';
 
 class TrackCtrl extends React.Component {
@@ -15,25 +14,17 @@ class TrackCtrl extends React.Component {
     var isActive = !hasTag(player, ':player/empty') && track.id === player.track.id;
 
     return (
-      <Sound track={track} onFinish={() => nextTrack(tracklist)}>
-        <Track
-          track={track}
-          index={index}
-          isActive={isActive}
-          onTogglePlay={ (t) => togglePlay(t, tracklist) } />
-      </Sound>
+      <Track
+        track={track}
+        index={index}
+        isActive={isActive}
+        onTogglePlay={ (t) => togglePlay(t, tracklist) } />
     );
   }
 }
 
 function togglePlay(track, tracklist) {
   app.push(Player.togglePlay(app.value.get(':db/player'), track, tracklist));
-}
-
-function nextTrack(tracklist) {
-  app.push(
-    Player.play(
-      Player.nextTrack(app.value.get(':db/player'), tracklist)));
 }
 
 export default updateOn(TrackCtrl, function (dbVal) {

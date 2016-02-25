@@ -20,11 +20,17 @@ class Soundmanager extends React.Component {
         if (!app.value.get(':db/player').seeking) {
           app.push(merge(app.value.get(':db/player'), { position: position }));
         }
-      })
+      });
 
       on(SoundDriver, 'whileloading', (bytesLoaded, bytesTotal) => {
         app.push(merge(app.value.get(':db/player'), { bytesLoaded, bytesTotal }));
-      })
+      });
+
+      on(SoundDriver, 'finish', () => {
+        app.push(
+          Player.play(
+            Player.nextTrack(app.value.get(':db/player'))));
+      });
 
       on(SoundDriver, 'error', err => reload(err.track));
     });

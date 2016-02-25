@@ -83,22 +83,22 @@ export function stopSeeking(p) {
   return merge(removeTag(p, ':player/seeking'), { position: p.seekPosition });
 }
 
-export function nextTrack(p, tracklist) {
-  if (isLastTrack(tracklist, p.track)) {
+export function nextTrack(p) {
+  if (isLastTrack(p.tracklist, p.track)) {
     return stop(p);
   }
 
   return merge(p, {
-    track: nextAfter(tracklist, p.track)
+    track: nextAfter(p.tracklist, p.track)
   });
 }
 
 export function useTracklist(p, tracklist) {
-  if (Object.keys(p.track).length === 0 && tracklist.size > 0) {
-    return merge(p, { track: tracklist.first() });
+  if (hasTag(p, ':player/empty') && tracklist.length > 0) {
+    return removeTag(merge(p, { track: tracklist[0] }), ':player/empty');
   }
 
-  return merge(p, { tracklist: tracklist });
+  return merge(p, { tracklist });
 }
 
 export function relativePosition(p) {
@@ -126,17 +126,13 @@ export function relativeLoaded(p) {
 }
 
 function isLastTrack(tracklist, track) {
-  var activeIndex = tracklist.findIndex(function (t) {
-    return t.id === track.id;
-  });
-
-  return (activeIndex + 1) === tracklist.length;
+  return (activeIndex(tracklist, track) + 1) === tracklist.length;
 }
 
 function nextAfter(tracklist, track) {
-  var activeIndex = tracklist.findIndex(function (t) {
-    return t.id === track.id;
-  });
+  return tracklist[activeIndex(tracklist, track) + 1];
+}
 
-  return tracklist[activeIndex + 1];
+function activeIndex(tracklist, track) {
+  return tracklist.findIndex(t => t.id === track.id);
 }
