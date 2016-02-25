@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import './GroupsList.css';
 
 let Group = ({ value }) =>
@@ -6,7 +7,9 @@ let Group = ({ value }) =>
     <div className='GroupsList__image' style={{ width: 30, height: 30 }}>
       <img src={value.photo_50} width={30} height={30} />
     </div>
-    <div className='GroupsList__name'>{value.name}</div>
+    <div className='GroupsList__name'>
+      <Link to="/groups">{value.name}</Link>
+    </div>
   </div>
 
 let GroupsList = ({ groups }) =>

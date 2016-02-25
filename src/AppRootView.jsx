@@ -16,6 +16,7 @@ import { Section, Header, Content } from 'app/ResponsiveGrid';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import LibraryStaticTracklist from 'app/library/LibraryStaticTracklist';
 import GroupsListContainer from 'app/GroupsListContainer';
+import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -81,10 +82,10 @@ var MainPage = () =>
     <PlayBtnCtrl />
   </div>
 
-var AppRootView = () =>
+var AppRootView = ({ children }) =>
   <Authenticated>
     <Layer>
-      <MainPage />
+      {children}
       <VkAudioSync />
       <VkDriver />
       <Soundmanager />
@@ -93,4 +94,13 @@ var AppRootView = () =>
     </Layer>
   </Authenticated>
 
-export default AppRootView;
+let Root = () =>
+  <Router history={hashHistory}>
+    <Route path="/" component={AppRootView}>
+      <IndexRoute component={MainPage} />
+      <Route path="groups" component={GroupPage} />
+    </Route>
+  </Router>
+
+
+export default Root;
