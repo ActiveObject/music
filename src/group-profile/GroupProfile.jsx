@@ -15,6 +15,16 @@ var GroupProfile = ({ group }) => (
   </div>
 );
 
+let GroupProfilePreview = () =>
+  <div className='group-profile group-profile-preview'>
+    <div className='group-image'>
+      <div className='group-profile-preview__image' />
+    </div>
+    <span className='group-name'>
+      <div className='group-profile-preview__name' />
+    </span>
+  </div>
+
 class GroupLoader extends React.Component {
   constructor() {
     super();
@@ -41,7 +51,7 @@ class GroupLoader extends React.Component {
 
   render() {
     if (this.state.isLoading) {
-      return <div/>;
+      return <GroupProfilePreview />
     }
 
     return <GroupProfile group={this.state.group} />

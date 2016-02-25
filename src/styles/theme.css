@@ -20,6 +20,7 @@ $accent-color: #FD76B3;
 $accent-text-color: #FDF6E3;
 $primary-color: #6c71c4;
 $primary-dark-color: #5A5D9C;
+$primary-lightdark-color: #5b5fb0;
 $primary-text-color: #FDF6E3;
 $base-text-color: #657b83;
 
@@ -145,4 +146,13 @@ header {
 
 .apl-load-line {
   background-color: #fff;
+}
+
+.group-profile-preview__image,
+.group-profile-preview__name {
+  background-color: $primary-lightdark-color;
+}
+
+.group-profile-preview .group-image {
+  border-color: $primary-lightdark-color;
 }

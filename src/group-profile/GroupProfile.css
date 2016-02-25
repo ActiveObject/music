@@ -21,6 +21,16 @@
   font-weight: 100;
 }
 
+.group-profile-preview__image {
+  width: 200px;
+  height: 200px;
+}
+
+.group-profile-preview__name {
+  width: 200px;
+  height: 1.5rem;
+}
+
 @media screen and (max-aspect-ratio: 3/2) {
   .group-profile {
     height: 360px;
