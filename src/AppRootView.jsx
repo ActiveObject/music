@@ -1,4 +1,7 @@
+import React from 'react';
+import cx from 'classnames';
 import app from 'app';
+import { updateOn } from 'app/renderer';
 import vk from 'app/vk';
 import { hasTag } from 'app/Tag';
 import GroupProfile from 'app/group-profile/GroupProfile';
@@ -92,13 +95,35 @@ class GroupPage extends React.Component {
   }
 }
 
+let Toolbar = updateOn(() => {
+  var player = app.value.get(':db/player');
+  var isShuffled = hasTag(player, ':player/is-shuffled');
+
+  return (
+    <div className='toolbar-container'>
+      <div className='toolbar'>
+        <span className={cx({ 'action': true, 'action--active': isShuffled })} onClick={shuffle}>shuffle</span>
+      </div>
+    </div>
+  );
+}, db => hasTag(db.get(':db/player'), ':player/is-shuffled'));
+
+function shuffle() {
+  app.push({
+    tag: ':library/toggle-shuffle'
+  });
+}
+
 let LibraryPage = () =>
   <div className='library-page'>
     <Layer>
       <ProfileCtrl />
     </Layer>
     <Layer>
-      <LibraryTracklist />
+      <div className='main-layout'>
+        <Toolbar />
+        <LibraryTracklist />
+      </div>
     </Layer>
     <PlayBtnCtrl />
   </div>
@@ -113,9 +138,7 @@ let MainPage = () =>
       <Section>
         <Content>
           <Header>
-            <Link to='/library'>
-              Library
-            </Link>
+            <Link to='/library'>Library</Link>
           </Header>
           <LibraryStaticTracklist />
         </Content>

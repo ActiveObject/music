@@ -90,16 +90,16 @@ a:hover {
   color: $base-text-color;
 }
 
-.command-palette__action {
+.action {
   color: $base-text-color;
 }
 
-.command-palette__action:hover {
+.action:hover {
   background-color: rgba(153, 153, 153, .12);
 }
 
-.command-palette__action--active,
-.command-palette__action--active:hover {
+.action--active,
+.action--active:hover {
   background-color: $accent-color;
   color: $accent-text-color;
 }
