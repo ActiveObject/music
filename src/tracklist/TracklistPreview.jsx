@@ -22,10 +22,16 @@ let TrackPreview = () => (
   </div>
 );
 
-let TracklistPreview = ({ numOfItems }) => (
-  <div>
-    {repeat(numOfItems, (i) => <TrackPreview key={i} />)}
-  </div>
-);
+let TracklistPreview = ({ isActive, numOfItems, children }) => {
+  if (isActive) {
+    return (
+      <div>
+        {repeat(numOfItems, (i) => <TrackPreview key={i} />)}
+      </div>
+    );
+  }
+
+  return children;
+}
 
 export default TracklistPreview;

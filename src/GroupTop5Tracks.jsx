@@ -54,6 +54,14 @@ function topAudios(posts) {
   return audios;
 }
 
+let TopTracks = ({ posts }) => {
+  var tracks = topAudios(top5(posts))
+    .map(x => fromVk(x, app.value.get(':db/albums')))
+    .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}));
+
+  return <StaticTracklist tracks={tracks} limit={5} />;
+}
+
 class GroupTop5Tracks extends React.Component {
   constructor() {
     super();
@@ -72,29 +80,16 @@ class GroupTop5Tracks extends React.Component {
         return console.log(err);
       }
 
-      this.setState({
-        isLoading: false,
-        posts: posts
-      });
+      this.setState({ isLoading: false, posts });
     });
   }
 
   render() {
-    if (this.state.isLoading) {
-      return (
-        <TracklistTable>
-          <TracklistPreview numOfItems={5} />
-        </TracklistTable>
-      );
-    }
-
-    var tracks = topAudios(top5(this.state.posts))
-        .map(x => fromVk(x, app.value.get(':db/albums')))
-        .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}));
-
     return (
       <TracklistTable>
-        <StaticTracklist tracks={tracks} limit={5} />
+        <TracklistPreview isActive={this.state.isLoading} numOfItems={5}>
+          <TopTracks posts={this.state.posts} />
+        </TracklistPreview>
       </TracklistTable>
     );
   }

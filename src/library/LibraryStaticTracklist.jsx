@@ -3,19 +3,10 @@ import { Map } from 'immutable';
 import app from 'app';
 import { hasTag } from 'app/Tag';
 import { updateOn } from 'app/renderer';
-import * as Storage from 'app/Storage';
 import LibrarySync from './LibrarySync';
 import TracklistTable from 'app/tracklist/TracklistTable';
 import TracklistPreview from 'app/tracklist/TracklistPreview';
 import StaticTracklist from 'app/tracklist/StaticTracklist';
-
-let Tracklist = ({ tracks }) => {
-  if (tracks.length === 0) {
-    return <TracklistPreview numOfItems={10} />;
-  } else {
-    return <StaticTracklist tracks={tracks} limit={10} />;
-  }
-}
 
 class LibraryStaticTracklist extends React.Component {
   constructor() {
@@ -27,8 +18,8 @@ class LibraryStaticTracklist extends React.Component {
   }
 
   componentWillMount() {
-    Storage.getItem(':cache/library', (cache) => {
-      this.setState({ cache: Map(JSON.parse(cache)) });
+    this.setState({
+      cache: Map(JSON.parse(localStorage.getItem(':cache/library')))
     });
   }
 
@@ -38,18 +29,18 @@ class LibraryStaticTracklist extends React.Component {
     return (
       <LibrarySync cache={this.state.cache} onSync={(c) => this.updateCache(c)} >
         <TracklistTable>
-          <Tracklist tracks={tracks} />
+          <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
+            <StaticTracklist tracks={tracks} limit={10} />
+          </TracklistPreview>
         </TracklistTable>
       </LibrarySync>
     );
   }
 
-  updateCache(c) {
-    this.setState({ cache: c });
+  updateCache(cache) {
+    this.setState({ cache });
 
-    Storage.setItem({
-      ':cache/library': JSON.stringify(c)
-    });
+    localStorage.setItem(':cache/library', JSON.stringify(cache));
   }
 }
 
