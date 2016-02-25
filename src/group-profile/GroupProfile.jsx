@@ -1,4 +1,5 @@
 import React from 'react';
+import vk from 'app/vk';
 import './GroupProfile.css';
 
 var GroupImage = ({ group }) => (
@@ -14,4 +15,37 @@ var GroupProfile = ({ group }) => (
   </div>
 );
 
-export default GroupProfile;
+class GroupLoader extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      isLoading: true
+    };
+  }
+
+  componentWillMount() {
+    vk.groups.getById({
+      group_ids: this.props.group,
+      fields: ['description']
+    }, (err, res) => {
+      if (err) {
+        return console.log(err);
+      }
+
+      this.setState({
+        isLoading: false,
+        group: res.response[0]
+      });
+    });
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return <div/>;
+    }
+
+    return <GroupProfile group={this.state.group} />
+  }
+}
+
+export default GroupLoader;

@@ -7,11 +7,11 @@ import StaticTracklist from 'app/tracklist/StaticTracklist';
 import TracklistTable from 'app/tracklist/TracklistTable';
 import TracklistPreview from 'app/tracklist/TracklistPreview';
 
-function loadLastWeekPosts(domain, offset, count, postsSoFar, time, callback) {
+function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback) {
   vk.wall.get({
-    domain: domain,
-    offset: offset,
-    count: count
+    owner_id: ownerId,
+    offset,
+    count
   }, (err, res) => {
     if (err) {
       return callback(err);
@@ -23,7 +23,7 @@ function loadLastWeekPosts(domain, offset, count, postsSoFar, time, callback) {
       return callback(null, postsSoFar.concat(posts))
     }
 
-    loadLastWeekPosts(domain, offset + count, count, postsSoFar.concat(posts), time, callback);
+    loadLastWeekPosts(ownerId, offset + count, count, postsSoFar.concat(posts), time, callback);
   });
 }
 
@@ -67,7 +67,7 @@ class GroupTop5Tracks extends React.Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    loadLastWeekPosts(this.props.group, 0, 100, [], Date.now() - 7 * 24 * 60 * 60 * 10000, (err, posts) => {
+    loadLastWeekPosts(-this.props.group, 0, 100, [], Date.now() - 7 * 24 * 60 * 60 * 10000, (err, posts) => {
       if (err) {
         return console.log(err);
       }

@@ -8,7 +8,7 @@ let Group = ({ value }) =>
       <img src={value.photo_50} width={30} height={30} />
     </div>
     <div className='GroupsList__name'>
-      <Link to="/groups">{value.name}</Link>
+      <Link to={`/groups/${value.id}`}>{value.name}</Link>
     </div>
   </div>
 
