@@ -13,20 +13,27 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "babel-loader": "^5.3.2",
+    "babel-core": "^6.5.2",
+    "babel-loader": "^6.2.3",
+    "babel-plugin-react-transform": "^2.0.0",
+    "babel-preset-es2015-webpack": "^6.3.14",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-react-hmre": "^1.1.0",
     "chai": "^1.9.2",
     "css-loader": "^0.8.0",
     "eslint": "^1.6.0",
     "eslint-loader": "^1.0.0",
     "expose-loader": "^0.5.3",
+    "express": "^4.13.4",
+    "express-history-api-fallback": "^2.0.0",
     "postcss-loader": "^0.6.0",
     "postcss-simple-vars": "^1.0.1",
-    "react-hot-loader": "^1.3.0",
     "style-loader": "^0.8.0",
     "surge": "^0.16.0",
     "svg-sprite-loader": "0.0.11",
     "webpack": "2.0.7-beta",
-    "webpack-dev-server": "2.0.0-beta"
+    "webpack-dev-middleware": "^1.5.1",
+    "webpack-hot-middleware": "^2.7.1"
   },
   "dependencies": {
     "classnames": "^1.1.4",
@@ -50,13 +57,13 @@
   },
   "scripts": {
     "start": "node server.js",
-    "build": "npm run clean && npm run copy && NODE_ENV=production webpack -p --progress",
+    "build": "npm run clean && npm run copy && NODE_ENV=production webpack -p --progress --env production",
     "predeploy": "MUSIC_APP_ID=4656659 npm run build",
     "deploy": "surge -p _public -d music.activeobject.me",
     "lint": "eslint src/**",
     "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp -R src/assets/* _public && cp src/assets/index.html _public/200.html",
-    "dev-server": "webpack-dev-server --hot --history-api-fallback --progress --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline"
+    "dev-server": "node devServer.js"
   }
 }

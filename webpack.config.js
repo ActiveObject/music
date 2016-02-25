@@ -1,43 +1,54 @@
 var path = require('path');
 var webpack = require('webpack');
 
-if (!Number(process.env.MUSIC_APP_ID)) {
-  throw new Error('MUSIC_APP_ID env var should be a number');
-}
+module.exports = function (env) {
+  var plugins = [];
+  var entry = ['./src/main.js'];
 
-var definePlugin = new webpack.DefinePlugin({
-  'process.env': {
-    NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-    MUSIC_APP_ID: JSON.stringify(process.env.MUSIC_APP_ID)
+  if (!Number(process.env.MUSIC_APP_ID)) {
+    throw new Error('MUSIC_APP_ID env var should be a number');
   }
-});
 
-module.exports = {
-  devtool: 'source-map',
-  entry: './src/main.js',
+  plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(env),
+      MUSIC_APP_ID: JSON.stringify(process.env.MUSIC_APP_ID)
+    }
+  }));
 
-  output: {
-    path: '_public',
-    filename: 'app.js'
-  },
+  if (env === 'development') {
+    plugins.push(new webpack.HotModuleReplacementPlugin());
+    plugins.push(new webpack.NoErrorsPlugin());
+    entry.unshift('webpack-hot-middleware/client');
+  }
 
-  module: {
-    preLoaders: [
-      { test: /src\/(.*)\.(js|jsx)$/, loader: 'eslint' }
-    ],
+  return {
+    devtool: env === 'development' ? 'cheap-module-eval-source-map' : 'source-map',
+    entry: entry,
 
-    loaders: [
-      { test: /src\/(.*)\.(js|jsx)$/, loaders: ['react-hot', 'babel-loader'] },
-      { test: /\.css$/, loaders: ['style', 'css', 'postcss'] },
-      { test: require.resolve('react'), loader: 'expose?React' },
-      { test: /\.svg$/, loader: 'svg-sprite' }
-    ]
-  },
+    output: {
+      path: path.join(__dirname, '_public'),
+      filename: 'app.js'
+    },
 
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
+    module: {
+      preLoaders: [
+        { test: /src\/(.*)\.(js|jsx)$/, loader: 'eslint' }
+      ],
 
-  plugins: [definePlugin],
-  postcss: [require('postcss-simple-vars')]
+      loaders: [
+        { test: /\.jsx?/, loaders: ['babel'], include: path.join(__dirname, 'src') },
+        { test: /\.css$/, loaders: ['style', 'css', 'postcss'] },
+        { test: require.resolve('react'), loader: 'expose?React' },
+        { test: /\.svg$/, loader: 'svg-sprite' }
+      ]
+    },
+
+    resolve: {
+      extensions: ['', '.js', '.jsx']
+    },
+
+    plugins: plugins,
+    postcss: [require('postcss-simple-vars')]
+  }
 };
