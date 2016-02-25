@@ -75,7 +75,7 @@ class GroupTop5Tracks extends React.Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    loadLastWeekPosts(-this.props.groupId, 0, 100, [], Date.now() - 7 * 24 * 60 * 60 * 10000, (err, posts) => {
+    loadLastWeekPosts(-this.props.groupId, 0, 100, [], Date.now() - 7 * 24 * 60 * 60 * 1000, (err, posts) => {
       if (err) {
         return console.log(err);
       }
