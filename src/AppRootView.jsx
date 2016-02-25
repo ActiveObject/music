@@ -22,7 +22,9 @@ import GroupsListContainer from 'app/GroupsListContainer';
 import Router from 'react-router/lib/Router';
 import Route from 'react-router/lib/Route';
 import IndexRoute from 'react-router/lib/IndexRoute';
+import Link from 'react-router/lib/Link';
 import browserHistory from 'react-router/lib/browserHistory';
+import LibraryTracklist from 'app/library/LibraryTracklist';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -90,6 +92,17 @@ class GroupPage extends React.Component {
   }
 }
 
+let LibraryPage = () =>
+  <div className='library-page'>
+    <Layer>
+      <ProfileCtrl />
+    </Layer>
+    <Layer>
+      <LibraryTracklist />
+    </Layer>
+    <PlayBtnCtrl />
+  </div>
+
 let MainPage = () =>
   <div className='main-page'>
     <div className='scroll-container'>
@@ -99,7 +112,11 @@ let MainPage = () =>
 
       <Section>
         <Content>
-          <Header>Library</Header>
+          <Header>
+            <Link to='/library'>
+              Library
+            </Link>
+          </Header>
           <LibraryStaticTracklist />
         </Content>
       </Section>
@@ -133,6 +150,7 @@ let AppRootView = () =>
     <Route path="/" component={App}>
       <IndexRoute component={MainPage} />
       <Route path="groups/:id" component={GroupPage} />
+      <Route path="library" component={LibraryPage} />
     </Route>
   </Router>
 

@@ -38,6 +38,7 @@ body,
   width: 100%;
   height: 100%;
   padding-top: 100px;
+  padding-bottom: 80px;
 }
 
 .main-layout__play-btn {
@@ -92,6 +93,16 @@ body,
 
 .main-page .scroll-container {
   padding-bottom: 80px;
+}
+
+.library-page {
+  width: 100%;
+  height: 100%;
+}
+
+.library-page .TracklistTable {
+  width: 800px;
+  height: 100%;
 }
 
 .group-page__content {
