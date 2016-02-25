@@ -56,7 +56,7 @@
     "lint": "eslint src/**",
     "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
-    "copy": "cp -R src/assets/* _public",
+    "copy": "cp -R src/assets/* _public && cp src/assets/index.html _public/200.html",
     "dev-server": "webpack-dev-server --hot --history-api-fallback --progress --port=5003 --content-base=_public --debug --devtool eval-source-map --output-pathinfo --inline"
   }
 }
