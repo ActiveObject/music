@@ -11,9 +11,9 @@ import StaticTracklist from 'app/tracklist/StaticTracklist';
 
 let Tracklist = ({ tracks }) => {
   if (tracks.length === 0) {
-    return <TracklistPreview numOfItems={5} />;
+    return <TracklistPreview numOfItems={10} />;
   } else {
-    return <StaticTracklist tracks={tracks} limit={5} />;
+    return <StaticTracklist tracks={tracks} limit={10} />;
   }
 }
 
