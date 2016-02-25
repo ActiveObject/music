@@ -32,6 +32,10 @@ function commonReducer(state, v) {
     return state.set(':db/library', v.value);
   }
 
+  if (hasTag(v, ':app/groups')) {
+    return state.set(':db/groups', v.value);
+  }
+
   return state;
 }
 

@@ -18,10 +18,16 @@ let GroupPreview = () => (
   </div>
 );
 
-let GroupsListPreview = ({ numOfItems }) => (
-  <div>
-    {repeat(numOfItems, (i) => <GroupPreview key={i} />)}
-  </div>
-);
+let GroupsListPreview = ({ isActive, numOfItems, children }) => {
+  if (isActive) {
+    return (
+      <div>
+        {repeat(numOfItems, (i) => <GroupPreview key={i} />)}
+      </div>
+    );
+  }
+
+  return children;
+}
 
 export default GroupsListPreview;

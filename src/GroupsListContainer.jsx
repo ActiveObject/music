@@ -1,34 +1,41 @@
 import React from 'react';
+import { Map } from 'immutable';
 import vk from 'app/vk';
 import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
+import GroupSync from 'app/GroupSync';
 
 class GroupsListContainer extends React.Component {
   constructor() {
     super();
     this.state = {
-      groups: []
+      cache: Map()
     };
   }
 
   componentWillMount() {
-    vk.groups.getById({
-      group_ids: this.props.ids.join(','),
-      fields: ['description'].join(',')
-    }, (err, res) => {
-      if (err) {
-        return console.log(err);
-      }
-
-      this.setState({ groups: res.response }); });
+    this.setState({
+      cache: Map(JSON.parse(localStorage.getItem(':cache/groups')))
+    });
   }
 
   render() {
-    if (this.state.groups.length === 0) {
-      return <GroupsListPreview numOfItems={5} />
-    }
+    var groups = this.props.ids
+      .filter(id => this.state.cache.has(id))
+      .map(id => this.state.cache.get(id));
 
-    return <GroupsList groups={this.state.groups} />
+    return (
+      <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
+        <GroupsListPreview isActive={groups.length === 0} numOfItems={5}>
+          <GroupsList groups={groups} />
+        </GroupsListPreview>
+      </GroupSync>
+    )
+  }
+
+  updateCache(cache) {
+    this.setState({ cache });
+    localStorage.setItem(':cache/groups', JSON.stringify(cache));
   }
 }
 

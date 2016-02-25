@@ -14,7 +14,7 @@ let Group = ({ value }) =>
 
 let GroupsList = ({ groups }) =>
   <div className='groups-list'>
-    {groups.map(v => <Group value={v} />)}
+    {groups.map(v => <Group key={v.id} value={v} />)}
   </div>
 
 export default GroupsList;

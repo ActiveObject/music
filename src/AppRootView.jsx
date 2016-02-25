@@ -6,6 +6,7 @@ import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import Authenticated from 'app/auth/Authenticated';
 import Layer from 'app/Layer';
 import VkAudioSync from 'app/VkAudioSync';
+import VkGroupSync from 'app/VkGroupSync';
 import VkDriver from 'app/VkDriver';
 import Soundmanager from 'app/soundmanager/Soundmanager';
 import PlayerSync from 'app/PlayerSync';
@@ -74,6 +75,7 @@ var AppRootView = ({ children }) =>
     <Layer>
       {children}
       <VkAudioSync />
+      <VkGroupSync />
       <VkDriver />
       <Soundmanager />
       <PlayerSync />

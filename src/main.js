@@ -19,6 +19,7 @@ var initialAppState = Map({
   },
 
   ':db/library': [],
+  ':db/groups': [],
 
   ':db/user': {
     tag: ':app/user'
