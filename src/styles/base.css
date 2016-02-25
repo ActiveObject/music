@@ -66,6 +66,10 @@ body,
   width: 100%;
 }
 
+.page-section {
+  margin-top: 50px;
+}
+
 .content {
   width: 800px;
   margin: 0 auto;
@@ -80,6 +84,14 @@ body,
 
 .group-page {
   width: 100%;
+}
+
+.main-page {
+  height: 100%;
+}
+
+.main-page .section:last-child {
+  margin-bottom: 80px;
 }
 
 .group-page__content {

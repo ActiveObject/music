@@ -15,6 +15,7 @@ import Player from 'app/player/Player';
 import { Section, Header, Content } from 'app/ResponsiveGrid';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import LibraryStaticTracklist from 'app/library/LibraryStaticTracklist';
+import GroupsListContainer from 'app/GroupsListContainer';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
@@ -69,8 +70,15 @@ var MainPage = () =>
         </Content>
       </Section>
 
-      <PlayBtnCtrl />
+      <Section className='page-section'>
+        <Content>
+          <Header>Groups</Header>
+          <GroupsListContainer ids={['32211876', '1489880', '43426041', '10830340', '26578488']} />
+        </Content>
+      </Section>
     </div>
+
+    <PlayBtnCtrl />
   </div>
 
 var AppRootView = () =>
