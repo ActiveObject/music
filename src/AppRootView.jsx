@@ -17,12 +17,12 @@ import { Section, Header, Content } from 'app/ResponsiveGrid';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import LibraryStaticTracklist from 'app/library/LibraryStaticTracklist';
 import GroupsListContainer from 'app/GroupsListContainer';
-import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import 'app/styles/base.css';
 import 'app/styles/theme.css';
 
-var GroupPage = ({ params }) =>
+let GroupPage = ({ params }) =>
   <div className='group-page'>
     <div className='scroll-container'>
       <Section>
@@ -45,7 +45,7 @@ var GroupPage = ({ params }) =>
     </div>
   </div>
 
-var MainPage = () =>
+let MainPage = () =>
   <div className='main-page'>
     <div className='scroll-container'>
       <Section>
@@ -70,7 +70,7 @@ var MainPage = () =>
     <PlayBtnCtrl />
   </div>
 
-var AppRootView = ({ children }) =>
+let App = ({ children }) =>
   <Authenticated>
     <Layer>
       {children}
@@ -83,13 +83,12 @@ var AppRootView = ({ children }) =>
     </Layer>
   </Authenticated>
 
-let Root = () =>
-  <Router history={hashHistory}>
-    <Route path="/" component={AppRootView}>
+let AppRootView = () =>
+  <Router history={browserHistory}>
+    <Route path="/" component={App}>
       <IndexRoute component={MainPage} />
       <Route path="groups/:id" component={GroupPage} />
     </Route>
   </Router>
 
-
-export default Root;
+export default AppRootView;
