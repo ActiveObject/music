@@ -21,10 +21,6 @@ class KeyboardDriver extends React.Component {
         console.log(`[KeyboardDriver] toggle play`);
         app.push(Player.togglePlay(app.value.get(':db/player')));
       });
-
-      key('command+shift+p', function () {
-        app.push(toggleTag(app.value.get(':db/command-palette'), ':cmd/is-activated'));
-      });
     });
   }
 

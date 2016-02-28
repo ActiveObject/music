@@ -8,7 +8,6 @@ import Profile from './Profile';
 const ProfileCtrl = () => {
   var user = app.value.get(':db/user');
   var isLoaded = hasTag(user, ':user/is-loaded');
-  var isCmdActivated = hasTag(app.value.get(':db/command-palette'), ':cmd/is-activated');
 
   return (
     <Motion
@@ -19,9 +18,9 @@ const ProfileCtrl = () => {
       }}
 
       style={{
-        opacity: isCmdActivated ? spring(0) : spring(isLoaded ? 100 : 0, [160, 50]),
-        rotate: isCmdActivated ? spring(30) : spring(isLoaded ? 0 : 30, [150, 30]),
-        zoom: isCmdActivated ? spring(80) : spring(isLoaded ? 100 : 80)
+        opacity: spring(isLoaded ? 100 : 0, [160, 50]),
+        rotate: spring(isLoaded ? 0 : 30, [150, 30]),
+        zoom: spring(isLoaded ? 100 : 80)
       }}>
       {interpolated =>
         <div className='main-layout__profile'>

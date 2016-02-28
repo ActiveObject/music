@@ -7,8 +7,6 @@ import vk from 'app/vk';
 
 var initialAppState = Map({
   ':db/albums': Map(),
-  ':db/tracks': Map(),
-
   ':db/player': {
     tag: [':app/player', ':player/empty'],
     position: 0,
@@ -23,23 +21,6 @@ var initialAppState = Map({
 
   ':db/user': {
     tag: ':app/user'
-  },
-
-  ':db/visibleGroups': [],
-
-  ':db/cmd': 'All tracks',
-
-  ':db/command-palette': {
-    tag: [':app/command-palette']
-  },
-
-  ':db/context': {
-    tag: [':context/playlist']
-  },
-
-  ':db/tags': [],
-  ':db/vk': {
-    tag: []
   }
 });
 
