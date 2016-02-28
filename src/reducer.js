@@ -16,18 +16,6 @@ function commonReducer(state, v) {
     return state.set(':db/user', v);
   }
 
-  if (hasTag(v, ':app/route')) {
-    return state.set(':db/route', v);
-  }
-
-  if (hasTag(v, ':app/cmd')) {
-    return state.set(':db/cmd', v.value);
-  }
-
-  if (hasTag(v, ':app/command-palette')) {
-    return state.set(':db/command-palette', v);
-  }
-
   if (hasTag(v, ':app/library')) {
     return state.set(':db/library', v.value);
   }
