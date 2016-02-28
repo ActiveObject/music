@@ -1,9 +1,8 @@
 import Atom from 'app/Atom';
 
-var appState = new Atom(null);
-var app = Object.create(appState);
+var app = Object.create(new Atom(null));
 
-app.run = function (initialState, view, update) {
+export function run(initialState, view, update) {
   app.push = function (v) {
     Atom.swap(app, update(app.value, v));
     view(app.value);

@@ -1,5 +1,5 @@
 import { Map, List } from 'immutable';
-import app from 'app';
+import app, { run } from 'app';
 import reducer from 'app/reducer';
 import { render } from 'app/renderer';
 import AppRootView from 'app/AppRootView';
@@ -45,7 +45,7 @@ var initialAppState = Map({
 
 var renderApp = render(<AppRootView />, document.getElementById('app'));
 
-app.run(initialAppState, renderApp, reducer);
+run(initialAppState, renderApp, reducer);
 
 if (process.env.NODE_ENV === 'development') {
   window._app = app;
