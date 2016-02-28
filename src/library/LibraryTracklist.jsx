@@ -6,7 +6,6 @@ import { updateOn } from 'app/renderer';
 import { hasTag } from 'app/Tag';
 import TracklistTable from 'app/tracklist/TracklistTable';
 import LazyTracklist from 'app/tracklist/LazyTracklist';
-import * as Storage from 'app/Storage';
 import LibrarySync from './LibrarySync';
 
 class LibraryTracklist extends React.Component {
@@ -19,9 +18,8 @@ class LibraryTracklist extends React.Component {
   }
 
   componentWillMount() {
-    Storage.getItem(':cache/library', (cache) => {
-      this.setState({ cache: Map(JSON.parse(cache)) });
-    });
+    var cache = localStorage.getItem(':cache/library');
+    this.setState({ cache: Map(JSON.parse(cache)) });
   }
 
   render() {
@@ -36,12 +34,9 @@ class LibraryTracklist extends React.Component {
     );
   }
 
-  updateCache(c) {
-    this.setState({ cache: c });
-
-    Storage.setItem({
-      ':cache/library': JSON.stringify(c)
-    });
+  updateCache(cache) {
+    this.setState({ cache });
+    localStorage.setItem(':cache/library', JSON.stringify(cache));
   }
 }
 

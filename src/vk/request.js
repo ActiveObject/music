@@ -1,5 +1,5 @@
 import Url from 'url';
-import * as Http from 'app/Http';
+import request from 'jsonp';
 import merge from 'app/merge';
 
 var Request = function (attrs) {
@@ -23,7 +23,7 @@ var Request = function (attrs) {
 };
 
 Request.prototype.send = function (callback) {
-  Http.request(this.url, function (err, data) {
+  request(this.url, function (err, data) {
     if (err) {
       return callback(err);
     }
