@@ -1,7 +1,7 @@
 import React from 'react';
 import vk from 'app/vk';
 import './GroupActivity.css';
-import ActivityChart from 'app/ActivityChart';
+import ActivityChart from './ActivityChart';
 
 class GroupActivity extends React.Component {
   constructor() {
