@@ -61,12 +61,16 @@ a:hover {
   color: $primary-text-color;
 }
 
-.playlist__columns {
+.TracklistTable__columns {
   color: $base-text-color;
   border-bottom: 1px solid #eee;
 }
 
-.playlist__header {
+.TracklistTable__table {
+  border-bottom: 1px solid #eee;
+}
+
+.TracklistTable__header {
   color: $base-text-color;
 }
 
