@@ -64,6 +64,7 @@
     "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp -R src/assets/* _public && cp src/assets/index.html _public/200.html",
-    "dev-server": "node devServer.js"
+    "dev-server": "node devServer.js",
+    "version": "npm run build"
   }
 }
