@@ -3,7 +3,7 @@ import { Map } from 'immutable';
 import app from 'app';
 import { hasTag } from 'app/Tag';
 import { updateOn } from 'app/renderer';
-import LibrarySync from './LibrarySync';
+import LibrarySync from 'app/library/LibrarySync';
 import TracklistTable from 'app/tracklist/TracklistTable';
 import TracklistPreview from 'app/tracklist/TracklistPreview';
 import StaticTracklist from 'app/tracklist/StaticTracklist';
