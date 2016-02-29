@@ -3,7 +3,7 @@ import { Map } from 'immutable';
 import vk from 'app/vk';
 import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
-import GroupSync from 'app/GroupSync';
+import GroupSync from './GroupSync';
 
 class GroupsListContainer extends React.Component {
   constructor() {
