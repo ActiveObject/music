@@ -7,7 +7,10 @@ import { hasTag } from 'app/Tag';
 class PlayerSync extends React.Component {
   componentWillMount() {
     var cache = localStorage.getItem(':cache/player');
-    app.push(useTrack(app.value.get(':db/player'), JSON.parse(cache)));
+
+    if (cache) {
+      app.push(useTrack(app.value.get(':db/player'), JSON.parse(cache)));
+    }
   }
 
   componentDidUpdate() {
