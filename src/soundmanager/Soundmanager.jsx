@@ -68,7 +68,7 @@ function reload(track) {
     app.push(
       Player.play(
         Player.useTrack(app.value.get(':db/player'), merge(track, {
-          url: res.response
+          url: res.response[0]
         }))));
   });
 }
