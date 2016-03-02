@@ -29,11 +29,11 @@
 }
 
 .track__title {
-  width: 58%;
+  flex: 2;
 }
 
 .track__artist {
-  width: 25%;
+  flex: 1;
 }
 
 .track__duration {
@@ -48,10 +48,10 @@
   }
 
   .track__artist {
-    width: 40%;
+    flex: 1;
   }
 
   .track__title {
-    width: 60%;
+    flex: 1;
   }
 }
