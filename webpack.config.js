@@ -16,14 +16,8 @@ module.exports = function (env) {
     }
   }));
 
-  if (env === 'development') {
-    plugins.push(new webpack.HotModuleReplacementPlugin());
-    plugins.push(new webpack.NoErrorsPlugin());
-    entry.unshift('webpack-hot-middleware/client');
-  }
-
   return {
-    devtool: env === 'development' ? 'cheap-module-eval-source-map' : 'source-map',
+    devtool: 'source-map',
     entry: entry,
 
     output: {
