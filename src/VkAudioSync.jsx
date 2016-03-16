@@ -16,8 +16,9 @@ function startTrackUpdating(interval) {
   var timer = null;
 
   function next() {
-    updateTracks();
-    timer = setTimeout(() => next(), interval);
+    updateTracks(() => {
+      timer = setTimeout(() => next(), interval);
+    });
   }
 
   next();
@@ -27,7 +28,7 @@ function startTrackUpdating(interval) {
   };
 }
 
-function updateTracks() {
+function updateTracks(callback) {
   var user = app.value.get(':db/user');
 
   loadAllAudioIds(user.id, (err, res) => {
@@ -44,6 +45,8 @@ function updateTracks() {
         }
       })
     });
+
+    callback(err, res);
   });
 }
 
