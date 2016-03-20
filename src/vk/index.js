@@ -1,2 +1,1 @@
-import vkApi from './vk-api';
-export default vkApi;
+export { default } from './vk-api';
