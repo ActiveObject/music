@@ -53,7 +53,7 @@
     "node": "4.2.x"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "npm run dev",
     "build": "npm run clean && npm run copy && NODE_ENV=production webpack -p --progress --env production",
     "predeploy": "MUSIC_APP_ID=4656659 npm run build",
     "deploy": "surge -p _public -d music.activeobject.me",
