@@ -57,7 +57,6 @@
     "build": "npm run clean && npm run copy && NODE_ENV=production webpack -p --progress --env production",
     "predeploy": "MUSIC_APP_ID=4656659 npm run build",
     "deploy": "surge -p _public -d music.activeobject.me",
-    "lint": "eslint src/**",
     "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp -R src/assets/* _public && cp src/assets/index.html _public/200.html",
