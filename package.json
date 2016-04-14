@@ -29,7 +29,7 @@
     "webpack-dev-server": "^2.0.0-beta"
   },
   "dependencies": {
-    "classnames": "^1.1.4",
+    "classnames": "^2.2.3",
     "immutable": "^3.5.0",
     "iscroll": "^5.1.2",
     "jsonp": "0.0.4",
