@@ -1,6 +1,5 @@
 import React from 'react';
 import { Map } from 'immutable';
-import { Motion, spring } from 'react-motion';
 import app from 'app';
 import { updateOn } from 'app/renderer';
 import { hasTag } from 'app/Tag';

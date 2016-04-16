@@ -17,7 +17,7 @@ const PlayBtn = ({ isPlaying, onClick }) => {
   return (
     <Motion
       defaultStyle={{ rotate: 0 }}
-      style={{ rotate: spring(isPlaying ? 90 : 0, [160, 17]) }}>
+      style={{ rotate: spring(isPlaying ? 90 : 0, { stiffness: 160, damping: 17 }) }}>
       {interpolated =>
         <div key='play-btn' className={classes} onClick={onClick} style={{ transform: `rotate(${interpolated.rotate}deg)` }}>
           <Icon id={isPlaying ? pauseSvg : playSvg } />

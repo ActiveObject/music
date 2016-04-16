@@ -18,8 +18,8 @@ const ProfileCtrl = () => {
       }}
 
       style={{
-        opacity: spring(isLoaded ? 100 : 0, [160, 50]),
-        rotate: spring(isLoaded ? 0 : 30, [150, 30]),
+        opacity: spring(isLoaded ? 100 : 0, { stiffness: 160, damping: 50 }),
+        rotate: spring(isLoaded ? 0 : 30, { stiffness: 150, damping: 30 }),
         zoom: spring(isLoaded ? 100 : 80)
       }}>
       {interpolated =>
