@@ -26,10 +26,6 @@ module.exports = function (env) {
     },
 
     module: {
-      preLoaders: [
-        { test: /src\/(.*)\.(js|jsx)$/, loader: 'eslint' }
-      ],
-
       loaders: [
         { test: /\.jsx?/, loaders: ['babel'], include: path.join(__dirname, 'src') },
         { test: /\.css$/, loaders: ['style', 'css', 'postcss'] },
