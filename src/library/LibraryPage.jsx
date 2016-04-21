@@ -7,6 +7,7 @@ import LibraryTracklist from 'app/library/LibraryTracklist';
 import Layer from 'app/Layer';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
+import './LibraryPage.css';
 
 let Toolbar = updateOn(() => {
   var player = app.value.get(':db/player');
@@ -28,12 +29,12 @@ function shuffle() {
 }
 
 let LibraryPage = () =>
-  <div className='library-page'>
+  <div className='LibraryPage'>
     <Layer>
       <ProfileCtrl />
     </Layer>
     <Layer>
-      <div className='main-layout'>
+      <div className='LibraryPage__body'>
         <Toolbar />
         <LibraryTracklist />
       </div>
