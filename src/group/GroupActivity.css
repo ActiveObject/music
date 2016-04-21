@@ -3,3 +3,9 @@
   justify-content: center;
   padding: 30px;
 }
+
+@media screen and (max-aspect-ratio: 2/3) {
+  .group-activity {
+    display: none;
+  }
+}
