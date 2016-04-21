@@ -1,5 +1,6 @@
 import React from 'react';
 import vk from 'app/vk';
+import MediaQuery from 'react-responsive';
 import { Section, Header, Content } from 'app/ResponsiveGrid';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import GroupProfile from './GroupProfile';
@@ -51,9 +52,11 @@ class GroupPage extends React.Component {
             </GroupProfilePreview>
           </Section>
 
-          <Section>
-            <GroupActivity groupId={this.props.params.id} />
-          </Section>
+          <MediaQuery minAspectRatio='2/3'>
+            <Section>
+              <GroupActivity groupId={this.props.params.id} />
+            </Section>
+          </MediaQuery>
 
           <Section className='group-page__content'>
             <Content>
