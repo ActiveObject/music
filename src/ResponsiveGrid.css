@@ -1,0 +1,26 @@
+.section {
+  width: 100%;
+}
+
+.content {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  padding: 20px 0;
+  font-size: 2rem;
+  font-weight: 100;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  .header {
+    font-size: 1.5rem;
+  }
+}

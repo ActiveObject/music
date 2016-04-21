@@ -1,3 +1,5 @@
+import './ResponsiveGrid.css';
+
 export let Section = ({ children, className }) =>
   <div className={`section ${className}`}>
     {children}

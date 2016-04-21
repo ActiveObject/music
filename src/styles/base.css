@@ -63,24 +63,8 @@ body,
   margin-top: 70px;
 }
 
-.section {
-  width: 100%;
-}
-
 .page-section {
   margin-top: 50px;
-}
-
-.content {
-  width: 800px;
-  margin: 0 auto;
-}
-
-.header {
-  padding: 20px 0;
-  font-size: 2rem;
-  font-weight: 100;
-  text-align: center;
 }
 
 .group-page {
@@ -140,16 +124,7 @@ body,
 }
 
 @media screen and (max-width: 768px) {
-  .content {
-    width: 100%;
-    padding: 0 15px;
-  }
-
   .group-page__content {
     padding-top: 15px;
-  }
-
-  .header {
-    font-size: 1.5rem;
   }
 }

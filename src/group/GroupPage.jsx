@@ -46,12 +46,13 @@ class GroupPage extends React.Component {
       <div className='group-page'>
         <div className='scroll-container'>
           <Section>
-            <Content>
-              <GroupProfilePreview isActive={this.state.isLoading}>
-                <GroupProfile group={this.state.group} />
-              </GroupProfilePreview>
-              <GroupActivity groupId={this.props.params.id} />
-            </Content>
+            <GroupProfilePreview isActive={this.state.isLoading}>
+              <GroupProfile group={this.state.group} />
+            </GroupProfilePreview>
+          </Section>
+
+          <Section>
+            <GroupActivity groupId={this.props.params.id} />
           </Section>
 
           <Section className='group-page__content'>
