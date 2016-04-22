@@ -51,7 +51,7 @@
     "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp -R src/assets/* _public && cp src/assets/index.html _public/200.html",
-    "dev-server": "webpack-dev-server -d --port=5003 --content-base=_public --history-api-fallback",
+    "dev-server": "webpack-dev-server -d --port 5003",
     "version": "npm run build"
   }
 }

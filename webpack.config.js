@@ -3,7 +3,6 @@ var webpack = require('webpack');
 
 module.exports = function (env) {
   var plugins = [];
-  var entry = ['./src/main.js'];
 
   if (!Number(process.env.MUSIC_APP_ID)) {
     throw new Error('MUSIC_APP_ID env var should be a number');
@@ -18,7 +17,7 @@ module.exports = function (env) {
 
   return {
     devtool: 'source-map',
-    entry: entry,
+    entry: './src/main.js',
 
     output: {
       path: path.join(__dirname, '_public'),
@@ -39,6 +38,10 @@ module.exports = function (env) {
     },
 
     plugins: plugins,
-    postcss: [require('postcss-simple-vars')]
+    postcss: [require('postcss-simple-vars')],
+    devServer: {
+      contentBase: '_public',
+      historyApiFallback: true
+    }
   }
 };
