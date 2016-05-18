@@ -1,24 +1,40 @@
 import { EventEmitter } from 'events';
-import ReactDOM from 'react-dom';
 import React from 'react';
+import Atom from 'app/Atom';
 
-var renderQueue = new EventEmitter();
-renderQueue.setMaxListeners(1000);
+var AppContext = React.createClass({
+  contextTypes: {
+    changeEmitter: React.PropTypes.instanceOf(EventEmitter)
+  },
 
-export function render(rootElement, targetDOMElement) {
-  var isFirstRun = true;
+  componentWillMount() {
+    Atom.listen(this.props.value, () => this.context.changeEmitter.emit('render'));
+  },
 
-  return function (appstate) {
-    if (isFirstRun) {
-      ReactDOM.render(rootElement, targetDOMElement);
-      isFirstRun = false;
-    }
+  render() {
+    return this.props.children;
+  }
+});
 
-    renderQueue.emit('render', appstate);
+export default React.createClass({
+  childContextTypes: {
+    changeEmitter: React.PropTypes.instanceOf(EventEmitter)
+  },
 
-    return appstate;
-  };
-}
+  getChildContext() {
+    var changeEmitter = new EventEmitter();
+    changeEmitter.setMaxListeners(1000);
+    return { changeEmitter };
+  },
+
+  render() {
+    return (
+      <AppContext value={this.props.value}>
+        {this.props.children}
+      </AppContext>
+    );
+  }
+});
 
 export function updateOn(ComposedComponent, ...dbKeys) {
   return updateOnDbChange(ComposedComponent, function (prevDb, nextDb) {
@@ -28,10 +44,14 @@ export function updateOn(ComposedComponent, ...dbKeys) {
 
 function updateOnDbChange(ComposedComponent, equals) {
   return React.createClass({
-    componentDidMount: function () {
+    contextTypes: {
+      changeEmitter: React.PropTypes.instanceOf(EventEmitter)
+    },
+
+    componentWillMount: function () {
       var prevDbVal = null;
 
-      this.unsub = addListener(renderQueue, 'render', nextDbVal => {
+      this.unsub = addListener(this.context.changeEmitter, 'render', nextDbVal => {
         if (!prevDbVal) {
           prevDbVal = nextDbVal;
           this.forceUpdate();

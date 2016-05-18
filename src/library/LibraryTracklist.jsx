@@ -1,7 +1,7 @@
 import React from 'react';
 import { Map } from 'immutable';
 import app from 'app';
-import { updateOn } from 'app/renderer';
+import { updateOn } from 'app/StartApp';
 import { hasTag } from 'app/Tag';
 import TracklistTable from 'app/tracklist/TracklistTable';
 import LazyTracklist from 'app/tracklist/LazyTracklist';

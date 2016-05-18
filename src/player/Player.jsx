@@ -1,6 +1,6 @@
 import React from 'react';
 import app from 'app';
-import { updateOn } from 'app/renderer';
+import { updateOn } from 'app/StartApp';
 import { hasTag } from 'app/Tag';
 import AudioProgressLine from './AudioProgressLine';
 import './Player.css';

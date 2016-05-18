@@ -1,17 +1,30 @@
+import { Map } from 'immutable';
 import Atom from 'app/Atom';
+import reducer from 'app/reducer';
 
-var app = Object.create(new Atom(null));
+var initialAppState = Map({
+  ':db/albums': Map(),
+  ':db/player': {
+    tag: [':app/player', ':player/empty'],
+    position: 0,
+    seekPosition: 0,
+    bytesTotal: 0,
+    bytesLoaded: 0,
+    tracklist: []
+  },
 
-export function run(initialState, view, update) {
-  app.push = function (v) {
-    Atom.swap(app, update(app.value, v));
-    view(app.value);
-  };
+  ':db/library': [],
+  ':db/groups': [],
 
-  Atom.swap(app, initialState);
-  view(app.value);
+  ':db/user': {
+    tag: ':app/user'
+  }
+});
 
-  return app;
+var app = new Atom(initialAppState);
+
+app.push = function (v) {
+  Atom.swap(app, reducer(app.value, v));
 };
 
 export default app;

@@ -3,7 +3,7 @@ import omit from 'lodash/omit';
 import app from 'app';
 import subscribeWith from 'app/subscribeWith';
 import emitterOn from 'app/emitterOn';
-import { updateOn } from 'app/renderer';
+import { updateOn } from 'app/StartApp';
 import { hasTag, removeTag } from 'app/Tag';
 import merge from 'app/merge';
 import SoundDriver from './SoundDriver';

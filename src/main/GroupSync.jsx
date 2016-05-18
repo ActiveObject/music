@@ -3,7 +3,7 @@ import difference from 'lodash/difference';
 import app from 'app';
 import vk from 'app/vk';
 import merge from 'app/merge';
-import { updateOn } from 'app/renderer';
+import { updateOn } from 'app/StartApp';
 
 class GroupSync extends React.Component {
   componentWillMount() {
