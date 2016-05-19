@@ -1,7 +1,7 @@
 import React from 'react';
 import vk from 'app/vk';
 import MediaQuery from 'react-responsive';
-import { Section, Header, Content } from 'app/ResponsiveGrid';
+import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import GroupProfile from './GroupProfile';
 import GroupProfilePreview from './GroupProfilePreview';

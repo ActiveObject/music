@@ -4,7 +4,7 @@ import { updateOn } from 'app/StartApp';
 import { hasTag } from 'app/shared/Tag';
 import AudioProgressLine from './AudioProgressLine';
 import './Player.css';
-import { Section, Content } from 'app/ResponsiveGrid';
+import { Section, Content } from 'app/app/shared/ResponsiveGrid';
 
 let Player = () => {
   var player = app.value.get(':db/player');

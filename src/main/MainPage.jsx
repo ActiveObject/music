@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'react-router/lib/Link';
-import { Section, Header, Content } from 'app/ResponsiveGrid';
+import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
 import ProfileCtrl from 'app/user-profile/ProfileCtrl';
 import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
 import GroupsListContainer from './GroupsListContainer';
