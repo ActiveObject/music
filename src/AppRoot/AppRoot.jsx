@@ -6,7 +6,7 @@ import browserHistory from 'react-router/lib/browserHistory';
 
 import Authenticated from 'app/auth/Authenticated';
 import GroupPage from 'app/group/GroupPage';
-import MainPage from 'app/main/MainPage';
+import Home from 'app/Home';
 import LibraryPage from 'app/library/LibraryPage';
 
 import Layer from 'app/shared/Layer';
@@ -36,7 +36,7 @@ let AppContainer = ({ children }) =>
 let AppRoot = () =>
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
-      <IndexRoute component={MainPage} />
+      <IndexRoute component={Home} />
       <Route path="groups/:id" component={GroupPage} />
       <Route path="library" component={LibraryPage} />
     </Route>
