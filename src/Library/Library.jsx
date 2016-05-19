@@ -6,7 +6,7 @@ import { updateOn } from 'app/AppHost';
 import LibraryTracklist from 'app/library/LibraryTracklist';
 import Layer from 'app/shared/Layer';
 import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';
-import PlayBtnCtrl from 'app/shared/play-btn/PlayBtnCtrl';
+import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import './Library.css';
 
 let Toolbar = updateOn(() => {
