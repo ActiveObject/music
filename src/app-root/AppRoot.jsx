@@ -31,7 +31,7 @@ let App = ({ children }) =>
     </Layer>
   </Authenticated>
 
-let AppRootView = () =>
+let AppRoot = () =>
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={MainPage} />
@@ -40,4 +40,4 @@ let AppRootView = () =>
     </Route>
   </Router>
 
-export default AppRootView;
+export default AppRoot;
