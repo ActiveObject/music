@@ -1,4 +1,4 @@
-import merge from 'app/merge';
+import merge from 'app/shared/merge';
 import Request from './request';
 import Response from './response';
 import setupHelpers from './setupHelpers';

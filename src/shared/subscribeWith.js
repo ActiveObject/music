@@ -1,4 +1,4 @@
-import onValue from 'app/onValue';
+import onValue from 'app/shared/onValue';
 
 export default function subscribeWith(...fns) {
   var subs = [];

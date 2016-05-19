@@ -2,7 +2,7 @@ import React from 'react';
 import app from 'app';
 import { updateOn } from 'app/StartApp';
 import { useTrack } from 'app/Player';
-import { hasTag } from 'app/Tag';
+import { hasTag } from 'app/shared/Tag';
 
 class PlayerSync extends React.Component {
   componentWillMount() {

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import React from 'react';
-import Atom from 'app/Atom';
+import Atom from 'app/shared/Atom';
 
 var AppContext = React.createClass({
   contextTypes: {

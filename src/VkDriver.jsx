@@ -2,8 +2,8 @@ import { EventEmitter } from 'events';
 import React from 'react';
 import app from 'app';
 import vk from 'app/vk';
-import merge from 'app/merge';
-import { addTag } from 'app/Tag';
+import merge from 'app/shared/merge';
+import { addTag } from 'app/shared/Tag';
 import VkCaptchaView from 'app/VkCaptchaView';
 
 export default class VkDriver extends React.Component {

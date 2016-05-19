@@ -2,8 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import app from 'app';
 import * as Player from 'app/Player';
-import { hasTag } from 'app/Tag';
-import subscribeWith from 'app/subscribeWith';
+import { hasTag } from 'app/shared/Tag';
+import subscribeWith from 'app/shared/subscribeWith';
 import './AudioProgressLine.css';
 
 class AudioProgressLine extends React.Component {

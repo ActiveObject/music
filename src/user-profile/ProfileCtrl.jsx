@@ -2,7 +2,7 @@ import React from 'react';
 import app from 'app';
 import { Motion, spring } from 'react-motion';
 import { updateOn } from 'app/StartApp';
-import { hasTag } from 'app/Tag';
+import { hasTag } from 'app/shared/Tag';
 import Profile from './Profile';
 
 const ProfileCtrl = () => {

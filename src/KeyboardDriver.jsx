@@ -2,7 +2,7 @@ import React from 'react';
 import key from 'keymaster';
 import app from 'app';
 import * as Player from 'app/Player';
-import { toggleTag } from 'app/Tag';
+import { toggleTag } from 'app/shared/Tag';
 
 class KeyboardDriver extends React.Component {
   componentWillMount() {

@@ -1,6 +1,6 @@
 import Url from 'url';
 import request from 'jsonp';
-import merge from 'app/merge';
+import merge from 'app/shared/merge';
 
 var Request = function (attrs) {
   this.entryPoint = attrs.entryPoint;

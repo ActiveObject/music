@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
 import throttle from 'lodash/throttle';
 import { soundManager as sm } from 'soundmanager2';
-import merge from 'app/merge';
-import { hasTag } from 'app/Tag';
+import merge from 'app/shared/merge';
+import { hasTag } from 'app/shared/Tag';
 import { toString } from 'app/Track';
 
 function SoundDriver() {

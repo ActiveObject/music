@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import Atom from 'app/Atom';
+import Atom from 'app/shared/Atom';
 import reducer from 'app/reducer';
 
 var initialAppState = Map({

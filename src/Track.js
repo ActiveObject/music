@@ -1,4 +1,4 @@
-import merge from 'app/merge';
+import merge from 'app/shared/merge';
 
 export function fromVk(data, existingAlbums) {
   var albumIds = existingAlbums.map(v => v.id).toArray();

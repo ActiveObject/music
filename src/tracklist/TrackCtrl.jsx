@@ -2,7 +2,7 @@ import React from 'react';
 import app from 'app';
 import { updateOn } from 'app/StartApp';
 import * as Player from 'app/Player';
-import { hasTag } from 'app/Tag';
+import { hasTag } from 'app/shared/Tag';
 import Track from './track';
 
 class TrackCtrl extends React.Component {

@@ -1,4 +1,4 @@
-import merge from 'app/merge';
+import merge from 'app/shared/merge';
 
 export default { hasTag, addTag, removeTag, toggleTag };
 

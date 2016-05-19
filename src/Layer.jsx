@@ -1,4 +1,4 @@
-import merge from 'app/merge';
+import merge from 'app/shared/merge';
 
 function Layer({ style, className, children }) {
   var layerStyle = merge({

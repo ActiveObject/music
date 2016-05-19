@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import app from 'app';
-import { hasTag } from 'app/Tag';
+import { hasTag } from 'app/shared/Tag';
 import { updateOn } from 'app/StartApp';
 import LibraryTracklist from 'app/library/LibraryTracklist';
 import Layer from 'app/Layer';

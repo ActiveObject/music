@@ -1,11 +1,11 @@
 import React from 'react';
 import omit from 'lodash/omit';
 import app from 'app';
-import subscribeWith from 'app/subscribeWith';
-import emitterOn from 'app/emitterOn';
+import subscribeWith from 'app/shared/subscribeWith';
+import emitterOn from 'app/shared/emitterOn';
 import { updateOn } from 'app/StartApp';
-import { hasTag, removeTag } from 'app/Tag';
-import merge from 'app/merge';
+import { hasTag, removeTag } from 'app/shared/Tag';
+import merge from 'app/shared/merge';
 import SoundDriver from './SoundDriver';
 import vk from 'app/vk';
 import * as Player from 'app/Player';

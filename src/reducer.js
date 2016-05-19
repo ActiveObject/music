@@ -2,8 +2,8 @@ import { Map } from 'immutable';
 import omit from 'lodash/omit';
 import union from 'lodash/union';
 import shuffleArray from 'lodash/shuffle';
-import { hasTag, addTag, removeTag } from 'app/Tag';
-import merge from 'app/merge';
+import { hasTag, addTag, removeTag } from 'app/shared/Tag';
+import merge from 'app/shared/merge';
 import Track from 'app/Track';
 import Album from 'app/Album';
 
