@@ -5,8 +5,8 @@ import { hasTag } from 'app/shared/Tag';
 import { updateOn } from 'app/StartApp';
 import LibraryTracklist from 'app/library/LibraryTracklist';
 import Layer from 'app/shared/Layer';
-import ProfileCtrl from 'app/user-profile/ProfileCtrl';
-import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
+import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';
+import PlayBtnCtrl from 'app/shared/play-btn/PlayBtnCtrl';
 import './LibraryPage.css';
 
 let Toolbar = updateOn(() => {

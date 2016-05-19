@@ -1,8 +1,8 @@
 import React from 'react';
-import vk from 'app/vk';
+import vk from 'app/shared/vk';
 import MediaQuery from 'react-responsive';
 import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
-import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
+import PlayBtnCtrl from 'app/shared/play-btn/PlayBtnCtrl';
 import GroupProfile from './GroupProfile';
 import GroupProfilePreview from './GroupProfilePreview';
 import GroupTop5Tracks from './GroupTop5Tracks';

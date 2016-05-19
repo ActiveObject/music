@@ -4,7 +4,7 @@ import Layer from 'app/shared/Layer';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
-import Soundmanager from 'app/soundmanager/Soundmanager';
+import Soundmanager from 'app/shared/soundmanager/Soundmanager';
 import PlayerSync from './PlayerSync';
 import KeyboardDriver from './KeyboardDriver';
 import Router from 'react-router/lib/Router';
@@ -15,8 +15,8 @@ import GroupPage from 'app/group/GroupPage';
 import MainPage from 'app/main/MainPage';
 import LibraryPage from 'app/library/LibraryPage';
 
-import 'app/styles/base.css';
-import 'app/styles/theme.css';
+import './styles/base.css';
+import './styles/theme.css';
 
 let App = ({ children }) =>
   <Authenticated>

@@ -1,6 +1,6 @@
 import React from 'react';
 import app from 'app';
-import vk from 'app/vk';
+import vk from 'app/shared/vk';
 
 class VkGroupSync extends React.Component {
   componentWillMount() {

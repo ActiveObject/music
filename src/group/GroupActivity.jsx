@@ -1,5 +1,5 @@
 import React from 'react';
-import vk from 'app/vk';
+import vk from 'app/shared/vk';
 import './GroupActivity.css';
 import ActivityChart from './ActivityChart';
 

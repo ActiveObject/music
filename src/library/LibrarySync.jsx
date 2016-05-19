@@ -1,9 +1,9 @@
 import React from 'react';
 import difference from 'lodash/difference';
 import app from 'app';
-import vk from 'app/vk';
+import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
-import * as Track from 'app/Track';
+import * as Track from 'app/shared/Track';
 
 class LibrarySync extends React.Component {
   componentWillMount() {

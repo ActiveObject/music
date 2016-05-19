@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'react-router/lib/Link';
 import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
-import ProfileCtrl from 'app/user-profile/ProfileCtrl';
-import PlayBtnCtrl from 'app/play-btn/PlayBtnCtrl';
+import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';
+import PlayBtnCtrl from 'app/shared/play-btn/PlayBtnCtrl';
 import GroupsListContainer from './GroupsListContainer';
 import LibraryStaticTracklist from './LibraryStaticTracklist';
 

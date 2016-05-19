@@ -1,7 +1,7 @@
 import React from 'react';
 import difference from 'lodash/difference';
 import app from 'app';
-import vk from 'app/vk';
+import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import { updateOn } from 'app/StartApp';
 

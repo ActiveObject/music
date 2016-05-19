@@ -4,9 +4,9 @@ import app from 'app';
 import { hasTag } from 'app/shared/Tag';
 import { updateOn } from 'app/StartApp';
 import LibrarySync from 'app/library/LibrarySync';
-import TracklistTable from 'app/tracklist/TracklistTable';
-import TracklistPreview from 'app/tracklist/TracklistPreview';
-import StaticTracklist from 'app/tracklist/StaticTracklist';
+import TracklistTable from 'app/shared/tracklist/TracklistTable';
+import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
+import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
 
 class LibraryStaticTracklist extends React.Component {
   constructor() {

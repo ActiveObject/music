@@ -7,9 +7,9 @@ import { updateOn } from 'app/StartApp';
 import { hasTag, removeTag } from 'app/shared/Tag';
 import merge from 'app/shared/merge';
 import SoundDriver from './SoundDriver';
-import vk from 'app/vk';
-import * as Player from 'app/Player';
-import { toString } from 'app/Track';
+import vk from 'app/shared/vk';
+import * as Player from 'app/shared/Player';
+import { toString } from 'app/shared/Track';
 
 class Soundmanager extends React.Component {
   componentWillMount() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import TrackCtrl from 'app/tracklist/TrackCtrl';
+import TrackCtrl from 'app/shared/tracklist/TrackCtrl';
 
 const StaticTracklist = ({ tracks, limit = tracks.length }) =>
   <div>

@@ -3,7 +3,7 @@ import throttle from 'lodash/throttle';
 import { soundManager as sm } from 'soundmanager2';
 import merge from 'app/shared/merge';
 import { hasTag } from 'app/shared/Tag';
-import { toString } from 'app/Track';
+import { toString } from 'app/shared/Track';
 
 function SoundDriver() {
   this.state = {

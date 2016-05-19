@@ -3,8 +3,8 @@ import { Map } from 'immutable';
 import app from 'app';
 import { updateOn } from 'app/StartApp';
 import { hasTag } from 'app/shared/Tag';
-import TracklistTable from 'app/tracklist/TracklistTable';
-import LazyTracklist from 'app/tracklist/LazyTracklist';
+import TracklistTable from 'app/shared/tracklist/TracklistTable';
+import LazyTracklist from 'app/shared/tracklist/LazyTracklist';
 import LibrarySync from './LibrarySync';
 
 class LibraryTracklist extends React.Component {

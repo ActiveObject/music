@@ -1,11 +1,11 @@
 import React from 'react';
 import app from 'app';
-import vk from 'app/vk';
-import { fromVk } from 'app/Track';
+import vk from 'app/shared/vk';
+import { fromVk } from 'app/shared/Track';
 import merge from 'app/shared/merge';
-import StaticTracklist from 'app/tracklist/StaticTracklist';
-import TracklistTable from 'app/tracklist/TracklistTable';
-import TracklistPreview from 'app/tracklist/TracklistPreview';
+import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
+import TracklistTable from 'app/shared/tracklist/TracklistTable';
+import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
 
 function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback) {
   vk.wall.get({

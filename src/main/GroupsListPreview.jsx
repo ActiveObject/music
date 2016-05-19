@@ -1,6 +1,6 @@
 import React from 'react';
-import 'app/tracklist/TracklistPreview.css';
-import 'app/tracklist/track.css';
+import 'app/shared/tracklist/TracklistPreview.css';
+import 'app/shared/tracklist/track.css';
 import './GroupsListPreview.css';
 import './GroupsList.css';
 

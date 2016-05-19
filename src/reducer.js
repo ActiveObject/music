@@ -4,8 +4,8 @@ import union from 'lodash/union';
 import shuffleArray from 'lodash/shuffle';
 import { hasTag, addTag, removeTag } from 'app/shared/Tag';
 import merge from 'app/shared/merge';
-import Track from 'app/Track';
-import Album from 'app/Album';
+import Track from 'app/shared/Track';
+import Album from 'app/shared/Album';
 
 function commonReducer(state, v) {
   if (hasTag(v, ':app/player')) {

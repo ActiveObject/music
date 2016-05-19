@@ -1,6 +1,6 @@
 import React from 'react';
 import { Map } from 'immutable';
-import vk from 'app/vk';
+import vk from 'app/shared/vk';
 import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
 import GroupSync from './GroupSync';

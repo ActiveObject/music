@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from 'app/Icon';
+import Icon from 'app/shared/Icon';
 
 import './auth.css';
 import vkLogo from './vkcom.svg';
