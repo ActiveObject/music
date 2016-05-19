@@ -5,7 +5,7 @@ import IndexRoute from 'react-router/lib/IndexRoute';
 import browserHistory from 'react-router/lib/browserHistory';
 
 import Authenticated from 'app/auth/Authenticated';
-import GroupPage from 'app/group/GroupPage';
+import Group from 'app/Group';
 import Home from 'app/Home';
 import LibraryPage from 'app/library/LibraryPage';
 
@@ -37,7 +37,7 @@ let AppRoot = () =>
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
       <IndexRoute component={Home} />
-      <Route path="groups/:id" component={GroupPage} />
+      <Route path="groups/:id" component={Group} />
       <Route path="library" component={LibraryPage} />
     </Route>
   </Router>

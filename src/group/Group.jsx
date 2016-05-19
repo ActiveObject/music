@@ -8,7 +8,7 @@ import GroupProfilePreview from './GroupProfilePreview';
 import GroupTop5Tracks from './GroupTop5Tracks';
 import GroupActivity from './GroupActivity';
 
-class GroupPage extends React.Component {
+class Group extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -74,4 +74,4 @@ class GroupPage extends React.Component {
   }
 }
 
-export default GroupPage;
+export default Group;
