@@ -17,7 +17,7 @@ module.exports = function (env) {
 
   return {
     devtool: 'source-map',
-    entry: './src/main.js',
+    entry: './src/entry.js',
 
     output: {
       path: path.join(__dirname, '_public'),
