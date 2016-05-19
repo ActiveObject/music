@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import app from 'app';
-import AppRootView from 'app/AppRootView';
+import AppRootView from 'app/app-root/AppRootView';
 import StartApp from 'app/StartApp';
 import vk from 'app/vk';
 
