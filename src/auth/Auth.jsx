@@ -29,7 +29,7 @@ function isUserInStorage() {
   return localStorage.getItem('user_id') && localStorage.getItem('access_token');
 }
 
-class Authenticated extends React.Component {
+class Auth extends React.Component {
   componentDidMount() {
     if (hasToken(location.hash)) {
       var credentials = querystring.parse(location.hash.slice(1));
@@ -64,4 +64,4 @@ class Authenticated extends React.Component {
   }
 }
 
-export default updateOn(Authenticated, [':db/user']);
+export default updateOn(Auth, [':db/user']);

@@ -4,7 +4,7 @@ import Route from 'react-router/lib/Route';
 import IndexRoute from 'react-router/lib/IndexRoute';
 import browserHistory from 'react-router/lib/browserHistory';
 
-import Authenticated from 'app/auth/Authenticated';
+import Auth from 'app/auth/Auth';
 import Group from 'app/Group';
 import Home from 'app/Home';
 import Library from 'app/Library';
@@ -21,7 +21,7 @@ import './styles/base.css';
 import './styles/theme.css';
 
 let AppContainer = ({ children }) =>
-  <Authenticated>
+  <Auth>
     <Layer>
       {children}
       <VkAudioSync />
@@ -31,7 +31,7 @@ let AppContainer = ({ children }) =>
       <PlayerSync />
       <KeyboardDriver />
     </Layer>
-  </Authenticated>
+  </Auth>
 
 let AppRoot = () =>
   <Router history={browserHistory}>
