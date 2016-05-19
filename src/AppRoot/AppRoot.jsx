@@ -7,7 +7,7 @@ import browserHistory from 'react-router/lib/browserHistory';
 import Authenticated from 'app/auth/Authenticated';
 import Group from 'app/Group';
 import Home from 'app/Home';
-import LibraryPage from 'app/library/LibraryPage';
+import Library from 'app/Library';
 
 import Layer from 'app/shared/Layer';
 import Soundmanager from 'app/shared/soundmanager/Soundmanager';
@@ -38,7 +38,7 @@ let AppRoot = () =>
     <Route path="/" component={AppContainer}>
       <IndexRoute component={Home} />
       <Route path="groups/:id" component={Group} />
-      <Route path="library" component={LibraryPage} />
+      <Route path="library" component={Library} />
     </Route>
   </Router>
 

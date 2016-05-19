@@ -1,14 +1,14 @@
-.LibraryPage {
+.Library {
   width: 100%;
   height: 100%;
 }
 
-.LibraryPage .TracklistTable {
+.Library .TracklistTable {
   width: 800px;
   height: 100%;
 }
 
-.LibraryPage__body {
+.Library__body {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,13 +19,13 @@
 }
 
 @media screen and (max-width: 768px) {
-  .LibraryPage__body {
+  .Library__body {
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
   }
 
-  .LibraryPage .TracklistTable {
+  .Library .TracklistTable {
     width: 100%;
   }
 }
