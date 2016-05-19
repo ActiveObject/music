@@ -20,7 +20,7 @@ import KeyboardDriver from './KeyboardDriver';
 import './styles/base.css';
 import './styles/theme.css';
 
-let App = ({ children }) =>
+let AppContainer = ({ children }) =>
   <Authenticated>
     <Layer>
       {children}
@@ -35,7 +35,7 @@ let App = ({ children }) =>
 
 let AppRoot = () =>
   <Router history={browserHistory}>
-    <Route path="/" component={App}>
+    <Route path="/" component={AppContainer}>
       <IndexRoute component={MainPage} />
       <Route path="groups/:id" component={GroupPage} />
       <Route path="library" component={LibraryPage} />
