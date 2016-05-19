@@ -57,21 +57,21 @@ body,
   margin-top: 50px;
 }
 
-.group-page {
+.Group {
   width: 100%;
 }
 
-.main-page {
+.Group__content {
+  padding-top: 50px;
+  padding-bottom: 100px;
+}
+
+.Home {
   height: 100%;
 }
 
-.main-page .scroll-container {
+.Home .scroll-container {
   padding-bottom: 80px;
-}
-
-.group-page__content {
-  padding-top: 50px;
-  padding-bottom: 100px;
 }
 
 .scroll-container {
@@ -104,7 +104,7 @@ body,
 }
 
 @media screen and (max-width: 768px) {
-  .group-page__content {
+  .Group__content {
     padding-top: 15px;
   }
 }

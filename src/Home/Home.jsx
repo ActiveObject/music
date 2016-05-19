@@ -6,8 +6,8 @@ import PlayBtnCtrl from 'app/shared/play-btn/PlayBtnCtrl';
 import GroupsListContainer from './GroupsListContainer';
 import LibraryStaticTracklist from './LibraryStaticTracklist';
 
-let MainPage = () =>
-  <div className='main-page'>
+let Home = () =>
+  <div className='Home'>
     <div className='scroll-container'>
       <Section>
         <ProfileCtrl />
@@ -33,4 +33,4 @@ let MainPage = () =>
     <PlayBtnCtrl />
   </div>
 
-export default MainPage;
+export default Home;

@@ -44,7 +44,7 @@ class Group extends React.Component {
 
   render() {
     return (
-      <div className='group-page'>
+      <div className='Group'>
         <div className='scroll-container'>
           <Section>
             <GroupProfilePreview isActive={this.state.isLoading}>
@@ -58,7 +58,7 @@ class Group extends React.Component {
             </Section>
           </MediaQuery>
 
-          <Section className='group-page__content'>
+          <Section className='Group__content'>
             <Content>
               <Header>Week top</Header>
               <GroupTop5Tracks groupId={this.props.params.id} />
