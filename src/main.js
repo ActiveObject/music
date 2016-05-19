@@ -9,7 +9,5 @@ render(
     <AppRootView />
   </StartApp>, document.querySelector('#app'));
 
-if (process.env.NODE_ENV === 'development') {
-  window._app = app;
-  window._vk = vk;
-}
+window._app = app;
+window._vk = vk;
