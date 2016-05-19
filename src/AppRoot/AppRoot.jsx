@@ -4,7 +4,7 @@ import Route from 'react-router/lib/Route';
 import IndexRoute from 'react-router/lib/IndexRoute';
 import browserHistory from 'react-router/lib/browserHistory';
 
-import Auth from 'app/auth/Auth';
+import Auth from 'app/Auth';
 import Group from 'app/Group';
 import Home from 'app/Home';
 import Library from 'app/Library';
