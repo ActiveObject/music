@@ -50,7 +50,7 @@
     "deploy": "surge -p _public -d music.activeobject.me",
     "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
-    "copy": "cp -R src/assets/* _public && cp src/assets/index.html _public/200.html",
+    "copy": "cp index.html manifest.json _public/ && cp index.html _public/200.html",
     "dev-server": "webpack-dev-server -d --port 5003 --env development",
     "version": "npm run build"
   }
