@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import app from 'app';
 import { hasTag } from 'app/shared/Tag';
-import { updateOn } from 'app/StartApp';
+import { updateOn } from 'app/AppHost';
 import LibraryTracklist from 'app/library/LibraryTracklist';
 import Layer from 'app/shared/Layer';
 import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';

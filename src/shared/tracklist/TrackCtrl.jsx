@@ -1,6 +1,6 @@
 import React from 'react';
 import app from 'app';
-import { updateOn } from 'app/StartApp';
+import { updateOn } from 'app/AppHost';
 import * as Player from 'app/shared/Player';
 import { hasTag } from 'app/shared/Tag';
 import Track from './track';

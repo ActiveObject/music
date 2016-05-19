@@ -4,7 +4,7 @@ import React from 'react';
 import app from 'app';
 import AuthView from 'app/auth/AuthView';
 import { hasTag } from 'app/shared/Tag';
-import { updateOn } from 'app/StartApp';
+import { updateOn } from 'app/AppHost';
 
 const AUTH_URL = Url.format({
   protocol: 'https',

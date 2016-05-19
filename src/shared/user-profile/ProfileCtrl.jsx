@@ -1,7 +1,7 @@
 import React from 'react';
 import app from 'app';
 import { Motion, spring } from 'react-motion';
-import { updateOn } from 'app/StartApp';
+import { updateOn } from 'app/AppHost';
 import { hasTag } from 'app/shared/Tag';
 import Profile from './Profile';
 

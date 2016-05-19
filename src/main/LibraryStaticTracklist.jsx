@@ -2,7 +2,7 @@ import React from 'react';
 import { Map } from 'immutable';
 import app from 'app';
 import { hasTag } from 'app/shared/Tag';
-import { updateOn } from 'app/StartApp';
+import { updateOn } from 'app/AppHost';
 import LibrarySync from 'app/library/LibrarySync';
 import TracklistTable from 'app/shared/tracklist/TracklistTable';
 import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
