@@ -33,7 +33,7 @@ let AppContainer = ({ children }) =>
     </Layer>
   </Auth>
 
-let AppRoot = () =>
+let MusicApp = () =>
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
       <IndexRoute component={Home} />
@@ -42,4 +42,4 @@ let AppRoot = () =>
     </Route>
   </Router>
 
-export default AppRoot;
+export default MusicApp;
