@@ -8,7 +8,20 @@ var AppContext = React.createClass({
   },
 
   componentWillMount() {
-    Atom.listen(this.props.value, () => this.context.changeEmitter.emit('render'));
+    this.unsub = this.subscribe();
+  },
+
+  componentWillUpdate() {
+    this.unsub();
+    this.unsub = this.subscribe();
+  },
+
+  componentWillUnmount() {
+    this.unsub();
+  },
+
+  subscribe() {
+    return Atom.listen(this.props.value, dbVal => this.context.changeEmitter.emit('render', dbVal));
   },
 
   render() {
@@ -49,24 +62,34 @@ function updateOnDbChange(ComposedComponent, equals) {
     },
 
     componentWillMount: function () {
-      var prevDbVal = null;
+      this.prevDbVal = null;
+      this.unsub = this.subscribe(this.context.changeEmitter);
+    },
 
-      this.unsub = addListener(this.context.changeEmitter, 'render', nextDbVal => {
-        if (!prevDbVal) {
-          prevDbVal = nextDbVal;
-          this.forceUpdate();
-          return;
-        }
-
-        if (!equals(prevDbVal, nextDbVal)) {
-          prevDbVal = nextDbVal;
-          this.forceUpdate();
-        }
-      });
+    componentWillUpdate(nextProps, nextState, nextContext) {
+      if (this.context.changeEmitter !== nextContext.changeEmitter) {
+        this.unsub();
+        this.unsub = this.subscribe(nextContext.changeEmitter);
+      }
     },
 
     componentWillUnmount: function () {
       this.unsub();
+    },
+
+    subscribe(emitter) {
+      return addListener(emitter, 'render', nextDbVal => {
+        if (!this.prevDbVal) {
+          this.prevDbVal = nextDbVal;
+          this.forceUpdate();
+          return;
+        }
+
+        if (!equals(this.prevDbVal, nextDbVal)) {
+          this.prevDbVal = nextDbVal;
+          this.forceUpdate();
+        }
+      });
     },
 
     render: function () {
