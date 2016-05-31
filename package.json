@@ -35,6 +35,7 @@
     "lodash": "^4.3.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
+    "react-hot-loader": "^3.0.0-beta.2",
     "react-motion": "^0.4.2",
     "react-responsive": "^1.1.2",
     "react-router": "^2.0.0",
@@ -51,7 +52,7 @@
     "dev": "npm run clean && npm run copy && npm run dev-server",
     "clean": "rm -rf _public && mkdir _public",
     "copy": "cp index.html manifest.json _public/ && cp index.html _public/200.html",
-    "dev-server": "webpack-dev-server -d --port 5003 --env development",
+    "dev-server": "webpack-dev-server -d --port 5003 --hot --env development",
     "version": "npm run build"
   }
 }
