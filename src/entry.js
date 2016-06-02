@@ -1,4 +1,3 @@
-import 'react-hot-loader/patch';
 import { render } from 'react-dom';
 import AppHost from 'app/AppHost';
 import MusicApp from 'app/MusicApp';
