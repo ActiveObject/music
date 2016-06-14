@@ -1,6 +1,7 @@
 import React from 'react';
 import { Map } from 'immutable';
-import vk from 'app/shared/vk';
+import app from 'app';
+import { updateOn } from 'app/AppHost';
 import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
 import GroupSync from './GroupSync';
@@ -20,7 +21,7 @@ class GroupsListContainer extends React.Component {
   }
 
   render() {
-    var groups = this.props.ids
+    var groups = app.value.get(':db/groups')
       .filter(id => this.state.cache.has(id))
       .map(id => this.state.cache.get(id));
 
@@ -39,4 +40,4 @@ class GroupsListContainer extends React.Component {
   }
 }
 
-export default GroupsListContainer;
+export default updateOn(GroupsListContainer, ':db/groups');

@@ -25,7 +25,7 @@ let Home = () =>
       <Section className='page-section'>
         <Content>
           <Header>Groups</Header>
-          <GroupsListContainer ids={['32211876', '1489880', '43426041', '10830340', '26578488']} />
+          <GroupsListContainer />
         </Content>
       </Section>
     </div>
