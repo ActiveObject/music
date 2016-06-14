@@ -5,12 +5,14 @@ import { updateOn } from 'app/AppHost';
 import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
 import GroupSync from './GroupSync';
+import Tracker from './Tracker';
 
 class GroupsListContainer extends React.Component {
   constructor() {
     super();
     this.state = {
-      cache: Map()
+      cache: Map(),
+      usage: Map()
     };
   }
 
@@ -18,19 +20,26 @@ class GroupsListContainer extends React.Component {
     this.setState({
       cache: Map(JSON.parse(localStorage.getItem(':cache/groups')))
     });
+
+    this.setState({
+      usage: Map(JSON.parse(localStorage.getItem(':cache/groups-usage')))
+    });
   }
 
   render() {
     var groups = app.value.get(':db/groups')
+      .sort(compareByUsage(this.state.usage))
       .filter(id => this.state.cache.has(id))
       .map(id => this.state.cache.get(id));
 
     return (
-      <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
-        <GroupsListPreview isActive={groups.length === 0} numOfItems={5}>
-          <GroupsList groups={groups} />
-        </GroupsListPreview>
-      </GroupSync>
+      <Tracker value={this.state.usage} onChange={c => this.updateUsage(c)}>
+        <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
+          <GroupsListPreview isActive={groups.length === 0} numOfItems={5}>
+            <GroupsList groups={groups} />
+          </GroupsListPreview>
+        </GroupSync>
+      </Tracker>
     )
   }
 
@@ -38,6 +47,21 @@ class GroupsListContainer extends React.Component {
     this.setState({ cache });
     localStorage.setItem(':cache/groups', JSON.stringify(cache));
   }
+
+  updateUsage(usage) {
+    this.setState({ usage });
+    localStorage.setItem(':cache/groups-usage', JSON.stringify(usage));
+  }
+}
+
+function compareByUsage(usage) {
+  function usageOf(id) {
+    return usage.has(id) ? usage.get(id) : 0;
+  }
+
+  return function (a, b) {
+    return usageOf(b) - usageOf(a);
+  };
 }
 
 export default updateOn(GroupsListContainer, ':db/groups');
