@@ -42,7 +42,7 @@
     "soundmanager2": "2.97.20150601"
   },
   "engines": {
-    "node": "4.2.x"
+    "node": "6.3.x"
   },
   "scripts": {
     "start": "npm run dev",
