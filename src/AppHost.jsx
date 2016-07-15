@@ -57,6 +57,8 @@ export function updateOn(ComposedComponent, ...dbKeys) {
 
 function updateOnDbChange(ComposedComponent, equals) {
   return React.createClass({
+    displayName: `updateOn(${getDisplayName(ComposedComponent)})`,
+
     contextTypes: {
       changeEmitter: React.PropTypes.instanceOf(EventEmitter)
     },
@@ -124,4 +126,8 @@ function addListener(emitter, event, listener) {
   return function () {
     emitter.removeListener(event, handleEvent);
   };
+}
+
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
