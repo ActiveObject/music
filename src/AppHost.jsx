@@ -50,8 +50,8 @@ export default React.createClass({
 });
 
 export function updateOn(ComposedComponent, ...dbKeys) {
-  return updateOnDbChange(ComposedComponent, function (prevDb, nextDb) {
-    return dbKeys.every(equalsByGivenKey(prevDb, nextDb));
+  return updateOnDbChange(ComposedComponent, function (prevDb, nextDb, props) {
+    return dbKeys.every(equalsByGivenKey(prevDb, nextDb, props));
   });
 }
 
@@ -87,7 +87,7 @@ function updateOnDbChange(ComposedComponent, equals) {
           return;
         }
 
-        if (!equals(this.prevDbVal, nextDbVal)) {
+        if (!equals(this.prevDbVal, nextDbVal, this.props)) {
           this.prevDbVal = nextDbVal;
           this.forceUpdate();
         }
@@ -100,7 +100,7 @@ function updateOnDbChange(ComposedComponent, equals) {
   });
 }
 
-function equalsByGivenKey(prevDb, nextDb) {
+function equalsByGivenKey(prevDb, nextDb, props) {
   return function equals(dbKey) {
     if (Array.isArray(dbKey)) {
       return dbKey.every(function (key) {
@@ -109,7 +109,7 @@ function equalsByGivenKey(prevDb, nextDb) {
     }
 
     if (typeof dbKey === 'function') {
-      return dbKey(prevDb) === dbKey(nextDb);
+      return dbKey(prevDb, props) === dbKey(nextDb, props);
     }
 
     return prevDb.get(dbKey) === nextDb.get(dbKey);
