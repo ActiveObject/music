@@ -1,16 +1,20 @@
 import cx from 'classnames';
 import './track.css';
 
-const Track = ({ track, index, isActive = false, onTogglePlay }) =>
+const Track = ({ track, index, isActive = false, position, onTogglePlay }) =>
   <div className={ cx({ 'track': true, 'track--active': isActive }) } onClick={ () => onTogglePlay(track) }>
     <div className='track__index'>{index}</div>
     <div className='track__artist'>{track.artist}</div>
     <div className='track__title'>{track.title}</div>
-    <div className='track__duration'>{duration(track.duration)}</div>
+    <div className='track__duration'>{trackTime(track, isActive, position)}</div>
   </div>
 
-function pad(n) {
-  return n < 10 ? '0' + n : n;
+function trackTime(track, isActive, position) {
+  if (isActive) {
+    return `${duration(Math.floor(position/1000))}/${duration(track.duration)}`;
+  }
+
+  return duration(track.duration);
 }
 
 function duration(s) {
@@ -32,6 +36,10 @@ function duration(s) {
 
     return `${hh}:${mm}:${ss}`;
   }
+}
+
+function pad(n) {
+  return n < 10 ? '0' + n : n;
 }
 
 export default Track;

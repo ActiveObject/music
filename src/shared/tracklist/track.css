@@ -24,21 +24,23 @@
 }
 
 .track__index {
-  width: 3rem;
   text-align: center;
-}
-
-.track__title {
-  flex: 2;
+  width: 3em;
+  flex-shrink: 0;
 }
 
 .track__artist {
-  flex: 1;
+  width: 30%;
+  flex-shrink: 0;
+}
+
+.track__title {
+  width: 60%;
 }
 
 .track__duration {
-  width: 3rem;
-  text-align: right;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
 @media screen and (max-width: 768px) {

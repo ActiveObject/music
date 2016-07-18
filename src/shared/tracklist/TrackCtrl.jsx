@@ -18,6 +18,7 @@ class TrackCtrl extends React.Component {
         track={track}
         index={index}
         isActive={isActive}
+        position={player.position}
         onTogglePlay={ (t) => togglePlay(t, tracklist) } />
     );
   }
@@ -27,6 +28,9 @@ function togglePlay(track, tracklist) {
   app.push(Player.togglePlay(app.value.get(':db/player'), track, tracklist));
 }
 
-export default updateOn(TrackCtrl, function (dbVal) {
-  return !(hasTag(dbVal.get(':db/player'), ':player/empty')) && dbVal.get(':db/player').track.id;
+export default updateOn(TrackCtrl, function (dbVal, props) {
+  var p = dbVal.get(':db/player');
+  var isActive = !hasTag(p, ':player/empty') && p.track.id === props.track.id;
+
+  return isActive ? p.position : false;
 });
