@@ -1,9 +1,11 @@
+import React from 'react';
 import { render } from 'react-dom';
+import { AppContainer as HotLoader } from 'react-hot-loader';
+import app from 'app';
 import AppHost from 'app/AppHost';
 import MusicApp from 'app/MusicApp';
-import app from 'app';
 import vk from 'app/shared/vk';
-import { AppContainer as HotLoader } from 'react-hot-loader';
+import Perf from 'react-addons-perf';
 
 render(
   <HotLoader>
@@ -25,3 +27,4 @@ if (module.hot) {
 
 window._app = app;
 window._vk = vk;
+window.Perf = Perf;

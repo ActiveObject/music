@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = function (env) {
   var plugins = [];
-  var entry = ['./src/entry.js'];
+  var entry = [];
 
   if (!Number(process.env.MUSIC_APP_ID)) {
     throw new Error('MUSIC_APP_ID env var should be a number');
@@ -17,7 +17,10 @@ module.exports = function (env) {
   }));
 
   if (env === 'development') {
-    entry.unshift('react-hot-loader/patch');
+    entry.push('react-hot-loader/patch');
+    entry.push('./src/entry.dev.js');
+  } else {
+    entry.push('./src/entry.prod.js');
   }
 
   return {
