@@ -3,6 +3,17 @@ import omit from 'lodash/omit';
 import merge from 'app/shared/merge';
 import { hasTag, toggleTag, removeTag, addTag } from 'app/shared/Tag';
 
+export function createPlayer() {
+  return {
+    tag: [':app/player', ':player/empty'],
+    position: 0,
+    seekPosition: 0,
+    bytesTotal: 0,
+    bytesLoaded: 0,
+    tracklist: []
+  };
+}
+
 export function play(p) {
   return addTag(p, ':player/is-playing');
 }

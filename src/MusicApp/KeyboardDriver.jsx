@@ -1,25 +1,28 @@
 import React from 'react';
 import key from 'keymaster';
+import { connect } from 'react-redux';
 import app from 'app';
-import * as Player from 'app/shared/Player';
 import { toggleTag } from 'app/shared/Tag';
+import { rewind, forward, togglePlay } from 'app/playerActions';
 
 class KeyboardDriver extends React.Component {
   componentWillMount() {
+    let { dispatch } = this.props;
+
     this.unsub = bindKeys(function (key) {
       key('left', function () {
         console.log(`[KeyboardDriver] rewind 5s`);
-        app.push(Player.rewind(app.value.get(':db/player'), 5000));
+        dispatch(rewind(5000));
       });
 
       key('right', function () {
         console.log(`[KeyboardDriver] forward 5s`);
-        app.push(Player.forward(app.value.get(':db/player'), 5000));
+        dispatch(forward(5000));
       });
 
       key('space', function () {
         console.log(`[KeyboardDriver] toggle play`);
-        app.push(Player.togglePlay(app.value.get(':db/player')));
+        dispatch(togglePlay());
       });
     });
   }
@@ -46,4 +49,4 @@ function bindKeys(fn) {
   };
 }
 
-export default KeyboardDriver;
+export default connect()(KeyboardDriver);

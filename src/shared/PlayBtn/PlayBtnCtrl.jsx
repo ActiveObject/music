@@ -1,22 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import app from 'app';
 import { hasTag } from 'app/shared/Tag';
-import { updateOn } from 'app/AppHost';
-import * as Player from 'app/shared/Player';
+import { togglePlay } from 'app/playerActions';
 import PlayBtn from './PlayBtn';
 
-const PlayBtnCtrl = () => {
-  var isPlaying = hasTag(app.value.get(':db/player'), ':player/is-playing');
+function PlayBtnCtrl({ player, dispatch }) {
+  var isPlaying = hasTag(player, ':player/is-playing');
 
   return (
     <div className='main-layout__play-btn'>
-      <PlayBtn isPlaying={isPlaying} onClick={togglePlay} />
+      <PlayBtn isPlaying={isPlaying} onClick={() => dispatch(togglePlay())} />
     </div>
   );
 }
 
-function togglePlay() {
-  app.push(Player.togglePlay(app.value.get(':db/player')));
-}
-
-export default updateOn(PlayBtnCtrl, ':db/player');
+export default connect(state => ({ player: state }))(PlayBtnCtrl);
