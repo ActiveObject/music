@@ -66,7 +66,7 @@ SoundDriver.prototype.tick = function (player) {
 SoundDriver.prototype.createSound = function (track) {
   console.log(`[SoundDriver] create sound for ${toString(track)}`);
 
-  return sm.createSound({
+  var sound = sm.createSound({
     id: 'Audio(' + track.artist + ', ' + track.title + ')',
     url: track.url,
     autoLoad: false,
@@ -82,6 +82,7 @@ SoundDriver.prototype.createSound = function (track) {
     },
 
     onfinish: () => {
+      console.log(`[SoundDriver] finish`);
       this.emit('finish', this.track);
     },
 
@@ -95,6 +96,18 @@ SoundDriver.prototype.createSound = function (track) {
       this.emit('whileloading', this.sound.bytesLoaded, this.sound.bytesTotal);
     }, 500)
   });
+
+  // Workaround issue with HTML5 stalled event that isn't
+  // passed through soundmanager Sound object
+  // See http://stackoverflow.com/questions/12027442/how-to-bind-the-html5stalled-event-from-soundmanager
+  sound._a.addEventListener('stalled', () => {
+    console.log(`[SoundDriver] stalled ${toString(track)}`);
+    var err = new Error(`Can\'t load audio ${toString(track)}`);
+    err.track = this.track;
+    this.emit('error', err);
+  });
+
+  return sound;
 };
 
 export default new SoundDriver();
