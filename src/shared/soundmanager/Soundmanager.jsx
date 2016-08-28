@@ -10,7 +10,7 @@ import SoundDriver from './SoundDriver';
 import vk from 'app/shared/vk';
 import * as Player from 'app/shared/Player';
 import { toString } from 'app/shared/Track';
-import { updatePosition, updateLoading, nextTrack, play, finishSeeking } from 'app/playerActions';
+import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/playerActions';
 
 class Soundmanager extends React.Component {
   componentWillMount() {
@@ -53,7 +53,7 @@ class Soundmanager extends React.Component {
   }
 }
 
-function reload(track) {
+function reload(track, dispatch) {
   console.log(`[TrackCtrl] fetch url for ${toString(track)}`);
 
   fetchUrl(track, (err, res) => {
@@ -61,11 +61,11 @@ function reload(track) {
       return console.log(err);
     }
 
-    app.push(
-      Player.play(
-        Player.useTrack(this.props.player, merge(track, {
-          url: res.response[0]
-        }))));
+    dispatch(useTrack(merge(track, {
+      url: res.response[0]
+    })));
+
+    dispatch(play());
   });
 }
 

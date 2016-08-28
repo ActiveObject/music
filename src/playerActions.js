@@ -52,3 +52,10 @@ export function finishSeeking() {
     type: 'PLAYER_FINISH_SEEKING'
   };
 }
+
+export function useTrack(track) {
+  return {
+    type: 'PLAYER_USE_TRACK',
+    track
+  };
+}

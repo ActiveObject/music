@@ -22,12 +22,12 @@ export function pause(p) {
 }
 
 export function stop(p) {
-  return seek(pause(p), 0);
+  return startSeeking(pause(p), 0);
 }
 
 export function togglePlay(player, track, tracklist) {
   if (hasTag(player, ':player/empty')) {
-    return play(useTrack(player, track));
+    return play(useTracklist(useTrack(player, track), tracklist));
   }
 
   if (arguments.length === 1) {
