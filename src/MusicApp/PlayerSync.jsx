@@ -1,7 +1,7 @@
 import React from 'react';
-import app from 'app';
+import { connect } from 'react-redux';
 import { updateOn } from 'app/AppHost';
-import { useTrack } from 'app/shared/Player';
+import { useTrack } from 'app/playerActions';
 import { hasTag } from 'app/shared/Tag';
 
 class PlayerSync extends React.Component {
@@ -9,12 +9,12 @@ class PlayerSync extends React.Component {
     var cache = localStorage.getItem(':cache/player');
 
     if (cache) {
-      app.push(useTrack(app.value.get(':db/player'), JSON.parse(cache)));
+      this.props.dispatch(useTrack(JSON.parse(cache)));
     }
   }
 
   componentDidUpdate() {
-    var player = app.value.get(':db/player');
+    var player = this.props.player;
 
     if (!hasTag(player, ':player/empty')) {
       localStorage.setItem(':cache/player', JSON.stringify(player.track));
@@ -26,4 +26,4 @@ class PlayerSync extends React.Component {
   }
 }
 
-export default updateOn(PlayerSync, db => db.get(':db/player').track);
+export default connect(state => ({ player: state }))(PlayerSync);
