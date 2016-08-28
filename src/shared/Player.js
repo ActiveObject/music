@@ -7,7 +7,6 @@ export function createPlayer() {
   return {
     tag: [':app/player', ':player/empty'],
     position: 0,
-    seekPosition: 0,
     bytesTotal: 0,
     bytesLoaded: 0,
     tracklist: []
@@ -60,38 +59,28 @@ export function togglePlayState(p) {
   return toggleTag(p, ':player/is-playing');
 }
 
-export function seek(p, position) {
-  return merge(p, {
-    seekPosition: p.track.duration * position * 1000
+export function forward(player, amount) {
+  var duration = player.track.duration * 1000;
+  var seekToPosition = player.position + amount > duration ? duration : player.position + amount;
+
+  return startSeeking(player, seekToPosition);
+}
+
+export function rewind(player, amount) {
+  var duration = player.track.duration * 1000;
+  var seekToPosition = player.position > amount ? player.position - amount : 0;
+
+  return startSeeking(player, seekToPosition);
+}
+
+export function startSeeking(player, seekToPosition) {
+  return merge(addTag(player, ':player/seek-to-position'), { seekToPosition });
+}
+
+export function finishSeeking(player) {
+  return merge(omit(removeTag(player, ':player/seek-to-position'), 'seekToPosition'), {
+    position: player.seekToPosition
   });
-}
-
-export function seekTo(p, position) {
-  return merge(addTag(p, ':player/seek-to-position'), {
-    seekToPosition: p.track.duration * position * 1000
-  });
-}
-
-export function forward(p, amount) {
-  var duration = p.track.duration * 1000;
-
-  return merge(addTag(p, ':player/seek-to-position'), {
-    seekToPosition: p.position + amount > duration ? duration : p.position + amount
-  });
-}
-
-export function rewind(p, amount) {
-  return merge(addTag(p, ':player/seek-to-position'), {
-    seekToPosition: p.position > amount ? p.position - amount : 0
-  });
-}
-
-export function startSeeking(p) {
-  return merge(addTag(p, ':player/seeking'), { seekPosition: p.position });
-}
-
-export function stopSeeking(p) {
-  return merge(removeTag(p, ':player/seeking'), { position: p.seekPosition });
 }
 
 export function nextTrack(p) {

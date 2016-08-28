@@ -10,7 +10,7 @@ import SoundDriver from './SoundDriver';
 import vk from 'app/shared/vk';
 import * as Player from 'app/shared/Player';
 import { toString } from 'app/shared/Track';
-import { updatePosition, updateLoading, nextTrack, play } from 'app/playerActions';
+import { updatePosition, updateLoading, nextTrack, play, finishSeeking } from 'app/playerActions';
 
 class Soundmanager extends React.Component {
   componentWillMount() {
@@ -40,11 +40,9 @@ class Soundmanager extends React.Component {
     this.unsub();
   }
 
-  componentWillUpdate({ player }) {
+  componentWillUpdate({ player, dispatch }) {
     if (hasTag(player, ':player/seek-to-position')) {
-      app.push(merge(omit(removeTag(player, ':player/seek-to-position'), 'seekToPosition'), {
-        position: player.seekToPosition
-      }));
+      dispatch(finishSeeking());
     }
 
     SoundDriver.tick(player);

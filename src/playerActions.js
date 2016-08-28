@@ -46,3 +46,9 @@ export function nextTrack() {
     type: 'PLAYER_NEXT_TRACK'
   };
 }
+
+export function finishSeeking() {
+  return {
+    type: 'PLAYER_FINISH_SEEKING'
+  };
+}

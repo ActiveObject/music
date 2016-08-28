@@ -1,4 +1,4 @@
-import { rewind, forward, togglePlay, nextTrack, seekToPosition } from 'app/shared/Player';
+import { rewind, forward, togglePlay, nextTrack, finishSeeking } from 'app/shared/Player';
 
 export default function (state, action) {
   switch (action.type) {
@@ -9,6 +9,7 @@ export default function (state, action) {
     case 'PLAYER_UPDATE_POSITION': return Object.assign({}, state, { position: action.position });
     case 'PLAYER_UPDATE_LOADING': return Object.assign({}, state, { bytesLoaded: action.bytesLoaded, bytesTotal: action.bytesTotal });
     case 'PLAYER_NEXT_TRACK': return nextTrack(state);
+    case 'PLAYER_FINISH_SEEKING': return finishSeeking(state);
   }
 
   return state;
