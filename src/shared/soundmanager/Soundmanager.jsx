@@ -1,14 +1,12 @@
 import React from 'react';
 import omit from 'lodash/omit';
 import { connect } from 'react-redux';
-import app from 'app';
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
 import { hasTag, removeTag } from 'app/shared/Tag';
 import merge from 'app/shared/merge';
 import SoundDriver from './SoundDriver';
 import vk from 'app/shared/vk';
-import * as Player from 'app/shared/Player';
 import { toString } from 'app/shared/Track';
 import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/playerActions';
 
