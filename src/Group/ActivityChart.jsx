@@ -29,11 +29,23 @@ class ActivityChart extends React.Component {
         if (i !== 0 || j < weekday) {
           var d = new Date(now - ((i * 7) + j) * 24 * 60 * 60 * 1000);
           var key = [d.getFullYear(), d.getMonth(), d.getDate()].join('-');
-          ctx.fillStyle = fillColor(value[key]);
-          ctx.fillRect((size + margin) * (weeks - i - 1), (size + margin) * j, size, size);
+
+          if (value[key]) {
+            ctx.fillStyle = fillColor(value[key]);
+            ctx.fillRect((size + margin) * (weeks - i - 1), (size + margin) * j, size, size);
+          } else {
+            var x = (size + margin) * (weeks - i - 1) + size / 2;
+            var y = (size + margin) * j + size / 2;
+
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.arc(x, y, 2, 0, Math.PI*2, false);
+            ctx.fill();
+          }
         }
       }
     }
+
   }
 }
 
