@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import difference from 'lodash/difference';
 import app from 'app';
 import vk from 'app/shared/vk';
@@ -19,7 +20,7 @@ class LibrarySync extends React.Component {
   }
 
   sync() {
-    var user = app.value.get(':db/user');
+    var user = this.props.user;
     var albums = app.value.get(':db/albums');
     var library = app.value.get(':db/library');
     var idsInCache = [...this.props.cache.keys()];
@@ -56,4 +57,4 @@ function loadTracksById(items, callback) {
   }, callback);
 }
 
-export default LibrarySync;
+export default connect(state => ({ user: state.user }))(LibrarySync);

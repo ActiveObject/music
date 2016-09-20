@@ -1,12 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import app from 'app';
 import { Motion, spring } from 'react-motion';
-import { updateOn } from 'app/AppHost';
 import { hasTag } from 'app/shared/Tag';
 import Profile from './Profile';
 
-const ProfileCtrl = () => {
-  var user = app.value.get(':db/user');
+const ProfileCtrl = ({ user }) => {
   var isLoaded = hasTag(user, ':user/is-loaded');
 
   return (
@@ -31,4 +30,4 @@ const ProfileCtrl = () => {
   );
 }
 
-export default updateOn(ProfileCtrl, [':db/user', ':db/command-palette']);
+export default connect(state => ({ user: state.user }))(ProfileCtrl);

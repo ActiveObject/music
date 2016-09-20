@@ -1,12 +1,14 @@
 import { EventEmitter } from 'events';
 import React from 'react';
+import { connect } from 'react-redux';
 import app from 'app';
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import { addTag } from 'app/shared/Tag';
 import VkCaptchaView from './VkCaptchaView';
+import { loaded } from 'app/userActions';
 
-export default class VkDriver extends React.Component {
+class VkDriver extends React.Component {
   constructor() {
     super();
     this.state = { inTransaction: false };
@@ -14,7 +16,7 @@ export default class VkDriver extends React.Component {
 
   componentWillMount() {
     this.tx = new EventEmitter();
-    var user = app.value.get(':db/user');
+    var user = this.props.user;
 
     vk.authorize(user);
     vk.onCaptcha = (captchaUrl) => {
@@ -28,20 +30,12 @@ export default class VkDriver extends React.Component {
     vk.users.get({
       user_ids: user.id,
       fields: ['photo_50']
-    }, function (err, result) {
+    }, (err, result) => {
       if (err) {
         return console.log(err);
       }
 
-      var res = result.response[0];
-
-      var u = merge(app.value.get(':db/user'), {
-        photo50: res.photo_50,
-        firstName: res.first_name,
-        lastName: res.last_name
-      });
-
-      app.push(addTag(u, ':user/is-loaded'));
+      this.props.dispatch(loaded(result.response[0]));
     });
   }
 
@@ -71,3 +65,5 @@ export default class VkDriver extends React.Component {
     this.setState({ inTransaction: false, captchaUrl: '' });
   }
 }
+
+export default connect(state => ({ user: state.user }))(VkDriver);

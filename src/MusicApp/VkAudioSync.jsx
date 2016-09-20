@@ -1,10 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import app from 'app';
 import vk from 'app/shared/vk';
 
 class VkAudioSync extends React.Component {
   componentWillMount() {
-    this.stopUpdating = startTrackUpdating(10 * 1000);
+    this.stopUpdating = startTrackUpdating(this.props.user, 10 * 1000);
   }
 
   render() {
@@ -12,11 +13,11 @@ class VkAudioSync extends React.Component {
   }
 }
 
-function startTrackUpdating(interval) {
+function startTrackUpdating(user, interval) {
   var timer = null;
 
   function next() {
-    updateTracks(() => {
+    updateTracks(user, () => {
       timer = setTimeout(() => next(), interval);
     });
   }
@@ -28,9 +29,7 @@ function startTrackUpdating(interval) {
   };
 }
 
-function updateTracks(callback) {
-  var user = app.value.get(':db/user');
-
+function updateTracks(user, callback) {
   loadAllAudioIds(user.id, (err, res) => {
     if (err) {
       return console.log(err);
@@ -58,4 +57,4 @@ function loadAllAudioIds(owner, callback) {
   }, callback);
 }
 
-export default VkAudioSync;
+export default connect(state => ({ user: state.user }))(VkAudioSync);

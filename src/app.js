@@ -14,11 +14,7 @@ var initialAppState = Map({
   },
 
   ':db/library': [],
-  ':db/groups': [],
-
-  ':db/user': {
-    tag: ':app/user'
-  }
+  ':db/groups': []
 });
 
 var app = new Atom(initialAppState);
