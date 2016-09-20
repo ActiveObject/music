@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import app from 'app';
+
 import vk from 'app/shared/vk';
 import { pushGroups } from 'app/actions';
 

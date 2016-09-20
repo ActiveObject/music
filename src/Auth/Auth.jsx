@@ -2,7 +2,7 @@ import Url from 'url';
 import querystring from 'querystring';
 import React from 'react';
 import { connect } from 'react-redux';
-import app from 'app';
+
 import AuthView from 'app/auth/AuthView';
 import { hasTag } from 'app/shared/Tag';
 import { authenticate } from 'app/actions';

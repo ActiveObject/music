@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import React from 'react';
 import { connect } from 'react-redux';
-import app from 'app';
+
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import { addTag } from 'app/shared/Tag';

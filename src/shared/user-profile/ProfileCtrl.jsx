@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import app from 'app';
+
 import { Motion, spring } from 'react-motion';
 import { hasTag } from 'app/shared/Tag';
 import Profile from './Profile';

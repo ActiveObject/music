@@ -1,7 +1,7 @@
 import React from 'react';
 import key from 'keymaster';
 import { connect } from 'react-redux';
-import app from 'app';
+
 import { toggleTag } from 'app/shared/Tag';
 import { rewind, forward, togglePlay } from 'app/playerActions';
 

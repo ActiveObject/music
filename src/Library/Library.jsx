@@ -1,32 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import cx from 'classnames';
-import app from 'app';
 import { hasTag } from 'app/shared/Tag';
-import { updateOn } from 'app/AppHost';
 import LibraryTracklist from 'app/library/LibraryTracklist';
 import Layer from 'app/shared/Layer';
 import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import './Library.css';
+import { toggleShuffle } from 'app/actions';
 
-let Toolbar = updateOn(() => {
-  var player = app.value.get(':db/player');
-  var isShuffled = hasTag(player, ':player/is-shuffled');
-
-  return (
-    <div className='toolbar-container'>
-      <div className='toolbar'>
-        <span className={cx({ 'action': true, 'action--active': isShuffled })} onClick={shuffle}>shuffle</span>
-      </div>
+let Toolbar = ({ player, isShuffled, dispatch }) =>
+  <div className='toolbar-container'>
+    <div className='toolbar'>
+      <span
+        className={cx({ 'action': true, 'action--active': isShuffled })}
+        onClick={() => dispatch(toggleShuffle())}>shuffle</span>
     </div>
-  );
-}, db => hasTag(db.get(':db/player'), ':player/is-shuffled'));
+  </div>
 
-function shuffle() {
-  app.push({
-    tag: ':library/toggle-shuffle'
-  });
-}
+Toolbar = connect(state => ({ player: state.player, isShuffled: state.isShuffled }))(Toolbar);
 
 let Library = () =>
   <div className='Library'>

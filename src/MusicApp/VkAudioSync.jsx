@@ -1,11 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import app from 'app';
 import vk from 'app/shared/vk';
+import { pushLibrary } from 'app/actions';
 
 class VkAudioSync extends React.Component {
   componentWillMount() {
-    this.stopUpdating = startTrackUpdating(this.props.user, 10 * 1000);
+    this.stopUpdating = startTrackUpdating(this.props.user, 10 * 1000, res => {
+      this.props.dispatch(pushLibrary(res.response.map(t => {
+        return {
+          tag: ':track-source/library',
+          trackId: String(t)
+        }
+      })));
+    });
   }
 
   render() {
@@ -13,11 +20,12 @@ class VkAudioSync extends React.Component {
   }
 }
 
-function startTrackUpdating(user, interval) {
+function startTrackUpdating(user, interval, callback) {
   var timer = null;
 
   function next() {
-    updateTracks(user, () => {
+    updateTracks(user, res => {
+      callback(res);
       timer = setTimeout(() => next(), interval);
     });
   }
@@ -35,17 +43,7 @@ function updateTracks(user, callback) {
       return console.log(err);
     }
 
-    app.push({
-      tag: ':app/library',
-      value: res.response.map(t => {
-        return {
-          tag: ':track-source/library',
-          trackId: String(t)
-        }
-      })
-    });
-
-    callback(err, res);
+    callback(res);
   });
 }
 

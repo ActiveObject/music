@@ -1,5 +1,5 @@
 import React from 'react';
-import app from 'app';
+
 import { connect } from 'react-redux';
 import { toggleTrack } from 'app/playerActions';
 import { hasTag } from 'app/shared/Tag';

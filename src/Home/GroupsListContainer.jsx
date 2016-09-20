@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import app from 'app';
+
 import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
 import GroupSync from './GroupSync';

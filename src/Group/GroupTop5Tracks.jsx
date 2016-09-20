@@ -1,5 +1,6 @@
 import React from 'react';
-import app from 'app';
+import { connect } from 'react-redux';
+
 import vk from 'app/shared/vk';
 import { fromVk } from 'app/shared/Track';
 import merge from 'app/shared/merge';
@@ -54,14 +55,16 @@ function topAudios(posts) {
   return audios;
 }
 
-let TopTracks = ({ posts }) => {
+let TopTracks = ({ posts, albums }) => {
   var tracks = topAudios(top5(posts))
-    .map(x => fromVk(x, app.value.get(':db/albums')))
+    .map(x => fromVk(x, albums))
     .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
     .slice(0, 5);
 
   return <StaticTracklist tracks={tracks} />;
 }
+
+TopTracks = connect(state => ({ albums: state.albums }))(TopTracks);
 
 class GroupTop5Tracks extends React.Component {
   constructor() {

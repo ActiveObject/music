@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import { combineReducers } from 'redux';
 import { reducer as player } from 'app/shared/Player';
 import { addTag } from 'app/shared/Tag';
@@ -30,8 +31,26 @@ function groups(state = [], action) {
   return state;
 }
 
+function library(state = [], action) {
+  if (action.type === 'LIBRARY_PUSH') {
+    return action.library;
+  }
+
+  return state;
+}
+
+function albums(state = Map(), action) {
+  if (action.type === 'ALBUMS_PUSH') {
+    return action.albums;
+  }
+
+  return state;
+}
+
 export default combineReducers({
   player,
   user,
-  groups
+  groups,
+  library,
+  albums
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import difference from 'lodash/difference';
-import app from 'app';
+
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 

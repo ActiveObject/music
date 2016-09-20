@@ -1,7 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import app from 'app';
-import { updateOn } from 'app/AppHost';
+
 import { hasTag } from 'app/shared/Tag';
 import TracklistTable from 'app/shared/tracklist/TracklistTable';
 import LazyTracklist from 'app/shared/tracklist/LazyTracklist';
@@ -22,7 +22,7 @@ class LibraryTracklist extends React.Component {
   }
 
   render() {
-    var tracks = makeTracks(this.state.cache);
+    var tracks = makeTracks(this.state.cache, this.props.player, this.props.library, this.props.isShuffled);
 
     return (
       <LibrarySync cache={this.state.cache} onSync={(c) => this.updateCache(c)} >
@@ -39,12 +39,9 @@ class LibraryTracklist extends React.Component {
   }
 }
 
-function makeTracks(cache) {
-  var player = app.value.get(':db/player');
-  var tracklist = app.value.get(':db/library');
-
+function makeTracks(cache, player, library, isShuffled) {
   if (hasTag(player, ':player/is-shuffled')) {
-    tracklist = app.value.get(':db/shuffled-library');
+    tracklist = isShuffled;
   }
 
   return tracklist
@@ -52,4 +49,4 @@ function makeTracks(cache) {
     .map(t => cache.get(t.trackId));
 }
 
-export default updateOn(LibraryTracklist, ':db/library', db => hasTag(db.get(':db/player'), ':player/is-shuffled'));
+export default connect(state => ({ player: state.player, library: state.library, isShuffled: state.isShuffled }))(LibraryTracklist);
