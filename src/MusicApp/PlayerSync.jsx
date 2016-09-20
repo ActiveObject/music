@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateOn } from 'app/AppHost';
 import { useTrack } from 'app/playerActions';
 import { hasTag } from 'app/shared/Tag';
 
