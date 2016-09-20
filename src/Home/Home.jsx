@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'react-router/lib/Link';
+import Link from 'react-router/Link';
 import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
 import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';

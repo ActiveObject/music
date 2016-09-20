@@ -1,8 +1,6 @@
 import React from 'react';
-import Router from 'react-router/lib/Router';
-import Route from 'react-router/lib/Route';
-import IndexRoute from 'react-router/lib/IndexRoute';
-import browserHistory from 'react-router/lib/browserHistory';
+import Router from 'react-router/BrowserRouter';
+import Match from 'react-router/Match';
 
 import Auth from 'app/Auth';
 import Group from 'app/Group';
@@ -20,26 +18,22 @@ import KeyboardDriver from './KeyboardDriver';
 import './styles/base.css';
 import './styles/theme.css';
 
-let AppContainer = ({ children }) =>
-  <Auth>
-    <Layer>
-      {children}
-      <VkAudioSync />
-      <VkGroupSync />
-      <VkDriver />
-      <Soundmanager />
-      <PlayerSync />
-      <KeyboardDriver />
-    </Layer>
-  </Auth>
-
 let MusicApp = () =>
-  <Router history={browserHistory}>
-    <Route path="/" component={AppContainer}>
-      <IndexRoute component={Home} />
-      <Route path="groups/:id" component={Group} />
-      <Route path="library" component={Library} />
-    </Route>
+  <Router>
+    <Auth>
+      <Layer>
+        <Match exactly pattern="/" component={Home} />
+        <Match pattern="/groups/:id" component={Group} />
+        <Match pattern="/library" component={Library} />
+
+        <VkAudioSync />
+        <VkGroupSync />
+        <VkDriver />
+        <Soundmanager />
+        <PlayerSync />
+        <KeyboardDriver />
+      </Layer>
+    </Auth>
   </Router>
 
 export default MusicApp;
