@@ -15,4 +15,4 @@ function PlayBtnCtrl({ player, dispatch }) {
   );
 }
 
-export default connect(state => ({ player: state }))(PlayBtnCtrl);
+export default connect(state => ({ player: state.player }))(PlayBtnCtrl);

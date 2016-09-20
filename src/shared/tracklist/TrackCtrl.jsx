@@ -19,4 +19,4 @@ function TrackCtrl({ player, track, tracklist, dispatch }) {
   );
 }
 
-export default connect(state => ({ player: state }))(TrackCtrl);
+export default connect(state => ({ player: state.player }))(TrackCtrl);

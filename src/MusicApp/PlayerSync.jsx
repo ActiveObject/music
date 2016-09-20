@@ -26,4 +26,4 @@ class PlayerSync extends React.Component {
   }
 }
 
-export default connect(state => ({ player: state }))(PlayerSync);
+export default connect(state => ({ player: state.player }))(PlayerSync);

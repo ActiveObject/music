@@ -75,8 +75,4 @@ function fetchUrl(audio, callback) {
   }, callback);
 }
 
-export default connect((state) => {
-  return {
-    player: state
-  };
-})(Soundmanager);
+export default connect(state => ({ player: state.player }))(Soundmanager);

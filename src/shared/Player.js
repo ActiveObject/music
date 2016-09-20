@@ -13,7 +13,7 @@ export function createPlayer() {
   };
 }
 
-export function reducer(state, action) {
+export function reducer(state = createPlayer(), action) {
   switch (action.type) {
     case 'PLAYER_FORWARD': return forward(state, action.ms);
     case 'PLAYER_REWIND': return rewind(state, action.ms);
