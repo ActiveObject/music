@@ -14,3 +14,10 @@ export function loaded(res) {
     lastName: res.last_name
   };
 }
+
+export function pushGroups(groups) {
+  return {
+    type: 'GROUPS_PUSH',
+    groups
+  };
+}

@@ -1,7 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import app from 'app';
-import { updateOn } from 'app/AppHost';
 import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
 import GroupSync from './GroupSync';
@@ -27,7 +27,7 @@ class GroupsListContainer extends React.Component {
   }
 
   render() {
-    var groups = app.value.get(':db/groups')
+    var groups = this.props.groups
       .sort(compareByUsage(this.state.usage))
       .filter(id => this.state.cache.has(id))
       .map(id => this.state.cache.get(id));
@@ -64,4 +64,4 @@ function compareByUsage(usage) {
   };
 }
 
-export default updateOn(GroupsListContainer, ':db/groups');
+export default connect(state => ({ groups: state.groups }))(GroupsListContainer);

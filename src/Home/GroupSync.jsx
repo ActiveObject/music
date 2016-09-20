@@ -1,9 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import difference from 'lodash/difference';
 import app from 'app';
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
-import { updateOn } from 'app/AppHost';
 
 class GroupSync extends React.Component {
   componentWillMount() {
@@ -19,7 +19,7 @@ class GroupSync extends React.Component {
   }
 
   sync() {
-    var idsInUse = app.value.get(':db/groups');
+    var idsInUse = this.props.groups;
     var idsInCache = [...this.props.cache.keys()];
 
     var outdated = difference(idsInCache, idsInUse);
@@ -48,4 +48,4 @@ GroupSync.propTypes = {
   onSync: React.PropTypes.func.isRequired
 };
 
-export default updateOn(GroupSync, ':db/groups');
+export default connect(state => ({ groups: state.groups }))(GroupSync);

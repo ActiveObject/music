@@ -22,7 +22,16 @@ function user(state = { tag: ':app/user' }, action) {
   return state;
 }
 
+function groups(state = [], action) {
+  if (action.type === 'GROUPS_PUSH') {
+    return action.groups;
+  }
+
+  return state;
+}
+
 export default combineReducers({
   player,
-  user
+  user,
+  groups
 });

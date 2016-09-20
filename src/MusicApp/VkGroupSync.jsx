@@ -1,10 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import app from 'app';
 import vk from 'app/shared/vk';
+import { pushGroups } from 'app/actions';
 
 class VkGroupSync extends React.Component {
   componentWillMount() {
-    this.stopUpdating = startUpdating(60 * 1000);
+    this.stopUpdating = startUpdating(60 * 1000, groups => {
+      this.props.dispatch(pushGroups(groups));
+    });
   }
 
   componentWillUnmount() {
@@ -16,11 +20,18 @@ class VkGroupSync extends React.Component {
   }
 }
 
-function startUpdating(interval) {
+function startUpdating(interval, callback) {
   var timer = null;
 
   function next() {
-    updateGroups();
+    vk.groups.get({}, (err, res) => {
+      if (err) {
+        return console.log(err);
+      }
+
+      callback(res.response.items.map(String));
+    });
+
     timer = setTimeout(() => next(), interval);
   }
 
@@ -31,17 +42,4 @@ function startUpdating(interval) {
   };
 }
 
-function updateGroups() {
-  vk.groups.get({}, (err, res) => {
-    if (err) {
-      return console.log(err);
-    }
-
-    app.push({
-      tag: ':app/groups',
-      value: res.response.items.map(String)
-    });
-  });
-}
-
-export default VkGroupSync;
+export default connect()(VkGroupSync);
