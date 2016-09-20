@@ -6,7 +6,7 @@ import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import { addTag } from 'app/shared/Tag';
 import VkCaptchaView from './VkCaptchaView';
-import { loaded } from 'app/userActions';
+import { loaded } from 'app/actions';
 
 class VkDriver extends React.Component {
   constructor() {

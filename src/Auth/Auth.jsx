@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import app from 'app';
 import AuthView from 'app/auth/AuthView';
 import { hasTag } from 'app/shared/Tag';
-import { authenticate } from 'app/userActions';
+import { authenticate } from 'app/actions';
 
 const AUTH_URL = Url.format({
   protocol: 'https',
