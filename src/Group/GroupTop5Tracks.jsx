@@ -29,15 +29,17 @@ function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback) {
 }
 
 function hasAudio(post) {
+  if (Array.isArray(post.copy_history)) {
+    return post.copy_history.some(hasAudio);
+  }
+
   return post.attachments && post.attachments.some(a => a.type === 'audio');
 }
 
 function top5(posts) {
   return posts
     .filter(hasAudio)
-    .sort(function (postA, postB) {
-      return postB.likes.count - postA.likes.count;
-    })
+    .sort((postA, postB) => postB.likes.count - postA.likes.count)
     .slice(0, 5);
 }
 
@@ -45,11 +47,15 @@ function topAudios(posts) {
   var audios = [];
 
   posts.forEach(function (post) {
-    post.attachments.forEach(function (attachment) {
-      if (attachment.type === 'audio') {
-        audios.push(attachment.audio);
-      }
-    });
+    if (Array.isArray(post.copy_history)) {
+      audios.push(...topAudios(post.copy_history));
+    } else {
+      post.attachments.forEach(function (attachment) {
+        if (attachment.type === 'audio') {
+          audios.push(attachment.audio);
+        }
+      });
+    }
   });
 
   return audios;
