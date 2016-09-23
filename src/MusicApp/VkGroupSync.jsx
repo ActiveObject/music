@@ -16,7 +16,7 @@ class VkGroupSync extends React.Component {
   }
 
   render() {
-    return <div />;
+    return null;
   }
 }
 

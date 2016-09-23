@@ -21,7 +21,7 @@ class PlayerSync extends React.Component {
   }
 
   render() {
-    return <div/>;
+    return null;
   }
 }
 

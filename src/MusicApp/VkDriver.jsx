@@ -48,7 +48,7 @@ class VkDriver extends React.Component {
       return <VkCaptchaView captchaUrl={this.state.captchaUrl} onEnter={(v) => this.commitTransaction(v)} />;
     }
 
-    return <div />;
+    return null;
   }
 
   startTransaction(captchaUrl) {

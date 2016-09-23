@@ -16,7 +16,7 @@ class VkAudioSync extends React.Component {
   }
 
   render() {
-    return <div />;
+    return null;
   }
 }
 
