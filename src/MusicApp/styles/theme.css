@@ -24,6 +24,10 @@ $primary-lightdark-color: #5b5fb0;
 $primary-text-color: #FDF6E3;
 $base-text-color: #657b83;
 
+body {
+  color: $base-text-color;
+}
+
 ::selection {
   background-color: $primary-dark-color;
   color: $primary-text-color;
@@ -36,10 +40,6 @@ a {
 
 a:hover {
   color: $accent-color;
-}
-
-.track {
-  color: $base-text-color;
 }
 
 .track:nth-child(odd),
@@ -62,16 +62,11 @@ a:hover {
 }
 
 .TracklistTable__columns {
-  color: $base-text-color;
   border-bottom: 1px solid #eee;
 }
 
 .TracklistTable__table {
   border-bottom: 1px solid #eee;
-}
-
-.TracklistTable__header {
-  color: $base-text-color;
 }
 
 .play-btn {
@@ -84,18 +79,6 @@ a:hover {
 
 .command-palette__todo {
   color: $accent-color;
-}
-
-.profile__name {
-  color: $base-text-color;
-}
-
-.cmdout__item {
-  color: $base-text-color;
-}
-
-.action {
-  color: $base-text-color;
 }
 
 .action:hover {
@@ -111,10 +94,6 @@ a:hover {
 .group-profile,
 .Group__activity {
   background-color: $primary-color;
-}
-
-header {
-  color: $base-text-color;
 }
 
 .group-name {
