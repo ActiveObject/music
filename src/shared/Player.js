@@ -17,6 +17,7 @@ export function reducer(state = createPlayer(), action) {
   switch (action.type) {
     case 'PLAYER_FORWARD': return forward(state, action.ms);
     case 'PLAYER_REWIND': return rewind(state, action.ms);
+    case 'PLAYER_PLAY': return play(state);
     case 'PLAYER_TOGGLE_PLAY': return togglePlay(state);
     case 'PLAYER_TOGGLE_TRACK': return togglePlay(state, action.track, action.tracklist);
     case 'PLAYER_UPDATE_POSITION': return Object.assign({}, state, { position: action.position });

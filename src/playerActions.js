@@ -12,6 +12,12 @@ export function forward(ms) {
   };
 }
 
+export function play() {
+  return {
+    type: 'PLAYER_PLAY'
+  };
+}
+
 export function togglePlay() {
   return {
     type: 'PLAYER_TOGGLE_PLAY'
