@@ -1,12 +1,12 @@
 import React from 'react';
 import vk from 'app/shared/vk';
 import MediaQuery from 'react-responsive';
-import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import GroupProfile from './GroupProfile';
 import GroupProfilePreview from './GroupProfilePreview';
 import GroupTop5Tracks from './GroupTop5Tracks';
 import GroupActivity from './GroupActivity';
+import 'app/shared/ResponsiveGrid.css';
 
 class Group extends React.Component {
   constructor() {
@@ -46,24 +46,24 @@ class Group extends React.Component {
     return (
       <div className='Group'>
         <div className='scroll-container'>
-          <Section>
+          <div className='section'>
             <GroupProfilePreview isActive={this.state.isLoading}>
               <GroupProfile group={this.state.group} />
             </GroupProfilePreview>
-          </Section>
+          </div>
 
           <MediaQuery minAspectRatio='2/3'>
-            <Section>
+            <div className='section'>
               <GroupActivity groupId={this.props.params.id} />
-            </Section>
+            </div>
           </MediaQuery>
 
-          <Section className='Group__content'>
-            <Content>
-              <Header>Week top</Header>
+          <div className='section Group__content'>
+            <div className='content'>
+              <div className='header'>Week top</div>
               <GroupTop5Tracks groupId={this.props.params.id} />
-            </Content>
-          </Section>
+            </div>
+          </div>
         </div>
 
         <PlayBtnCtrl />

@@ -1,33 +1,33 @@
 import React from 'react';
 import Link from 'react-router/Link';
-import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
 import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import GroupsListContainer from './GroupsListContainer';
 import LibraryStaticTracklist from './LibraryStaticTracklist';
+import 'app/shared/ResponsiveGrid.css';
 
 let Home = () =>
   <div className='Home'>
     <div className='scroll-container'>
-      <Section>
+      <div className='section'>
         <UserProfileCtrl />
-      </Section>
+      </div>
 
-      <Section>
-        <Content>
-          <Header>
+      <div className='section'>
+        <div className='content'>
+          <div className='header'>
             <Link to='/library'>Library</Link>
-          </Header>
+          </div>
           <LibraryStaticTracklist />
-        </Content>
-      </Section>
+        </div>
+      </div>
 
-      <Section className='page-section'>
-        <Content>
-          <Header>Groups</Header>
+      <div className='section page-section'>
+        <div className='content'>
+          <div className='header'>Groups</div>
           <GroupsListContainer />
-        </Content>
-      </Section>
+        </div>
+      </div>
     </div>
 
     <PlayBtnCtrl />
