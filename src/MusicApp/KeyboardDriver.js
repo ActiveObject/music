@@ -20,7 +20,8 @@ class KeyboardDriver extends React.Component {
         dispatch(forward(5000));
       });
 
-      key('space', function () {
+      key('space', function (event) {
+        event.preventDefault();
         console.log(`[KeyboardDriver] toggle play`);
         dispatch(togglePlay());
       });
