@@ -15,13 +15,6 @@ body,
   padding: 0;
 }
 
-.app-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
 .icon {
   display: inline-block
 }
@@ -29,15 +22,6 @@ body,
 .scroll-wrapper {
   height: 100%;
   overflow: hidden;
-}
-
-.app-cmd {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 100px;
-  margin-top: 70px;
 }
 
 .page-section {
