@@ -108,15 +108,9 @@ a:hover {
   color: $accent-text-color;
 }
 
-.Group {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.group-profile,
+.Group__activity {
   background-color: $primary-color;
-}
-
-.Group__content {
-  background-color: white;
 }
 
 header {

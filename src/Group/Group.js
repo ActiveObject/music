@@ -45,22 +45,20 @@ class Group extends React.Component {
   render() {
     return (
       <div className='Group'>
-        <div className='scroll-container'>
-          <GroupProfilePreview isActive={this.state.isLoading}>
-            <GroupProfile group={this.state.group} />
-          </GroupProfilePreview>
+        <GroupProfilePreview isActive={this.state.isLoading}>
+          <GroupProfile group={this.state.group} />
+        </GroupProfilePreview>
 
-          <MediaQuery minAspectRatio='2/3'>
-            <section>
-              <GroupActivity groupId={this.props.params.id} />
-            </section>
-          </MediaQuery>
-
-          <section className='Group__content'>
-            <header>Week top</header>
-            <GroupTop5Tracks groupId={this.props.params.id} />
+        <MediaQuery minAspectRatio='2/3'>
+          <section className='Group__activity'>
+            <GroupActivity groupId={this.props.params.id} />
           </section>
-        </div>
+        </MediaQuery>
+
+        <section className='Group__content'>
+          <header>Week top</header>
+          <GroupTop5Tracks groupId={this.props.params.id} />
+        </section>
 
         <PlayBtnCtrl />
       </div>

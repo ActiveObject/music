@@ -28,26 +28,12 @@ body,
   margin-top: 50px;
 }
 
-.Group {
-  width: 100%;
-}
-
 .Group__content {
   padding-top: 50px;
   padding-bottom: 100px;
 }
 
 .Home {
-  height: 100%;
-}
-
-.Home .scroll-container {
-  padding-bottom: 80px;
-}
-
-.scroll-container {
-  overflow: auto;
-  width: 100%;
   height: 100%;
 }
 

@@ -20,7 +20,7 @@ import './styles/theme.css';
 let MusicApp = () =>
   <Router>
     <Auth>
-      <div className='layer'>
+      <div>
         <Match exactly pattern='/' component={Home} />
         <Match pattern='/groups/:id' component={Group} />
         <Match pattern='/library' component={Library} />
