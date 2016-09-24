@@ -7,7 +7,6 @@ import Group from 'app/Group';
 import Home from 'app/Home';
 import Library from 'app/Library';
 
-import Layer from 'app/shared/Layer';
 import Soundmanager from 'app/shared/soundmanager/Soundmanager';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
@@ -21,7 +20,7 @@ import './styles/theme.css';
 let MusicApp = () =>
   <Router>
     <Auth>
-      <Layer>
+      <div className="layer">
         <Match exactly pattern="/" component={Home} />
         <Match pattern="/groups/:id" component={Group} />
         <Match pattern="/library" component={Library} />
@@ -32,7 +31,7 @@ let MusicApp = () =>
         <Soundmanager />
         <PlayerSync />
         <KeyboardDriver />
-      </Layer>
+      </div>
     </Auth>
   </Router>
 

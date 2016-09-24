@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 import { hasTag } from 'app/shared/Tag';
 import LibraryTracklist from 'app/library/LibraryTracklist';
-import Layer from 'app/shared/Layer';
 import ProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import './Library.css';
@@ -22,15 +21,17 @@ Toolbar = connect(state => ({ player: state.player, isShuffled: state.isShuffled
 
 let Library = () =>
   <div className='Library'>
-    <Layer>
+    <div className='layer'>
       <ProfileCtrl />
-    </Layer>
-    <Layer>
+    </div>
+
+    <div className='layer'>
       <div className='Library__body'>
         <Toolbar />
         <LibraryTracklist />
       </div>
-    </Layer>
+    </div>
+
     <PlayBtnCtrl />
   </div>
 
