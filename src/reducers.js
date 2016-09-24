@@ -5,9 +5,9 @@ import { addTag } from 'app/shared/Tag';
 function createDefaultState() {
   return Object.assign({
     ':app/isAuthenticated': false,
-    groups: [],
-    library: [],
-    albums: Map()
+    ':app/groups': [],
+    ':app/library': [],
+    ':app/albums': Map()
   }, createPlayer());
 }
 
@@ -24,19 +24,19 @@ export default function (state = createDefaultState(), action) {
 
   if (action.type === 'GROUPS_PUSH') {
     return Object.assign({}, state, {
-      groups: action.groups
+      ':app/groups': action.groups
     });
   }
 
   if (action.type === 'LIBRARY_PUSH') {
     return Object.assign({}, state, {
-      library: action.library
+      ':app/library': action.library
     });
   }
 
   if (action.type === 'ALBUMS_PUSH') {
     return Object.assign({}, state, {
-      albums: action.albums
+      ':app/albums': action.albums
     });
   }
 

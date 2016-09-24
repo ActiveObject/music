@@ -64,4 +64,4 @@ function compareByUsage(usage) {
   };
 }
 
-export default connect(state => ({ groups: state.groups }))(GroupsListContainer);
+export default connect(state => ({ groups: state[':app/groups'] }))(GroupsListContainer);

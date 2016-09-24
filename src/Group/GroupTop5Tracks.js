@@ -70,7 +70,7 @@ let TopTracks = ({ posts, albums }) => {
   return <StaticTracklist tracks={tracks} />;
 }
 
-TopTracks = connect(state => ({ albums: state.albums }))(TopTracks);
+TopTracks = connect(state => ({ albums: state[':app/albums'] }))(TopTracks);
 
 class GroupTop5Tracks extends React.Component {
   constructor() {

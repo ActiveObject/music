@@ -51,5 +51,5 @@ function makeTracks(cache, library) {
 }
 
 export default connect(state => ({
-  library: state.library
+  library: state[':app/library']
 }))(LibraryStaticTracklist);

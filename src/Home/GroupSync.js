@@ -48,4 +48,4 @@ GroupSync.propTypes = {
   onSync: React.PropTypes.func.isRequired
 };
 
-export default connect(state => ({ groups: state.groups }))(GroupSync);
+export default connect(state => ({ groups: state[':app/groups'] }))(GroupSync);
