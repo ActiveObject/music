@@ -5,23 +5,26 @@ import { hasTag, toggleTag, removeTag, addTag } from 'app/shared/Tag';
 
 export function createPlayer() {
   return {
-    tag: [':app/player', ':player/empty'],
-    position: 0,
-    bytesTotal: 0,
-    bytesLoaded: 0,
-    tracklist: []
+    ':player/is-empty': true,
+    ':player/is-playing': false,
+    ':player/position': 0,
+    ':player/bytesTotal': 0,
+    ':player/bytesLoaded': 0,
+    ':player/tracklist': [],
+    ':player/seek-to-position': 0,
+    ':player/is-seeking': false
   };
 }
 
-export function reducer(state = createPlayer(), action) {
+export function reducer(state, action) {
   switch (action.type) {
     case 'PLAYER_FORWARD': return forward(state, action.ms);
     case 'PLAYER_REWIND': return rewind(state, action.ms);
     case 'PLAYER_PLAY': return play(state);
     case 'PLAYER_TOGGLE_PLAY': return togglePlay(state);
     case 'PLAYER_TOGGLE_TRACK': return togglePlay(state, action.track, action.tracklist);
-    case 'PLAYER_UPDATE_POSITION': return Object.assign({}, state, { position: action.position });
-    case 'PLAYER_UPDATE_LOADING': return Object.assign({}, state, { bytesLoaded: action.bytesLoaded, bytesTotal: action.bytesTotal });
+    case 'PLAYER_UPDATE_POSITION': return updatePosition(state, action.position);
+    case 'PLAYER_UPDATE_LOADING': return updateLoadingData(state, action.bytesLoaded, action.bytesTotal);
     case 'PLAYER_NEXT_TRACK': return nextTrack(state);
     case 'PLAYER_FINISH_SEEKING': return finishSeeking(state);
     case 'PLAYER_USE_TRACK': return useTrack(state, action.track);
@@ -30,20 +33,24 @@ export function reducer(state = createPlayer(), action) {
   return state;
 }
 
-export function play(p) {
-  return addTag(p, ':player/is-playing');
+export function play(player) {
+  return merge(player, {
+    ':player/is-playing': true
+  });
 }
 
-export function pause(p) {
-  return removeTag(p, ':player/is-playing');
+export function pause(player) {
+  return merge(player, {
+    ':player/is-playing': false
+  });
 }
 
-export function stop(p) {
-  return startSeeking(pause(p), 0);
+export function stop(player) {
+  return startSeeking(pause(player), 0);
 }
 
 export function togglePlay(player, track, tracklist) {
-  if (hasTag(player, ':player/empty')) {
+  if (player[':player/is-empty']) {
     return play(useTracklist(useTrack(player, track), tracklist));
   }
 
@@ -53,93 +60,116 @@ export function togglePlay(player, track, tracklist) {
 
   var result = useTrack(player, track);
 
-  if (tracklist !== player.tracklist) {
+  if (tracklist !== player[':player/tracklist']) {
     result = useTracklist(result, tracklist);
   }
 
-  if (track.id !== player.track.id) {
+  if (track.id !== player[':player/track'].id) {
     result = play(result);
   }
 
-  if (track.id === player.track.id) {
+  if (track.id === player[':player/track'].id) {
     result = togglePlayState(result);
   }
 
   return result;
 }
 
-export function useTrack(player, track) {
-  return merge(removeTag(player, ':player/empty'), { track: track });
+export function updatePosition(player, position) {
+  return merge(player, {
+    ':player/position': position
+  });
 }
 
-export function togglePlayState(p) {
-  return toggleTag(p, ':player/is-playing');
+export function updateLoadingData(player, bytesLoaded, bytesTotal) {
+  return merge(player, {
+    ':player/bytesLoaded': bytesLoaded,
+    ':player/bytesTotal': bytesTotal
+  });
+}
+
+export function useTrack(player, track) {
+  return merge(player, {
+    ':player/is-empty': false,
+    ':player/track': track
+  });
+}
+
+export function togglePlayState(player) {
+  return Object.assign(player, {
+    ':player/is-playing': !player[':player/is-playing']
+  });
 }
 
 export function forward(player, amount) {
-  var duration = player.track.duration * 1000;
-  var seekToPosition = player.position + amount > duration ? duration : player.position + amount;
+  var duration = player[':player/track'].duration * 1000;
+  var seekToPosition = player[':player/position'] + amount > duration ? duration : player[':player/position'] + amount;
 
   return startSeeking(player, seekToPosition);
 }
 
 export function rewind(player, amount) {
-  var duration = player.track.duration * 1000;
-  var seekToPosition = player.position > amount ? player.position - amount : 0;
+  var duration = player[':player/track'].duration * 1000;
+  var seekToPosition = player[':player/position'] > amount ? player[':player/position'] - amount : 0;
 
   return startSeeking(player, seekToPosition);
 }
 
 export function startSeeking(player, seekToPosition) {
-  return merge(addTag(player, ':player/seek-to-position'), { seekToPosition });
+  return merge(player, {
+    ':player/is-seeking': true,
+    ':player/seek-to-position': seekToPosition
+  });
 }
 
 export function finishSeeking(player) {
-  return merge(omit(removeTag(player, ':player/seek-to-position'), 'seekToPosition'), {
-    position: player.seekToPosition
+  return merge(player, {
+    ':player/is-seeking': false,
+    ':player/seek-to-position': 0,
+    ':player/position': player[':player/seek-to-position']
   });
 }
 
 export function nextTrack(p) {
-  if (isLastTrack(p.tracklist, p.track)) {
+  if (isLastTrack(p[':player/tracklist'], p[':player/track'])) {
     return stop(p);
   }
 
-  return merge(p, {
-    track: nextAfter(p.tracklist, p.track)
-  });
+  return useTrack(p, nextAfter(p[':player/tracklist'], p[':player/track']));
 }
 
 export function useTracklist(p, tracklist) {
-  if (hasTag(p, ':player/empty') && tracklist.length > 0) {
-    return removeTag(merge(p, { track: tracklist[0] }), ':player/empty');
+  if (p[':player/is-empty'] && tracklist.length > 0) {
+    return useTrack(p, tracklist[0]);
   }
 
-  return merge(p, { tracklist });
+  return merge(p, {
+    ':player/tracklist': tracklist
+  });
 }
 
 export function relativePosition(p) {
-  if (p.track.duration === 0) {
+  if (p[':player/track'].duration === 0) {
     return 0;
   }
 
-  return p.position / p.track.duration / 1000;
+  return p[':player/position'] / p[':player/track'].duration / 1000;
 }
 
 export function relativeSeekPosition(p) {
-  if (p.track.duration === 0) {
+  if (p[':player/track'].duration === 0) {
     return 0;
   }
 
-  return p.seekPosition / p.track.duration / 1000;
+  return p[':player/seek-to-position'] / p.track.duration / 1000;
 }
 
 export function relativeLoaded(p) {
-  if (p.bytesTotal === 0) {
+  if (p[':player/bytesTotal'] === 0) {
     return 0;
   }
 
-  return p.bytesLoaded / p.bytesTotal;
+  return p[':player/bytesLoaded'] / p[':player/bytesTotal'];
 }
 
 function isLastTrack(tracklist, track) {

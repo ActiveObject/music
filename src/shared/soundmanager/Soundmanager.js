@@ -16,7 +16,7 @@ class Soundmanager extends React.Component {
 
     this.unsub = subscribeWith(emitterOn, (on) => {
       on(SoundDriver, 'whileplaying', (position) => {
-        if (!this.props.player.seeking) {
+        if (!this.props.isSeeking) {
           this.props.dispatch(updatePosition(position));
         }
       });
@@ -38,12 +38,12 @@ class Soundmanager extends React.Component {
     this.unsub();
   }
 
-  componentWillUpdate({ player, dispatch }) {
-    if (hasTag(player, ':player/seek-to-position')) {
+  componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
+    if (isSeeking) {
       dispatch(finishSeeking());
     }
 
-    SoundDriver.tick(player);
+    SoundDriver.tick(track, isPlaying, isSeeking, seekToPosition);
   }
 
   render() {
@@ -75,4 +75,9 @@ function fetchUrl(audio, callback) {
   }, callback);
 }
 
-export default connect(state => ({ player: state.player }))(Soundmanager);
+export default connect(state => ({
+  isSeeking: state[':player/is-seeking'],
+  isPlaying: state[':player/is-playing'],
+  track: state[':player/track'],
+  seekToPosition: state[':player/seek-to-position']
+}))(Soundmanager);

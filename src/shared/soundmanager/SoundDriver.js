@@ -25,16 +25,14 @@ SoundDriver.prototype.setup = function (options) {
   }));
 };
 
-SoundDriver.prototype.tick = function (player) {
+SoundDriver.prototype.tick = function (track, isPlaying, isSeeking, seekToPosition) {
   if (!hasTag(this.state, ':sm/ready')) {
     return;
   }
 
-  if (!player.track) {
+  if (!track) {
     return;
   }
-
-  var track = player.track;
 
   if (this.track && (track.id !== this.track.id || track.url !== this.track.url)) {
     console.log(`[SoundDriver] destroy sound for ${toString(this.track)}`);
@@ -46,20 +44,20 @@ SoundDriver.prototype.tick = function (player) {
     this.sound = this.createSound(track);
   }
 
-  if (!hasTag(player, ':player/is-playing') && !this.sound.paused) {
+  if (!isPlaying && !this.sound.paused) {
     return this.sound.pause();
   }
 
-  if (hasTag(player, ':player/is-playing') && this.sound.playState === 0) {
+  if (isPlaying && this.sound.playState === 0) {
     return this.sound.play();
   }
 
-  if (hasTag(player, ':player/is-playing') && this.sound.paused) {
+  if (isPlaying && this.sound.paused) {
     return this.sound.resume();
   }
 
-  if (hasTag(player, ':player/seek-to-position')) {
-    return this.sound.setPosition(player.seekToPosition);
+  if (isSeeking) {
+    return this.sound.setPosition(seekToPosition);
   }
 };
 

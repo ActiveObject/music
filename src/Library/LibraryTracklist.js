@@ -22,7 +22,7 @@ class LibraryTracklist extends React.Component {
   }
 
   render() {
-    var tracks = makeTracks(this.state.cache, this.props.player, this.props.library, this.props.shuffledLibrary);
+    var tracks = makeTracks(this.state.cache, this.props.library);
 
     return (
       <LibrarySync cache={this.state.cache} onSync={(c) => this.updateCache(c)} >
@@ -39,12 +39,13 @@ class LibraryTracklist extends React.Component {
   }
 }
 
-function makeTracks(cache, player, library, shuffledLibrary) {
-  var tracklist = hasTag(player, ':player/is-shuffled') ? shuffledLibrary : library;
-
-  return tracklist
+function makeTracks(cache, library) {
+  return library
     .filter(t => cache.has(t.trackId))
     .map(t => cache.get(t.trackId));
 }
 
-export default connect(state => ({ player: state.player, library: state.library, shuffledLibrary: state.shuffledLibrary }))(LibraryTracklist);
+export default connect(state => ({
+  library: state.library,
+  shuffledLibrary: state.shuffledLibrary
+}))(LibraryTracklist);

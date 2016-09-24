@@ -13,10 +13,10 @@ class PlayerSync extends React.Component {
   }
 
   componentDidUpdate() {
-    var player = this.props.player;
+    var { isPlayerEmpty, track } = this.props;
 
-    if (!hasTag(player, ':player/empty')) {
-      localStorage.setItem(':cache/player', JSON.stringify(player.track));
+    if (!isPlayerEmpty) {
+      localStorage.setItem(':cache/player', JSON.stringify(track));
     }
   }
 
@@ -25,4 +25,7 @@ class PlayerSync extends React.Component {
   }
 }
 
-export default connect(state => ({ player: state.player }))(PlayerSync);
+export default connect(state => ({
+  isPlayerEmpty: state[':player/is-empty'],
+  track: state[':player/track'] 
+}))(PlayerSync);

@@ -8,7 +8,7 @@ import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import './Library.css';
 import { toggleShuffle } from 'app/actions';
 
-let Library = ({ player, isShuffled, dispatch }) =>
+let Library = ({ dispatch }) =>
   <div className='Library'>
     <UserProfileCtrl />
 
@@ -17,7 +17,7 @@ let Library = ({ player, isShuffled, dispatch }) =>
         <div className='toolbar-container'>
           <div className='toolbar'>
             <span
-              className={cx({ 'action': true, 'action--active': isShuffled })}
+              className={cx({ 'action': true, 'action--active': false })}
               onClick={() => dispatch(toggleShuffle())}>shuffle</span>
           </div>
         </div>
@@ -28,4 +28,4 @@ let Library = ({ player, isShuffled, dispatch }) =>
     <PlayBtnCtrl />
   </div>
 
-export default connect(state => ({ player: state.player, isShuffled: state.isShuffled }))(Library);
+export default connect()(Library);
