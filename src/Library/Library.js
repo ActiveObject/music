@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { hasTag } from 'app/shared/Tag';
 import LibraryTracklist from 'app/library/LibraryTracklist';
 import Layer from 'app/shared/Layer';
-import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';
+import ProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import './Library.css';
 import { toggleShuffle } from 'app/actions';

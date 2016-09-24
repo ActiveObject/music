@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { Motion, spring } from 'react-motion';
 import { hasTag } from 'app/shared/Tag';
-import Profile from './Profile';
+import UserProfile from './UserProfile';
 
-const ProfileCtrl = ({ user }) => {
+const UserProfileCtrl = ({ user }) => {
   var isLoaded = hasTag(user, ':user/is-loaded');
 
   return (
@@ -22,12 +21,12 @@ const ProfileCtrl = ({ user }) => {
         zoom: spring(isLoaded ? 100 : 80)
       }}>
       {interpolated =>
-        <div className='main-layout__profile'>
-          <Profile user={user} opacity={interpolated.opacity / 100} rotationAngle={interpolated.rotate} zoom={interpolated.zoom / 100} />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '20px 30px'}}>
+          <UserProfile user={user} opacity={interpolated.opacity / 100} rotationAngle={interpolated.rotate} zoom={interpolated.zoom / 100} />
         </div>
       }
     </Motion>
   );
 }
 
-export default connect(state => ({ user: state.user }))(ProfileCtrl);
+export default connect(state => ({ user: state.user }))(UserProfileCtrl);

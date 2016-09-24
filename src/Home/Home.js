@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'react-router/Link';
 import { Section, Header, Content } from 'app/shared/ResponsiveGrid';
-import ProfileCtrl from 'app/shared/user-profile/ProfileCtrl';
+import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import GroupsListContainer from './GroupsListContainer';
 import LibraryStaticTracklist from './LibraryStaticTracklist';
@@ -10,7 +10,7 @@ let Home = () =>
   <div className='Home'>
     <div className='scroll-container'>
       <Section>
-        <ProfileCtrl />
+        <UserProfileCtrl />
       </Section>
 
       <Section>
