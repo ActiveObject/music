@@ -9,25 +9,19 @@ import 'app/shared/ResponsiveGrid.css';
 let Home = () =>
   <div className='Home'>
     <div className='scroll-container'>
-      <div className='section'>
-        <UserProfileCtrl />
-      </div>
+      <UserProfileCtrl />
 
-      <div className='section'>
-        <div className='content'>
-          <div className='header'>
-            <Link to='/library'>Library</Link>
-          </div>
-          <LibraryStaticTracklist />
-        </div>
-      </div>
+      <section>
+        <header>
+          <Link to='/library'>Library</Link>
+        </header>
+        <LibraryStaticTracklist />
+      </section>
 
-      <div className='section page-section'>
-        <div className='content'>
-          <div className='header'>Groups</div>
-          <GroupsListContainer />
-        </div>
-      </div>
+      <section className='page-section'>
+        <header>Groups</header>
+        <GroupsListContainer />
+      </section>
     </div>
 
     <PlayBtnCtrl />

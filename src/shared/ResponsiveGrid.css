@@ -1,13 +1,13 @@
-.section {
+section {
   width: 100%;
 }
 
-.content {
+section > * {
   width: 800px;
   margin: 0 auto;
 }
 
-.header {
+header {
   padding: 20px 0;
   font-size: 2rem;
   font-weight: 100;
@@ -15,12 +15,13 @@
 }
 
 @media screen and (max-width: 768px) {
-  .content {
+  section > * {
     width: 100%;
     padding: 0 15px;
   }
 
-  .header {
+  header {
     font-size: 1.5rem;
+    padding: 20px 0;
   }
 }
