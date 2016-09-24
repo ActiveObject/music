@@ -1,7 +1,4 @@
-import { List } from 'immutable';
-import omit from 'lodash/omit';
 import merge from 'app/shared/merge';
-import { hasTag, toggleTag, removeTag, addTag } from 'app/shared/Tag';
 
 export function createPlayer() {
   return {
