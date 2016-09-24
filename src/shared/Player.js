@@ -33,143 +33,143 @@ export function reducer(state, action) {
   return state;
 }
 
-export function play(player) {
-  return merge(player, {
+function play(state) {
+  return merge(state, {
     ':player/is-playing': true
   });
 }
 
-export function pause(player) {
-  return merge(player, {
+function pause(state) {
+  return merge(state, {
     ':player/is-playing': false
   });
 }
 
-export function stop(player) {
-  return startSeeking(pause(player), 0);
+function stop(state) {
+  return startSeeking(pause(state), 0);
 }
 
-export function togglePlay(player, track, tracklist) {
-  if (player[':player/is-empty']) {
-    return play(useTracklist(useTrack(player, track), tracklist));
+function togglePlay(state, track, tracklist) {
+  if (state[':player/is-empty']) {
+    return play(useTracklist(useTrack(state, track), tracklist));
   }
 
   if (arguments.length === 1) {
-    return togglePlayState(player);
+    return togglePlayState(state);
   }
 
-  var result = useTrack(player, track);
+  var result = useTrack(state, track);
 
-  if (tracklist !== player[':player/tracklist']) {
+  if (tracklist !== state[':player/tracklist']) {
     result = useTracklist(result, tracklist);
   }
 
-  if (track.id !== player[':player/track'].id) {
+  if (track.id !== state[':player/track'].id) {
     result = play(result);
   }
 
-  if (track.id === player[':player/track'].id) {
+  if (track.id === state[':player/track'].id) {
     result = togglePlayState(result);
   }
 
   return result;
 }
 
-export function updatePosition(player, position) {
-  return merge(player, {
+function updatePosition(state, position) {
+  return merge(state, {
     ':player/position': position
   });
 }
 
-export function updateLoadingData(player, bytesLoaded, bytesTotal) {
-  return merge(player, {
+function updateLoadingData(state, bytesLoaded, bytesTotal) {
+  return merge(state, {
     ':player/bytesLoaded': bytesLoaded,
     ':player/bytesTotal': bytesTotal
   });
 }
 
-export function useTrack(player, track) {
-  return merge(player, {
+function useTrack(state, track) {
+  return merge(state, {
     ':player/is-empty': false,
     ':player/track': track
   });
 }
 
-export function togglePlayState(player) {
-  return Object.assign(player, {
-    ':player/is-playing': !player[':player/is-playing']
+function togglePlayState(state) {
+  return Object.assign(state, {
+    ':player/is-playing': !state[':player/is-playing']
   });
 }
 
-export function forward(player, amount) {
-  var duration = player[':player/track'].duration * 1000;
-  var seekToPosition = player[':player/position'] + amount > duration ? duration : player[':player/position'] + amount;
+function forward(state, amount) {
+  var duration = state[':player/track'].duration * 1000;
+  var seekToPosition = state[':player/position'] + amount > duration ? duration : state[':player/position'] + amount;
 
-  return startSeeking(player, seekToPosition);
+  return startSeeking(state, seekToPosition);
 }
 
-export function rewind(player, amount) {
-  var duration = player[':player/track'].duration * 1000;
-  var seekToPosition = player[':player/position'] > amount ? player[':player/position'] - amount : 0;
+function rewind(state, amount) {
+  var duration = state[':player/track'].duration * 1000;
+  var seekToPosition = state[':player/position'] > amount ? state[':player/position'] - amount : 0;
 
-  return startSeeking(player, seekToPosition);
+  return startSeeking(state, seekToPosition);
 }
 
-export function startSeeking(player, seekToPosition) {
-  return merge(player, {
+function startSeeking(state, seekToPosition) {
+  return merge(state, {
     ':player/is-seeking': true,
     ':player/seek-to-position': seekToPosition
   });
 }
 
-export function finishSeeking(player) {
-  return merge(player, {
+function finishSeeking(state) {
+  return merge(state, {
     ':player/is-seeking': false,
     ':player/seek-to-position': 0,
-    ':player/position': player[':player/seek-to-position']
+    ':player/position': state[':player/seek-to-position']
   });
 }
 
-export function nextTrack(p) {
-  if (isLastTrack(p[':player/tracklist'], p[':player/track'])) {
-    return stop(p);
+function nextTrack(state) {
+  if (isLastTrack(state[':player/tracklist'], state[':player/track'])) {
+    return stop(state);
   }
 
-  return useTrack(p, nextAfter(p[':player/tracklist'], p[':player/track']));
+  return useTrack(state, nextAfter(state[':player/tracklist'], state[':player/track']));
 }
 
-export function useTracklist(p, tracklist) {
-  if (p[':player/is-empty'] && tracklist.length > 0) {
-    return useTrack(p, tracklist[0]);
+function useTracklist(state, tracklist) {
+  if (state[':player/is-empty'] && tracklist.length > 0) {
+    return useTrack(state, tracklist[0]);
   }
 
-  return merge(p, {
+  return merge(state, {
     ':player/tracklist': tracklist
   });
 }
 
-export function relativePosition(p) {
-  if (p[':player/track'].duration === 0) {
+function relativePosition(state) {
+  if (state[':player/track'].duration === 0) {
     return 0;
   }
 
-  return p[':player/position'] / p[':player/track'].duration / 1000;
+  return state[':player/position'] / state[':player/track'].duration / 1000;
 }
 
-export function relativeSeekPosition(p) {
-  if (p[':player/track'].duration === 0) {
+function relativeSeekPosition(state) {
+  if (state[':player/track'].duration === 0) {
     return 0;
   }
 
-  return p[':player/seek-to-position'] / p.track.duration / 1000;
+  return state[':player/seek-to-position'] / state.track.duration / 1000;
 }
 
-export function relativeLoaded(p) {
-  if (p[':player/bytesTotal'] === 0) {
+function relativeLoaded(state) {
+  if (state[':player/bytesTotal'] === 0) {
     return 0;
   }
 
-  return p[':player/bytesLoaded'] / p[':player/bytesTotal'];
+  return state[':player/bytesLoaded'] / state[':player/bytesTotal'];
 }
 
 function isLastTrack(tracklist, track) {
