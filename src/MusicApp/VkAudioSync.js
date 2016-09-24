@@ -5,8 +5,10 @@ import { pushLibrary } from 'app/actions';
 
 class VkAudioSync extends React.Component {
   componentWillMount() {
-    this.stopUpdating = startTrackUpdating(this.props.user, 10 * 1000, res => {
-      this.props.dispatch(pushLibrary(res.response.map(t => {
+    var { userId, dispatch } = this.props;
+
+    this.stopUpdating = startTrackUpdating(userId, 10 * 1000, res => {
+      dispatch(pushLibrary(res.response.map(t => {
         return {
           tag: ':track-source/library',
           trackId: String(t)
@@ -20,11 +22,11 @@ class VkAudioSync extends React.Component {
   }
 }
 
-function startTrackUpdating(user, interval, callback) {
+function startTrackUpdating(userId, interval, callback) {
   var timer = null;
 
   function next() {
-    updateTracks(user, res => {
+    updateTracks(userId, res => {
       callback(res);
       timer = setTimeout(() => next(), interval);
     });
@@ -37,8 +39,8 @@ function startTrackUpdating(user, interval, callback) {
   };
 }
 
-function updateTracks(user, callback) {
-  loadAllAudioIds(user.id, (err, res) => {
+function updateTracks(userId, callback) {
+  loadAllAudioIds(userId, (err, res) => {
     if (err) {
       return console.log(err);
     }
@@ -55,4 +57,6 @@ function loadAllAudioIds(owner, callback) {
   }, callback);
 }
 
-export default connect(state => ({ user: state.user }))(VkAudioSync);
+export default connect(state => ({
+  userId: state[':app/userId']
+}))(VkAudioSync);

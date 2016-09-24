@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import difference from 'lodash/difference';
-
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import * as Track from 'app/shared/Track';
@@ -20,14 +19,12 @@ class LibrarySync extends React.Component {
   }
 
   sync() {
-    var user = this.props.user;
-    var albums = this.props.albums;
-    var library = this.props.library;
-    var idsInCache = [...this.props.cache.keys()];
+    var { userId, albums, library, cache } = this.props;
+    var idsInCache = [...cache.keys()];
     var idsInLibrary = library.map(t => t.trackId)
     var outdated = difference(idsInCache, idsInLibrary);
     var missing = difference(idsInLibrary, idsInCache);
-    var itemsToLoad = missing.map(id => ({ owner: user.id, id }));
+    var itemsToLoad = missing.map(id => ({ owner: userId, id }));
 
     console.log(`[LibrarySync] ${missing.length} missing, ${outdated.length} outdated`);
 
@@ -57,4 +54,8 @@ function loadTracksById(items, callback) {
   }, callback);
 }
 
-export default connect(state => ({ user: state.user, albums: state.albums, library: state.library }))(LibrarySync);
+export default connect(state => ({
+  userId: state[':app/user'],
+  albums: state.albums,
+  library: state.library
+}))(LibrarySync);

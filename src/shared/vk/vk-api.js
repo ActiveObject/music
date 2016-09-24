@@ -33,11 +33,11 @@ VkApi.prototype.stop = function () {
   }
 };
 
-VkApi.prototype.authorize = function (user) {
+VkApi.prototype.authorize = function (userId, accessToken) {
   this.state = {
     isAuthorized: true,
-    user: user.id,
-    token: user.accessToken
+    user: userId,
+    token: accessToken
   };
 };
 

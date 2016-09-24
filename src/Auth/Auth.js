@@ -48,7 +48,7 @@ class Auth extends React.Component {
   }
 
   render() {
-    if (!hasTag(this.props.user, ':user/authenticated')) {
+    if (!this.props.isAuthenticated) {
       return <AuthView url={AUTH_URL} />
     }
 
@@ -56,4 +56,4 @@ class Auth extends React.Component {
   }
 }
 
-export default connect(state => ({ user: state.user }), null, null, { pure: false })(Auth);
+export default connect(state => ({ isAuthenticated: state[':app/isAuthenticated'] }), null, null, { pure: false })(Auth);

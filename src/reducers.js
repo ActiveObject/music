@@ -4,9 +4,7 @@ import { addTag } from 'app/shared/Tag';
 
 function createDefaultState() {
   return Object.assign({
-    user: {
-      tag: ':app/user'
-    },
+    ':app/isAuthenticated': false,
     groups: [],
     library: [],
     albums: Map()
@@ -16,23 +14,11 @@ function createDefaultState() {
 export default function (state = createDefaultState(), action) {
   var state = player(state, action);
 
-  if (action.type === 'USER_AUTHENTICATE') {
+  if (action.type === 'AUTHENTICATE') {
     return Object.assign({}, state, {
-      user: {
-        tag: [':app/user', ':user/authenticated'],
-        id: action.userId,
-        accessToken: action.accessToken
-      }
-    });
-  }
-
-  if (action.type === 'USER_LOADED') {
-    return Object.assign({}, state, {
-      user: addTag(Object.assign({}, state.user, {
-        photo50: action.photo50,
-        firstName: action.firstName,
-        lastName: action.lastName
-      }), ':user/is-loaded')
+      ':app/isAuthenticated': true,
+      ':app/userId': action.userId,
+      ':app/accessToken': action.accessToken
     });
   }
 
