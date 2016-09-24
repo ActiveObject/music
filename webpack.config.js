@@ -42,7 +42,7 @@ module.exports = function (env) {
     },
 
     resolve: {
-      extensions: ['', '.js', '.jsx']
+      extensions: ['', '.js']
     },
 
     plugins: plugins,
