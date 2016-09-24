@@ -3,31 +3,24 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 import { hasTag } from 'app/shared/Tag';
 import LibraryTracklist from 'app/library/LibraryTracklist';
-import ProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
+import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import './Library.css';
 import { toggleShuffle } from 'app/actions';
 
-let Toolbar = ({ player, isShuffled, dispatch }) =>
-  <div className='toolbar-container'>
-    <div className='toolbar'>
-      <span
-        className={cx({ 'action': true, 'action--active': isShuffled })}
-        onClick={() => dispatch(toggleShuffle())}>shuffle</span>
-    </div>
-  </div>
-
-Toolbar = connect(state => ({ player: state.player, isShuffled: state.isShuffled }))(Toolbar);
-
-let Library = () =>
+let Library = ({ player, isShuffled, dispatch }) =>
   <div className='Library'>
-    <div className='layer'>
-      <ProfileCtrl />
-    </div>
+    <UserProfileCtrl />
 
     <div className='layer'>
       <div className='Library__body'>
-        <Toolbar />
+        <div className='toolbar-container'>
+          <div className='toolbar'>
+            <span
+              className={cx({ 'action': true, 'action--active': isShuffled })}
+              onClick={() => dispatch(toggleShuffle())}>shuffle</span>
+          </div>
+        </div>
         <LibraryTracklist />
       </div>
     </div>
@@ -35,4 +28,4 @@ let Library = () =>
     <PlayBtnCtrl />
   </div>
 
-export default Library;
+export default connect(state => ({ player: state.player, isShuffled: state.isShuffled }))(Library);
