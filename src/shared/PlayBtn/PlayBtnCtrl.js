@@ -10,5 +10,5 @@ const PlayBtnCtrl = ({ isPlaying, dispatch }) =>
   </div>
 
 export default connect(state => ({
-  isPlaying: state[':player/is-playing']
+  isPlaying: state[':player/isPlaying']
 }))(PlayBtnCtrl);

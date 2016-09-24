@@ -26,6 +26,6 @@ class PlayerSync extends React.Component {
 }
 
 export default connect(state => ({
-  isPlayerEmpty: state[':player/is-empty'],
+  isPlayerEmpty: state[':player/isEmpty'],
   track: state[':player/track'] 
 }))(PlayerSync);

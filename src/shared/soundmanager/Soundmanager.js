@@ -76,8 +76,8 @@ function fetchUrl(audio, callback) {
 }
 
 export default connect(state => ({
-  isSeeking: state[':player/is-seeking'],
-  isPlaying: state[':player/is-playing'],
+  isSeeking: state[':player/isSeeking'],
+  isPlaying: state[':player/isPlaying'],
   track: state[':player/track'],
-  seekToPosition: state[':player/seek-to-position']
+  seekToPosition: state[':player/seekToPosition']
 }))(Soundmanager);

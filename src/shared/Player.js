@@ -2,14 +2,14 @@ import merge from 'app/shared/merge';
 
 export function createPlayer() {
   return {
-    ':player/is-empty': true,
-    ':player/is-playing': false,
+    ':player/isEmpty': true,
+    ':player/isPlaying': false,
     ':player/position': 0,
     ':player/bytesTotal': 0,
     ':player/bytesLoaded': 0,
     ':player/tracklist': [],
-    ':player/seek-to-position': 0,
-    ':player/is-seeking': false
+    ':player/seekToPosition': 0,
+    ':player/isSeeking': false
   };
 }
 
@@ -32,13 +32,13 @@ export function reducer(state, action) {
 
 function play(state) {
   return merge(state, {
-    ':player/is-playing': true
+    ':player/isPlaying': true
   });
 }
 
 function pause(state) {
   return merge(state, {
-    ':player/is-playing': false
+    ':player/isPlaying': false
   });
 }
 
@@ -47,7 +47,7 @@ function stop(state) {
 }
 
 function togglePlay(state, track, tracklist) {
-  if (state[':player/is-empty']) {
+  if (state[':player/isEmpty']) {
     return play(useTracklist(useTrack(state, track), tracklist));
   }
 
@@ -87,14 +87,14 @@ function updateLoadingData(state, bytesLoaded, bytesTotal) {
 
 function useTrack(state, track) {
   return merge(state, {
-    ':player/is-empty': false,
+    ':player/isEmpty': false,
     ':player/track': track
   });
 }
 
 function togglePlayState(state) {
   return Object.assign(state, {
-    ':player/is-playing': !state[':player/is-playing']
+    ':player/isPlaying': !state[':player/isPlaying']
   });
 }
 
@@ -114,16 +114,16 @@ function rewind(state, amount) {
 
 function startSeeking(state, seekToPosition) {
   return merge(state, {
-    ':player/is-seeking': true,
-    ':player/seek-to-position': seekToPosition
+    ':player/isSeeking': true,
+    ':player/seekToPosition': seekToPosition
   });
 }
 
 function finishSeeking(state) {
   return merge(state, {
-    ':player/is-seeking': false,
-    ':player/seek-to-position': 0,
-    ':player/position': state[':player/seek-to-position']
+    ':player/isSeeking': false,
+    ':player/seekToPosition': 0,
+    ':player/position': state[':player/seekToPosition']
   });
 }
 
@@ -136,7 +136,7 @@ function nextTrack(state) {
 }
 
 function useTracklist(state, tracklist) {
-  if (state[':player/is-empty'] && tracklist.length > 0) {
+  if (state[':player/isEmpty'] && tracklist.length > 0) {
     return useTrack(state, tracklist[0]);
   }
 
@@ -158,7 +158,7 @@ function relativeSeekPosition(state) {
     return 0;
   }
 
-  return state[':player/seek-to-position'] / state.track.duration / 1000;
+  return state[':player/seekToPosition'] / state.track.duration / 1000;
 }
 
 function relativeLoaded(state) {

@@ -21,6 +21,6 @@ function TrackCtrl({ position, isPlayerEmpty, currentTrack, track, tracklist, di
 
 export default connect(state => ({
   position: state[':player/position'],
-  isPlayerEmpty: state[':player/is-empty'],
+  isPlayerEmpty: state[':player/isEmpty'],
   currentTrack: state[':player/track']
 }))(TrackCtrl);
