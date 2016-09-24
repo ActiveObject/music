@@ -31,13 +31,6 @@ body,
   overflow: hidden;
 }
 
-.main-layout__play-btn {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  padding: 20px 30px;
-}
-
 .main-layout__profile {
   padding: 20px 30px;
   display: flex;

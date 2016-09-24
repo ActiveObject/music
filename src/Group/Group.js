@@ -66,9 +66,7 @@ class Group extends React.Component {
           </Section>
         </div>
 
-        <div className='main-layout__play-btn'>
-          <PlayBtnCtrl />
-        </div>
+        <PlayBtnCtrl />
       </div>
     )
   }
