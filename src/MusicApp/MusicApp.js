@@ -23,23 +23,25 @@ import './styles/theme.css';
 let MusicApp = () =>
   <Router>
     <Auth>
-      <div>
-        <Match exactly pattern='/' component={UserProfileCtrl} />
-        <Match pattern='/library' component={UserProfileCtrl} />
+      <Soundmanager>
+        <div>
+          <Match exactly pattern='/' component={UserProfileCtrl} />
+          <Match pattern='/library' component={UserProfileCtrl} />
 
-        <Match exactly pattern='/' component={Home} />
-        <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
-        <Match pattern='/library' component={Library} />
+          <Match exactly pattern='/' component={Home} />
+          <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
+          <Match pattern='/library' component={Library} />
 
-        <PlayBtnCtrl />
+          <PlayBtnCtrl />
 
-        <VkAudioSync />
-        <VkGroupSync />
-        <VkDriver />
-        <Soundmanager />
-        <PlayerSync />
-        <KeyboardDriver />
-      </div>
+          <VkAudioSync />
+          <VkGroupSync />
+          <VkDriver />
+          <Soundmanager />
+          <PlayerSync />
+          <KeyboardDriver />
+        </div>
+      </Soundmanager>
     </Auth>
   </Router>
 

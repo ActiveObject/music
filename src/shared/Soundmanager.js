@@ -6,6 +6,17 @@ import { toString } from 'app/shared/Track';
 import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/playerActions';
 
 class Soundmanager extends React.Component {
+  constructor() {
+    super();
+    this.state = { audio: undefined };
+  }
+
+  getChildContext() {
+    return {
+      audio: this.state.audio
+    };
+  }
+
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
     if (isSeeking) {
       dispatch(finishSeeking());
@@ -24,6 +35,7 @@ class Soundmanager extends React.Component {
       console.log(`[SoundDriver] create audio ${toString(track)}`);
       this.track = track;
       this.audio = new Audio(track.url);
+      this.setState({ audio: this.audio });
 
       var onStalled = () => {
         console.log(`[SoundDriver] stalled ${toString(track)}`);
@@ -73,9 +85,13 @@ class Soundmanager extends React.Component {
   }
 
   render() {
-    return null;
+    return this.props.children;
   }
 }
+
+Soundmanager.childContextTypes = {
+  audio: React.PropTypes.instanceOf(Audio)
+};
 
 function reload(track, dispatch) {
   console.log(`[TrackCtrl] fetch url for ${toString(track)}`);
@@ -100,6 +116,16 @@ function fetchUrl(audio, callback) {
     `
   }, callback);
 }
+
+export class AudioProvider extends React.Component {
+  render() {
+    return this.props.children(this.context.audio);
+  }
+}
+
+AudioProvider.contextTypes = {
+  audio: React.PropTypes.instanceOf(Audio)
+};
 
 export default connect(state => ({
   isSeeking: state[':player/isSeeking'],
