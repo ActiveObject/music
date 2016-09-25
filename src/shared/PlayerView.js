@@ -9,7 +9,7 @@ const PlayerView = ({ track }) =>
     <div className='PlayerView__top'>
       <div className='PlayerView__visualization'>
         <AudioProvider>
-          {audio => <FrequencyBar audio={audio} width={400} height={150} />}
+          {audio => <FrequencyBar audio={audio} width={360} height={150} />}
         </AudioProvider>
       </div>
       <div className='PlayerView__audio'></div>
@@ -20,8 +20,8 @@ class FrequencyBar extends React.Component {
   componentWillMount() {
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     this.analyser = this.audioCtx.createAnalyser();
-    this.analyser.minDecibels = -90;
-    this.analyser.maxDecibels = -10;
+    this.analyser.minDecibels = -80;
+    this.analyser.maxDecibels = -20;
     this.analyser.smoothingTimeConstant = 0.85;
     this.analyser.fftSize = 256;
     this.bufferLength = this.analyser.frequencyBinCount;
@@ -65,17 +65,24 @@ class FrequencyBar extends React.Component {
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, width, height);
 
-    var barWidth = (width / this.bufferLength) * 2.5;
+    var barWidth = Math.floor((width / this.bufferLength) * 2);
     var barHeight;
     var x = 0;
+    var y = 0;
+    var size = barWidth;
+    var margin = 2;
 
     for(var i = 0; i < this.bufferLength; i++) {
       barHeight = this.dataArray[i]/2;
 
-      ctx.fillStyle = '#f2f2f2';
-      ctx.fillRect(x, height / 2 - barHeight / 2, barWidth, barHeight);
+      for (var j = 0, count = Math.floor(barHeight / (size + margin)); j < count; j++) {
+        ctx.fillStyle = '#f2f2f2';
+        y = j * (size + margin);
+        ctx.fillRect(x, height / 2 - y, barWidth, size);
+        ctx.fillRect(x, height / 2 + y, barWidth, size);
+      }
 
-      x += barWidth + 1;
+      x += barWidth + margin;
     }
   }
 
