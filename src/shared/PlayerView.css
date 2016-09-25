@@ -33,3 +33,12 @@
   height: 150px;
   width: 100%;
 }
+
+.PlayerView__info {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-weight: 300;
+}

@@ -4,17 +4,28 @@ import { connect } from 'react-redux';
 import { AudioProvider } from 'app/shared/Soundmanager';
 import './PlayerView.css';
 
-const PlayerView = ({ track }) =>
-  <div className='PlayerView'>
-    <div className='PlayerView__top'>
-      <div className='PlayerView__visualization'>
-        <AudioProvider>
-          {audio => <FrequencyBar audio={audio} width={360} height={150} />}
-        </AudioProvider>
+const PlayerView = ({ track }) => {
+  var artist = track && track.artist;
+  var title = track && track.title;
+
+  return (
+    <div className='PlayerView'>
+      <div className='PlayerView__top'>
+        <div className='PlayerView__visualization'>
+          <AudioProvider>
+            {audio => <FrequencyBar audio={audio} width={360} height={150} />}
+          </AudioProvider>
+        </div>
+        <div className='PlayerView__audio'></div>
       </div>
-      <div className='PlayerView__audio'></div>
+
+      <div className='PlayerView__info'>
+        <div className='PlayerView__artist'>{artist}</div>
+        <div className='PlayerView__title'>{title}</div>
+      </div>
     </div>
-  </div>
+  )
+}
 
 class FrequencyBar extends React.Component {
   componentWillMount() {
@@ -65,7 +76,7 @@ class FrequencyBar extends React.Component {
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, width, height);
 
-    var barWidth = Math.floor((width / this.bufferLength) * 2);
+    var barWidth = Math.floor(width / this.bufferLength);
     var barHeight;
     var x = 0;
     var y = 0;
@@ -73,10 +84,10 @@ class FrequencyBar extends React.Component {
     var margin = 2;
 
     for(var i = 0; i < this.bufferLength; i++) {
-      barHeight = this.dataArray[i]/2;
+      barHeight = this.dataArray[i] / 4;
 
       for (var j = 0, count = Math.floor(barHeight / (size + margin)); j < count; j++) {
-        ctx.fillStyle = '#f2f2f2';
+        ctx.fillStyle = '#e2e2e2';
         y = j * (size + margin);
         ctx.fillRect(x, height / 2 - y, barWidth, size);
         ctx.fillRect(x, height / 2 + y, barWidth, size);
