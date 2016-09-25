@@ -7,7 +7,7 @@ import Group from 'app/Group';
 import Home from 'app/Home';
 import Library from 'app/Library';
 
-import Soundmanager from 'app/shared/soundmanager/Soundmanager';
+import Soundmanager from 'app/shared/Soundmanager';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
