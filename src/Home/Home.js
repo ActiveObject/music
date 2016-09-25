@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'react-router/Link';
+import PlayerView from 'app/shared/PlayerView';
 import GroupsListContainer from './GroupsListContainer';
 import LibraryStaticTracklist from './LibraryStaticTracklist';
 import 'app/shared/ResponsiveGrid.css';
@@ -17,6 +18,8 @@ let Home = () =>
       <header>Groups</header>
       <GroupsListContainer />
     </section>
+
+    <PlayerView />
   </div>
 
 export default Home;

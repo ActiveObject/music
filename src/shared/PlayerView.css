@@ -1,0 +1,10 @@
+.PlayerView {
+  position: fixed;
+  bottom: 100px;
+  left: 100px;
+  width: 400px;
+  height: 500px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  background-color: white;
+  border-radius: 2px;
+}
