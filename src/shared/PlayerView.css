@@ -7,4 +7,29 @@
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   background-color: white;
   border-radius: 2px;
+  padding: 50px 20px;
+}
+
+.PlayerView__top {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.PlayerView__audio {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 1px solid red;
+  background-color: white;
+}
+
+.PlayerView__visualization {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 150px;
+  width: 100%;
 }
