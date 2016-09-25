@@ -1,15 +1,8 @@
 import { EventEmitter } from 'events';
-import throttle from 'lodash/throttle';
-import { soundManager as sm } from 'soundmanager2';
 import merge from 'app/shared/merge';
-import { hasTag } from 'app/shared/Tag';
 import { toString } from 'app/shared/Track';
 
 function SoundDriver() {
-  this.state = {
-    tag: ':sm/uninitialized'
-  };
-
   this.setMaxListeners(100);
 }
 
@@ -17,95 +10,68 @@ SoundDriver.prototype = Object.create(EventEmitter.prototype, {
   constructor: { value: SoundDriver, enumerable: false }
 });
 
-SoundDriver.prototype.setup = function (options) {
-  sm.setup(merge(options, {
-    onready: () => {
-      this.state.tag = ':sm/ready';
-    }
-  }));
-};
-
 SoundDriver.prototype.tick = function (track, isPlaying, isSeeking, seekToPosition) {
-  if (!hasTag(this.state, ':sm/ready')) {
-    return;
-  }
-
   if (!track) {
     return;
   }
 
   if (this.track && (track.id !== this.track.id || track.url !== this.track.url)) {
     console.log(`[SoundDriver] destroy sound for ${toString(this.track)}`);
-    this.sound.destruct();
+    this.destroyAudio();
   }
 
   if (!this.track || track.id !== this.track.id || track.url !== this.track.url) {
     this.track = track;
-    this.sound = this.createSound(track);
+    this.destroyAudio = this.createAudio(track);
   }
 
-  if (!isPlaying && !this.sound.paused) {
-    return this.sound.pause();
+  if (!isPlaying && !this.audio.paused) {
+    return this.audio.pause();
   }
 
-  if (isPlaying && this.sound.playState === 0) {
-    return this.sound.play();
-  }
-
-  if (isPlaying && this.sound.paused) {
-    return this.sound.resume();
+  if (isPlaying && this.audio.paused) {
+    return this.audio.play();
   }
 
   if (isSeeking) {
-    return this.sound.setPosition(seekToPosition);
+    return this.audio.currentTime = seekToPosition / 1000;
   }
 };
 
-SoundDriver.prototype.createSound = function (track) {
-  console.log(`[SoundDriver] create sound for ${toString(track)}`);
+SoundDriver.prototype.createAudio = function (track) {
+  console.log(`[SoundDriver] create audio for ${toString(track)}`);
 
-  var sound = sm.createSound({
-    id: 'Audio(' + track.artist + ', ' + track.title + ')',
-    url: track.url,
-    autoLoad: false,
-    autoPlay: false,
-    volume: 100,
+  var audio = new Audio(track.url);
 
-    onload: () => {
-      if (this.sound.readyState === 2) {
-        var err = new Error(`Can\'t load audio ${toString(track)}`);
-        err.track = this.track;
-        this.emit('error', err);
-      }
-    },
-
-    onfinish: () => {
-      console.log(`[SoundDriver] finish`);
-      this.emit('finish', this.track);
-    },
-
-    whileplaying: throttle(() => {
-      if (this.sound.readyState !== 0) {
-        this.emit('whileplaying', this.sound.position);
-      }
-    }, 500),
-
-    whileloading: throttle(() => {
-      this.emit('whileloading', this.sound.bytesLoaded, this.sound.bytesTotal);
-    }, 500)
-  });
-
-  // Workaround issue with HTML5 stalled event that isn't
-  // passed through soundmanager Sound object
-  // See http://stackoverflow.com/questions/12027442/how-to-bind-the-html5stalled-event-from-soundmanager
-  sound._a.addEventListener('stalled', () => {
+  var onStalled = () => {
     console.log(`[SoundDriver] stalled ${toString(track)}`);
     var err = new Error(`Can\'t load audio ${toString(track)}`);
     err.track = this.track;
     this.emit('error', err);
-  });
+  }
 
-  return sound;
+  var onTimeUpdate = () => {
+    this.emit('whileplaying', audio.currentTime * 1000);
+  }
+
+  var onEnded = () => {
+    this.emit('finish');
+  }
+
+  audio.addEventListener('stalled', onStalled, false);
+  audio.addEventListener('timeupdate', onTimeUpdate, false);
+  audio.addEventListener('ended', onEnded, false);
+
+  this.audio = audio;
+
+  return function () {
+    audio.pause();
+    audio.src = '';
+    audio.load();
+    audio.removeEventListener('stalled', onStalled, false);
+    audio.removeEventListener('timeupdate', onTimeUpdate, false);
+    audio.removeEventListener('ended', onEnded, false);
+  };
 };
 
 export default new SoundDriver();

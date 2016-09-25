@@ -12,8 +12,6 @@ import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack
 
 class Soundmanager extends React.Component {
   componentWillMount() {
-    SoundDriver.setup({ debugMode: false });
-
     this.unsub = subscribeWith(emitterOn, (on) => {
       on(SoundDriver, 'whileplaying', (position) => {
         if (!this.props.isSeeking) {

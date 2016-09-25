@@ -45,8 +45,7 @@
     "react-redux": "^4.4.5",
     "react-responsive": "^1.1.2",
     "react-router": "^4.0.0-alpha.3",
-    "redux": "^3.5.2",
-    "soundmanager2": "2.97.20150601"
+    "redux": "^3.5.2"
   },
   "engines": {
     "node": "6.3.x"
