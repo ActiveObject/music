@@ -23,7 +23,6 @@ import './styles/theme.css';
 let MusicApp = () =>
   <Router>
     <Auth>
-      <Soundmanager>
         <div>
           <Match exactly pattern='/' component={UserProfileCtrl} />
           <Match pattern='/library' component={UserProfileCtrl} />
@@ -41,7 +40,6 @@ let MusicApp = () =>
           <PlayerSync />
           <KeyboardDriver />
         </div>
-      </Soundmanager>
     </Auth>
   </Router>
 

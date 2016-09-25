@@ -1,22 +1,14 @@
 import React from 'react';
+import { EventEmitter } from 'events';
 import { connect } from 'react-redux';
 import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
 import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/playerActions';
+import subscribeWith from 'app/shared/subscribeWith';
+import emitterOn from 'app/shared/emitterOn';
 
 class Soundmanager extends React.Component {
-  constructor() {
-    super();
-    this.state = { audio: undefined };
-  }
-
-  getChildContext() {
-    return {
-      audio: this.state.audio
-    };
-  }
-
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
     if (isSeeking) {
       dispatch(finishSeeking());
@@ -27,18 +19,20 @@ class Soundmanager extends React.Component {
     }
 
     if (this.track && (track.id !== this.track.id || track.url !== this.track.url)) {
-      console.log(`[SoundDriver] destroy audio ${toString(this.track)}`);
+      console.log(`[Soundmanager] destroy audio ${toString(this.track)}`);
       this.destroyAudio();
     }
 
     if (!this.track || track.id !== this.track.id || track.url !== this.track.url) {
-      console.log(`[SoundDriver] create audio ${toString(track)}`);
+      console.log(`[Soundmanager] create audio ${toString(track)}`);
       this.track = track;
       this.audio = new Audio(track.url);
-      this.setState({ audio: this.audio });
+      this.audio.crossOrigin = 'anonymous';
+      this.audio.track = toString(track);
+      this.context.audioEmitter.emit('change', this.audio);
 
       var onStalled = () => {
-        console.log(`[SoundDriver] stalled ${toString(track)}`);
+        console.log(`[Soundmanager] stalled ${toString(track)}`);
         reload(track, dispatch);
       }
 
@@ -89,8 +83,8 @@ class Soundmanager extends React.Component {
   }
 }
 
-Soundmanager.childContextTypes = {
-  audio: React.PropTypes.instanceOf(Audio)
+Soundmanager.contextTypes = {
+  audioEmitter: React.PropTypes.instanceOf(EventEmitter)
 };
 
 function reload(track, dispatch) {
@@ -118,18 +112,53 @@ function fetchUrl(audio, callback) {
 }
 
 export class AudioProvider extends React.Component {
+  constructor() {
+    super();
+    this.state = { audio: undefined };
+  }
+
+  componentWillMount() {
+    this.unsub = subscribeWith(emitterOn, on => {
+      on(this.context.audioEmitter, 'change', audio => {
+        this.setState({ audio });
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsub();
+  }
+
   render() {
-    return this.props.children(this.context.audio);
+    return this.props.children(this.state.audio);
   }
 }
 
 AudioProvider.contextTypes = {
-  audio: React.PropTypes.instanceOf(Audio)
+  audioEmitter: React.PropTypes.instanceOf(EventEmitter)
 };
 
-export default connect(state => ({
+Soundmanager = connect(state => ({
   isSeeking: state[':player/isSeeking'],
   isPlaying: state[':player/isPlaying'],
   track: state[':player/track'],
   seekToPosition: state[':player/seekToPosition']
 }))(Soundmanager);
+
+class AudioContextProvider extends React.Component {
+  getChildContext() {
+    return {
+      audioEmitter: new EventEmitter()
+    };
+  }
+
+  render() {
+    return (<Soundmanager>{this.props.children}</Soundmanager>);
+  }
+}
+
+AudioContextProvider.childContextTypes = {
+  audioEmitter: React.PropTypes.instanceOf(EventEmitter)
+};
+
+export default AudioContextProvider;
