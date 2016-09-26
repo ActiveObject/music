@@ -2,11 +2,11 @@ import React from 'react';
 import Link from 'react-router/Link';
 import MediaQuery from 'react-responsive';
 import GroupProfile from './GroupProfile';
-import GroupProfilePreview from './GroupProfilePreview';
 import GroupTop5Tracks from './GroupTop5Tracks';
 import GroupActivity from './GroupActivity';
 import FetchGroup from './FetchGroup';
 import 'app/shared/ResponsiveGrid.css';
+import './Group.css'
 
 let randomNum = (min, max) => min + Math.floor(Math.random() * (max - min));
 
@@ -30,14 +30,20 @@ const GroupListItem = ({ group }) =>
     </div>
   </div>
 
+const GroupProfilePreview = () =>
+  <div className='group-profile group-profile-preview'>
+    <div className='group-image'>
+      <div className='group-profile-preview__image' />
+    </div>
+    <span className='group-name'>
+      <div className='group-profile-preview__name' />
+    </span>
+  </div>
+
 const GroupFullscreen = ({ id }) =>
   <div className='Group'>
     <FetchGroup id={id}>
-      {({ isLoading, group }) =>
-        <GroupProfilePreview isActive={isLoading}>
-          <GroupProfile group={group} />
-        </GroupProfilePreview>
-      }
+      {({ isLoading, group }) => isLoading ? <GroupProfilePreview /> : <GroupProfile group={group} /> }
     </FetchGroup>
 
     <MediaQuery minAspectRatio='2/3'>

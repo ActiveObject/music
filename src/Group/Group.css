@@ -5,3 +5,14 @@
   width: 30px;
   border-radius: 50%;
 }
+
+.GroupsList__image {
+  border-radius: 50%;
+  margin: 0 10px;
+  overflow: hidden;
+  width: 4em;
+}
+
+.GroupsList__name {
+  width: 60%;
+}

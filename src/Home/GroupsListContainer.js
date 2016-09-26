@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import Link from 'react-router/Link';
 
 import GroupSync from './GroupSync';
 import Tracker from './Tracker';
 import Group from 'app/Group';
-
-import './GroupsList.css';
 
 class GroupsListContainer extends React.Component {
   constructor() {
