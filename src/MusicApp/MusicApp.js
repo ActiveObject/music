@@ -28,7 +28,7 @@ let MusicApp = () =>
         <Match pattern='/library' component={UserProfileCtrl} />
 
         <Match exactly pattern='/' component={Home} />
-        <Match pattern='/groups/:id' component={Group} />
+        <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
         <Match pattern='/library' component={Library} />
 
         <PlayBtnCtrl />
