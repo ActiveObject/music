@@ -4,7 +4,6 @@ import PlayerView from 'app/shared/PlayerView';
 import GroupsListContainer from './GroupsListContainer';
 import LibraryStaticTracklist from './LibraryStaticTracklist';
 import 'app/shared/ResponsiveGrid.css';
-import Soundmanager from 'app/shared/Soundmanager';
 
 let Home = () =>
   <div className='Home'>
@@ -19,10 +18,6 @@ let Home = () =>
       <header>Groups</header>
       <GroupsListContainer />
     </section>
-
-    <Soundmanager>
-      <PlayerView />
-    </Soundmanager>
   </div>
 
 export default Home;

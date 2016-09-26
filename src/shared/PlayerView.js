@@ -23,6 +23,8 @@ const PlayerView = ({ track }) => {
         <div className='PlayerView__artist'>{artist}</div>
         <div className='PlayerView__title'>{title}</div>
       </div>
+
+      <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 100, backgroundColor: 'white'}}></div>
     </div>
   )
 }
@@ -73,7 +75,7 @@ class FrequencyBar extends React.Component {
     this.drawVisual = requestAnimationFrame(this.draw.bind(this));
     this.analyser.getByteFrequencyData(this.dataArray);
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#FD76B3';
     ctx.fillRect(0, 0, width, height);
 
     var barWidth = Math.floor(width / this.bufferLength);
@@ -87,7 +89,7 @@ class FrequencyBar extends React.Component {
       barHeight = this.dataArray[i] / 4;
 
       for (var j = 0, count = Math.floor(barHeight / (size + margin)); j < count; j++) {
-        ctx.fillStyle = '#e2e2e2';
+        ctx.fillStyle = '#df699e';
         y = j * (size + margin);
         ctx.fillRect(x, height / 2 - y, barWidth, size);
         ctx.fillRect(x, height / 2 + y, barWidth, size);

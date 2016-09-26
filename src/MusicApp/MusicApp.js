@@ -16,6 +16,7 @@ import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
 import PlayerSync from './PlayerSync';
 import KeyboardDriver from './KeyboardDriver';
+import PlayerView from 'app/shared/PlayerView';
 
 import './styles/base.css';
 import './styles/theme.css';
@@ -23,23 +24,27 @@ import './styles/theme.css';
 let MusicApp = () =>
   <Router>
     <Auth>
-        <div>
-          <Match exactly pattern='/' component={UserProfileCtrl} />
-          <Match pattern='/library' component={UserProfileCtrl} />
+      <div>
+        <Match exactly pattern='/' component={UserProfileCtrl} />
+        <Match pattern='/library' component={UserProfileCtrl} />
 
-          <Match exactly pattern='/' component={Home} />
-          <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
-          <Match pattern='/library' component={Library} />
+        <Match exactly pattern='/' component={Home} />
+        <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
+        <Match pattern='/library' component={Library} />
 
-          <PlayBtnCtrl />
+        <PlayBtnCtrl />
 
-          <VkAudioSync />
-          <VkGroupSync />
-          <VkDriver />
-          <Soundmanager />
-          <PlayerSync />
-          <KeyboardDriver />
-        </div>
+        <Soundmanager>
+          <PlayerView />
+        </Soundmanager>
+
+        <VkAudioSync />
+        <VkGroupSync />
+        <VkDriver />
+        <Soundmanager />
+        <PlayerSync />
+        <KeyboardDriver />
+      </div>
     </Auth>
   </Router>
 
