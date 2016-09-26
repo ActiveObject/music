@@ -7,18 +7,14 @@ import './Library.css';
 
 let Library = ({ dispatch }) =>
   <div className='Library'>
-    <div className='layer'>
-      <div className='Library__body'>
-        <div className='toolbar-container'>
-          <div className='toolbar'>
-            <span
-              className={cx({ 'action': true, 'action--active': false })}
-              onClick={() => dispatch(toggleShuffle())}>shuffle</span>
-          </div>
-        </div>
-        <LibraryTracklist />
+    <div className='toolbar-container'>
+      <div className='toolbar'>
+        <span
+          className={cx({ 'action': true, 'action--active': false })}
+          onClick={() => dispatch(toggleShuffle())}>shuffle</span>
       </div>
     </div>
+    <LibraryTracklist />
   </div>
 
 export default connect()(Library);

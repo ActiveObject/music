@@ -1,6 +1,13 @@
 .Library {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  top: 120px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Library .TracklistTable {
@@ -8,21 +15,10 @@
   height: 100%;
 }
 
-.Library__body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding-top: 120px;
-  padding-bottom: 80px;
-}
-
 @media screen and (max-width: 768px) {
-  .Library__body {
-    width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
+  .Library {
+    left: 15px;
+    right: 15px;
   }
 
   .Library .TracklistTable {
