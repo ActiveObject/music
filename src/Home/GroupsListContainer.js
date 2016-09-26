@@ -1,11 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
+import Link from 'react-router/Link';
 
-import GroupsList from './GroupsList';
 import GroupsListPreview from './GroupsListPreview';
 import GroupSync from './GroupSync';
 import Tracker from './Tracker';
+
+import './GroupsList.css';
+
+let Group = ({ value }) =>
+  <div className='track' style={{ height: 50 }}>
+    <div className='GroupsList__image' style={{ width: 30, height: 30 }}>
+      <img src={value.photo_50} width={30} height={30} />
+    </div>
+    <div className='GroupsList__name'>
+      <Link to={`/groups/${value.id}`} data-track-key={value.id}>{value.name}</Link>
+    </div>
+  </div>
 
 class GroupsListContainer extends React.Component {
   constructor() {
@@ -36,7 +48,9 @@ class GroupsListContainer extends React.Component {
       <Tracker value={this.state.usage} onChange={c => this.updateUsage(c)}>
         <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
           <GroupsListPreview isActive={groups.length === 0} numOfItems={5}>
-            <GroupsList groups={groups} />
+            <div className='groups-list'>
+              {groups.map(v => <Group key={v.id} value={v} />)}
+            </div>
           </GroupsListPreview>
         </GroupSync>
       </Tracker>
