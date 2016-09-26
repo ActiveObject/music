@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'react-router/Link';
 import MediaQuery from 'react-responsive';
-import GroupProfile from './GroupProfile';
 import GroupTop5Tracks from './GroupTop5Tracks';
 import GroupActivity from './GroupActivity';
 import FetchGroup from './FetchGroup';
@@ -38,6 +37,14 @@ const GroupProfilePreview = () =>
     <span className='group-name'>
       <div className='group-profile-preview__name' />
     </span>
+  </div>
+
+const GroupProfile = ({ group }) =>
+  <div className='group-profile'>
+    <div className='group-image'>
+      <img src={group.photo_200} />
+    </div>
+    <span className='group-name'>{group.name}</span>
   </div>
 
 const GroupFullscreen = ({ id }) =>
