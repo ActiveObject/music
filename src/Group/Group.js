@@ -1,6 +1,5 @@
 import React from 'react';
 import MediaQuery from 'react-responsive';
-import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import GroupProfile from './GroupProfile';
 import GroupProfilePreview from './GroupProfilePreview';
 import GroupTop5Tracks from './GroupTop5Tracks';
@@ -28,8 +27,6 @@ const Group = ({ params }) =>
       <header>Week top</header>
       <GroupTop5Tracks groupId={params.id} />
     </section>
-
-    <PlayBtnCtrl />
   </div>
 
 export default Group;

@@ -7,6 +7,8 @@ import Group from 'app/Group';
 import Home from 'app/Home';
 import Library from 'app/Library';
 
+import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
+
 import Soundmanager from 'app/shared/Soundmanager';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
@@ -24,6 +26,8 @@ let MusicApp = () =>
         <Match exactly pattern='/' component={Home} />
         <Match pattern='/groups/:id' component={Group} />
         <Match pattern='/library' component={Library} />
+
+        <PlayBtnCtrl />
 
         <VkAudioSync />
         <VkGroupSync />

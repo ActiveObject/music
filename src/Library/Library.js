@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { hasTag } from 'app/shared/Tag';
 import LibraryTracklist from 'app/library/LibraryTracklist';
 import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
-import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import './Library.css';
 import { toggleShuffle } from 'app/actions';
 
@@ -24,8 +23,6 @@ let Library = ({ dispatch }) =>
         <LibraryTracklist />
       </div>
     </div>
-
-    <PlayBtnCtrl />
   </div>
 
 export default connect()(Library);
