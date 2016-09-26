@@ -1,16 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import { hasTag } from 'app/shared/Tag';
 import LibraryTracklist from 'app/library/LibraryTracklist';
-import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
-import './Library.css';
 import { toggleShuffle } from 'app/actions';
+import './Library.css';
 
 let Library = ({ dispatch }) =>
   <div className='Library'>
-    <UserProfileCtrl />
-
     <div className='layer'>
       <div className='Library__body'>
         <div className='toolbar-container'>

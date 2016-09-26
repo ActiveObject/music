@@ -8,6 +8,7 @@ import Home from 'app/Home';
 import Library from 'app/Library';
 
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
+import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
 
 import Soundmanager from 'app/shared/Soundmanager';
 import VkAudioSync from './VkAudioSync';
@@ -23,6 +24,9 @@ let MusicApp = () =>
   <Router>
     <Auth>
       <div>
+        <Match exactly pattern='/' component={UserProfileCtrl} />
+        <Match pattern='/library' component={UserProfileCtrl} />
+
         <Match exactly pattern='/' component={Home} />
         <Match pattern='/groups/:id' component={Group} />
         <Match pattern='/library' component={Library} />
