@@ -41,7 +41,6 @@ let MusicApp = () =>
         <VkAudioSync />
         <VkGroupSync />
         <VkDriver />
-        <Soundmanager />
         <PlayerSync />
         <KeyboardDriver />
       </div>
