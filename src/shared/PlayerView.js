@@ -16,7 +16,7 @@ class PlayerPopover extends React.Component {
   }
 
   render() {
-    var { track, onHide } = this.props;
+    var { track, audio, onHide } = this.props;
     var artist = track && track.artist;
     var title = track && track.title;
 
@@ -24,9 +24,7 @@ class PlayerPopover extends React.Component {
       <div className='PlayerView' onClick={onHide}>
         <div className='PlayerView__top'>
           <div className='PlayerView__visualization'>
-            <AudioProvider>
-              {audio => <FrequencyBar audio={audio} width={360} height={150} />}
-            </AudioProvider>
+            <FrequencyBar audio={audio} width={360} height={150} />
           </div>
           <div className='PlayerView__audio'></div>
         </div>
@@ -49,6 +47,14 @@ class PlayerView extends React.Component {
   }
 
   render() {
+    return (
+      <AudioProvider>
+        {audio => this.renderChildren(audio) }
+      </AudioProvider>
+    )
+  }
+
+  renderChildren(audio) {
     if (this.state.shape === 'button') {
       return (
         <div style={{position: 'fixed', left: 0, bottom: 0, padding: '20px 30px'}}>
@@ -57,48 +63,57 @@ class PlayerView extends React.Component {
       );
     }
 
-    return <PlayerPopover track={this.props.track} onHide={() => this.setState({ shape: 'button' })} />
+    return <PlayerPopover track={this.props.track} audio={audio} onHide={() => this.setState({ shape: 'button' })} />
   }
 }
 
+const AUDIO_CTX = new (window.AudioContext || window.webkitAudioContext)();
+const MEDIA_ELEMENT_SOURCES = new WeakMap();
+
 class FrequencyBar extends React.Component {
   componentWillMount() {
-    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    this.analyser = this.audioCtx.createAnalyser();
+    this.analyser = AUDIO_CTX.createAnalyser();
     this.analyser.minDecibels = -80;
     this.analyser.maxDecibels = -20;
     this.analyser.smoothingTimeConstant = 0.85;
     this.analyser.fftSize = 256;
     this.bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(this.bufferLength);
-    this.analyser.connect(this.audioCtx.destination);
+    this.connect(this.props.audio);
+  }
 
-    if (this.props.audio) {
-      this.connect(this.props.audio);
-    }
+  componentDidMount() {
+    this.draw();
   }
 
   componentWillUpdate({ audio }) {
-    if (this.props.audio) {
-      this.disconnect && this.disconnect();
-      this.connect(audio);
-    }
+    this.disconnect && this.disconnect();
+    this.connect(audio);
   }
 
   componentWillUnmount() {
+    this.disconnect && this.disconnect();
     window.cancelAnimationFrame(this.drawVisual);
   }
 
   connect(audio) {
     console.log('[FrequencyBar] connect');
-    var source = this.audioCtx.createMediaElementSource(audio);
+    var source;
+
+    if (MEDIA_ELEMENT_SOURCES.has(audio)) {
+      source = MEDIA_ELEMENT_SOURCES.get(audio);
+    } else {
+      source = AUDIO_CTX.createMediaElementSource(audio);
+      source.connect(AUDIO_CTX.destination)
+      MEDIA_ELEMENT_SOURCES.set(audio, source);
+    }
+
     source.connect(this.analyser);
 
     this.disconnect = function () {
+      console.log('[FrequencyBar] disconnect');
       source.disconnect(this.analyser);
     };
-
-    this.draw();
   }
 
   draw() {
