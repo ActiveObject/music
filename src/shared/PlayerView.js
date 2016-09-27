@@ -9,19 +9,30 @@ import PlayBtn from 'app/shared/PlayBtn/PlayBtn';
 class PlayerPopover extends React.Component {
   componentDidMount() {
     key('esc', this.props.onHide);
+
+    this.removeEventListener = addEventListener(document, 'click', (e) => {
+      var { width, height, left, top } = ReactDOM.findDOMNode(this).getBoundingClientRect();
+      var isOutsideX = e.clientX < left || e.clientX > (left + width);
+      var isOutsideY = e.clientY < top || e.clientY > (top + height);
+
+      if (isOutsideX || isOutsideY) {
+        this.props.onHide();
+      }
+    }, true);
   }
 
   componentWillUnmount() {
     key.unbind('esc', this.props.onHide);
+    this.removeEventListener();
   }
 
   render() {
-    var { track, audio, onHide } = this.props;
+    var { track, audio } = this.props;
     var artist = track && track.artist;
     var title = track && track.title;
 
     return (
-      <div className='PlayerView' onClick={onHide}>
+      <div className='PlayerView'>
         <div className='PlayerView__top'>
           <div className='PlayerView__visualization'>
             <FrequencyBar audio={audio} width={360} height={150} />
@@ -149,6 +160,14 @@ class FrequencyBar extends React.Component {
   render() {
     return <canvas width={this.props.width} height={this.props.height} />;
   }
+}
+
+function addEventListener(el, eventName, listener, isCapture) {
+  el.addEventListener(eventName, listener, isCapture);
+
+  return function () {
+    el.removeEventListener(eventName, listener, isCapture);
+  };
 }
 
 export default connect(state => ({
