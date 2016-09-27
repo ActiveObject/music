@@ -57,8 +57,8 @@ a:hover {
 .track--active:nth-child(even),
 .track-container .track--active:nth-child(odd),
 .track-container .track--active:nth-child(even) {
-  background-color: $primary-color;
-  color: $primary-text-color;
+  background-color: $accent-color;
+  color: $accent-text-color;
 }
 
 .TracklistTable__columns {

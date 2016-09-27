@@ -16,7 +16,7 @@ import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
 import PlayerSync from './PlayerSync';
 import KeyboardDriver from './KeyboardDriver';
-import PlayerView from 'app/shared/PlayerView';
+import Player from 'app/shared/PlayerView';
 
 import './styles/base.css';
 import './styles/theme.css';
@@ -32,10 +32,8 @@ let MusicApp = () =>
         <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
         <Match pattern='/library' component={Library} />
 
-        <PlayBtnCtrl />
-
         <Soundmanager>
-          <PlayerView />
+          <Player />
         </Soundmanager>
 
         <VkAudioSync />

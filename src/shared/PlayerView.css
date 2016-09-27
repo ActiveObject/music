@@ -1,7 +1,7 @@
 .PlayerView {
   position: fixed;
-  bottom: 100px;
-  left: 100px;
+  bottom: 20px;
+  left: 30px;
   width: 400px;
   height: 500px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);

@@ -1,32 +1,64 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import key from 'keymaster';
 import { connect } from 'react-redux';
 import { AudioProvider } from 'app/shared/Soundmanager';
 import './PlayerView.css';
+import PlayBtn from 'app/shared/PlayBtn/PlayBtn';
 
-const PlayerView = ({ track }) => {
-  var artist = track && track.artist;
-  var title = track && track.title;
+class PlayerPopover extends React.Component {
+  componentDidMount() {
+    key('esc', this.props.onHide);
+  }
 
-  return (
-    <div className='PlayerView'>
-      <div className='PlayerView__top'>
-        <div className='PlayerView__visualization'>
-          <AudioProvider>
-            {audio => <FrequencyBar audio={audio} width={360} height={150} />}
-          </AudioProvider>
+  componentWillUnmount() {
+    key.unbind('esc', this.props.onHide);
+  }
+
+  render() {
+    var { track, onHide } = this.props;
+    var artist = track && track.artist;
+    var title = track && track.title;
+
+    return (
+      <div className='PlayerView' onClick={onHide}>
+        <div className='PlayerView__top'>
+          <div className='PlayerView__visualization'>
+            <AudioProvider>
+              {audio => <FrequencyBar audio={audio} width={360} height={150} />}
+            </AudioProvider>
+          </div>
+          <div className='PlayerView__audio'></div>
         </div>
-        <div className='PlayerView__audio'></div>
-      </div>
 
-      <div className='PlayerView__info'>
-        <div className='PlayerView__artist'>{artist}</div>
-        <div className='PlayerView__title'>{title}</div>
-      </div>
+        <div className='PlayerView__info'>
+          <div className='PlayerView__artist'>{artist}</div>
+          <div className='PlayerView__title'>{title}</div>
+        </div>
 
-      <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 100, backgroundColor: 'white'}}></div>
-    </div>
-  )
+        <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 100, backgroundColor: 'white'}}></div>
+      </div>
+    )
+  }
+}
+
+class PlayerView extends React.Component {
+  constructor() {
+    super();
+    this.state = { shape: 'button' };
+  }
+
+  render() {
+    if (this.state.shape === 'button') {
+      return (
+        <div style={{position: 'fixed', left: 0, bottom: 0, padding: '20px 30px'}}>
+          <PlayBtn isPlaying={this.props.isPlaying} onClick={() => this.setState({ shape: 'popover' })} />
+        </div>
+      );
+    }
+
+    return <PlayerPopover track={this.props.track} onHide={() => this.setState({ shape: 'button' })} />
+  }
 }
 
 class FrequencyBar extends React.Component {
@@ -105,5 +137,6 @@ class FrequencyBar extends React.Component {
 }
 
 export default connect(state => ({
-  track: state[':player/track']
+  track: state[':player/track'],
+  isPlaying: state[':player/isPlaying']
 }))(PlayerView);
