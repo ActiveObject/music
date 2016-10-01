@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { TransitionMotion, spring } from 'react-motion';
 import key from 'keymaster';
 import { connect } from 'react-redux';
 import { AudioProvider } from 'app/shared/Soundmanager';
@@ -27,27 +28,93 @@ class PlayerPopover extends React.Component {
   }
 
   render() {
-    var { track, audio } = this.props;
+    var { track, audio, x, y, width, height } = this.props;
     var artist = track && track.artist;
     var title = track && track.title;
+    var vOffset = Math.floor((500 - height) / 2);
+    var hOffset = Math.floor((400 - width) / 2);
+    var WebkitClipPath = `inset(${vOffset}px ${hOffset}px)`;
+    var newY = y + Math.sin(Math.PI * y / 230) * y * 0.5;
 
     return (
-      <div className='PlayerView'>
-        <div className='PlayerView__top'>
-          <div className='PlayerView__visualization'>
-            <FrequencyBar audio={audio} width={360} height={150} />
+      <div className='PlayerView' style={{ transform: `translate(${x}px, ${newY}px)`, WebkitClipPath }}>
+        <div className='PlayerView-b'>
+          <div className='PlayerView__top'>
+            <div className='PlayerView__visualization'>
+              <FrequencyBar audio={audio} width={360} height={150} />
+            </div>
+            <div className='PlayerView__audio'></div>
           </div>
-          <div className='PlayerView__audio'></div>
-        </div>
 
-        <div className='PlayerView__info'>
-          <div className='PlayerView__artist'>{artist}</div>
-          <div className='PlayerView__title'>{title}</div>
-        </div>
+          <div className='PlayerView__info'>
+            <div className='PlayerView__artist'>{artist}</div>
+            <div className='PlayerView__title'>{title}</div>
+          </div>
 
-        <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 100, backgroundColor: 'white'}}></div>
+          <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 100, backgroundColor: 'white'}}></div>
+        </div>
       </div>
     )
+  }
+}
+
+class PlayerAnimation extends Component {
+  render() {
+    return (
+      <TransitionMotion
+        styles={this.getStyles()}
+        willEnter={this.willEnter}
+        willLeave={this.willLeave}
+        children={this.props.children} />
+    );
+  }
+
+  getStyles(v) {
+    if (this.props.shape === 'button') {
+      return [{
+        key: 'button',
+        style: {
+          x: 0,
+          y: 0
+        }
+      }];
+    }
+
+    return [{
+      key: 'popover',
+      style: {
+        x: spring(0, { stiffness: 100, damping: 25 }),
+        y: spring(0, { stiffness: 100, damping: 25 }),
+        width: spring(400, { stiffness: 300, damping: 25 }),
+        height: spring(500, { stiffness: 300, damping: 25 })
+      }
+    }]
+  }
+
+  willLeave(v) {
+    if (v.key === 'button') {
+      return null;
+    }
+
+    return {
+      x: spring(-180, { stiffness: 300, damping: 25 }),
+      y: spring(230, { stiffness: 300, damping: 25 }),
+      width: spring(30, { stiffness: 300, damping: 25 }),
+      height: spring(30, { stiffness: 300, damping: 25 })
+    };
+  }
+
+  willEnter(v) {
+    if (v.key === 'button') {
+      return null;
+    }
+
+    return {
+      x: -180,
+      y: 230,
+      width: 30,
+      height: 30
+    };
   }
 }
 
@@ -66,15 +133,43 @@ class PlayerView extends React.Component {
   }
 
   renderChildren(audio) {
-    if (this.state.shape === 'button') {
-      return (
-        <div style={{position: 'fixed', left: 0, bottom: 0, padding: '20px 30px'}}>
-          <PlayBtn isPlaying={this.props.isPlaying} onClick={() => this.setState({ shape: 'popover' })} />
-        </div>
-      );
-    }
+    return (
+      <PlayerAnimation shape={this.state.shape}>
+        {interpolated => {
+          if (interpolated.length === 0) {
+            return null;
+          }
 
-    return <PlayerPopover track={this.props.track} audio={audio} onHide={() => this.setState({ shape: 'button' })} />
+          var result = [];
+
+          interpolated.forEach(({ key, style }) => {
+            if (key === 'button') {
+              result.push(
+                <div key={key} style={{position: 'fixed', left: 0, bottom: 0, padding: '20px 30px'}}>
+                  <PlayBtn isPlaying={this.props.isPlaying} onClick={() => this.setState({ shape: 'popover' })} />
+                </div>
+              );
+            }
+
+            if (key === 'popover') {
+              result.push (
+                <PlayerPopover
+                  key={key}
+                  x={style.x}
+                  y={style.y}
+                  width={style.width}
+                  height={style.height}
+                  track={this.props.track}
+                  audio={audio}
+                  onHide={() => this.setState({ shape: 'button' })} />
+              );
+            }
+          })
+
+          return <div>{result}</div>;
+        }}
+      </PlayerAnimation>
+    );
   }
 }
 
@@ -98,8 +193,10 @@ class FrequencyBar extends React.Component {
   }
 
   componentWillUpdate({ audio }) {
-    this.disconnect && this.disconnect();
-    this.connect(audio);
+    if (this.props.audio !== audio) {
+      this.disconnect && this.disconnect();
+      this.connect(audio);
+    }
   }
 
   componentWillUnmount() {
