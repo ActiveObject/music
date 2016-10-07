@@ -2,10 +2,10 @@ import Url from 'url';
 import querystring from 'querystring';
 import React from 'react';
 import { connect } from 'react-redux';
-
-import AuthView from 'app/auth/AuthView';
-import { hasTag } from 'app/shared/Tag';
+import Icon from 'app/shared/Icon';
 import { authenticate } from 'app/actions';
+import './Auth.css';
+import vkLogo from './vkcom.svg';
 
 const AUTH_URL = Url.format({
   protocol: 'https',
@@ -48,11 +48,20 @@ class Auth extends React.Component {
   }
 
   render() {
-    if (!this.props.isAuthenticated) {
-      return <AuthView url={AUTH_URL} />
+    if (this.props.isAuthenticated) {
+      return this.props.children;
     }
 
-    return this.props.children;
+    return (
+      <div className='auth'>
+        <a className='element-link auth-link' href={AUTH_URL}>
+          <div className='auth-bg-circle'>
+            <Icon id={vkLogo} className='auth-vk-icon' />
+            <div className='auth-vk-desc'>{'login with vk'}</div>
+          </div>
+        </a>
+      </div>
+    );
   }
 }
 
