@@ -7,6 +7,7 @@ import { toString } from 'app/shared/Track';
 import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/playerActions';
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
+import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
 
 class Soundmanager extends React.Component {
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
@@ -47,9 +48,18 @@ class Soundmanager extends React.Component {
         dispatch(play());
       }
 
+      var onError = (e) => {
+        console.log(`[Soundmanager] ${showMediaError(this.audio.error.code)}`);
+
+        if (this.audio.error.code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
+          reload(track, dispatch);
+        }
+      }
+
       this.audio.addEventListener('stalled', onStalled, false);
       this.audio.addEventListener('timeupdate', onTimeUpdate, false);
       this.audio.addEventListener('ended', onEnded, false);
+      this.audio.addEventListener('error', onError, false);
 
       this.destroyAudio = () => {
         this.audio.pause();
@@ -58,6 +68,7 @@ class Soundmanager extends React.Component {
         this.audio.removeEventListener('stalled', onStalled, false);
         this.audio.removeEventListener('timeupdate', onTimeUpdate, false);
         this.audio.removeEventListener('ended', onEnded, false);
+        this.audio.removeEventListener('error', onError, false);
       };
     }
 
