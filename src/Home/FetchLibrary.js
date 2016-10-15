@@ -1,14 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-
-import { hasTag } from 'app/shared/Tag';
 import LibrarySync from 'app/library/LibrarySync';
-import TracklistTable from 'app/shared/tracklist/TracklistTable';
-import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
-import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
 
-class LibraryStaticTracklist extends React.Component {
+class FetchLibrary extends React.Component {
   constructor() {
     super();
 
@@ -28,11 +23,7 @@ class LibraryStaticTracklist extends React.Component {
 
     return (
       <LibrarySync cache={this.state.cache} onSync={(c) => this.updateCache(c)} >
-        <TracklistTable>
-          <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
-            <StaticTracklist tracks={tracks} limit={10} />
-          </TracklistPreview>
-        </TracklistTable>
+        {this.props.children(tracks)}
       </LibrarySync>
     );
   }
@@ -52,4 +43,4 @@ function makeTracks(cache, library) {
 
 export default connect(state => ({
   library: state[':app/library']
-}))(LibraryStaticTracklist);
+}))(FetchLibrary);
