@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'react-router/BrowserRouter';
 import Match from 'react-router/Match';
+import { connect } from 'react-redux';
 
 import Auth from 'app/Auth';
 import Group from 'app/Group';
@@ -18,12 +19,14 @@ import PlayerSync from './PlayerSync';
 import KeyboardDriver from './KeyboardDriver';
 import Player from 'app/shared/PlayerView';
 
+import { authenticate } from 'app/redux';
+
 import './styles/base.css';
 import './styles/theme.css';
 
-let MusicApp = () =>
+let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
   <Router>
-    <Auth>
+    <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
       <div>
         <Match exactly pattern='/' component={UserProfileCtrl} />
         <Match pattern='/library' component={UserProfileCtrl} />
@@ -33,7 +36,7 @@ let MusicApp = () =>
         <Match pattern='/library' component={Library} />
 
         <Soundmanager>
-          <Player />
+          <Player track={activeTrack} isPlaying={isPlaying} />
         </Soundmanager>
 
         <VkAudioSync />
@@ -45,4 +48,18 @@ let MusicApp = () =>
     </Auth>
   </Router>
 
-export default MusicApp;
+function mapStateToProps(state) {
+  return {
+    isAuthenticated: state[':app/isAuthenticated'],
+    activeTrack: state[':player/track'],
+    isPlaying: state[':player/isPlaying']
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onAuth: (userId, accessToken) => dispatch(authenticate(userId, accessToken))
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MusicApp);

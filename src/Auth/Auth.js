@@ -1,9 +1,7 @@
 import Url from 'url';
 import querystring from 'querystring';
 import React from 'react';
-import { connect } from 'react-redux';
 import Icon from 'app/shared/Icon';
-import { authenticate } from 'app/redux';
 import './Auth.css';
 import vkLogo from './vkcom.svg';
 
@@ -37,13 +35,13 @@ class Auth extends React.Component {
       localStorage.setItem('user_id', credentials.user_id);
       localStorage.setItem('access_token', credentials.access_token);
 
-      this.props.dispatch(authenticate(credentials.user_id, credentials.access_token));
+      this.props.onAuth(credentials.user_id, credentials.access_token);
 
       location.hash = '#';
     }
 
     if (isUserInStorage()) {
-      return this.props.dispatch(authenticate(localStorage.getItem('user_id'), localStorage.getItem('access_token')));
+      return this.props.onAuth(localStorage.getItem('user_id'), localStorage.getItem('access_token'));
     }
   }
 
@@ -65,4 +63,4 @@ class Auth extends React.Component {
   }
 }
 
-export default connect(state => ({ isAuthenticated: state[':app/isAuthenticated'] }), null, null, { pure: false })(Auth);
+export default Auth;

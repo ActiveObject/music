@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { TransitionMotion, spring } from 'react-motion';
 import key from 'keymaster';
-import { connect } from 'react-redux';
 import { AudioProvider } from 'app/shared/Soundmanager';
 import './PlayerView.css';
 import PlayBtn from 'app/shared/PlayBtn/PlayBtn';
@@ -267,7 +266,4 @@ function addEventListener(el, eventName, listener, isCapture) {
   };
 }
 
-export default connect(state => ({
-  track: state[':player/track'],
-  isPlaying: state[':player/isPlaying']
-}))(PlayerView);
+export default PlayerView;
