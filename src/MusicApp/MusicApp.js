@@ -1,16 +1,14 @@
 import React from 'react';
 import Router from 'react-router/BrowserRouter';
 import Match from 'react-router/Match';
+import Link from 'react-router/Link';
 import { connect } from 'react-redux';
 
 import Auth from 'app/Auth';
 import Group from 'app/Group';
-import Home from 'app/Home';
 import Library from 'app/Library';
-
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
-
 import Soundmanager from 'app/shared/Soundmanager';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
@@ -18,11 +16,18 @@ import VkDriver from './VkDriver';
 import PlayerSync from './PlayerSync';
 import KeyboardDriver from './KeyboardDriver';
 import Player from 'app/shared/PlayerView';
+import GroupsListContainer from 'app/Home/GroupsListContainer';
+import FetchLibrary from 'app/Home/FetchLibrary';
+import TracklistTable from 'app/shared/tracklist/TracklistTable';
+import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
+import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
 
 import { authenticate } from 'app/redux';
 
 import './styles/base.css';
 import './styles/theme.css';
+import 'app/shared/ResponsiveGrid.css';
+
 
 let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
   <Router>
@@ -31,7 +36,32 @@ let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
         <Match exactly pattern='/' component={UserProfileCtrl} />
         <Match pattern='/library' component={UserProfileCtrl} />
 
-        <Match exactly pattern='/' component={Home} />
+        <Match exactly pattern='/' render={() =>
+          <div className='Home'>
+            <section>
+              <header>
+                <Link to='/library'>Library</Link>
+              </header>
+              <FetchLibrary>
+                {tracks =>
+                  <TracklistTable>
+                    <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
+                      <StaticTracklist tracks={tracks} limit={10} />
+                    </TracklistPreview>
+                  </TracklistTable>
+                }
+              </FetchLibrary>
+            </section>
+
+            <section className='page-section'>
+              <header>Groups</header>
+              <GroupsListContainer>
+                {groups => groups.map(id => <Group key={id} id={id} shape='list-item' />)}
+              </GroupsListContainer>
+            </section>
+          </div>
+        }/>
+
         <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
         <Match pattern='/library' component={Library} />
 
