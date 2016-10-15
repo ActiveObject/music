@@ -1,13 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
 import vk from 'app/shared/vk';
-import { pushGroups } from 'app/redux';
 
 class VkGroupSync extends React.Component {
   componentWillMount() {
     this.stopUpdating = startUpdating(60 * 1000, groups => {
-      this.props.dispatch(pushGroups(groups));
+      this.props.onSync(groups);
     });
   }
 
@@ -42,4 +39,4 @@ function startUpdating(interval, callback) {
   };
 }
 
-export default connect()(VkGroupSync);
+export default VkGroupSync;

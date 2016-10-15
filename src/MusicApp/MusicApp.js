@@ -24,7 +24,7 @@ import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
 import LazyTracklist from 'app/shared/tracklist/LazyTracklist';
 import vk from 'app/shared/vk';
 
-import { authenticate, toggleShuffle, pushLibrary } from 'app/redux';
+import { authenticate, toggleShuffle, pushLibrary, pushGroups } from 'app/redux';
 
 import './styles/base.css';
 import './styles/theme.css';
@@ -41,7 +41,8 @@ let MusicApp = ({
   groups,
   onAuth,
   onToggleShuffle,
-  onAudioSync
+  onAudioSync,
+  onGroupSync
 }) =>
   <Router>
     <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
@@ -101,7 +102,7 @@ let MusicApp = ({
         </Soundmanager>
 
         <VkAudioSync userId={userId} onSync={onAudioSync} />
-        <VkGroupSync />
+        <VkGroupSync userId={userId} onSync={onGroupSync} />
         <VkDriver vk={vk} userId={userId} accessToken={accessToken} />
         <PlayerSync />
         <KeyboardDriver />
@@ -126,6 +127,7 @@ function mapDispatchToProps(dispatch) {
     onAuth: (userId, accessToken) => dispatch(authenticate(userId, accessToken)),
     onToggleShuffle: () => dispatch(toggleShuffle()),
     onAudioSync: (library) => dispatch(pushLibrary(library)),
+    onGroupSync: (groups) => dispatch(pushGroups(groups)),
   };
 }
 
