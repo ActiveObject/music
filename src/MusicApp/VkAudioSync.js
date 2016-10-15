@@ -1,19 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import vk from 'app/shared/vk';
-import { pushLibrary } from 'app/redux';
 
 class VkAudioSync extends React.Component {
   componentWillMount() {
-    var { userId, dispatch } = this.props;
+    var { userId, onSync } = this.props;
 
     this.stopUpdating = startTrackUpdating(userId, 10 * 1000, res => {
-      dispatch(pushLibrary(res.response.map(t => {
+      onSync(res.response.map(t => {
         return {
           tag: ':track-source/library',
           trackId: String(t)
         }
-      })));
+      }));
     });
   }
 
@@ -57,6 +55,4 @@ function loadAllAudioIds(owner, callback) {
   }, callback);
 }
 
-export default connect(state => ({
-  userId: state[':app/userId']
-}))(VkAudioSync);
+export default VkAudioSync;
