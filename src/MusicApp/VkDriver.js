@@ -3,8 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
-import { addTag } from 'app/shared/Tag';
-import VkCaptchaView from './VkCaptchaView';
 
 class VkDriver extends React.Component {
   constructor() {
@@ -33,7 +31,24 @@ class VkDriver extends React.Component {
 
   render() {
     if (this.state.inTransaction) {
-      return <VkCaptchaView captchaUrl={this.state.captchaUrl} onEnter={(v) => this.commitTransaction(v)} />;
+      var style = {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: 100,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      };
+
+      return (
+        <div style={style}>
+          <img src={this.state.captchaUrl} />
+          <input type='text' ref={(c) => this._input = c } />
+          <button onClick={() => this.commitTransaction(this._input.value)}>Send</button>
+        </div>
+      );
     }
 
     return null;
