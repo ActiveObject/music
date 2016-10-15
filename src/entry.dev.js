@@ -8,9 +8,9 @@ import Perf from 'react-addons-perf';
 import MusicApp from 'app/MusicApp';
 import vk from 'app/shared/vk';
 import DevTools from 'app/DevTools';
-import reducers from 'app/reducers';
+import rootReducer from 'app/redux';
 
-const store = createStore(reducers, compose(DevTools.instrument(), persistState(getDebugSessionKey())));
+const store = createStore(rootReducer, compose(DevTools.instrument(), persistState(getDebugSessionKey())));
 
 render(
   <HotLoader>
@@ -35,8 +35,8 @@ if (module.hot) {
       </HotLoader>, document.querySelector('#app'));
   });
 
-  module.hot.accept('app/reducers', () =>
-    store.replaceReducer(require('app/reducers'))
+  module.hot.accept('app/redux', () =>
+    store.replaceReducer(require('app/redux'))
   );
 }
 

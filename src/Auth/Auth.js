@@ -3,7 +3,7 @@ import querystring from 'querystring';
 import React from 'react';
 import { connect } from 'react-redux';
 import Icon from 'app/shared/Icon';
-import { authenticate } from 'app/actions';
+import { authenticate } from 'app/redux';
 import './Auth.css';
 import vkLogo from './vkcom.svg';
 

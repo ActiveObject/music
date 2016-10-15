@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import LibraryTracklist from 'app/library/LibraryTracklist';
-import { toggleShuffle } from 'app/actions';
+import { toggleShuffle } from 'app/redux';
 import './Library.css';
 
 let Library = ({ dispatch }) =>

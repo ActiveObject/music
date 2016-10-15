@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import { toggleTrack } from 'app/actions';
+import { toggleTrack } from 'app/redux';
 import { hasTag } from 'app/shared/Tag';
 import Track from './track';
 

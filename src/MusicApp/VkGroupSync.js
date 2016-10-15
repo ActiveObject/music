@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import vk from 'app/shared/vk';
-import { pushGroups } from 'app/actions';
+import { pushGroups } from 'app/redux';
 
 class VkGroupSync extends React.Component {
   componentWillMount() {

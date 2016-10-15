@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import vk from 'app/shared/vk';
-import { pushLibrary } from 'app/actions';
+import { pushLibrary } from 'app/redux';
 
 class VkAudioSync extends React.Component {
   componentWillMount() {
