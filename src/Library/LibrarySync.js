@@ -1,12 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
 import difference from 'lodash/difference';
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import * as Track from 'app/shared/Track';
 
 class LibrarySync extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      cache: Map()
+    };
+  }
+
   componentWillMount() {
+    this.setState({
+      cache: Map(JSON.parse(localStorage.getItem(':cache/library')))
+    });
+
     this.sync();
   }
 
@@ -15,11 +28,16 @@ class LibrarySync extends React.Component {
   }
 
   render() {
-    return this.props.children;
+    var tracks = this.props.library
+      .filter(t => this.state.cache.has(t.trackId))
+      .map(t => this.state.cache.get(t.trackId));
+
+    return this.props.children(tracks);
   }
 
   sync() {
-    var { userId, albums, library, cache } = this.props;
+    var { userId, albums, library } = this.props;
+    var { cache } = this.state;
     var idsInCache = [...cache.keys()];
     var idsInLibrary = library.map(t => t.trackId)
     var outdated = difference(idsInCache, idsInLibrary);
@@ -37,16 +55,12 @@ class LibrarySync extends React.Component {
         var tracks = res.response.map(t => Track.fromVk(t, albums));
         var cache = tracks.reduce((c, t) => c.set(t.id, t), this.props.cache)
 
-        this.props.onSync(cache);
+        this.setState({ cache });
+        localStorage.setItem(':cache/library', JSON.stringify(cache));
       });
     }
   }
 }
-
-LibrarySync.propTypes = {
-  cache: React.PropTypes.object.isRequired,
-  onSync: React.PropTypes.func.isRequired
-};
 
 function loadTracksById(items, callback) {
   vk.audio.getById({

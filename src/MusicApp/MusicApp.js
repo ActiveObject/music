@@ -17,7 +17,7 @@ import PlayerSync from './PlayerSync';
 import KeyboardDriver from './KeyboardDriver';
 import Player from 'app/shared/PlayerView';
 import GroupsListContainer from 'app/Home/GroupsListContainer';
-import FetchLibrary from 'app/Home/FetchLibrary';
+import LibrarySync from 'app/Library/LibrarySync';
 import TracklistTable from 'app/shared/tracklist/TracklistTable';
 import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
 import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
@@ -51,7 +51,7 @@ let MusicApp = ({
               <header>
                 <Link to='/library'>Library</Link>
               </header>
-              <FetchLibrary library={library}>
+              <LibrarySync>
                 {tracks =>
                   <TracklistTable>
                     <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
@@ -59,7 +59,7 @@ let MusicApp = ({
                     </TracklistPreview>
                   </TracklistTable>
                 }
-              </FetchLibrary>
+              </LibrarySync>
             </section>
 
             <section className='page-section'>
@@ -82,13 +82,13 @@ let MusicApp = ({
                   onClick={onToggleShuffle}>shuffle</span>
               </div>
             </div>
-            <FetchLibrary library={library}>
+            <LibrarySync>
               {tracks =>
                 <TracklistTable>
                   <LazyTracklist tracks={tracks} />
                 </TracklistTable>
               }
-            </FetchLibrary>
+            </LibrarySync>
           </div>
         }/>
 
