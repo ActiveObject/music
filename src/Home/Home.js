@@ -3,6 +3,7 @@ import Link from 'react-router/Link';
 import PlayerView from 'app/shared/PlayerView';
 import GroupsListContainer from './GroupsListContainer';
 import LibraryStaticTracklist from './LibraryStaticTracklist';
+import Group from 'app/Group';
 import 'app/shared/ResponsiveGrid.css';
 
 let Home = () =>
@@ -16,7 +17,9 @@ let Home = () =>
 
     <section className='page-section'>
       <header>Groups</header>
-      <GroupsListContainer />
+      <GroupsListContainer>
+        {groups => groups.map(id => <Group key={id} id={id} shape='list-item' />)}
+      </GroupsListContainer>
     </section>
   </div>
 

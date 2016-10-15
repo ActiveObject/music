@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-
 import GroupSync from './GroupSync';
 import Tracker from './Tracker';
-import Group from 'app/Group';
 
 class GroupsListContainer extends React.Component {
   constructor() {
@@ -32,7 +30,7 @@ class GroupsListContainer extends React.Component {
       <Tracker value={this.state.usage} onChange={c => this.updateUsage(c)}>
         <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
           <div className='groups-list'>
-            {groups.map(id => <Group key={id} id={id} shape='list-item' />)}
+            {this.props.children(groups)}
           </div>
         </GroupSync>
       </Tracker>
