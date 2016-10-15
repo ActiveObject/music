@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { useTrack } from 'app/playerActions';
+import { useTrack } from 'app/actions';
 import { hasTag } from 'app/shared/Tag';
 
 class PlayerSync extends React.Component {

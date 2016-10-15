@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hasTag } from 'app/shared/Tag';
-import { togglePlay } from 'app/playerActions';
+import { togglePlay } from 'app/actions';
 import PlayBtn from './PlayBtn';
 
 const PlayBtnCtrl = ({ isPlaying, dispatch }) =>
