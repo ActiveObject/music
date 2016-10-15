@@ -1,9 +1,25 @@
 import { Map } from 'immutable';
 import * as Player from 'app/shared/Player';
 
+const AUTHENTICATE = 'AUTHENTICATE';
+const GROUPS_PUSH = 'GROUPS_PUSH';
+const LIBRARY_PUSH = 'LIBRARY_PUSH';
+const ALBUMS_PUSH = 'ALBUMS_PUSH';
+const LIBRARY_TOGGLE_SHUFFLE = 'LIBRARY_TOGGLE_SHUFFLE';
+const PLAYER_REWIND = 'PLAYER_REWIND';
+const PLAYER_FORWARD = 'PLAYER_FORWARD';
+const PLAYER_PLAY = 'PLAYER_PLAY';
+const PLAYER_TOGGLE_PLAY = 'PLAYER_TOGGLE_PLAY';
+const PLAYER_TOGGLE_TRACK = 'PLAYER_TOGGLE_TRACK';
+const PLAYER_UPDATE_POSITION = 'PLAYER_UPDATE_POSITION';
+const PLAYER_UPDATE_LOADING = 'PLAYER_UPDATE_LOADING';
+const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
+const PLAYER_FINISH_SEEKING = 'PLAYER_FINISH_SEEKING';
+const PLAYER_USE_TRACK = 'PLAYER_USE_TRACK';
+
 export function authenticate(userId, accessToken) {
   return {
-    type: 'AUTHENTICATE',
+    type: AUTHENTICATE,
     userId,
     accessToken
   };
@@ -11,60 +27,60 @@ export function authenticate(userId, accessToken) {
 
 export function pushGroups(groups) {
   return {
-    type: 'GROUPS_PUSH',
+    type: GROUPS_PUSH,
     groups
   };
 }
 
 export function pushLibrary(library) {
   return {
-    type: 'LIBRARY_PUSH',
+    type: LIBRARY_PUSH,
     library
   };
 }
 
 export function pushAlbums(albums) {
   return {
-    type: 'LIBRARY_PUSH',
+    type: ALBUMS_PUSH,
     albums
   };
 }
 
 export function toggleShuffle() {
   return {
-    type: 'LIBRARY_TOGGLE_SHUFFLE'
+    type: LIBRARY_TOGGLE_SHUFFLE
   };
 }
 
 export function rewind(ms) {
   return {
-    type: 'PLAYER_REWIND',
+    type: PLAYER_REWIND,
     ms
   };
 }
 
 export function forward(ms) {
   return {
-    type: 'PLAYER_FORWARD',
+    type: PLAYER_FORWARD,
     ms
   };
 }
 
 export function play() {
   return {
-    type: 'PLAYER_PLAY'
+    type: PLAYER_PLAY
   };
 }
 
 export function togglePlay() {
   return {
-    type: 'PLAYER_TOGGLE_PLAY'
+    type: PLAYER_TOGGLE_PLAY
   };
 }
 
 export function toggleTrack(track, tracklist) {
   return {
-    type: 'PLAYER_TOGGLE_TRACK',
+    type: PLAYER_TOGGLE_TRACK,
     track,
     tracklist
   };
@@ -72,14 +88,14 @@ export function toggleTrack(track, tracklist) {
 
 export function updatePosition(position) {
   return {
-    type: 'PLAYER_UPDATE_POSITION',
+    type: PLAYER_UPDATE_POSITION,
     position
   };
 }
 
 export function updateLoading(bytesLoaded, bytesTotal) {
   return {
-    type: 'PLAYER_UPDATE_LOADING',
+    type: PLAYER_UPDATE_LOADING,
     bytesLoaded,
     bytesTotal
   };
@@ -87,19 +103,19 @@ export function updateLoading(bytesLoaded, bytesTotal) {
 
 export function nextTrack() {
   return {
-    type: 'PLAYER_NEXT_TRACK'
+    type: PLAYER_NEXT_TRACK
   };
 }
 
 export function finishSeeking() {
   return {
-    type: 'PLAYER_FINISH_SEEKING'
+    type: PLAYER_FINISH_SEEKING
   };
 }
 
 export function useTrack(track) {
   return {
-    type: 'PLAYER_USE_TRACK',
+    type: PLAYER_USE_TRACK,
     track
   };
 }
@@ -123,57 +139,57 @@ function createDefaultState() {
 
 export default function (state = createDefaultState(), action) {
   switch (action.type) {
-    case 'PLAYER_FORWARD':
-      return Player.forward(state, action.ms);
-
-    case 'PLAYER_REWIND':
-      return Player.rewind(state, action.ms);
-
-    case 'PLAYER_PLAY':
-      return Player.play(state);
-
-    case 'PLAYER_TOGGLE_PLAY':
-      return Player.togglePlay(state);
-
-    case 'PLAYER_TOGGLE_TRACK':
-      return Player.togglePlay(state, action.track, action.tracklist);
-
-    case 'PLAYER_UPDATE_POSITION':
-      return Player.updatePosition(state, action.position);
-
-    case 'PLAYER_UPDATE_LOADING':
-      return Player.updateLoadingData(state, action.bytesLoaded, action.bytesTotal);
-
-    case 'PLAYER_NEXT_TRACK':
-      return Player.nextTrack(state);
-
-    case 'PLAYER_FINISH_SEEKING':
-      return Player.finishSeeking(state);
-
-    case 'PLAYER_USE_TRACK':
-      return Player.useTrack(state, action.track);
-
-    case 'AUTHENTICATE':
+    case AUTHENTICATE:
       return Object.assign({}, state, {
         ':app/isAuthenticated': true,
         ':app/userId': action.userId,
         ':app/accessToken': action.accessToken
       });
 
-    case 'GROUPS_PUSH':
+    case GROUPS_PUSH:
       return Object.assign({}, state, {
         ':app/groups': action.groups
       });
 
-    case 'LIBRARY_PUSH':
+    case LIBRARY_PUSH:
       return Object.assign({}, state, {
         ':app/library': action.library
       });
 
-    case 'ALBUMS_PUSH':
+    case ALBUMS_PUSH:
       return Object.assign({}, state, {
         ':app/albums': action.albums
       });
+
+    case PLAYER_FORWARD:
+      return Player.forward(state, action.ms);
+
+    case PLAYER_REWIND:
+      return Player.rewind(state, action.ms);
+
+    case PLAYER_PLAY:
+      return Player.play(state);
+
+    case PLAYER_TOGGLE_PLAY:
+      return Player.togglePlay(state);
+
+    case PLAYER_TOGGLE_TRACK:
+      return Player.togglePlay(state, action.track, action.tracklist);
+
+    case PLAYER_UPDATE_POSITION:
+      return Player.updatePosition(state, action.position);
+
+    case PLAYER_UPDATE_LOADING:
+      return Player.updateLoadingData(state, action.bytesLoaded, action.bytesTotal);
+
+    case PLAYER_NEXT_TRACK:
+      return Player.nextTrack(state);
+
+    case PLAYER_FINISH_SEEKING:
+      return Player.finishSeeking(state);
+
+    case PLAYER_USE_TRACK:
+      return Player.useTrack(state, action.track);
 
     default:
       return state;
