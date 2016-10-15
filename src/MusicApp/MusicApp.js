@@ -22,6 +22,7 @@ import TracklistTable from 'app/shared/tracklist/TracklistTable';
 import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
 import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
 import LazyTracklist from 'app/shared/tracklist/LazyTracklist';
+import vk from 'app/shared/vk';
 
 import { authenticate, toggleShuffle } from 'app/redux';
 
@@ -32,6 +33,8 @@ import 'app/Library/Library.css';
 
 let MusicApp = ({
   isAuthenticated,
+  userId,
+  accessToken,
   activeTrack,
   isPlaying,
   library,
@@ -98,7 +101,7 @@ let MusicApp = ({
 
         <VkAudioSync />
         <VkGroupSync />
-        <VkDriver />
+        <VkDriver vk={vk} userId={userId} accessToken={accessToken} />
         <PlayerSync />
         <KeyboardDriver />
       </div>
@@ -108,6 +111,8 @@ let MusicApp = ({
 function mapStateToProps(state) {
   return {
     isAuthenticated: state[':app/isAuthenticated'],
+    userId: state[':app/userId'],
+    accessToken: state[':app/accessToken'],
     library: state[':app/library'],
     groups: state[':app/groups'],
     activeTrack: state[':player/track'],

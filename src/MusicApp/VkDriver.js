@@ -1,7 +1,5 @@
 import { EventEmitter } from 'events';
 import React from 'react';
-import { connect } from 'react-redux';
-import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 
 class VkDriver extends React.Component {
@@ -11,7 +9,7 @@ class VkDriver extends React.Component {
   }
 
   componentWillMount() {
-    var { userId, accessToken } = this.props;
+    var { userId, accessToken, vk } = this.props;
 
     this.tx = new EventEmitter();
 
@@ -69,7 +67,4 @@ class VkDriver extends React.Component {
   }
 }
 
-export default connect(state => ({
-  userId: state[':app/userId'],
-  accessToken: state[':app/accessToken']
-}))(VkDriver);
+export default VkDriver;
