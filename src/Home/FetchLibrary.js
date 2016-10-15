@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import LibrarySync from 'app/library/LibrarySync';
 
@@ -41,6 +40,4 @@ function makeTracks(cache, library) {
     .map(t => cache.get(t.trackId));
 }
 
-export default connect(state => ({
-  library: state[':app/library']
-}))(FetchLibrary);
+export default FetchLibrary;

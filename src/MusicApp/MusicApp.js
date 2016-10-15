@@ -3,10 +3,10 @@ import Router from 'react-router/BrowserRouter';
 import Match from 'react-router/Match';
 import Link from 'react-router/Link';
 import { connect } from 'react-redux';
+import cx from 'classnames';
 
 import Auth from 'app/Auth';
 import Group from 'app/Group';
-import Library from 'app/Library';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
 import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
 import Soundmanager from 'app/shared/Soundmanager';
@@ -21,15 +21,24 @@ import FetchLibrary from 'app/Home/FetchLibrary';
 import TracklistTable from 'app/shared/tracklist/TracklistTable';
 import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
 import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
+import LazyTracklist from 'app/shared/tracklist/LazyTracklist';
 
-import { authenticate } from 'app/redux';
+import { authenticate, toggleShuffle } from 'app/redux';
 
 import './styles/base.css';
 import './styles/theme.css';
 import 'app/shared/ResponsiveGrid.css';
+import 'app/Library/Library.css';
 
-
-let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
+let MusicApp = ({
+  isAuthenticated,
+  activeTrack,
+  isPlaying,
+  library,
+  groups,
+  onAuth,
+  onToggleShuffle
+}) =>
   <Router>
     <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
       <div>
@@ -42,7 +51,7 @@ let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
               <header>
                 <Link to='/library'>Library</Link>
               </header>
-              <FetchLibrary>
+              <FetchLibrary library={library}>
                 {tracks =>
                   <TracklistTable>
                     <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
@@ -55,7 +64,7 @@ let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
 
             <section className='page-section'>
               <header>Groups</header>
-              <GroupsListContainer>
+              <GroupsListContainer groups={groups}>
                 {groups => groups.map(id => <Group key={id} id={id} shape='list-item' />)}
               </GroupsListContainer>
             </section>
@@ -63,7 +72,25 @@ let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
         }/>
 
         <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
-        <Match pattern='/library' component={Library} />
+
+        <Match pattern='/library' render={() =>
+          <div className='Library'>
+            <div className='toolbar-container'>
+              <div className='toolbar'>
+                <span
+                  className={cx({ 'action': true, 'action--active': false })}
+                  onClick={onToggleShuffle}>shuffle</span>
+              </div>
+            </div>
+            <FetchLibrary library={library}>
+              {tracks =>
+                <TracklistTable>
+                  <LazyTracklist tracks={tracks} />
+                </TracklistTable>
+              }
+            </FetchLibrary>
+          </div>
+        }/>
 
         <Soundmanager>
           <Player track={activeTrack} isPlaying={isPlaying} />
@@ -81,14 +108,17 @@ let MusicApp = ({ isAuthenticated, activeTrack, isPlaying, onAuth }) =>
 function mapStateToProps(state) {
   return {
     isAuthenticated: state[':app/isAuthenticated'],
+    library: state[':app/library'],
+    groups: state[':app/groups'],
     activeTrack: state[':player/track'],
-    isPlaying: state[':player/isPlaying']
+    isPlaying: state[':player/isPlaying'],
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onAuth: (userId, accessToken) => dispatch(authenticate(userId, accessToken))
+    onAuth: (userId, accessToken) => dispatch(authenticate(userId, accessToken)),
+    onToggleShuffle: () => dispatch(toggleShuffle())
   };
 }
 

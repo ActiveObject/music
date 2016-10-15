@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import GroupSync from './GroupSync';
 import Tracker from './Tracker';
@@ -58,4 +57,4 @@ function compareByUsage(usage) {
   };
 }
 
-export default connect(state => ({ groups: state[':app/groups'] }))(GroupsListContainer);
+export default GroupsListContainer;
