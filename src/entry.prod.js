@@ -1,13 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { AppContainer as HotLoader } from 'react-hot-loader';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { AppContainer as HotLoader } from 'react-hot-loader';
 import MusicApp from 'app/MusicApp';
-import store from 'app/store.prod';
+import reducers from 'app/reducers';
 
 render(
   <HotLoader>
-    <Provider store={store}>
+    <Provider store={createStore(reducers)}>
       <MusicApp />
     </Provider>
   </HotLoader>, document.querySelector('#app'));
