@@ -1,58 +1,53 @@
 import React from 'react';
-import vk from 'app/shared/vk';
 
-class VkAudioSync extends React.Component {
+export default class VkAudioSync extends React.Component {
   componentWillMount() {
-    var { userId, onSync } = this.props;
+    console.log(`[VkAudioSync] start syncing audio every ${this.props.interval}s`);
+    this.stopSyncing = this.startSyncing();
+  }
 
-    this.stopUpdating = startTrackUpdating(userId, 10 * 1000, res => {
-      onSync(res.response.map(t => {
-        return {
-          tag: ':track-source/library',
-          trackId: String(t)
+  componentWillUnmount() {
+    console.log(`[VkAudioSync] stop syncing`);
+    this.stopSyncing();
+  }
+
+  startSyncing(interval) {
+    var timer = null;
+    var { vk, userId, onSync, interval } = this.props;
+
+    function sync() {
+      console.log(`[VkAudioSync] sync`);
+
+      vk.execute({
+        code: `
+        return API.audio.get({ owner_id: ${userId} }).items@.id;
+        `
+      }, (err, res) => {
+        if (err) {
+          return console.log(err);
         }
-      }));
-    });
+
+        var library = res.response.map(t => {
+          return {
+            tag: ':track-source/library',
+            trackId: String(t)
+          }
+        });
+
+        onSync(library);
+
+        timer = setTimeout(sync, interval * 1000);
+      });
+    }
+
+    sync();
+
+    return function () {
+      clearTimeout(timer);
+    };
   }
 
   render() {
     return null;
   }
 }
-
-function startTrackUpdating(userId, interval, callback) {
-  var timer = null;
-
-  function next() {
-    updateTracks(userId, res => {
-      callback(res);
-      timer = setTimeout(() => next(), interval);
-    });
-  }
-
-  next();
-
-  return function () {
-    clearTimeout(timer);
-  };
-}
-
-function updateTracks(userId, callback) {
-  loadAllAudioIds(userId, (err, res) => {
-    if (err) {
-      return console.log(err);
-    }
-
-    callback(res);
-  });
-}
-
-function loadAllAudioIds(owner, callback) {
-  vk.execute({
-    code: `
-      return API.audio.get({ owner_id: ${owner} }).items@.id;
-    `
-  }, callback);
-}
-
-export default VkAudioSync;

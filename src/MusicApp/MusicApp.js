@@ -103,7 +103,7 @@ let MusicApp = ({
           <Player track={activeTrack} isPlaying={isPlaying} />
         </Soundmanager>
 
-        <VkAudioSync userId={userId} onSync={onAudioSync} />
+        <VkAudioSync vk={vk} userId={userId} onSync={onAudioSync} interval={10} />
         <VkGroupSync userId={userId} onSync={onGroupSync} />
         <VkDriver vk={vk} userId={userId} accessToken={accessToken} />
         <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
