@@ -3,9 +3,9 @@ import Request from './request';
 import Response from './response';
 import setupHelpers from './setupHelpers';
 
-function VkApi(attrs) {
-  this.interval = 1000 / attrs.rateLimit;
-  this.version = attrs.version;
+function VkApi({ rateLimit, version }) {
+  this.interval = 1000 / rateLimit;
+  this.version = version;
   this.entryPoint = 'https://api.vk.com/method/';
   this.state = {
     isAuthorized: false,
