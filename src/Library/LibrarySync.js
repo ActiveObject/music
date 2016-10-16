@@ -49,7 +49,7 @@ class LibrarySync extends React.Component {
         }
 
         var tracks = res.response.map(t => Track.fromVk(t, albums));
-        var cache = tracks.reduce((c, t) => c.set(t.id, t), this.props.cache)
+        var cache = tracks.reduce((c, t) => c.set(t.id, t), this.state.cache)
 
         this.setState({ cache });
         localStorage.setItem(':cache/library', JSON.stringify(cache));
