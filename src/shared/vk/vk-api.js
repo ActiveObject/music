@@ -6,7 +6,7 @@ import setupHelpers from './setupHelpers';
 function VkApi(attrs) {
   this.interval = 1000 / attrs.rateLimit;
   this.version = attrs.version;
-  this.entryPoint = attrs.entryPoint;
+  this.entryPoint = 'https://api.vk.com/method/';
   this.state = {
     isAuthorized: false,
     isWaitingForCaptcha: false
@@ -88,6 +88,5 @@ VkApi.prototype.process = function () {
 
 export default new VkApi({
   rateLimit: 2,
-  version: '5.29',
-  entryPoint: 'https://api.vk.com/method/'
+  version: '5.29'
 });
