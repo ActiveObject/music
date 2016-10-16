@@ -49,8 +49,13 @@ let MusicApp = ({
   <Router>
     <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
       <div>
-        <Match exactly pattern='/' component={UserProfile} />
-        <Match pattern='/library' component={UserProfile} />
+        <Match exactly pattern='/' render={() =>
+          <UserProfile userId={userId} />
+        }/>
+
+        <Match pattern='/library' render={() =>
+          <UserProfile userId={userId} />
+        }/>
 
         <Match exactly pattern='/' render={() =>
           <div className='Home'>

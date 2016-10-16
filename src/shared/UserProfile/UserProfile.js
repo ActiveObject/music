@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Motion, spring } from 'react-motion';
 import vk from 'app/shared/vk';
 import './UserProfile.css';
@@ -70,4 +69,4 @@ const UserProfile = ({ userId }) =>
     }
   </FetchUser>
 
-export default connect(state => ({ userId: state[':app/userId'] }))(UserProfile);
+export default UserProfile;
