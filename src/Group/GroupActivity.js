@@ -4,11 +4,8 @@ import './GroupActivity.css';
 import ActivityChart from './ActivityChart';
 
 class GroupActivity extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      activity: {}
-    };
+  state = {
+    activity: {}
   }
 
   componentWillMount() {

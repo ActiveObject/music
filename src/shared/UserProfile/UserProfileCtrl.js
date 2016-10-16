@@ -6,13 +6,9 @@ import { hasTag } from 'app/shared/Tag';
 import UserProfile from './UserProfile';
 
 class FetchUser extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      isLoading: false,
-      user: {}
-    };
+  state = {
+    isLoading: false,
+    user: {}
   }
 
   componentDidMount() {

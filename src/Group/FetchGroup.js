@@ -2,11 +2,8 @@ import React from 'react';
 import vk from 'app/shared/vk';
 
 export default class FetchGroup extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      isLoading: false
-    };
+  state = {
+    isLoading: false
   }
 
   componentWillMount() {

@@ -7,12 +7,8 @@ import merge from 'app/shared/merge';
 import * as Track from 'app/shared/Track';
 
 class LibrarySync extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      cache: Map()
-    };
+  state = {
+    cache: Map()
   }
 
   componentWillMount() {

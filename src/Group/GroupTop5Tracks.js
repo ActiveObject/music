@@ -73,13 +73,9 @@ let TopTracks = ({ posts, albums }) => {
 TopTracks = connect(state => ({ albums: state[':app/albums'] }))(TopTracks);
 
 class GroupTop5Tracks extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      isLoading: false,
-      posts: []
-    };
+  state = {
+    isLoading: false,
+    posts: []
   }
 
   componentDidMount() {

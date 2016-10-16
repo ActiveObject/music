@@ -3,9 +3,8 @@ import React from 'react';
 import merge from 'app/shared/merge';
 
 class VkDriver extends React.Component {
-  constructor() {
-    super();
-    this.state = { inTransaction: false };
+  state = {
+    inTransaction: false
   }
 
   componentWillMount() {

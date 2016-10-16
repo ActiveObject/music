@@ -118,9 +118,8 @@ class PlayerAnimation extends Component {
 }
 
 class PlayerView extends React.Component {
-  constructor() {
-    super();
-    this.state = { shape: 'button' };
+  state = {
+    shape: 'button'
   }
 
   render() {

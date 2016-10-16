@@ -4,12 +4,9 @@ import GroupSync from './GroupSync';
 import Tracker from './Tracker';
 
 class GroupsListContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      cache: Map(),
-      usage: Map()
-    };
+  state = {
+    cache: Map(),
+    usage: Map()
   }
 
   componentWillMount() {

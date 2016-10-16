@@ -31,14 +31,11 @@ let ScrollContainer = ({ yOffset, children }) => {
 }
 
 class LazyTracklist extends React.Component {
-  constructor(props) {
-    super();
-    this.state = {
-      cursor: new Cursor(props.tracks, {
-        itemHeight: props.itemHeight,
-        pageSize: props.pageSize
-      })
-    };
+  state = {
+    cursor: new Cursor(this.props.tracks, {
+      itemHeight: this.props.itemHeight,
+      pageSize: this.props.pageSize
+    })
   }
 
   shouldComponentUpdate(nextProps, nextState) {

@@ -123,9 +123,8 @@ function fetchUrl(audio, callback) {
 }
 
 export class AudioProvider extends React.Component {
-  constructor() {
-    super();
-    this.state = { audio: undefined };
+  state = {
+    audio: undefined
   }
 
   componentWillMount() {
