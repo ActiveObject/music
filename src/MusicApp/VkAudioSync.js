@@ -16,8 +16,6 @@ export default class VkAudioSync extends React.Component {
     var { vk, userId, onSync, interval } = this.props;
 
     function sync() {
-      console.log(`[VkAudioSync] sync`);
-
       vk.execute({
         code: `
         return API.audio.get({ owner_id: ${userId} }).items@.id;

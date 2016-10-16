@@ -1,42 +1,39 @@
 import React from 'react';
-import vk from 'app/shared/vk';
 
-class VkGroupSync extends React.Component {
+export default class VkGroupSync extends React.Component {
   componentWillMount() {
-    this.stopUpdating = startUpdating(60 * 1000, groups => {
-      this.props.onSync(groups);
-    });
+    console.log(`[VkGroupSync] start syncing groups every ${this.props.interval}s`);
+    this.stopSyncing = this.startSyncing();
   }
 
   componentWillUnmount() {
-    this.stopUpdating();
+    this.stopSyncing();
+  }
+
+  startSyncing() {
+    var timer = null;
+    var { userId, vk, interval, onSync } = this.props;
+
+    function sync() {
+      vk.groups.get({}, (err, res) => {
+        if (err) {
+          return console.log(err);
+        }
+
+        onSync(res.response.items.map(String));
+      });
+
+      timer = setTimeout(sync, interval * 1000);
+    }
+
+    sync();
+
+    return function () {
+      clearTimeout(timer);
+    };
   }
 
   render() {
     return null;
   }
 }
-
-function startUpdating(interval, callback) {
-  var timer = null;
-
-  function next() {
-    vk.groups.get({}, (err, res) => {
-      if (err) {
-        return console.log(err);
-      }
-
-      callback(res.response.items.map(String));
-    });
-
-    timer = setTimeout(() => next(), interval);
-  }
-
-  next();
-
-  return function () {
-    clearTimeout(timer);
-  };
-}
-
-export default VkGroupSync;
