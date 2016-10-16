@@ -8,7 +8,7 @@ import cx from 'classnames';
 import Auth from 'app/Auth';
 import Group from 'app/Group';
 import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
-import UserProfileCtrl from 'app/shared/UserProfile/UserProfileCtrl';
+import UserProfile from 'app/shared/UserProfile';
 import Soundmanager from 'app/shared/Soundmanager';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
@@ -49,8 +49,8 @@ let MusicApp = ({
   <Router>
     <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
       <div>
-        <Match exactly pattern='/' component={UserProfileCtrl} />
-        <Match pattern='/library' component={UserProfileCtrl} />
+        <Match exactly pattern='/' component={UserProfile} />
+        <Match pattern='/library' component={UserProfile} />
 
         <Match exactly pattern='/' render={() =>
           <div className='Home'>
