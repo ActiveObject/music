@@ -33,20 +33,19 @@ module.exports = function (env) {
     },
 
     module: {
-      loaders: [
-        { test: /\.jsx?/, loaders: ['babel'], include: path.join(__dirname, 'src') },
-        { test: /\.css$/, loaders: ['style', 'css', 'postcss'] },
-        { test: require.resolve('react'), loader: 'expose?React' },
-        { test: /\.svg$/, loader: 'svg-sprite' }
+      rules: [
+        { test: /\.jsx?/, use: ['babel'], include: path.join(__dirname, 'src') },
+        { test: /\.css$/, use: ['style', 'css', 'postcss'] },
+        { test: require.resolve('react'), use: 'expose?React' },
+        { test: /\.svg$/, use: 'svg-sprite' }
       ]
     },
 
     resolve: {
-      extensions: ['', '.js']
+      extensions: ['.js']
     },
 
     plugins: plugins,
-    postcss: [require('postcss-simple-vars')],
     devServer: {
       contentBase: '_public',
       historyApiFallback: true
