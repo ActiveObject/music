@@ -36,7 +36,6 @@ module.exports = function (env) {
       rules: [
         { test: /\.jsx?/, use: ['babel'], include: path.join(__dirname, 'src') },
         { test: /\.css$/, use: ['style', 'css', 'postcss'] },
-        { test: require.resolve('react'), use: 'expose?React' },
         { test: /\.svg$/, use: 'svg-sprite' }
       ]
     },
