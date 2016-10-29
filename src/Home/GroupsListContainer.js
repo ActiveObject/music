@@ -24,13 +24,11 @@ class GroupsListContainer extends React.Component {
     var groups = this.props.groups.sort(compareByUsage(this.state.usage));
 
     return (
-      <Tracker value={this.state.usage} onChange={c => this.updateUsage(c)}>
-        <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
-          <div className='groups-list'>
-            {this.props.children(groups)}
-          </div>
-        </GroupSync>
-      </Tracker>
+      <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
+        <div className='groups-list' onClick={e => this.updateUsage(e)}>
+          {this.props.children(groups)}
+        </div>
+      </GroupSync>
     )
   }
 
@@ -39,9 +37,14 @@ class GroupsListContainer extends React.Component {
     localStorage.setItem(':cache/groups', JSON.stringify(cache));
   }
 
-  updateUsage(usage) {
-    this.setState({ usage });
-    localStorage.setItem(':cache/groups-usage', JSON.stringify(usage));
+  updateUsage(event) {
+    var key = event.target.dataset.trackKey;
+
+    if (key) {
+      var usage = this.state.usage.update(key, 0, v => v + 1);
+      this.setState({ usage });
+      localStorage.setItem(':cache/groups-usage', JSON.stringify(usage));
+    }
   }
 }
 
@@ -53,24 +56,6 @@ function compareByUsage(usage) {
   return function (a, b) {
     return usageOf(b) - usageOf(a);
   };
-}
-
-class Tracker extends React.Component {
-  render() {
-    return (
-      <div onClick={e => this.track(e)}>
-        {this.props.children}
-      </div>
-    );
-  }
-
-  track(e) {
-    var key = e.target.dataset.trackKey;
-
-    if (key) {
-      this.props.onChange(this.props.value.update(key, 0, v => v + 1));
-    }
-  }
 }
 
 class GroupSync extends React.Component {
