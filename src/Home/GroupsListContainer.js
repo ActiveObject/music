@@ -1,7 +1,6 @@
 import React from 'react';
 import { Map } from 'immutable';
 import GroupSync from './GroupSync';
-import Tracker from './Tracker';
 
 class GroupsListContainer extends React.Component {
   state = {
@@ -52,6 +51,24 @@ function compareByUsage(usage) {
   return function (a, b) {
     return usageOf(b) - usageOf(a);
   };
+}
+
+class Tracker extends React.Component {
+  render() {
+    return (
+      <div onClick={e => this.track(e)}>
+        {this.props.children}
+      </div>
+    );
+  }
+
+  track(e) {
+    var key = e.target.dataset.trackKey;
+
+    if (key) {
+      this.props.onChange(this.props.value.update(key, 0, v => v + 1));
+    }
+  }
 }
 
 export default GroupsListContainer;
