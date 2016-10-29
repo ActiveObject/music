@@ -1,6 +1,5 @@
 import React from 'react';
 import { Map } from 'immutable';
-import { connect } from 'react-redux';
 import difference from 'lodash/difference';
 import vk from 'app/shared/vk';
 
@@ -24,8 +23,8 @@ class GroupsListContainer extends React.Component {
     var groups = this.props.groups.sort(compareByUsage(this.state.usage));
 
     return (
-      <GroupSync cache={this.state.cache} onSync={c => this.updateCache(c)}>
-        <div className='groups-list' onClick={e => this.updateUsage(e)}>
+      <GroupSync groups={this.props.groups} cache={this.state.cache} onSync={c => this.updateCache(c)}>
+        <div className='groups-list'>
           {this.props.children(groups)}
         </div>
       </GroupSync>
