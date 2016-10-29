@@ -18,10 +18,10 @@ module.exports = function (env) {
 
   if (env === 'development') {
     entry.push('react-hot-loader/patch');
-    entry.push('./src/entry.dev.js');
+    entry.push('./src/index.dev.js');
     plugins.push(new webpack.NamedModulesPlugin());
   } else {
-    entry.push('./src/entry.prod.js');
+    entry.push('./src/index.prod.js');
   }
 
   return {
