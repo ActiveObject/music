@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import vk from 'app/shared/vk';
-import { authenticate, toggleShuffle, pushLibrary, pushGroups, useTrack } from 'app/redux';
+import { authenticate, toggleShuffle, pushLibrary, pushGroups, useTrack } from 'app/shared/redux';
 
 import Auth from './Auth';
 import Group from './Group';

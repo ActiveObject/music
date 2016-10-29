@@ -3,7 +3,7 @@ import key from 'keymaster';
 import { connect } from 'react-redux';
 
 import { toggleTag } from 'app/shared/Tag';
-import { rewind, forward, togglePlay } from 'app/redux';
+import { rewind, forward, togglePlay } from 'app/shared/redux';
 
 class KeyboardDriver extends React.Component {
   componentWillMount() {

@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import * as Player from 'app/shared/Player';
+import * as Player from './Player';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const GROUPS_PUSH = 'GROUPS_PUSH';

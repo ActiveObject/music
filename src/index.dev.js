@@ -8,7 +8,7 @@ import Perf from 'react-addons-perf';
 import MusicApp from 'app/MusicApp';
 import vk from 'app/shared/vk';
 import DevTools from 'app/MusicApp/DevTools';
-import rootReducer from 'app/redux';
+import rootReducer from 'app/shared/redux';
 
 const store = createStore(rootReducer, compose(DevTools.instrument(), persistState(getDebugSessionKey())));
 
@@ -35,8 +35,8 @@ if (module.hot) {
       </HotLoader>, document.querySelector('#app'));
   });
 
-  module.hot.accept('app/redux', () =>
-    store.replaceReducer(require('app/redux'))
+  module.hot.accept('app/shared/redux', () =>
+    store.replaceReducer(require('app/shared/redux'))
   );
 }
 

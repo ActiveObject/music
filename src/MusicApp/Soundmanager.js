@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
-import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/redux';
+import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/shared/redux';
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
