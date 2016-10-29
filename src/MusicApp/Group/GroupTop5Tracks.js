@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import vk from 'app/shared/vk';
 import { fromVk } from 'app/shared/Track';
 import merge from 'app/shared/merge';
-import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
-import TracklistTable from 'app/shared/tracklist/TracklistTable';
-import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
+import StaticTracklist from '../tracklist/StaticTracklist';
+import TracklistTable from '../tracklist/TracklistTable';
+import TracklistPreview from '../tracklist/TracklistPreview';
 
 function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback) {
   vk.wall.get({

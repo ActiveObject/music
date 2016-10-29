@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { TransitionMotion, spring } from 'react-motion';
 import key from 'keymaster';
-import { AudioProvider } from 'app/shared/Soundmanager';
+import { AudioProvider } from './Soundmanager';
 import './PlayerView.css';
-import PlayBtn from 'app/shared/PlayBtn/PlayBtn';
+import PlayBtn from './PlayBtn/PlayBtn';
 
 class PlayerPopover extends React.Component {
   componentDidMount() {

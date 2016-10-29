@@ -4,7 +4,7 @@ import MediaQuery from 'react-responsive';
 import GroupTop5Tracks from './GroupTop5Tracks';
 import GroupActivity from './GroupActivity';
 import FetchGroup from './FetchGroup';
-import 'app/shared/ResponsiveGrid.css';
+import '../styles/ResponsiveGrid.css';
 import './Group.css'
 
 let randomNum = (min, max) => min + Math.floor(Math.random() * (max - min));

@@ -1,7 +1,7 @@
 import Url from 'url';
 import querystring from 'querystring';
 import React from 'react';
-import Icon from 'app/shared/Icon';
+import Icon from '../Icon';
 import './Auth.css';
 import vkLogo from './vkcom.svg';
 

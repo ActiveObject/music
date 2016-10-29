@@ -1,8 +1,7 @@
 import React from 'react';
 import { Motion, spring } from 'react-motion';
-import Icon from 'app/shared/Icon';
+import Icon from '../Icon';
 import cx from 'classnames';
-import { hasTag } from 'app/shared/Tag';
 
 import './PlayBtn.css';
 import pauseSvg from './pause.svg';

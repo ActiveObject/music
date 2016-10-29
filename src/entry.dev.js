@@ -7,7 +7,7 @@ import { AppContainer as HotLoader } from 'react-hot-loader';
 import Perf from 'react-addons-perf';
 import MusicApp from 'app/MusicApp';
 import vk from 'app/shared/vk';
-import DevTools from 'app/DevTools';
+import DevTools from 'app/MusicApp/DevTools';
 import rootReducer from 'app/redux';
 
 const store = createStore(rootReducer, compose(DevTools.instrument(), persistState(getDebugSessionKey())));

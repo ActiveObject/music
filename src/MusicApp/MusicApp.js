@@ -5,31 +5,31 @@ import Link from 'react-router/Link';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
-import Auth from 'app/Auth';
-import Group from 'app/Group';
-import PlayBtnCtrl from 'app/shared/PlayBtn/PlayBtnCtrl';
-import UserProfile from 'app/shared/UserProfile';
-import Soundmanager from 'app/shared/Soundmanager';
+import vk from 'app/shared/vk';
+import { authenticate, toggleShuffle, pushLibrary, pushGroups, useTrack } from 'app/redux';
+
+import Auth from './Auth';
+import Group from './Group';
+import PlayBtnCtrl from './PlayBtn/PlayBtnCtrl';
+import UserProfile from './UserProfile';
+import Soundmanager from './Soundmanager';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
 import PlayerSync from './PlayerSync';
 import KeyboardDriver from './KeyboardDriver';
-import Player from 'app/shared/PlayerView';
-import GroupsListContainer from 'app/Home/GroupsListContainer';
-import LibrarySync from 'app/Library/LibrarySync';
-import TracklistTable from 'app/shared/tracklist/TracklistTable';
-import TracklistPreview from 'app/shared/tracklist/TracklistPreview';
-import StaticTracklist from 'app/shared/tracklist/StaticTracklist';
-import LazyTracklist from 'app/shared/tracklist/LazyTracklist';
-import vk from 'app/shared/vk';
-
-import { authenticate, toggleShuffle, pushLibrary, pushGroups, useTrack } from 'app/redux';
+import Player from './PlayerView';
+import GroupsListContainer from './GroupsListContainer';
+import LibrarySync from './LibrarySync';
+import TracklistTable from './tracklist/TracklistTable';
+import TracklistPreview from './tracklist/TracklistPreview';
+import StaticTracklist from './tracklist/StaticTracklist';
+import LazyTracklist from './tracklist/LazyTracklist';
 
 import './styles/base.css';
 import './styles/theme.css';
-import 'app/shared/ResponsiveGrid.css';
-import 'app/Library/Library.css';
+import './styles/Library.css';
+import './styles/ResponsiveGrid.css';
 
 let MusicApp = ({
   isAuthenticated,
