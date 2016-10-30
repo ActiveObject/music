@@ -24,7 +24,7 @@ class GroupsListContainer extends React.Component {
 
     return (
       <GroupSync groups={this.props.groups} cache={this.state.cache} onSync={c => this.updateCache(c)}>
-        <div className='groups-list'>
+        <div className='groups-list' onClick={e => this.updateUsage(e)}>
           {this.props.children(groups)}
         </div>
       </GroupSync>
