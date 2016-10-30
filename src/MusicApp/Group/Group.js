@@ -11,12 +11,8 @@ let randomNum = (min, max) => min + Math.floor(Math.random() * (max - min));
 
 const GroupListItemPreview = () =>
   <div className='track' style={{ height: 50 }}>
-    <div className='GroupsList__image'>
-      <div className='GroupsListPreview__image-block'></div>
-    </div>
-    <div className='GroupsList__title'>
-      <div className='TracklistPreview__block' style={{ width: `${randomNum(50, 100)}%` }}></div>
-    </div>
+    <div className='GroupsList__image GroupsListPreview__image-block' />
+    <div className='GroupsList__title TracklistPreview__block' style={{ width: `${randomNum(20, 70)}%` }}></div>
   </div>
 
 const GroupListItem = ({ group }) =>
