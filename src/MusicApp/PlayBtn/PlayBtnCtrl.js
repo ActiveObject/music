@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hasTag } from 'app/shared/Tag';
 import { togglePlay } from 'app/shared/redux';
 import PlayBtn from './PlayBtn';
 
