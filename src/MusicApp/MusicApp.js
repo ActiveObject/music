@@ -23,8 +23,8 @@ import GroupsListContainer from './GroupsListContainer';
 import LibrarySync from './LibrarySync';
 import TracklistTable from './tracklist/TracklistTable';
 import TracklistPreview from './tracklist/TracklistPreview';
-import StaticTracklist from './tracklist/StaticTracklist';
 import LazyTracklist from './tracklist/LazyTracklist';
+import TrackCtrl from './tracklist/TrackCtrl';
 
 import './styles/base.css';
 import './styles/theme.css';
@@ -67,7 +67,9 @@ let MusicApp = ({
                 {tracks =>
                   <TracklistTable>
                     <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
-                      <StaticTracklist tracks={tracks} limit={10} />
+                      <div>
+                        {tracks.slice(0, 10).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
+                      </div>
                     </TracklistPreview>
                   </TracklistTable>
                 }

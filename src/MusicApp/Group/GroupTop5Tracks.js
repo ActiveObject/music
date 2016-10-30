@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import vk from 'app/shared/vk';
 import { fromVk } from 'app/shared/Track';
 import merge from 'app/shared/merge';
-import StaticTracklist from '../tracklist/StaticTracklist';
 import TracklistTable from '../tracklist/TracklistTable';
 import TracklistPreview from '../tracklist/TracklistPreview';
+import TrackCtrl from '../tracklist/TrackCtrl';
 
 function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback) {
   vk.wall.get({
@@ -67,7 +67,11 @@ let TopTracks = ({ posts, albums }) => {
     .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
     .slice(0, 5);
 
-  return <StaticTracklist tracks={tracks} />;
+  return (
+    <div>
+      {tracks.slice(0, 5).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
+    </div>
+  );
 }
 
 TopTracks = connect(state => ({ albums: state[':app/albums'] }))(TopTracks);
