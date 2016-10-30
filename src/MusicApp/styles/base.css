@@ -72,6 +72,10 @@ body,
   overflow: hidden;
 }
 
+.preview-block {
+  background-color: #E6E6E6;
+}
+
 @media screen and (max-width: 768px) {
   .Group__content {
     padding-top: 15px;

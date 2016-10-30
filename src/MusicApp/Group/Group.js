@@ -5,14 +5,14 @@ import GroupTop5Tracks from './GroupTop5Tracks';
 import GroupActivity from './GroupActivity';
 import FetchGroup from './FetchGroup';
 import '../styles/ResponsiveGrid.css';
-import './Group.css'
+import './Group.css';
 
 let randomNum = (min, max) => min + Math.floor(Math.random() * (max - min));
 
 const GroupListItemPreview = () =>
   <div className='track' style={{ height: 50 }}>
-    <div className='GroupsList__image GroupsListPreview__image-block' />
-    <div className='GroupsList__title TracklistPreview__block' style={{ width: `${randomNum(20, 70)}%` }}></div>
+    <div className='GroupsList__image preview-block' />
+    <div className='GroupsList__title preview-block' style={{ width: `${randomNum(20, 70)}%`, height: 8 }}></div>
   </div>
 
 const GroupListItem = ({ group }) =>
