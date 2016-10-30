@@ -73,6 +73,7 @@ body,
 }
 
 .preview-block {
+  display: inline-block;
   background-color: #E6E6E6;
 }
 
