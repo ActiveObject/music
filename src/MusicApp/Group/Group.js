@@ -21,12 +21,8 @@ const GroupListItemPreview = () =>
 
 const GroupListItem = ({ group }) =>
   <div className='track' style={{ height: 50 }}>
-    <div className='GroupsList__image' style={{ width: 30, height: 30 }}>
-      <img src={group.photo_50} width={30} height={30} />
-    </div>
-    <div className='GroupsList__name'>
-      <Link to={`/groups/${group.id}`} data-track-key={group.id}>{group.name}</Link>
-    </div>
+    <img className='GroupsList__image' src={group.photo_50} width={30} height={30} />
+    <Link className='GroupsList__name' to={`/groups/${group.id}`} data-track-key={group.id}>{group.name}</Link>
   </div>
 
 const GroupProfilePreview = () =>
