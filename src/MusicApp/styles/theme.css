@@ -1,0 +1,135 @@
+$base-color-03: #002b36;
+$base-color-02: #073642;
+$base-color-01: #586e75;
+$base-color-00: #657b83;
+$base-color-0: #839496;
+$base-color-1: #93a1a1;
+$base-color-2: #eee8d5;
+$base-color-3: #fdf6e3;
+
+$accent-yellow: #b58900;
+$accent-orange: #cb4b16;
+$accent-red: #dc322f;
+$accent-magenta: #d33682;
+$accent-violet: #6c71c4;
+$accent-blue: #268bd2;
+$accent-cyan: #2aa198;
+$accent-green: #859900;
+
+$accent-color: #FD76B3;
+$accent-text-color: #FDF6E3;
+$primary-color: #6c71c4;
+$primary-dark-color: #5A5D9C;
+$primary-lightdark-color: #5b5fb0;
+$primary-text-color: #FDF6E3;
+$base-text-color: #657b83;
+
+body {
+  color: $base-text-color;
+}
+
+::selection {
+  background-color: $primary-dark-color;
+  color: $primary-text-color;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: $accent-color;
+}
+
+.track:nth-child(odd),
+.track-container:nth-child(odd) .track {
+  background-color: #F2F2F2;
+}
+
+.track:nth-child(even),
+.track-container:nth-child(even) .track {
+  background-color: white;
+}
+
+.track--active,
+.track--active:nth-child(odd),
+.track--active:nth-child(even),
+.track-container .track--active:nth-child(odd),
+.track-container .track--active:nth-child(even) {
+  background-color: $accent-color;
+  color: $accent-text-color;
+}
+
+.TracklistTable__columns {
+  border-bottom: 1px solid #eee;
+}
+
+.TracklistTable__table {
+  border-bottom: 1px solid #eee;
+}
+
+.play-btn {
+  background-color: $accent-color;
+}
+
+.play-btn .icon {
+  fill: $accent-text-color;
+}
+
+.command-palette__todo {
+  color: $accent-color;
+}
+
+.action:hover {
+  background-color: rgba(153, 153, 153, .12);
+}
+
+.action--active,
+.action--active:hover {
+  background-color: $accent-color;
+  color: $accent-text-color;
+}
+
+.group-profile,
+.Group__activity {
+  background-color: $primary-color;
+}
+
+.group-name {
+  color: $primary-text-color;
+}
+
+.vk-captcha-view {
+  background-color: $primary-dark-color;
+}
+
+.player-bbox {
+  background-color: $accent-color;
+  color: $accent-text-color;
+}
+
+.apl-fg-line {
+  background-color: #cf4885;
+}
+
+.apl-bg-line {
+  background-color: #f6abcc;
+}
+
+.apl-seek {
+  background-color: #cf4885;
+}
+
+.apl-load-line {
+  background-color: #fff;
+}
+
+.group-profile-preview__image,
+.group-profile-preview__name {
+  background-color: $primary-lightdark-color;
+}
+
+.group-profile-preview .group-image {
+  border-color: $primary-lightdark-color;
+}

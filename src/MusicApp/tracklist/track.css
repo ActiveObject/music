@@ -1,0 +1,59 @@
+.track {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+  padding: 0 5px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: .75rem;
+  transition: background-color 0.1s ease-in;
+}
+
+.track__title,
+.track__artist,
+.track__duration {
+  margin: 0 5px;
+}
+
+.track__title,
+.track__artist {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.track__index {
+  text-align: center;
+  width: 3em;
+  flex-shrink: 0;
+}
+
+.track__artist {
+  width: 30%;
+  flex-shrink: 0;
+}
+
+.track__title {
+  width: 60%;
+}
+
+.track__duration {
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .track__index,
+  .track__duration {
+    display: none;
+  }
+
+  .track__artist {
+    flex: 1;
+  }
+
+  .track__title {
+    flex: 1;
+  }
+}

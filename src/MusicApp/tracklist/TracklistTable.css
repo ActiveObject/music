@@ -1,0 +1,23 @@
+.TracklistTable {
+  height: 100%;
+}
+
+.TracklistTable__content {
+  height: 100%;
+}
+
+.TracklistTable__table {
+  height: calc(100% - 41px);
+}
+
+.TracklistTable__columns {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  width: 100%;
+  padding: 0 5px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+  text-transform: uppercase;
+  font-size: .8rem;
+}

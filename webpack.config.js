@@ -1,42 +1,54 @@
 var path = require('path');
 var webpack = require('webpack');
 
-if (!Number(process.env.MUSIC_APP_ID)) {
-  throw new Error('MUSIC_APP_ID env var should be a number');
-}
+module.exports = function (env) {
+  var plugins = [];
+  var entry = [];
 
-var definePlugin = new webpack.DefinePlugin({
-  'process.env': {
-    NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-    MUSIC_APP_ID: JSON.stringify(process.env.MUSIC_APP_ID)
+  if (!Number(process.env.MUSIC_APP_ID)) {
+    throw new Error('MUSIC_APP_ID env var should be a number');
   }
-});
 
-module.exports = {
-  entry: './src/main.js',
-  output: {
-    path: './_public',
-    filename: 'app.js'
-  },
-  module: {
-    loaders: [
-      { test: /app\/(.*)\.js$/, loader: 'esnext' },
-      { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' },
-      { test: require.resolve('react'), loader: 'expose?React' },
-      { test: /\.jsx$/, loader: 'jsx-loader?harmony' }
-    ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
-  externals: {
-    'sound-manager': 'soundManager',
-    'pouchdb': 'PouchDB',
-    'firebase': 'Firebase'
-  },
-  watchDelay: 200,
-  plugins: [
-    definePlugin,
-    new webpack.IgnorePlugin(/vertx/)
-  ]
+  plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(env),
+      MUSIC_APP_ID: JSON.stringify(process.env.MUSIC_APP_ID)
+    }
+  }));
+
+  if (env === 'development') {
+    entry.push('react-hot-loader/patch');
+    entry.push('./src/index.dev.js');
+    plugins.push(new webpack.NamedModulesPlugin());
+  } else {
+    entry.push('./src/index.prod.js');
+  }
+
+  return {
+    devtool: env === 'development' ? 'cheap-module-eval-source-map' : 'source-map',
+    entry: entry,
+
+    output: {
+      path: path.join(__dirname, '_public'),
+      filename: 'app.js'
+    },
+
+    module: {
+      rules: [
+        { test: /\.jsx?/, use: ['babel'], include: path.join(__dirname, 'src') },
+        { test: /\.css$/, use: ['style', 'css', 'postcss'] },
+        { test: /\.svg$/, use: 'svg-sprite' }
+      ]
+    },
+
+    resolve: {
+      extensions: ['.js']
+    },
+
+    plugins: plugins,
+    devServer: {
+      contentBase: '_public',
+      historyApiFallback: true
+    }
+  }
 };

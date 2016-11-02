@@ -1,0 +1,51 @@
+.PlayerView {
+  position: fixed;
+  bottom: 20px;
+  left: 30px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.PlayerView-b {
+  position: relative;
+  width: 400px;
+  height: 500px;
+  background-color: #FD76B3;
+  border-radius: 2px;
+  padding: 100px 0;
+  color: white;
+}
+
+.PlayerView__top {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.PlayerView__audio {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: #555;
+}
+
+.PlayerView__visualization {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  height: 150px;
+  width: 100%;
+}
+
+.PlayerView__info {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-weight: 300;
+  font-size: 0.8rem;
+}

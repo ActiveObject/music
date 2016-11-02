@@ -1,0 +1,23 @@
+$size: 40px;
+
+.play-btn {
+  width: $size;
+  height: $size;
+  min-width: $size;
+  border-radius: 2px;
+  cursor: pointer;
+  transform: rotate(0);
+  transition: background-color 0.2s, border-color 0.2s;
+  box-sizing: content-box;
+}
+
+.play-btn .icon {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  transition: fill 0.2s;
+}
+
+.play-btn--active .icon {
+  transform: rotate(-90deg);
+}

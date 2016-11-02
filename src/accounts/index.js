@@ -1,1 +1,0 @@
-exports.vk = require('./vk');
