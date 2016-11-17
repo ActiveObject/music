@@ -8,7 +8,6 @@ class VkDriver extends React.Component {
   state = {
     inTransaction: false,
     interval: 1000 / 2,
-    version: '5.29',
     entryPoint: 'https://api.vk.com/method/',
     state: {
       isAuthorized: false,
@@ -98,7 +97,7 @@ class VkDriver extends React.Component {
       var reqParams = this.state.queue[0];
       var req = new Request(merge(reqParams, {
         token: this.props.accessToken,
-        version: this.state.version,
+        version: this.props.apiVersion,
         entryPoint: this.state.entryPoint
       }));
 
