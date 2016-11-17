@@ -48,6 +48,7 @@ let MusicApp = ({
 }) =>
   <Router>
     <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
+      <VkDriver vk={vk} userId={userId} accessToken={accessToken}>
       <div>
         <Match exactly pattern='/' render={() =>
           <UserProfile userId={userId} />
@@ -112,10 +113,10 @@ let MusicApp = ({
 
         <VkAudioSync vk={vk} userId={userId} onSync={onAudioSync} interval={10} />
         <VkGroupSync vk={vk} userId={userId} onSync={onGroupSync} interval={60} />
-        <VkDriver vk={vk} userId={userId} accessToken={accessToken} />
         <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
         <KeyboardDriver />
       </div>
+      </VkDriver>
     </Auth>
   </Router>
 
