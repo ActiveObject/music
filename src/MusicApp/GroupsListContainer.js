@@ -2,7 +2,7 @@ import React from 'react';
 import { Map } from 'immutable';
 import difference from 'lodash/difference';
 import vk from 'app/shared/vk';
-import EffectComponent from 'app/shared/EffectComponent';
+import { EffectComponent } from 'app/shared/effects';
 
 class GroupsListContainer extends React.Component {
   state = {

@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import request from 'jsonp';
 import merge from 'app/shared/merge';
-import EffectHandler from 'app/shared/EffectHandler';
+import { EffectHandler } from 'app/shared/effects';
 
 class VkDriver extends React.Component {
   state = {

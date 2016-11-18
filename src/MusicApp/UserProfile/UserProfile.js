@@ -2,7 +2,7 @@ import React from 'react';
 import { Motion, spring } from 'react-motion';
 import vk from 'app/shared/vk';
 import './UserProfile.css';
-import EffectComponent from 'app/shared/EffectComponent';
+import { EffectComponent } from 'app/shared/effects';
 
 class FetchUser extends EffectComponent {
   state = {
