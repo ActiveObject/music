@@ -8,7 +8,7 @@ import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
-import EffectComponent from 'app/shared/EffectComponent';
+import { EffectComponent } from 'app/shared/effects';
 
 class Soundmanager extends EffectComponent {
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {

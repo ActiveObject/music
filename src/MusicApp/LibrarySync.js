@@ -5,7 +5,7 @@ import difference from 'lodash/difference';
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import * as Track from 'app/shared/Track';
-import EffectComponent from 'app/shared/EffectComponent';
+import { EffectComponent } from 'app/shared/effects';
 
 class LibrarySync extends EffectComponent {
   state = {

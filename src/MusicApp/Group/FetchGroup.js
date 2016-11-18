@@ -1,6 +1,6 @@
 import React from 'react';
 import vk from 'app/shared/vk';
-import EffectComponent from 'app/shared/EffectComponent';
+import { EffectComponent } from 'app/shared/effects';
 
 export default class FetchGroup extends EffectComponent {
   state = {

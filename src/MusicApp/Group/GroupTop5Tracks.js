@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import vk from 'app/shared/vk';
 import { fromVk } from 'app/shared/Track';
 import merge from 'app/shared/merge';
-import EffectComponent from 'app/shared/EffectComponent';
+import { EffectComponent } from 'app/shared/effects';
 import TracklistTable from '../tracklist/TracklistTable';
 import TracklistPreview from '../tracklist/TracklistPreview';
 import TrackCtrl from '../tracklist/TrackCtrl';

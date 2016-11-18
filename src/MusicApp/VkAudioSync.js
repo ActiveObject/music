@@ -1,5 +1,5 @@
 import React from 'react';
-import EffectComponent from 'app/shared/EffectComponent';
+import { EffectComponent } from 'app/shared/effects';
 
 export default class VkAudioSync extends EffectComponent {
   componentDidMount() {
