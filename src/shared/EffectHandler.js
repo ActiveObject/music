@@ -7,7 +7,11 @@ export default class EffectHandler extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener(this.props.type, event => this.props.onEffect(event), false);
+    document.addEventListener(this.props.type, this.props.onEffect, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener(this.props.type, this.props.onEffect, false);
   }
 
   render() {
