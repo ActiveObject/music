@@ -2,6 +2,7 @@ import React from 'react';
 import { Map } from 'immutable';
 import difference from 'lodash/difference';
 import vk from 'app/shared/vk';
+import EffectComponent from 'app/shared/EffectComponent';
 
 class GroupsListContainer extends React.Component {
   state = {
@@ -57,7 +58,7 @@ function compareByUsage(usage) {
   };
 }
 
-class GroupSync extends React.Component {
+class GroupSync extends EffectComponent {
   componentWillMount() {
     this.sync();
   }
@@ -80,7 +81,7 @@ class GroupSync extends React.Component {
     console.log(`[GroupSync] ${missing.length} missing, ${outdated.length} outdated`);
 
     if (missing.length > 0) {
-      vk.groups.getById({
+      var effect = vk.groups.getById({
         group_ids: missing.slice(0, 100).join(',')
       }, (err, res) => {
         if (err) {
@@ -91,6 +92,8 @@ class GroupSync extends React.Component {
 
         this.props.onSync(cache);
       });
+
+      this.perform(effect);
     }
   }
 }

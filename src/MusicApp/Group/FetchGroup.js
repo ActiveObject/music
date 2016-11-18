@@ -1,7 +1,8 @@
 import React from 'react';
 import vk from 'app/shared/vk';
+import EffectComponent from 'app/shared/EffectComponent';
 
-export default class FetchGroup extends React.Component {
+export default class FetchGroup extends EffectComponent {
   state = {
     isLoading: false
   }
@@ -16,7 +17,7 @@ export default class FetchGroup extends React.Component {
     } else {
       this.setState({ isLoading: true });
 
-      vk.groups.getById({
+      var effect = vk.groups.getById({
         group_ids: this.props.id,
         fields: ['description']
       }, (err, res) => {
@@ -29,6 +30,8 @@ export default class FetchGroup extends React.Component {
           group: res.response[0]
         });
       });
+
+      this.perform(effect);
     }
   }
 

@@ -5,8 +5,9 @@ import difference from 'lodash/difference';
 import vk from 'app/shared/vk';
 import merge from 'app/shared/merge';
 import * as Track from 'app/shared/Track';
+import EffectComponent from 'app/shared/EffectComponent';
 
-class LibrarySync extends React.Component {
+class LibrarySync extends EffectComponent {
   state = {
     cache: Map()
   }
@@ -43,7 +44,7 @@ class LibrarySync extends React.Component {
     console.log(`[LibrarySync] ${missing.length} missing, ${outdated.length} outdated`);
 
     if (itemsToLoad.length > 0) {
-      loadTracksById(itemsToLoad.slice(0, 100), (err, res) => {
+      var effect = loadTracksById(itemsToLoad.slice(0, 100), (err, res) => {
         if (err) {
           return console.log(err);
         }
@@ -54,12 +55,14 @@ class LibrarySync extends React.Component {
         this.setState({ cache });
         localStorage.setItem(':cache/library', JSON.stringify(cache));
       });
+
+      this.perform(effect);
     }
   }
 }
 
 function loadTracksById(items, callback) {
-  vk.audio.getById({
+  return vk.audio.getById({
     audios: items.map(({ owner, id }) => `${owner}_${id}`).join(',')
   }, callback);
 }

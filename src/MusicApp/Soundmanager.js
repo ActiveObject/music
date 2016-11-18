@@ -8,8 +8,9 @@ import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
+import EffectComponent from 'app/shared/EffectComponent';
 
-class Soundmanager extends React.Component {
+class Soundmanager extends EffectComponent {
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
     if (isSeeking) {
       dispatch(finishSeeking());
@@ -34,7 +35,7 @@ class Soundmanager extends React.Component {
 
       var onStalled = () => {
         console.log(`[Soundmanager] stalled ${toString(track)}`);
-        reload(track, dispatch);
+        this.perform(reload(track, dispatch));
       }
 
       var onTimeUpdate = () => {
@@ -101,7 +102,7 @@ Soundmanager.contextTypes = {
 function reload(track, dispatch) {
   console.log(`[TrackCtrl] fetch url for ${toString(track)}`);
 
-  fetchUrl(track, (err, res) => {
+  return fetchUrl(track, (err, res) => {
     if (err) {
       return console.log(err);
     }
@@ -115,7 +116,7 @@ function reload(track, dispatch) {
 }
 
 function fetchUrl(audio, callback) {
-  vk.execute({
+  return vk.execute({
     code: `
       return API.audio.getById({ audios: "${audio.owner}_${audio.id}" })@.url;
     `
