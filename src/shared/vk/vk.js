@@ -2,9 +2,9 @@ import groupBy from 'lodash/groupBy';
 import head from 'lodash/head';
 import methods from './methods';
 
-var api = {};
+var vk = {};
 
-api.request = function (method, params, callback) {
+vk.request = function (method, params, callback) {
   return {
     method,
     params,
@@ -13,7 +13,7 @@ api.request = function (method, params, callback) {
   };
 };
 
-setupHelpers(api);
+setupHelpers(vk);
 
 function not(predicate, ctx) {
   return function not() {
@@ -55,4 +55,4 @@ function isGlobal(method) {
   return method.length === 1;
 }
 
-export default api;
+export default vk;

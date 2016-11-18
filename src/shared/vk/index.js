@@ -1,1 +1,1 @@
-export { default } from './vk-api';
+export { default } from './vk';
