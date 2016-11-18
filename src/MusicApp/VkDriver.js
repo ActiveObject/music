@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import request from 'jsonp';
 import merge from 'app/shared/merge';
+import EffectHandler from 'app/shared/EffectHandler';
 
 class VkDriver extends React.Component {
   state = {
@@ -30,12 +31,6 @@ class VkDriver extends React.Component {
     }
 
     nextTick();
-
-    document.addEventListener("vk-request", event => {
-      this.setState(({ queue }) => ({
-        queue: queue.concat(event.detail)
-      }));
-    }, false);
   }
 
   onCaptcha(captchaUrl) {
@@ -68,19 +63,27 @@ class VkDriver extends React.Component {
       };
 
       return (
-        <div style={style}>
-          <img src={this.state.captchaUrl} />
-          <input type='text' ref={(c) => this._input = c } />
-          <button onClick={() => this.commitTransaction(this._input.value)}>Send</button>
-        </div>
+        <EffectHandler type="vk-request" onEffect={e => this.enqueRequest(e)}>
+          <div style={style}>
+            <img src={this.state.captchaUrl} />
+            <input type='text' ref={(c) => this._input = c } />
+            <button onClick={() => this.commitTransaction(this._input.value)}>Send</button>
+          </div>
+        </EffectHandler>
       );
     }
 
     return (
-      <div>
+      <EffectHandler type="vk-request" onEffect={e => this.enqueRequest(e)}>
         {this.props.children}
-      </div>
+      </EffectHandler>
     );
+  }
+
+  enqueRequest({ detail }) {
+    this.setState(({ queue }) => ({
+      queue: queue.concat(detail)
+    }));
   }
 
   startTransaction(captchaUrl) {
