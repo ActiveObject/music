@@ -2,8 +2,9 @@ import React from 'react';
 import { Motion, spring } from 'react-motion';
 import vk from 'app/shared/vk';
 import './UserProfile.css';
+import EffectComponent from 'app/shared/EffectComponent';
 
-class FetchUser extends React.Component {
+class FetchUser extends EffectComponent {
   state = {
     isLoading: false,
     user: {}
@@ -12,7 +13,7 @@ class FetchUser extends React.Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    vk.users.get({
+    var effect = vk.users.get({
       user_ids: this.props.id,
       fields: ['photo_50']
     }, (err, result) => {
@@ -29,6 +30,8 @@ class FetchUser extends React.Component {
         }
       });
     });
+
+    this.perform(effect);
   }
 
   render() {

@@ -1,7 +1,8 @@
 import React from 'react';
+import EffectComponent from 'app/shared/EffectComponent';
 
-export default class VkAudioSync extends React.Component {
-  componentWillMount() {
+export default class VkAudioSync extends EffectComponent {
+  componentDidMount() {
     console.log(`[VkAudioSync] start syncing audio every ${this.props.interval}s`);
     this.stopSyncing = this.startSyncing();
   }
@@ -15,8 +16,8 @@ export default class VkAudioSync extends React.Component {
     var timer = null;
     var { vk, userId, onSync, interval } = this.props;
 
-    function sync() {
-      vk.execute({
+    var sync = () => {
+      var effect = vk.execute({
         code: `
         return API.audio.get({ owner_id: ${userId} }).items@.id;
         `
@@ -36,6 +37,8 @@ export default class VkAudioSync extends React.Component {
 
         timer = setTimeout(sync, interval * 1000);
       });
+
+      this.perform(effect);
     }
 
     sync();
@@ -46,6 +49,6 @@ export default class VkAudioSync extends React.Component {
   }
 
   render() {
-    return null;
+    return <div></div>;
   }
 }

@@ -1,7 +1,8 @@
 import React from 'react';
+import EffectComponent from 'app/shared/EffectComponent';
 
-export default class VkGroupSync extends React.Component {
-  componentWillMount() {
+export default class VkGroupSync extends EffectComponent {
+  componentDidMount() {
     console.log(`[VkGroupSync] start syncing groups every ${this.props.interval}s`);
     this.stopSyncing = this.startSyncing();
   }
@@ -14,14 +15,16 @@ export default class VkGroupSync extends React.Component {
     var timer = null;
     var { userId, vk, interval, onSync } = this.props;
 
-    function sync() {
-      vk.groups.get({}, (err, res) => {
+    var sync = () => {
+      var effect = vk.groups.get({}, (err, res) => {
         if (err) {
           return console.log(err);
         }
 
         onSync(res.response.items.map(String));
       });
+
+      this.perform(effect);
 
       timer = setTimeout(sync, interval * 1000);
     }
@@ -34,6 +37,6 @@ export default class VkGroupSync extends React.Component {
   }
 
   render() {
-    return null;
+    return <div></div>;
   }
 }

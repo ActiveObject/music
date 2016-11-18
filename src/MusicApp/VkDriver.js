@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import Url from 'url';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import request from 'jsonp';
 import merge from 'app/shared/merge';
 
@@ -21,12 +22,6 @@ class VkDriver extends React.Component {
 
     this.tx = new EventEmitter();
 
-    vk.push = req => {
-      this.setState(({ queue }) => ({
-        queue: queue.concat(req)
-      }));
-    };
-
     var nextTick = () => {
       this.timer = setTimeout(() => {
         this.process();
@@ -35,6 +30,12 @@ class VkDriver extends React.Component {
     }
 
     nextTick();
+
+    document.addEventListener("vk-request", event => {
+      this.setState(({ queue }) => ({
+        queue: queue.concat(event.detail)
+      }));
+    }, false);
   }
 
   onCaptcha(captchaUrl) {
@@ -75,7 +76,11 @@ class VkDriver extends React.Component {
       );
     }
 
-    return this.props.children;
+    return (
+      <div>
+        {this.props.children}
+      </div>
+    );
   }
 
   startTransaction(captchaUrl) {

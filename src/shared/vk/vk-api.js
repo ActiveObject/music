@@ -2,13 +2,13 @@ import setupHelpers from './setupHelpers';
 
 var api = {};
 
-api.request = function (method, options, done) {
-  this.push({
-    method: method,
-    params: options,
-    attempt: 0,
-    callback: done
-  });
+api.request = function (method, params, callback) {
+  return {
+    method,
+    params,
+    callback,
+    attempt: 0
+  };
 };
 
 setupHelpers(api);

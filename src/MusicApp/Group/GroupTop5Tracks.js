@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import vk from 'app/shared/vk';
 import { fromVk } from 'app/shared/Track';
 import merge from 'app/shared/merge';
+import EffectComponent from 'app/shared/EffectComponent';
 import TracklistTable from '../tracklist/TracklistTable';
 import TracklistPreview from '../tracklist/TracklistPreview';
 import TrackCtrl from '../tracklist/TrackCtrl';
 
-function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback) {
-  vk.wall.get({
+function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback, onDone) {
+  return vk.wall.get({
     owner_id: ownerId,
     offset,
     count
@@ -24,7 +25,7 @@ function loadLastWeekPosts(ownerId, offset, count, postsSoFar, time, callback) {
       return callback(null, postsSoFar.concat(posts))
     }
 
-    loadLastWeekPosts(ownerId, offset + count, count, postsSoFar.concat(posts), time, callback);
+    onDone(ownerId, offset + count, count, postsSoFar.concat(posts), time, callback);
   });
 }
 
@@ -76,7 +77,7 @@ let TopTracks = ({ posts, albums }) => {
 
 TopTracks = connect(state => ({ albums: state[':app/albums'] }))(TopTracks);
 
-class GroupTop5Tracks extends React.Component {
+class GroupTop5Tracks extends EffectComponent {
   state = {
     isLoading: false,
     posts: []
@@ -85,13 +86,17 @@ class GroupTop5Tracks extends React.Component {
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    loadLastWeekPosts(-this.props.groupId, 0, 7 * 5, [], Date.now() - 7 * 24 * 60 * 60 * 1000, (err, posts) => {
+    var effect = loadLastWeekPosts(-this.props.groupId, 0, 7 * 5, [], Date.now() - 7 * 24 * 60 * 60 * 1000, (err, posts) => {
       if (err) {
         return console.log(err);
       }
 
       this.setState({ isLoading: false, posts });
+    }, (...args) => {
+      this.perform(loadLastWeekPosts(...args));
     });
+
+    this.perform(effect);
   }
 
   render() {
