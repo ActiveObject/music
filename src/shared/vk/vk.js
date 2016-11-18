@@ -6,10 +6,13 @@ var vk = {};
 
 vk.request = function (method, params, callback) {
   return {
-    method,
-    params,
-    callback,
-    attempt: 0
+    type: "vk-request",
+    detail: {
+      method,
+      params,
+      callback,
+      attempt: 0
+    }
   };
 };
 
