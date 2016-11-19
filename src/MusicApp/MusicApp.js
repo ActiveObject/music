@@ -5,7 +5,6 @@ import Link from 'react-router/Link';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
-import vk from 'app/shared/vk';
 import { authenticate, toggleShuffle, pushLibrary, pushGroups, useTrack } from 'app/shared/redux';
 
 import Auth from './Auth';
@@ -111,8 +110,8 @@ let MusicApp = ({
           <Player track={activeTrack} isPlaying={isPlaying} />
         </Soundmanager>
 
-        <VkAudioSync vk={vk} userId={userId} onSync={onAudioSync} interval={10} />
-        <VkGroupSync vk={vk} userId={userId} onSync={onGroupSync} interval={60} />
+        <VkAudioSync userId={userId} onSync={onAudioSync} interval={10} />
+        <VkGroupSync userId={userId} onSync={onGroupSync} interval={60} />
         <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
         <KeyboardDriver />
       </div>

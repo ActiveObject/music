@@ -1,4 +1,5 @@
 import React from 'react';
+import vk from 'app/shared/vk';
 import { EffectComponent } from 'app/shared/effects';
 
 export default class VkAudioSync extends EffectComponent {
@@ -14,7 +15,7 @@ export default class VkAudioSync extends EffectComponent {
 
   startSyncing(interval) {
     var timer = null;
-    var { vk, userId, onSync, interval } = this.props;
+    var { userId, onSync, interval } = this.props;
 
     var sync = () => {
       var effect = vk.execute({
