@@ -1,4 +1,5 @@
 import React from 'react';
+import vk from 'app/shared/vk';
 import { EffectComponent } from 'app/shared/effects';
 
 export default class VkGroupSync extends EffectComponent {
@@ -13,7 +14,7 @@ export default class VkGroupSync extends EffectComponent {
 
   startSyncing() {
     var timer = null;
-    var { userId, vk, interval, onSync } = this.props;
+    var { userId, interval, onSync } = this.props;
 
     var sync = () => {
       var effect = vk.groups.get({}, (err, res) => {
