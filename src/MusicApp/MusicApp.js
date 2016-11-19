@@ -48,7 +48,7 @@ let MusicApp = ({
 }) =>
   <Router>
     <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
-      <VkDriver apiVersion='5.29' vk={vk} userId={userId} accessToken={accessToken}>
+      <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
       <div>
         <Match exactly pattern='/' render={() =>
           <UserProfile userId={userId} />

@@ -6,6 +6,14 @@ import merge from 'app/shared/merge';
 import { EffectHandler } from 'app/shared/effects';
 
 class VkDriver extends React.Component {
+  static propTypes = {
+    userId: React.PropTypes.string.isRequired,
+    accessToken: React.PropTypes.string.isRequired,
+    apiVersion: React.PropTypes.string.isRequired,
+    interval: React.PropTypes.number,
+    entryPoint: React.PropTypes.string
+  }
+
   static defaultProps = {
     interval: 1000 / 5,
     entryPoint: 'https://api.vk.com/method/',
