@@ -1,14 +1,15 @@
 import React from 'react';
 import vk from 'app/shared/vk';
+import { EffectComponent } from 'app/shared/effects';
 import './GroupActivity.css';
 import ActivityChart from './ActivityChart';
 
-class GroupActivity extends React.Component {
+class GroupActivity extends EffectComponent {
   state = {
     activity: {}
   }
 
-  componentWillMount() {
+  componentDidMount() {
     loadActivityForLastNWeeks(this.props.groupId, 44, (err, items) => {
       if (err) {
         return console.log(err);
@@ -26,7 +27,7 @@ class GroupActivity extends React.Component {
       })
 
       this.forceUpdate();
-    });
+    }, this.perform.bind(this));
   }
 
   render() {
@@ -38,12 +39,12 @@ class GroupActivity extends React.Component {
   }
 }
 
-function loadActivityForLastNWeeks(groupId, n, onLoad) {
+function loadActivityForLastNWeeks(groupId, n, onLoad, perform) {
   var timestamp = Date.now() - n * 7 * 24 * 60 * 60 * 1000;
 
   function next(latestTimestamp, offset, count) {
     if (latestTimestamp > timestamp) {
-      loadGroupActivity(groupId, offset, count, (err, res) => {
+      var effect = loadGroupActivity(groupId, offset, count, (err, res) => {
         if (err) {
           return onLoad(err);
         }
@@ -54,6 +55,8 @@ function loadActivityForLastNWeeks(groupId, n, onLoad) {
           next(items[items.length - 1] * 1000, offset + count, count);
         }
       });
+
+      perform(effect);
     }
   }
 
@@ -62,7 +65,7 @@ function loadActivityForLastNWeeks(groupId, n, onLoad) {
 
 
 function loadGroupActivity(groupId, offset, count, callback) {
-  vk.execute({
+  return vk.execute({
     code: `
       var i = 10;
       var items = [];
