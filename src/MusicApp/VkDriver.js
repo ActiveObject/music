@@ -11,10 +11,7 @@ class VkDriver extends React.Component {
     inTransaction: false,
     interval: 1000 / 2,
     entryPoint: 'https://api.vk.com/method/',
-    state: {
-      isAuthorized: false,
-      isWaitingForCaptcha: false
-    },
+    isWaitingForCaptcha: false,
     queue: []
   }
 
