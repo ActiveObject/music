@@ -16,8 +16,6 @@ class VkDriver extends React.Component {
   }
 
   componentWillMount() {
-    var { userId, accessToken, vk } = this.props;
-
     this.tx = new EventEmitter();
 
     var nextTick = () => {
