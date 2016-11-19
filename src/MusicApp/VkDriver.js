@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import Url from 'url';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,45 +6,35 @@ import merge from 'app/shared/merge';
 import { EffectHandler } from 'app/shared/effects';
 
 class VkDriver extends React.Component {
-  state = {
-    inTransaction: false,
-    interval: 1000 / 2,
+  static defaultProps = {
+    interval: 1000 / 5,
     entryPoint: 'https://api.vk.com/method/',
+  }
+
+  state = {
     isWaitingForCaptcha: false,
     queue: []
   }
 
   componentWillMount() {
-    this.tx = new EventEmitter();
-
     var nextTick = () => {
       this.timer = setTimeout(() => {
         this.process();
         nextTick();
-      }, this.state.interval);
+      }, this.props.interval);
     }
 
     nextTick();
-  }
-
-  onCaptcha(captchaUrl) {
-    this.startTransaction(captchaUrl);
-
-    return new Promise((resolve, reject) => {
-      this.tx.once('commit', (captchaKey) => resolve(captchaKey));
-    });
   }
 
   componentWillUnmount() {
     if (this.timer) {
       clearTimeout(this.timer);
     }
-
-    this.tx.removeAllListeners();
   }
 
   render() {
-    if (this.state.inTransaction) {
+    if (this.state.isWaitingForCaptcha) {
       var style = {
         position: 'absolute',
         top: 0,
@@ -62,7 +51,7 @@ class VkDriver extends React.Component {
           <div style={style}>
             <img src={this.state.captchaUrl} />
             <input type='text' ref={(c) => this._input = c } />
-            <button onClick={() => this.commitTransaction(this._input.value)}>Send</button>
+            <button onClick={() => this.resume(this._input.value)}>Send</button>
           </div>
         </EffectHandler>
       );
@@ -81,27 +70,14 @@ class VkDriver extends React.Component {
     }));
   }
 
-  startTransaction(captchaUrl) {
-    if (!this.state.inTransaction) {
-      this.setState({
-        inTransaction: true,
-        captchaUrl
-      });
-    }
-  }
-
-  commitTransaction(captchaKey) {
-    this.tx.emit('commit', captchaKey);
-    this.setState({ inTransaction: false, captchaUrl: '' });
-  }
-
   process() {
     if (!this.state.isWaitingForCaptcha && this.state.queue.length > 0) {
+      var { accessToken, apiVersion, entryPoint } = this.props;
       var reqParams = this.state.queue[0];
       var req = new Request(merge(reqParams, {
-        token: this.props.accessToken,
-        version: this.props.apiVersion,
-        entryPoint: this.state.entryPoint
+        entryPoint,
+        token: accessToken,
+        version: apiVersion
       }));
 
       this.setState({
@@ -115,30 +91,42 @@ class VkDriver extends React.Component {
               queue: queue.concat(req.nextAttempt())
             });
           } else if (res.captchaNeeded()) {
-            if (!this.state.isWaitingForCaptcha) {
-              this.setState({
-                isWaitingForCaptcha: true
-              });
-
-              this.onCaptcha(err.captcha_img).then((captchaKey) => {
-                this.setState(({ queue }) => ({
-                  queue: queue.concat(merge(reqParams, {
-                    params: merge(reqParams.params, {
-                      captcha_key: captchaKey,
-                      captcha_sid: err.captcha_sid
-                    })
-                  })),
-
-                  isWaitingForCaptcha: false
-                }));
-              });
-            }
+            this.pauseOnCaptcha(err.captcha_img, err.captcha_sid, reqParams);
           } else {
             res.send(req.callback);
           }
         });
       });
     }
+  }
+
+  pauseOnCaptcha(captchaUrl, captchaSid, reqParams) {
+    if (!this.state.isWaitingForCaptcha) {
+      this.setState({
+        reqParams,
+        captchaSid,
+        captchaUrl,
+        isWaitingForCaptcha: true,
+      });
+    }
+  }
+
+  resume(captchaKey) {
+    var { reqParams } = this.state;
+
+    this.setState(({ queue, captchaSid }) => ({
+      queue: queue.concat(merge(reqParams, {
+        params: merge(reqParams.params, {
+          captcha_key: captchaKey,
+          captcha_sid: captchaSid
+        })
+      })),
+
+      isWaitingForCaptcha: false,
+      reqParams: null,
+      captchaSid: null,
+      captchaUrl: null
+    }));
   }
 }
 
