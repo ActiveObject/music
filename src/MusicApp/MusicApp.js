@@ -6,7 +6,18 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import vk from 'app/shared/vk';
-import { authenticate, toggleShuffle, pushLibrary, pushGroups, useTrack } from 'app/shared/redux';
+import Shortcut from 'app/shared/Shortcut';
+
+import {
+  authenticate,
+  toggleShuffle,
+  pushLibrary,
+  pushGroups,
+  useTrack,
+  togglePlay,
+  rewind,
+  forward
+} from 'app/shared/redux';
 
 import Auth from './Auth';
 import Group from './Group';
@@ -17,7 +28,6 @@ import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
 import PlayerSync from './PlayerSync';
-import KeyboardDriver from './KeyboardDriver';
 import Player from './PlayerView';
 import GroupsListContainer from './GroupsListContainer';
 import LibrarySync from './LibrarySync';
@@ -44,7 +54,10 @@ let MusicApp = ({
   onToggleShuffle,
   onAudioSync,
   onGroupSync,
-  onTrackChange
+  onTrackChange,
+  onTogglePlay,
+  onRewind,
+  onForward
 }) =>
   <Router>
     <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
@@ -114,7 +127,10 @@ let MusicApp = ({
         <VkGroupSync vk={vk} userId={userId} onSync={onGroupSync} interval={60} />
         <VkDriver vk={vk} userId={userId} accessToken={accessToken} />
         <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
-        <KeyboardDriver />
+
+        <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
+        <Shortcut bindTo='left' onKeyDown={onRewind} />
+        <Shortcut bindTo='right' onKeyDown={onForward} />
       </div>
     </Auth>
   </Router>
@@ -139,6 +155,20 @@ function mapDispatchToProps(dispatch) {
     onAudioSync: (library) => dispatch(pushLibrary(library)),
     onGroupSync: (groups) => dispatch(pushGroups(groups)),
     onTrackChange: (track) => dispatch(useTrack(track)),
+    onTogglePlay: () => {
+      console.log(`[MusicApp] toggle play`);
+      dispatch(togglePlay());
+    },
+
+    onRewind: () => {
+      console.log(`[MusicApp] rewind 5s`);
+      dispatch(rewind(5000));
+    },
+
+    onForward: () => {
+      console.log(`[MusicApp] forward 5s`);
+      dispatch(forward(5000));
+    }
   };
 }
 
