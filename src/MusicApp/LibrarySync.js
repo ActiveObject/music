@@ -73,5 +73,4 @@ function loadTracksById(items, callback) {
 
 export default connect(state => ({
   albums: state[':app/albums'],
-  library: state[':app/library']
 }))(LibrarySync);

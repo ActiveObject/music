@@ -2,7 +2,6 @@ import { Map } from 'immutable';
 import * as Player from './Player';
 
 export const GROUPS_PUSH = 'GROUPS_PUSH';
-export const LIBRARY_PUSH = 'LIBRARY_PUSH';
 export const ALBUMS_PUSH = 'ALBUMS_PUSH';
 export const LIBRARY_TOGGLE_SHUFFLE = 'LIBRARY_TOGGLE_SHUFFLE';
 export const PLAYER_REWIND = 'PLAYER_REWIND';
@@ -20,13 +19,6 @@ export function pushGroups(groups) {
   return {
     type: GROUPS_PUSH,
     groups
-  };
-}
-
-export function pushLibrary(library) {
-  return {
-    type: LIBRARY_PUSH,
-    library
   };
 }
 
@@ -114,7 +106,6 @@ export function useTrack(track) {
 function createDefaultState() {
   return {
     ':app/groups': [],
-    ':app/library': [],
     ':app/albums': Map(),
     ':player/isEmpty': true,
     ':player/isPlaying': false,
@@ -133,12 +124,7 @@ export default function (state = createDefaultState(), action) {
       return Object.assign({}, state, {
         ':app/groups': action.groups
       });
-
-    case LIBRARY_PUSH:
-      return Object.assign({}, state, {
-        ':app/library': action.library
-      });
-
+      
     case ALBUMS_PUSH:
       return Object.assign({}, state, {
         ':app/albums': action.albums
