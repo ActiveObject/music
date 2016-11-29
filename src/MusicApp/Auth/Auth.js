@@ -1,33 +1,18 @@
 import Url from 'url';
 import querystring from 'querystring';
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Icon from '../Icon';
 import './Auth.css';
 import vkLogo from './vkcom.svg';
 
-const AUTH_URL = Url.format({
-  protocol: 'https',
-  host: 'oauth.vk.com',
-  pathname: '/authorize',
-  query: {
-    client_id: process.env.MUSIC_APP_ID,
-    scope: ['audio', 'groups', 'wall', 'offline'].join(','),
-    redirect_uri: window.location.origin,
-    display: 'popup',
-    v: '5.29',
-    response_type: 'token'
+class Auth extends Component {
+  static propTypes = {
+    appId: PropTypes.string.isRequired,
+    apiVersion: PropTypes.string.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
+    onAuth: PropTypes.func.isRequired
   }
-});
 
-function hasToken(hash) {
-  return hash && querystring.parse(hash.slice(1)).access_token;
-}
-
-function isUserInStorage() {
-  return localStorage.getItem('user_id') && localStorage.getItem('access_token');
-}
-
-class Auth extends React.Component {
   componentDidMount() {
     if (hasToken(location.hash)) {
       var credentials = querystring.parse(location.hash.slice(1));
@@ -50,6 +35,20 @@ class Auth extends React.Component {
       return this.props.children;
     }
 
+    const AUTH_URL = Url.format({
+      protocol: 'https',
+      host: 'oauth.vk.com',
+      pathname: '/authorize',
+      query: {
+        client_id: this.props.appId,
+        scope: ['audio', 'groups', 'wall', 'offline'].join(','),
+        redirect_uri: window.location.origin,
+        display: 'popup',
+        v: this.props.apiVersion,
+        response_type: 'token'
+      }
+    });
+
     return (
       <div className='auth'>
         <a className='element-link auth-link' href={AUTH_URL}>
@@ -61,6 +60,14 @@ class Auth extends React.Component {
       </div>
     );
   }
+}
+
+function hasToken(hash) {
+  return hash && querystring.parse(hash.slice(1)).access_token;
+}
+
+function isUserInStorage() {
+  return localStorage.getItem('user_id') && localStorage.getItem('access_token');
 }
 
 export default Auth;

@@ -58,7 +58,7 @@ let MusicApp = ({
   onForward
 }) =>
   <Router>
-    <Auth isAuthenticated={isAuthenticated} onAuth={onAuth}>
+    <Auth appId={process.env.MUSIC_APP_ID} apiVersion='5.29' isAuthenticated={isAuthenticated} onAuth={onAuth}>
       <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
       <div>
         <Match exactly pattern='/' render={() =>
