@@ -8,7 +8,6 @@ import cx from 'classnames';
 import Shortcut from 'app/shared/Shortcut';
 import {
   toggleShuffle,
-  pushGroups,
   useTrack,
   togglePlay,
   rewind,
@@ -39,28 +38,26 @@ import './styles/ResponsiveGrid.css';
 
 class MusicApp extends Component {
   state = {
-    library: []
+    library: [],
+    groups: []
   }
 
-  onAudioSync = (library) => {
-    this.setState({ library });
-  }
+  onAudioSync = library => this.setState({ library })
+  onGroupSync = groups => this.setState({ groups })
 
   render() {
     var {
       activeTrack,
       isPlaying,
       isPlayerEmpty,
-      groups,
       onToggleShuffle,
-      onGroupSync,
       onTrackChange,
       onTogglePlay,
       onRewind,
       onForward
     } = this.props;
 
-    var { library } = this.state;
+    var { library, groups } = this.state;
 
     return (
       <Router>
@@ -130,7 +127,7 @@ class MusicApp extends Component {
               </Soundmanager>
 
               <VkAudioSync userId={userId} onSync={this.onAudioSync} interval={10} />
-              <VkGroupSync userId={userId} onSync={onGroupSync} interval={60} />
+              <VkGroupSync userId={userId} onSync={this.onGroupSync} interval={60} />
               <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
 
               <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
@@ -147,7 +144,6 @@ class MusicApp extends Component {
 
 function mapStateToProps(state) {
   return {
-    groups: state[':app/groups'],
     activeTrack: state[':player/track'],
     isPlaying: state[':player/isPlaying'],
     isPlayerEmpty: state[':player/isEmpty'],
@@ -157,7 +153,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onToggleShuffle: () => dispatch(toggleShuffle()),
-    onGroupSync: (groups) => dispatch(pushGroups(groups)),
     onTrackChange: (track) => dispatch(useTrack(track)),
     onTogglePlay: () => {
       console.log(`[MusicApp] toggle play`);
