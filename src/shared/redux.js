@@ -1,7 +1,6 @@
 import { Map } from 'immutable';
 import * as Player from './Player';
 
-export const AUTHENTICATE = 'AUTHENTICATE';
 export const GROUPS_PUSH = 'GROUPS_PUSH';
 export const LIBRARY_PUSH = 'LIBRARY_PUSH';
 export const ALBUMS_PUSH = 'ALBUMS_PUSH';
@@ -16,14 +15,6 @@ export const PLAYER_UPDATE_LOADING = 'PLAYER_UPDATE_LOADING';
 export const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
 export const PLAYER_FINISH_SEEKING = 'PLAYER_FINISH_SEEKING';
 export const PLAYER_USE_TRACK = 'PLAYER_USE_TRACK';
-
-export function authenticate(userId, accessToken) {
-  return {
-    type: AUTHENTICATE,
-    userId,
-    accessToken
-  };
-}
 
 export function pushGroups(groups) {
   return {
@@ -122,7 +113,6 @@ export function useTrack(track) {
 
 function createDefaultState() {
   return {
-    ':app/isAuthenticated': false,
     ':app/groups': [],
     ':app/library': [],
     ':app/albums': Map(),
@@ -139,13 +129,6 @@ function createDefaultState() {
 
 export default function (state = createDefaultState(), action) {
   switch (action.type) {
-    case AUTHENTICATE:
-      return Object.assign({}, state, {
-        ':app/isAuthenticated': true,
-        ':app/userId': action.userId,
-        ':app/accessToken': action.accessToken
-      });
-
     case GROUPS_PUSH:
       return Object.assign({}, state, {
         ':app/groups': action.groups

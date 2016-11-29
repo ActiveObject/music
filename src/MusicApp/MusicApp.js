@@ -7,7 +7,6 @@ import cx from 'classnames';
 
 import Shortcut from 'app/shared/Shortcut';
 import {
-  authenticate,
   toggleShuffle,
   pushLibrary,
   pushGroups,
@@ -40,15 +39,11 @@ import './styles/Library.css';
 import './styles/ResponsiveGrid.css';
 
 let MusicApp = ({
-  isAuthenticated,
-  userId,
-  accessToken,
   activeTrack,
   isPlaying,
   isPlayerEmpty,
   library,
   groups,
-  onAuth,
   onToggleShuffle,
   onAudioSync,
   onGroupSync,
@@ -58,87 +53,86 @@ let MusicApp = ({
   onForward
 }) =>
   <Router>
-    <Auth appId={process.env.MUSIC_APP_ID} apiVersion='5.29' isAuthenticated={isAuthenticated} onAuth={onAuth}>
-      <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
-      <div>
-        <Match exactly pattern='/' render={() =>
-          <UserProfile userId={userId} />
-        }/>
+    <Auth appId={process.env.MUSIC_APP_ID} apiVersion='5.29'>
+      {({ userId, accessToken }) =>
+        <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
+        <div>
+          <Match exactly pattern='/' render={() =>
+            <UserProfile userId={userId} />
+          }/>
 
-        <Match pattern='/library' render={() =>
-          <UserProfile userId={userId} />
-        }/>
+          <Match pattern='/library' render={() =>
+            <UserProfile userId={userId} />
+          }/>
 
-        <Match exactly pattern='/' render={() =>
-          <div className='Home'>
-            <section>
-              <header>
-                <Link to='/library'>Library</Link>
-              </header>
-              <LibrarySync>
+          <Match exactly pattern='/' render={() =>
+            <div className='Home'>
+              <section>
+                <header>
+                  <Link to='/library'>Library</Link>
+                </header>
+                <LibrarySync userId={userId}>
+                  {tracks =>
+                    <TracklistTable>
+                      <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
+                        <div>
+                          {tracks.slice(0, 10).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
+                        </div>
+                      </TracklistPreview>
+                    </TracklistTable>
+                  }
+                </LibrarySync>
+              </section>
+
+              <section className='page-section'>
+                <header>Groups</header>
+                <GroupsListContainer groups={groups}>
+                  {groups => groups.map(id => <Group key={id} id={id} shape='list-item' />)}
+                </GroupsListContainer>
+              </section>
+            </div>
+          }/>
+
+          <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
+
+          <Match pattern='/library' render={() =>
+            <div className='Library'>
+              <div className='toolbar-container'>
+                <div className='toolbar'>
+                  <span
+                    className={cx({ 'action': true, 'action--active': false })}
+                    onClick={onToggleShuffle}>shuffle</span>
+                </div>
+              </div>
+              <LibrarySync userId={userId}>
                 {tracks =>
                   <TracklistTable>
-                    <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
-                      <div>
-                        {tracks.slice(0, 10).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
-                      </div>
-                    </TracklistPreview>
+                    <LazyTracklist tracks={tracks} />
                   </TracklistTable>
                 }
               </LibrarySync>
-            </section>
-
-            <section className='page-section'>
-              <header>Groups</header>
-              <GroupsListContainer groups={groups}>
-                {groups => groups.map(id => <Group key={id} id={id} shape='list-item' />)}
-              </GroupsListContainer>
-            </section>
-          </div>
-        }/>
-
-        <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
-
-        <Match pattern='/library' render={() =>
-          <div className='Library'>
-            <div className='toolbar-container'>
-              <div className='toolbar'>
-                <span
-                  className={cx({ 'action': true, 'action--active': false })}
-                  onClick={onToggleShuffle}>shuffle</span>
-              </div>
             </div>
-            <LibrarySync>
-              {tracks =>
-                <TracklistTable>
-                  <LazyTracklist tracks={tracks} />
-                </TracklistTable>
-              }
-            </LibrarySync>
-          </div>
-        }/>
+          }/>
 
-        <Soundmanager>
-          <Player track={activeTrack} isPlaying={isPlaying} />
-        </Soundmanager>
+          <Soundmanager>
+            <Player track={activeTrack} isPlaying={isPlaying} />
+          </Soundmanager>
 
-        <VkAudioSync userId={userId} onSync={onAudioSync} interval={10} />
-        <VkGroupSync userId={userId} onSync={onGroupSync} interval={60} />
-        <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
+          <VkAudioSync userId={userId} onSync={onAudioSync} interval={10} />
+          <VkGroupSync userId={userId} onSync={onGroupSync} interval={60} />
+          <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
 
-        <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
-        <Shortcut bindTo='left' onKeyDown={onRewind} />
-        <Shortcut bindTo='right' onKeyDown={onForward} />
-      </div>
-      </VkDriver>
+          <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
+          <Shortcut bindTo='left' onKeyDown={onRewind} />
+          <Shortcut bindTo='right' onKeyDown={onForward} />
+        </div>
+        </VkDriver>
+      }
     </Auth>
   </Router>
 
 function mapStateToProps(state) {
   return {
-    isAuthenticated: state[':app/isAuthenticated'],
-    userId: state[':app/userId'],
-    accessToken: state[':app/accessToken'],
     library: state[':app/library'],
     groups: state[':app/groups'],
     activeTrack: state[':player/track'],
@@ -149,7 +143,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onAuth: (userId, accessToken) => dispatch(authenticate(userId, accessToken)),
     onToggleShuffle: () => dispatch(toggleShuffle()),
     onAudioSync: (library) => dispatch(pushLibrary(library)),
     onGroupSync: (groups) => dispatch(pushGroups(groups)),

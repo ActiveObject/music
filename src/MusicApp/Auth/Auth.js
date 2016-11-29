@@ -8,9 +8,11 @@ import vkLogo from './vkcom.svg';
 class Auth extends Component {
   static propTypes = {
     appId: PropTypes.string.isRequired,
-    apiVersion: PropTypes.string.isRequired,
-    isAuthenticated: PropTypes.bool.isRequired,
-    onAuth: PropTypes.func.isRequired
+    apiVersion: PropTypes.string.isRequired
+  }
+
+  state = {
+    isAuthenticated: false
   }
 
   componentDidMount() {
@@ -20,19 +22,27 @@ class Auth extends Component {
       localStorage.setItem('user_id', credentials.user_id);
       localStorage.setItem('access_token', credentials.access_token);
 
-      this.props.onAuth(credentials.user_id, credentials.access_token);
+      this.setState({
+        isAuthenticated: true,
+        userId: credentials.user_id,
+        accessToken: credentials.access_token
+      });
 
       location.hash = '#';
     }
 
     if (isUserInStorage()) {
-      return this.props.onAuth(localStorage.getItem('user_id'), localStorage.getItem('access_token'));
+      this.setState({
+        isAuthenticated: true,
+        userId: localStorage.getItem('user_id'),
+        accessToken: localStorage.getItem('access_token')
+      });
     }
   }
 
   render() {
-    if (this.props.isAuthenticated) {
-      return this.props.children;
+    if (this.state.isAuthenticated) {
+      return this.props.children(this.state);
     }
 
     const AUTH_URL = Url.format({
