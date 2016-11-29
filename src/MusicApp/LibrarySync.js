@@ -12,7 +12,7 @@ class LibrarySync extends EffectComponent {
     cache: Map()
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       cache: Map(JSON.parse(localStorage.getItem(':cache/library')))
     });
@@ -29,7 +29,11 @@ class LibrarySync extends EffectComponent {
       .filter(t => this.state.cache.has(t.trackId))
       .map(t => this.state.cache.get(t.trackId));
 
-    return this.props.children(tracks);
+    return (
+      <div>
+        {this.props.children(tracks)}
+      </div>
+    )
   }
 
   sync() {
