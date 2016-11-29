@@ -4,6 +4,7 @@ import Match from 'react-router/Match';
 import Link from 'react-router/Link';
 import { connect } from 'react-redux';
 import cx from 'classnames';
+import { Map } from 'immutable';
 
 import Shortcut from 'app/shared/Shortcut';
 import {
@@ -39,7 +40,8 @@ import './styles/ResponsiveGrid.css';
 class MusicApp extends Component {
   state = {
     library: [],
-    groups: []
+    groups: [],
+    albums: Map()
   }
 
   onAudioSync = library => this.setState({ library })
@@ -57,7 +59,7 @@ class MusicApp extends Component {
       onForward
     } = this.props;
 
-    var { library, groups } = this.state;
+    var { library, groups, albums } = this.state;
 
     return (
       <Router>
@@ -79,7 +81,7 @@ class MusicApp extends Component {
                     <header>
                       <Link to='/library'>Library</Link>
                     </header>
-                    <LibrarySync userId={userId} library={library}>
+                    <LibrarySync userId={userId} library={library} albums={albums}>
                       {tracks =>
                         <TracklistTable>
                           <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
@@ -112,7 +114,7 @@ class MusicApp extends Component {
                         onClick={onToggleShuffle}>shuffle</span>
                     </div>
                   </div>
-                  <LibrarySync userId={userId} library={library}>
+                  <LibrarySync userId={userId} library={library} albums={albums}>
                     {tracks =>
                       <TracklistTable>
                         <LazyTracklist tracks={tracks} />

@@ -1,5 +1,4 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
 import difference from 'lodash/difference';
 import vk from 'app/shared/vk';
@@ -8,6 +7,12 @@ import * as Track from 'app/shared/Track';
 import { EffectComponent } from 'app/shared/effects';
 
 class LibrarySync extends EffectComponent {
+  static propTypes = {
+    userId: PropTypes.string.isRequired,
+    library: PropTypes.array.isRequired,
+    albums: PropTypes.instanceOf(Map).isRequired
+  }
+
   state = {
     cache: Map()
   }
@@ -71,6 +76,4 @@ function loadTracksById(items, callback) {
   }, callback);
 }
 
-export default connect(state => ({
-  albums: state[':app/albums'],
-}))(LibrarySync);
+export default LibrarySync;

@@ -1,7 +1,5 @@
-import { Map } from 'immutable';
 import * as Player from './Player';
 
-export const ALBUMS_PUSH = 'ALBUMS_PUSH';
 export const LIBRARY_TOGGLE_SHUFFLE = 'LIBRARY_TOGGLE_SHUFFLE';
 export const PLAYER_REWIND = 'PLAYER_REWIND';
 export const PLAYER_FORWARD = 'PLAYER_FORWARD';
@@ -13,13 +11,6 @@ export const PLAYER_UPDATE_LOADING = 'PLAYER_UPDATE_LOADING';
 export const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
 export const PLAYER_FINISH_SEEKING = 'PLAYER_FINISH_SEEKING';
 export const PLAYER_USE_TRACK = 'PLAYER_USE_TRACK';
-
-export function pushAlbums(albums) {
-  return {
-    type: ALBUMS_PUSH,
-    albums
-  };
-}
 
 export function toggleShuffle() {
   return {
@@ -97,7 +88,6 @@ export function useTrack(track) {
 
 function createDefaultState() {
   return {
-    ':app/albums': Map(),
     ':player/isEmpty': true,
     ':player/isPlaying': false,
     ':player/position': 0,
@@ -111,11 +101,6 @@ function createDefaultState() {
 
 export default function (state = createDefaultState(), action) {
   switch (action.type) {
-    case ALBUMS_PUSH:
-      return Object.assign({}, state, {
-        ':app/albums': action.albums
-      });
-
     case PLAYER_FORWARD:
       return Player.forward(state, action.ms);
 

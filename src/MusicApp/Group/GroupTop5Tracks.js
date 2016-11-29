@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
+import { Map } from 'immutable';
 import vk from 'app/shared/vk';
 import { fromVk } from 'app/shared/Track';
 import merge from 'app/shared/merge';
@@ -64,7 +63,7 @@ function topAudios(posts) {
 
 let TopTracks = ({ posts, albums }) => {
   var tracks = topAudios(top5(posts))
-    .map(x => fromVk(x, albums))
+    .map(x => fromVk(x, Map()))
     .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
     .slice(0, 5);
 
@@ -74,8 +73,6 @@ let TopTracks = ({ posts, albums }) => {
     </div>
   );
 }
-
-TopTracks = connect(state => ({ albums: state[':app/albums'] }))(TopTracks);
 
 class GroupTop5Tracks extends EffectComponent {
   state = {
