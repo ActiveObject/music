@@ -12,7 +12,8 @@ import {
   useTrack,
   toggleTrack, PLAYER_TOGGLE_TRACK,
   rewind, PLAYER_REWIND,
-  forward, PLAYER_FORWARD
+  forward, PLAYER_FORWARD,
+  togglePlay, PLAYER_TOGGLE_PLAY
 } from 'app/shared/redux';
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
@@ -36,6 +37,11 @@ class Soundmanager extends EffectComponent {
   onRewind = ({ ms }) => {
     console.log(`[Soundmanager] rewind 5s`);
     this.props.dispatch(rewind(ms))
+  }
+
+  onTogglePlay = () => {
+    console.log(`[Soundmanager] toggle play`);
+    this.props.dispatch(togglePlay());
   }
 
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
@@ -122,7 +128,9 @@ class Soundmanager extends EffectComponent {
       <EffectHandler type={PLAYER_TOGGLE_TRACK} onEffect={this.onToggleTrack}>
       <EffectHandler type={PLAYER_FORWARD} onEffect={this.onForward}>
       <EffectHandler type={PLAYER_REWIND} onEffect={this.onRewind}>
+      <EffectHandler type={PLAYER_TOGGLE_PLAY} onEffect={this.onTogglePlay}>
         {this.props.children(this.state)}
+      </EffectHandler>
       </EffectHandler>
       </EffectHandler>
       </EffectHandler>

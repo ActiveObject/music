@@ -55,7 +55,6 @@ class MusicApp extends Component {
       isPlayerEmpty,
       onToggleShuffle,
       onTrackChange,
-      onTogglePlay
     } = this.props;
 
     var { library, groups, albums } = this.state;
@@ -139,7 +138,9 @@ class MusicApp extends Component {
                       {run => <Shortcut bindTo='right' onKeyDown={() => run(forward(5000))} />}
                     </Effect>
 
-                    <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
+                    <Effect>
+                      {run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault={true} />}
+                    </Effect>
                   </div>
                 }
               </Soundmanager>
@@ -163,10 +164,6 @@ function mapDispatchToProps(dispatch) {
   return {
     onToggleShuffle: () => dispatch(toggleShuffle()),
     onTrackChange: (track) => dispatch(useTrack(track)),
-    onTogglePlay: () => {
-      console.log(`[MusicApp] toggle play`);
-      dispatch(togglePlay());
-    }
   };
 }
 
