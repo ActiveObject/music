@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
-import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack } from 'app/shared/redux';
+import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack, toggleTrack } from 'app/shared/redux';
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
-import { EffectComponent } from 'app/shared/effects';
+import { EffectComponent, EffectHandler } from 'app/shared/effects';
 
 class Soundmanager extends EffectComponent {
   state = {
     audio: null
+  }
+
+  toggleTrack = ({ detail }) => {
+    this.props.dispatch(toggleTrack(detail.track, detail.tracklist));
   }
 
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
@@ -94,7 +98,11 @@ class Soundmanager extends EffectComponent {
   }
 
   render() {
-    return this.props.children(this.state);
+    return (
+      <EffectHandler type='PLAYLIST_TOGGLE_TRACK' onEffect={this.toggleTrack}>
+        {this.props.children(this.state)}
+      </EffectHandler>
+    )
   }
 }
 

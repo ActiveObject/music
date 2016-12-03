@@ -14,6 +14,14 @@ export class EffectComponent extends React.Component {
   }
 }
 
+export class Effect extends EffectComponent {
+  run = effect => this.perform(effect)
+
+  render() {
+    return this.props.children(this.run);
+  }
+}
+
 export class EffectHandler extends React.Component {
   static propTypes = {
     type: React.PropTypes.string.isRequired,
