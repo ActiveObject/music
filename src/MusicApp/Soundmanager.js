@@ -3,7 +3,17 @@ import { connect } from 'react-redux';
 import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
-import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack, toggleTrack, PLAYER_TOGGLE_TRACK } from 'app/shared/redux';
+import {
+  updatePosition,
+  updateLoading,
+  nextTrack,
+  play,
+  finishSeeking,
+  useTrack,
+  toggleTrack, PLAYER_TOGGLE_TRACK,
+  rewind, PLAYER_REWIND,
+  forward, PLAYER_FORWARD
+} from 'app/shared/redux';
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
@@ -14,8 +24,18 @@ class Soundmanager extends EffectComponent {
     audio: null
   }
 
-  toggleTrack = ({ track, tracklist }) => {
+  onToggleTrack = ({ track, tracklist }) => {
     this.props.dispatch(toggleTrack(track, tracklist));
+  }
+
+  onForward = ({ ms }) => {
+    console.log(`[Soundmanager] forward 5s`);
+    this.props.dispatch(forward(ms))
+  }
+
+  onRewind = ({ ms }) => {
+    console.log(`[Soundmanager] rewind 5s`);
+    this.props.dispatch(rewind(ms))
   }
 
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
@@ -99,8 +119,12 @@ class Soundmanager extends EffectComponent {
 
   render() {
     return (
-      <EffectHandler type={PLAYER_TOGGLE_TRACK} onEffect={this.toggleTrack}>
+      <EffectHandler type={PLAYER_TOGGLE_TRACK} onEffect={this.onToggleTrack}>
+      <EffectHandler type={PLAYER_FORWARD} onEffect={this.onForward}>
+      <EffectHandler type={PLAYER_REWIND} onEffect={this.onRewind}>
         {this.props.children(this.state)}
+      </EffectHandler>
+      </EffectHandler>
       </EffectHandler>
     )
   }

@@ -55,9 +55,7 @@ class MusicApp extends Component {
       isPlayerEmpty,
       onToggleShuffle,
       onTrackChange,
-      onTogglePlay,
-      onRewind,
-      onForward
+      onTogglePlay
     } = this.props;
 
     var { library, groups, albums } = this.state;
@@ -133,9 +131,15 @@ class MusicApp extends Component {
                     <VkGroupSync userId={userId} onSync={this.onGroupSync} interval={60} />
                     <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
 
-                    <Shortcut bindTo='left' onKeyDown={onRewind} />
+                    <Effect>
+                      {run => <Shortcut bindTo='left' onKeyDown={() => run(rewind(5000))} />}
+                    </Effect>
+
+                    <Effect>
+                      {run => <Shortcut bindTo='right' onKeyDown={() => run(forward(5000))} />}
+                    </Effect>
+
                     <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
-                    <Shortcut bindTo='right' onKeyDown={onForward} />
                   </div>
                 }
               </Soundmanager>
@@ -162,16 +166,6 @@ function mapDispatchToProps(dispatch) {
     onTogglePlay: () => {
       console.log(`[MusicApp] toggle play`);
       dispatch(togglePlay());
-    },
-
-    onRewind: () => {
-      console.log(`[MusicApp] rewind 5s`);
-      dispatch(rewind(5000));
-    },
-
-    onForward: () => {
-      console.log(`[MusicApp] forward 5s`);
-      dispatch(forward(5000));
     }
   };
 }

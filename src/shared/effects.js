@@ -18,7 +18,7 @@ export class Effect extends EffectComponent {
   run = effect => this.perform(effect)
 
   render() {
-    return this.props.children(this.run);
+    return <div>{this.props.children(this.run)}</div>;
   }
 }
 
