@@ -125,7 +125,7 @@ class MusicApp extends Component {
               }/>
 
               <Soundmanager>
-                <Player track={activeTrack} isPlaying={isPlaying} />
+                {({ audio }) => <Player audio={audio} track={activeTrack} isPlaying={isPlaying} />}
               </Soundmanager>
 
               <VkAudioSync userId={userId} onSync={this.onAudioSync} interval={10} />

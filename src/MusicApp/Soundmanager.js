@@ -1,5 +1,4 @@
 import React from 'react';
-import { EventEmitter } from 'events';
 import { connect } from 'react-redux';
 import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
@@ -11,6 +10,10 @@ import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaErr
 import { EffectComponent } from 'app/shared/effects';
 
 class Soundmanager extends EffectComponent {
+  state = {
+    audio: null
+  }
+
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
     if (isSeeking) {
       dispatch(finishSeeking());
@@ -31,7 +34,7 @@ class Soundmanager extends EffectComponent {
       this.audio = new Audio(track.url);
       this.audio.crossOrigin = 'anonymous';
       this.audio.track = toString(track);
-      this.context.audioEmitter.emit('change', this.audio);
+      this.setState({ audio: this.audio });
 
       var onStalled = () => {
         console.log(`[Soundmanager] stalled ${toString(track)}`);
@@ -91,13 +94,9 @@ class Soundmanager extends EffectComponent {
   }
 
   render() {
-    return this.props.children;
+    return this.props.children(this.state);
   }
 }
-
-Soundmanager.contextTypes = {
-  audioEmitter: React.PropTypes.instanceOf(EventEmitter)
-};
 
 function reload(track, dispatch) {
   console.log(`[Soundmanager] fetch url for ${toString(track)}`);
@@ -123,32 +122,6 @@ function fetchUrl(audio, callback) {
   }, callback);
 }
 
-export class AudioProvider extends React.Component {
-  state = {
-    audio: undefined
-  }
-
-  componentWillMount() {
-    this.unsub = subscribeWith(emitterOn, on => {
-      on(this.context.audioEmitter, 'change', audio => {
-        this.setState({ audio });
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsub();
-  }
-
-  render() {
-    return this.props.children(this.state.audio);
-  }
-}
-
-AudioProvider.contextTypes = {
-  audioEmitter: React.PropTypes.instanceOf(EventEmitter)
-};
-
 Soundmanager = connect(state => ({
   isSeeking: state[':player/isSeeking'],
   isPlaying: state[':player/isPlaying'],
@@ -156,20 +129,4 @@ Soundmanager = connect(state => ({
   seekToPosition: state[':player/seekToPosition']
 }))(Soundmanager);
 
-class AudioContextProvider extends React.Component {
-  getChildContext() {
-    return {
-      audioEmitter: new EventEmitter()
-    };
-  }
-
-  render() {
-    return (<Soundmanager>{this.props.children}</Soundmanager>);
-  }
-}
-
-AudioContextProvider.childContextTypes = {
-  audioEmitter: React.PropTypes.instanceOf(EventEmitter)
-};
-
-export default AudioContextProvider;
+export default Soundmanager;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { TransitionMotion, spring } from 'react-motion';
 import key from 'keymaster';
-import { AudioProvider } from './Soundmanager';
 import './PlayerView.css';
 import PlayBtn from './PlayBtn/PlayBtn';
 
@@ -123,14 +122,8 @@ class PlayerView extends React.Component {
   }
 
   render() {
-    return (
-      <AudioProvider>
-        {audio => this.renderChildren(audio) }
-      </AudioProvider>
-    )
-  }
+    var { audio } = this.props;
 
-  renderChildren(audio) {
     return (
       <PlayerAnimation shape={this.state.shape}>
         {interpolated => {
