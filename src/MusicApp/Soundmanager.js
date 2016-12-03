@@ -1,30 +1,27 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
 import {
-  updateLoading,
   nextTrack,
-  play,
   useTrack,
-  toggleTrack, PLAYER_TOGGLE_TRACK,
+  PLAYER_TOGGLE_TRACK,
   PLAYER_REWIND,
   PLAYER_FORWARD,
-  togglePlay, PLAYER_TOGGLE_PLAY
+  PLAYER_TOGGLE_PLAY
 } from 'app/shared/redux';
-import subscribeWith from 'app/shared/subscribeWith';
-import emitterOn from 'app/shared/emitterOn';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
 import { EffectComponent, EffectHandler } from 'app/shared/effects';
 
 class Soundmanager extends EffectComponent {
   state = {
-    audio: null
+    audio: null,
+    isPlaying: false
   }
 
-  onToggleTrack = ({ track, tracklist }) => {
-    this.props.dispatch(toggleTrack(track, tracklist));
+  onToggleTrack = () => {
+    console.log(`[Soundmanager] toggleTrack`);
+    this.setState({ isPlaying: true });
   }
 
   onForward = ({ ms }) => {
@@ -43,10 +40,15 @@ class Soundmanager extends EffectComponent {
 
   onTogglePlay = () => {
     console.log(`[Soundmanager] toggle play`);
-    this.props.dispatch(togglePlay());
+    if (this.audio) {
+      this.setState({ isPlaying: !this.state.isPlaying });
+    }
   }
 
-  componentWillUpdate({ track, isPlaying, dispatch }) {
+  componentDidUpdate() {
+    var { track } = this.props;
+    var { isPlaying } = this.state;
+
     if (!track) {
       return;
     }
@@ -66,12 +68,12 @@ class Soundmanager extends EffectComponent {
 
       var onStalled = () => {
         console.log(`[Soundmanager] stalled ${toString(track)}`);
-        this.perform(reload(track, dispatch));
+        this.perform(reload(track, this.perform.bind(this)));
       }
 
       var onEnded = () => {
-        dispatch(nextTrack());
-        dispatch(play());
+        this.perform(nextTrack());
+        // this.perform(play());
       }
 
       var onError = (e) => {
@@ -124,7 +126,7 @@ class Soundmanager extends EffectComponent {
   }
 }
 
-function reload(track, dispatch) {
+function reload(track, run) {
   console.log(`[Soundmanager] fetch url for ${toString(track)}`);
 
   return fetchUrl(track, (err, res) => {
@@ -132,11 +134,9 @@ function reload(track, dispatch) {
       return console.log(err);
     }
 
-    dispatch(useTrack(merge(track, {
+    run(useTrack(merge(track, {
       url: res.response[0]
     })));
-
-    dispatch(play());
   });
 }
 
@@ -147,9 +147,5 @@ function fetchUrl(audio, callback) {
     `
   }, callback);
 }
-
-Soundmanager = connect(state => ({
-  isPlaying: state[':player/isPlaying'],
-}))(Soundmanager);
 
 export default Soundmanager;

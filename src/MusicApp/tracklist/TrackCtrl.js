@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { toggleTrack } from 'app/shared/redux';
 import Track from './track';
 import { Effect } from 'app/shared/effects';
@@ -29,18 +28,22 @@ class TrackCtrl extends React.Component {
   }
 
   disconnect(audio) {
-    audio.removeEventListener('timeupdate', this.onTimeUpdate, false);
+    if (audio) {
+      audio.removeEventListener('timeupdate', this.onTimeUpdate, false);
+    }
   }
 
   connect(audio) {
-    audio.addEventListener('timeupdate', this.onTimeUpdate, false);
+    if (audio) {
+      audio.addEventListener('timeupdate', this.onTimeUpdate, false);
+    }
   }
 
   render() {
-    var { audio, isPlayerEmpty, currentTrack, track, tracklist } = this.props;
+    var { audio, currentTrack, track, tracklist } = this.props;
     var { position } = this.state;
-    var index = tracklist.findIndex(t => t.id === track.id) + 1;
-    var isActive = !isPlayerEmpty && track.id === currentTrack.id;
+    var index = track ? tracklist.findIndex(t => t.id === track.id) + 1 : 0;
+    var isActive = currentTrack ? track.id === currentTrack.id : false;
 
     return (
       <Effect>
@@ -57,7 +60,4 @@ class TrackCtrl extends React.Component {
   }
 }
 
-export default connect(state => ({
-  isPlayerEmpty: state[':player/isEmpty'],
-  currentTrack: state[':player/track']
-}))(TrackCtrl);
+export default TrackCtrl;
