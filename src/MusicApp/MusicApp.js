@@ -8,7 +8,6 @@ import { Map } from 'immutable';
 
 import Shortcut from 'app/shared/Shortcut';
 import {
-  toggleShuffle,
   useTrack,
   togglePlay,
   rewind,
@@ -53,7 +52,6 @@ class MusicApp extends Component {
       activeTrack,
       isPlaying,
       isPlayerEmpty,
-      onToggleShuffle,
       onTrackChange,
     } = this.props;
 
@@ -109,9 +107,7 @@ class MusicApp extends Component {
                       <div className='Library'>
                         <div className='toolbar-container'>
                           <div className='toolbar'>
-                            <span
-                              className={cx({ 'action': true, 'action--active': false })}
-                              onClick={onToggleShuffle}>shuffle</span>
+                            <span className={cx({ 'action': true, 'action--active': false })}>shuffle</span>
                           </div>
                         </div>
                         <LibrarySync userId={userId} library={library} albums={albums}>
@@ -162,7 +158,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onToggleShuffle: () => dispatch(toggleShuffle()),
     onTrackChange: (track) => dispatch(useTrack(track)),
   };
 }

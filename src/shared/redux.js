@@ -1,6 +1,5 @@
 import * as Player from './Player';
 
-export const LIBRARY_TOGGLE_SHUFFLE = 'LIBRARY_TOGGLE_SHUFFLE';
 export const PLAYER_REWIND = 'PLAYER_REWIND';
 export const PLAYER_FORWARD = 'PLAYER_FORWARD';
 export const PLAYER_PLAY = 'PLAYER_PLAY';
@@ -9,12 +8,6 @@ export const PLAYER_TOGGLE_TRACK = 'PLAYER_TOGGLE_TRACK';
 export const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
 export const PLAYER_FINISH_SEEKING = 'PLAYER_FINISH_SEEKING';
 export const PLAYER_USE_TRACK = 'PLAYER_USE_TRACK';
-
-export function toggleShuffle() {
-  return {
-    type: LIBRARY_TOGGLE_SHUFFLE
-  };
-}
 
 export function rewind(ms) {
   return {
@@ -67,8 +60,6 @@ function createDefaultState() {
   return {
     ':player/isEmpty': true,
     ':player/isPlaying': false,
-    ':player/bytesTotal': 0,
-    ':player/bytesLoaded': 0,
     ':player/tracklist': [],
   };
 }
@@ -83,7 +74,7 @@ export default function (state = createDefaultState(), action) {
 
     case PLAYER_TOGGLE_TRACK:
       return Player.togglePlay(state, action.track, action.tracklist);
-      
+
     case PLAYER_NEXT_TRACK:
       return Player.nextTrack(state);
 
