@@ -15,9 +15,17 @@ export class EffectComponent extends React.Component {
 }
 
 export class Effect extends EffectComponent {
+  static defaultProps = {
+    nowrap: false
+  }
+
   run = effect => this.perform(effect)
 
   render() {
+    if (this.props.nowrap) {
+      return this.props.children(this.run);
+    }
+
     return <div>{this.props.children(this.run)}</div>;
   }
 }

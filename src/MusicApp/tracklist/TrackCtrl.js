@@ -46,7 +46,7 @@ class TrackCtrl extends React.Component {
     var isActive = currentTrack ? track.id === currentTrack.id : false;
 
     return (
-      <Effect>
+      <Effect nowrap>
         {run =>
           <Track
             track={track}
