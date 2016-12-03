@@ -23,7 +23,7 @@ export default class PlaylistDriver extends Component {
       console.log(`[PlaylistDriver] last track in playlist`);
     } else {
       this.setState({
-        track: tracklist[activeIndex + 1]
+        track: playlist[activeIndex + 1]
       });
     }
   }
