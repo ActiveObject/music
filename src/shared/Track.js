@@ -1,9 +1,6 @@
 import merge from 'app/shared/merge';
 
 export function fromVk(data, existingAlbums) {
-  if (!existingAlbums) {
-    debugger
-  }
   var albumIds = existingAlbums.map(v => v.id).toArray();
   var albumNames = existingAlbums.map(v => v.title).toArray();
   var idx = albumIds.indexOf(data.album_id);
