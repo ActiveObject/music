@@ -25,14 +25,14 @@ class Soundmanager extends EffectComponent {
   }
 
   onForward = ({ ms }) => {
-    console.log(`[Soundmanager] forward ${ms}ms`);
+    console.log(`[Soundmanager] forward ${ms / 1000}s`);
     if (this.audio) {
       this.audio.currentTime += ms / 1000;
     }
   }
 
   onRewind = ({ ms }) => {
-    console.log(`[Soundmanager] rewind ${ms}s`);
+    console.log(`[Soundmanager] rewind ${ms / 1000}s`);
     if (this.audio) {
       this.audio.currentTime -= ms / 1000;
     }
