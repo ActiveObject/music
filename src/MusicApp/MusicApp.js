@@ -86,7 +86,7 @@ class MusicApp extends Component {
                               <TracklistTable>
                                 <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
                                   <div>
-                                    {tracks.slice(0, 10).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
+                                    {tracks.slice(0, 10).map(t => <TrackCtrl audio={audio} key={t.id} track={t} tracklist={tracks} />)}
                                   </div>
                                 </TracklistPreview>
                               </TracklistTable>
@@ -103,7 +103,7 @@ class MusicApp extends Component {
                       </div>
                     }/>
 
-                    <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
+                  <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} audio={audio} />}/>
 
                     <Match pattern='/library' render={() =>
                       <div className='Library'>
@@ -117,7 +117,7 @@ class MusicApp extends Component {
                         <LibrarySync userId={userId} library={library} albums={albums}>
                           {tracks =>
                             <TracklistTable>
-                              <LazyTracklist tracks={tracks} />
+                              <LazyTracklist tracks={tracks} audio={audio} />
                             </TracklistTable>
                           }
                         </LibrarySync>

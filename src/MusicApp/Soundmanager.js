@@ -4,15 +4,13 @@ import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
 import {
-  updatePosition,
   updateLoading,
   nextTrack,
   play,
-  finishSeeking,
   useTrack,
   toggleTrack, PLAYER_TOGGLE_TRACK,
-  rewind, PLAYER_REWIND,
-  forward, PLAYER_FORWARD,
+  PLAYER_REWIND,
+  PLAYER_FORWARD,
   togglePlay, PLAYER_TOGGLE_PLAY
 } from 'app/shared/redux';
 import subscribeWith from 'app/shared/subscribeWith';
@@ -30,13 +28,17 @@ class Soundmanager extends EffectComponent {
   }
 
   onForward = ({ ms }) => {
-    console.log(`[Soundmanager] forward 5s`);
-    this.props.dispatch(forward(ms))
+    console.log(`[Soundmanager] forward ${ms}ms`);
+    if (this.audio) {
+      this.audio.currentTime += ms / 1000;
+    }
   }
 
   onRewind = ({ ms }) => {
-    console.log(`[Soundmanager] rewind 5s`);
-    this.props.dispatch(rewind(ms))
+    console.log(`[Soundmanager] rewind ${ms}s`);
+    if (this.audio) {
+      this.audio.currentTime -= ms / 1000;
+    }
   }
 
   onTogglePlay = () => {
@@ -44,11 +46,7 @@ class Soundmanager extends EffectComponent {
     this.props.dispatch(togglePlay());
   }
 
-  componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {
-    if (isSeeking) {
-      dispatch(finishSeeking());
-    }
-
+  componentWillUpdate({ track, isPlaying, dispatch }) {
     if (!track) {
       return;
     }
@@ -71,12 +69,6 @@ class Soundmanager extends EffectComponent {
         this.perform(reload(track, dispatch));
       }
 
-      var onTimeUpdate = () => {
-        if (!this.props.isSeeking) {
-          dispatch(updatePosition(this.audio.currentTime * 1000));
-        }
-      }
-
       var onEnded = () => {
         dispatch(nextTrack());
         dispatch(play());
@@ -91,7 +83,6 @@ class Soundmanager extends EffectComponent {
       }
 
       this.audio.addEventListener('stalled', onStalled, false);
-      this.audio.addEventListener('timeupdate', onTimeUpdate, false);
       this.audio.addEventListener('ended', onEnded, false);
       this.audio.addEventListener('error', onError, false);
 
@@ -100,7 +91,6 @@ class Soundmanager extends EffectComponent {
         this.audio.src = '';
         this.audio.load();
         this.audio.removeEventListener('stalled', onStalled, false);
-        this.audio.removeEventListener('timeupdate', onTimeUpdate, false);
         this.audio.removeEventListener('ended', onEnded, false);
         this.audio.removeEventListener('error', onError, false);
       };
@@ -112,10 +102,6 @@ class Soundmanager extends EffectComponent {
 
     if (isPlaying && this.audio.paused) {
       return this.audio.play();
-    }
-
-    if (isSeeking) {
-      return this.audio.currentTime = seekToPosition / 1000;
     }
   }
 
@@ -163,10 +149,8 @@ function fetchUrl(audio, callback) {
 }
 
 Soundmanager = connect(state => ({
-  isSeeking: state[':player/isSeeking'],
   isPlaying: state[':player/isPlaying'],
   track: state[':player/track'],
-  seekToPosition: state[':player/seekToPosition']
 }))(Soundmanager);
 
 export default Soundmanager;

@@ -11,7 +11,7 @@ class TrackContainer extends React.Component {
   }
 
   render() {
-    return <TrackCtrl track={this.props.track} tracklist={this.props.tracklist} />
+    return <TrackCtrl audio={this.props.audio} track={this.props.track} tracklist={this.props.tracklist} />
   }
 }
 
@@ -75,7 +75,7 @@ class LazyTracklist extends React.Component {
   render() {
     var tracks = this.state.cursor.selection().map(track =>
       <ScrollContainer key={track.value.id} yOffset={track.yOffset}>
-        <TrackContainer track={track.value} tracklist={this.props.tracks} />
+        <TrackContainer audio={this.props.audio} track={track.value} tracklist={this.props.tracks} />
       </ScrollContainer>
     );
 

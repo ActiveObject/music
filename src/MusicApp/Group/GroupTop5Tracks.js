@@ -61,7 +61,7 @@ function topAudios(posts) {
   return audios;
 }
 
-let TopTracks = ({ posts, albums }) => {
+let TopTracks = ({ audio, posts, albums }) => {
   var tracks = topAudios(top5(posts))
     .map(x => fromVk(x, Map()))
     .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
@@ -69,7 +69,7 @@ let TopTracks = ({ posts, albums }) => {
 
   return (
     <div>
-      {tracks.slice(0, 5).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
+      {tracks.slice(0, 5).map(t => <TrackCtrl key={t.id} audio={audio} track={t} tracklist={tracks} />)}
     </div>
   );
 }
@@ -100,7 +100,7 @@ class GroupTop5Tracks extends EffectComponent {
     return (
       <TracklistTable>
         <TracklistPreview isActive={this.state.isLoading} numOfItems={5}>
-          <TopTracks posts={this.state.posts} />
+          <TopTracks posts={this.state.posts} audio={this.props.audio} />
         </TracklistPreview>
       </TracklistTable>
     );

@@ -42,12 +42,6 @@ export function togglePlay(state, track, tracklist) {
   return result;
 }
 
-export function updatePosition(state, position) {
-  return merge(state, {
-    ':player/position': position
-  });
-}
-
 export function updateLoadingData(state, bytesLoaded, bytesTotal) {
   return merge(state, {
     ':player/bytesLoaded': bytesLoaded,

@@ -39,7 +39,7 @@ const GroupProfile = ({ group }) =>
     <span className='group-name'>{group.name}</span>
   </div>
 
-const GroupFullscreen = ({ id }) =>
+const GroupFullscreen = ({ id, audio }) =>
   <div className='Group'>
     <FetchGroup id={id}>
       {({ isLoading, group }) => isLoading ? <GroupProfilePreview /> : <GroupProfile group={group} /> }
@@ -53,11 +53,11 @@ const GroupFullscreen = ({ id }) =>
 
     <section className='Group__content'>
       <header>Week top</header>
-      <GroupTop5Tracks groupId={id} />
+      <GroupTop5Tracks groupId={id} audio={audio} />
     </section>
   </div>
 
-const Group = ({ id, shape = 'fullscreen' }) => {
+const Group = ({ id, audio, shape = 'fullscreen' }) => {
   if (shape === 'list-item') {
     return (
       <FetchGroup id={id}>
@@ -67,7 +67,7 @@ const Group = ({ id, shape = 'fullscreen' }) => {
   }
 
   if (shape === 'fullscreen') {
-    return <GroupFullscreen id={id} />
+    return <GroupFullscreen id={id} audio={audio} />
   }
 }
 
