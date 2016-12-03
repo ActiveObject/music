@@ -7,10 +7,8 @@ import { Effect } from 'app/shared/effects';
 function toggleTrack(track, tracklist) {
   return {
     type: 'PLAYLIST_TOGGLE_TRACK',
-    detail: {
-      track,
-      tracklist
-    }
+    track,
+    tracklist
   };
 }
 

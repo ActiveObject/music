@@ -3,12 +3,10 @@ import methods from './methods';
 export default function vk(method, params, callback) {
   return {
     type: "vk-request",
-    detail: {
-      method,
-      params,
-      callback,
-      attempt: 0
-    }
+    method,
+    params,
+    callback,
+    attempt: 0
   };
 };
 

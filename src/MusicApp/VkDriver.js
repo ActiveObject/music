@@ -72,9 +72,9 @@ class VkDriver extends React.Component {
     );
   }
 
-  enqueRequest({ detail }) {
+  enqueRequest(req) {
     this.setState(({ queue }) => ({
-      queue: queue.concat(detail)
+      queue: queue.concat(req)
     }));
   }
 

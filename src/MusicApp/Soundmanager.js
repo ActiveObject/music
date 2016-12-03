@@ -14,8 +14,8 @@ class Soundmanager extends EffectComponent {
     audio: null
   }
 
-  toggleTrack = ({ detail }) => {
-    this.props.dispatch(toggleTrack(detail.track, detail.tracklist));
+  toggleTrack = ({ track, tracklist }) => {
+    this.props.dispatch(toggleTrack(track, tracklist));
   }
 
   componentWillUpdate({ track, isPlaying, isSeeking, seekToPosition, dispatch }) {

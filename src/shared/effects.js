@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 export class EffectComponent extends React.Component {
-  perform({ type, detail }) {
+  perform(effect) {
     var node = ReactDOM.findDOMNode(this);
-    var event = new CustomEvent(type, {
-      detail,
+    var event = new CustomEvent(effect.type, {
+      detail: effect,
       bubbles: true,
       cancelable: true
     });
@@ -28,12 +28,14 @@ export class EffectHandler extends React.Component {
     onEffect: React.PropTypes.func.isRequired
   }
 
+  onEffect = event => this.props.onEffect(event.detail)
+
   componentWillMount() {
-    document.addEventListener(this.props.type, this.props.onEffect, false);
+    document.addEventListener(this.props.type, this.onEffect, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener(this.props.type, this.props.onEffect, false);
+    document.removeEventListener(this.props.type, this.onEffect, false);
   }
 
   render() {
