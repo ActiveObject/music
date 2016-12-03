@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
-import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack, toggleTrack } from 'app/shared/redux';
+import { updatePosition, updateLoading, nextTrack, play, finishSeeking, useTrack, toggleTrack, PLAYER_TOGGLE_TRACK } from 'app/shared/redux';
 import subscribeWith from 'app/shared/subscribeWith';
 import emitterOn from 'app/shared/emitterOn';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
@@ -99,7 +99,7 @@ class Soundmanager extends EffectComponent {
 
   render() {
     return (
-      <EffectHandler type='PLAYLIST_TOGGLE_TRACK' onEffect={this.toggleTrack}>
+      <EffectHandler type={PLAYER_TOGGLE_TRACK} onEffect={this.toggleTrack}>
         {this.props.children(this.state)}
       </EffectHandler>
     )

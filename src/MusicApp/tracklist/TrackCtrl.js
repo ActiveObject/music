@@ -1,16 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { toggleTrack } from 'app/shared/redux';
+import { toggleTrack } from 'app/shared/redux';
 import Track from './track';
 import { Effect } from 'app/shared/effects';
-
-function toggleTrack(track, tracklist) {
-  return {
-    type: 'PLAYLIST_TOGGLE_TRACK',
-    track,
-    tracklist
-  };
-}
 
 function TrackCtrl({ position, isPlayerEmpty, currentTrack, track, tracklist }) {
   var index = tracklist.findIndex(t => t.id === track.id) + 1;
