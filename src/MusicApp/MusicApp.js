@@ -64,7 +64,7 @@ class MusicApp extends Component {
         <Auth appId={process.env.MUSIC_APP_ID} apiVersion='5.29'>
           {({ userId, accessToken }) =>
             <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
-              <Soundmanager>
+              <Soundmanager track={activeTrack}>
                 {({ audio }) =>
                   <div>
                     <Match exactly pattern='/' render={() =>

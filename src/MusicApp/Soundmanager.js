@@ -150,7 +150,6 @@ function fetchUrl(audio, callback) {
 
 Soundmanager = connect(state => ({
   isPlaying: state[':player/isPlaying'],
-  track: state[':player/track'],
 }))(Soundmanager);
 
 export default Soundmanager;
