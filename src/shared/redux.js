@@ -6,7 +6,6 @@ export const PLAYER_FORWARD = 'PLAYER_FORWARD';
 export const PLAYER_PLAY = 'PLAYER_PLAY';
 export const PLAYER_TOGGLE_PLAY = 'PLAYER_TOGGLE_PLAY';
 export const PLAYER_TOGGLE_TRACK = 'PLAYER_TOGGLE_TRACK';
-export const PLAYER_UPDATE_LOADING = 'PLAYER_UPDATE_LOADING';
 export const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
 export const PLAYER_FINISH_SEEKING = 'PLAYER_FINISH_SEEKING';
 export const PLAYER_USE_TRACK = 'PLAYER_USE_TRACK';
@@ -51,14 +50,6 @@ export function toggleTrack(track, tracklist) {
   };
 }
 
-export function updateLoading(bytesLoaded, bytesTotal) {
-  return {
-    type: PLAYER_UPDATE_LOADING,
-    bytesLoaded,
-    bytesTotal
-  };
-}
-
 export function nextTrack() {
   return {
     type: PLAYER_NEXT_TRACK
@@ -92,10 +83,7 @@ export default function (state = createDefaultState(), action) {
 
     case PLAYER_TOGGLE_TRACK:
       return Player.togglePlay(state, action.track, action.tracklist);
-
-    case PLAYER_UPDATE_LOADING:
-      return Player.updateLoadingData(state, action.bytesLoaded, action.bytesTotal);
-
+      
     case PLAYER_NEXT_TRACK:
       return Player.nextTrack(state);
 
