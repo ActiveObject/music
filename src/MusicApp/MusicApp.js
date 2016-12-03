@@ -14,6 +14,7 @@ import {
   rewind,
   forward
 } from 'app/shared/redux';
+import { Effect } from 'app/shared/effects';
 
 import Auth from './Auth';
 import Group from './Group';
@@ -66,76 +67,78 @@ class MusicApp extends Component {
         <Auth appId={process.env.MUSIC_APP_ID} apiVersion='5.29'>
           {({ userId, accessToken }) =>
             <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
-            <div>
-              <Match exactly pattern='/' render={() =>
-                <UserProfile userId={userId} />
-              }/>
-
-              <Match pattern='/library' render={() =>
-                <UserProfile userId={userId} />
-              }/>
-
-              <Match exactly pattern='/' render={() =>
-                <div className='Home'>
-                  <section>
-                    <header>
-                      <Link to='/library'>Library</Link>
-                    </header>
-                    <LibrarySync userId={userId} library={library} albums={albums}>
-                      {tracks =>
-                        <TracklistTable>
-                          <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
-                            <div>
-                              {tracks.slice(0, 10).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
-                            </div>
-                          </TracklistPreview>
-                        </TracklistTable>
-                      }
-                    </LibrarySync>
-                  </section>
-
-                  <section className='page-section'>
-                    <header>Groups</header>
-                    <GroupsListContainer groups={groups}>
-                      {groups => groups.map(id => <Group key={id} id={id} shape='list-item' />)}
-                    </GroupsListContainer>
-                  </section>
-                </div>
-              }/>
-
-              <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
-
-              <Match pattern='/library' render={() =>
-                <div className='Library'>
-                  <div className='toolbar-container'>
-                    <div className='toolbar'>
-                      <span
-                        className={cx({ 'action': true, 'action--active': false })}
-                        onClick={onToggleShuffle}>shuffle</span>
-                    </div>
-                  </div>
-                  <LibrarySync userId={userId} library={library} albums={albums}>
-                    {tracks =>
-                      <TracklistTable>
-                        <LazyTracklist tracks={tracks} />
-                      </TracklistTable>
-                    }
-                  </LibrarySync>
-                </div>
-              }/>
-
               <Soundmanager>
-                {({ audio }) => <Player audio={audio} track={activeTrack} isPlaying={isPlaying} />}
+                {({ audio }) =>
+                  <div>
+                    <Match exactly pattern='/' render={() =>
+                      <UserProfile userId={userId} />
+                    }/>
+
+                    <Match pattern='/library' render={() =>
+                      <UserProfile userId={userId} />
+                    }/>
+
+                    <Match exactly pattern='/' render={() =>
+                      <div className='Home'>
+                        <section>
+                          <header>
+                            <Link to='/library'>Library</Link>
+                          </header>
+                          <LibrarySync userId={userId} library={library} albums={albums}>
+                            {tracks =>
+                              <TracklistTable>
+                                <TracklistPreview isActive={tracks.length === 0} numOfItems={10}>
+                                  <div>
+                                    {tracks.slice(0, 10).map(t => <TrackCtrl key={t.id} track={t} tracklist={tracks} />)}
+                                  </div>
+                                </TracklistPreview>
+                              </TracklistTable>
+                            }
+                          </LibrarySync>
+                        </section>
+
+                        <section className='page-section'>
+                          <header>Groups</header>
+                          <GroupsListContainer groups={groups}>
+                            {groups => groups.map(id => <Group key={id} id={id} shape='list-item' />)}
+                          </GroupsListContainer>
+                        </section>
+                      </div>
+                    }/>
+
+                    <Match pattern='/groups/:id' render={({ params }) => <Group id={params.id} />}/>
+
+                    <Match pattern='/library' render={() =>
+                      <div className='Library'>
+                        <div className='toolbar-container'>
+                          <div className='toolbar'>
+                            <span
+                              className={cx({ 'action': true, 'action--active': false })}
+                              onClick={onToggleShuffle}>shuffle</span>
+                          </div>
+                        </div>
+                        <LibrarySync userId={userId} library={library} albums={albums}>
+                          {tracks =>
+                            <TracklistTable>
+                              <LazyTracklist tracks={tracks} />
+                            </TracklistTable>
+                          }
+                        </LibrarySync>
+                      </div>
+                    }/>
+
+                    <Player audio={audio} track={activeTrack} isPlaying={isPlaying} />
+
+                    <VkAudioSync userId={userId} onSync={this.onAudioSync} interval={10} />
+                    <VkGroupSync userId={userId} onSync={this.onGroupSync} interval={60} />
+                    <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
+
+                    <Shortcut bindTo='left' onKeyDown={onRewind} />
+                    <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
+                    <Shortcut bindTo='right' onKeyDown={onForward} />
+                  </div>
+                }
               </Soundmanager>
-
-              <VkAudioSync userId={userId} onSync={this.onAudioSync} interval={10} />
-              <VkGroupSync userId={userId} onSync={this.onGroupSync} interval={60} />
-              <PlayerSync isPlayerEmpty={isPlayerEmpty} track={activeTrack} onTrackChange={onTrackChange} />
-
-              <Shortcut bindTo='space' onKeyDown={onTogglePlay} preventDefault={true} />
-              <Shortcut bindTo='left' onKeyDown={onRewind} />
-              <Shortcut bindTo='right' onKeyDown={onForward} />
-            </div>
             </VkDriver>
           }
         </Auth>
