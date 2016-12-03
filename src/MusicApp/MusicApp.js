@@ -11,12 +11,11 @@ import {
   togglePlay,
   rewind,
   forward
-} from 'app/shared/redux';
+} from 'app/effects';
 import { Effect } from 'app/shared/effects';
 
 import Auth from './Auth';
 import Group from './Group';
-import PlayBtnCtrl from './PlayBtn/PlayBtnCtrl';
 import UserProfile from './UserProfile';
 import Soundmanager from './Soundmanager';
 import VkAudioSync from './VkAudioSync';

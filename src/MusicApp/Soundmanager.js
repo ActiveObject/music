@@ -9,7 +9,7 @@ import {
   PLAYER_REWIND,
   PLAYER_FORWARD,
   PLAYER_TOGGLE_PLAY
-} from 'app/shared/redux';
+} from 'app/effects';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
 import { EffectComponent, EffectHandler } from 'app/shared/effects';
 

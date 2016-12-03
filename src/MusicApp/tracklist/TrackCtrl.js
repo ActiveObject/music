@@ -1,5 +1,5 @@
 import React from 'react';
-import { toggleTrack } from 'app/shared/redux';
+import { toggleTrack } from 'app/effects';
 import Track from './track';
 import { Effect } from 'app/shared/effects';
 

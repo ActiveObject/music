@@ -53,10 +53,3 @@ export function useTrack(track) {
     track
   };
 }
-
-export default function (state, action) {
-  switch (action.type) {
-    default:
-      return state;
-  }
-}

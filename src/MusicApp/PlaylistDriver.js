@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { EffectHandler } from 'app/shared/effects';
-import { PLAYER_TOGGLE_TRACK, PLAYER_NEXT_TRACK, PLAYER_USE_TRACK } from 'app/shared/redux';
+import { PLAYER_TOGGLE_TRACK, PLAYER_NEXT_TRACK, PLAYER_USE_TRACK } from 'app/effects';
 
 export default class PlaylistDriver extends Component {
   state = {

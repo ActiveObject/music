@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { togglePlay } from 'app/shared/redux';
+import { togglePlay } from 'app/effects';
 import { Effect } from 'app/shared/effects';
 import PlayBtn from './PlayBtn';
 
