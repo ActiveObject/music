@@ -80,7 +80,7 @@ class Soundmanager extends EffectComponent {
         console.log(`[Soundmanager] ${showMediaError(this.audio.error.code)}`);
 
         if (this.audio.error.code === MEDIA_ERR_SRC_NOT_SUPPORTED) {
-          this.perform(reload(track, dispatch));
+          this.perform(reload(track, this.perform.bind(this)));
         }
       }
 
