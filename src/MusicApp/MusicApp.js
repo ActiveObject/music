@@ -17,7 +17,7 @@ import { Effect } from 'app/shared/effects';
 import Auth from './Auth';
 import Group from './Group';
 import UserProfile from './UserProfile';
-import Soundmanager from './Soundmanager';
+import AudioDriver from './AudioDriver';
 import VkAudioSync from './VkAudioSync';
 import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
@@ -55,7 +55,7 @@ class MusicApp extends Component {
           <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
             <PlaylistDriver playlist={library}>
               {({ track }) =>
-                <Soundmanager track={track}>
+                <AudioDriver track={track}>
                   {({ audio }) =>
                     <Router>
                     <div>
@@ -119,7 +119,7 @@ class MusicApp extends Component {
                       </div>
                     </Router>
                   }
-                </Soundmanager>
+                </AudioDriver>
               }
             </PlaylistDriver>
           </VkDriver>
