@@ -113,17 +113,9 @@ class MusicApp extends Component {
                         <VkAudioSync userId={userId} onSync={this.onAudioSync} interval={10} />
                         <VkGroupSync userId={userId} onSync={this.onGroupSync} interval={60} />
 
-                        <Effect>
-                          {run => <Shortcut bindTo='left' onKeyDown={() => run(rewind(5000))} />}
-                        </Effect>
-
-                        <Effect>
-                          {run => <Shortcut bindTo='right' onKeyDown={() => run(forward(5000))} />}
-                        </Effect>
-
-                        <Effect>
-                          {run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault={true} />}
-                        </Effect>
+                        <Effect children={run => <Shortcut bindTo='left' onKeyDown={() => run(rewind(5000))} />} />
+                        <Effect children={run => <Shortcut bindTo='right' onKeyDown={() => run(forward(5000))} />} />
+                        <Effect children={run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault={true} />} />
                       </div>
                     </Router>
                   }
