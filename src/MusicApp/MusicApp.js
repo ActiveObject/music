@@ -115,7 +115,7 @@ class MusicApp extends Component {
 
                         <Effect children={run => <Shortcut bindTo='left' onKeyDown={() => run(rewind(5000))} />} />
                         <Effect children={run => <Shortcut bindTo='right' onKeyDown={() => run(forward(5000))} />} />
-                        <Effect children={run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault={true} />} />
+                        <Effect children={run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault />} />
                       </div>
                     </Router>
                   }
