@@ -50,14 +50,14 @@ class MusicApp extends Component {
     var { library, groups, albums } = this.state;
 
     return (
-      <Router>
-        <Auth appId={process.env.MUSIC_APP_ID} apiVersion='5.29'>
-          {({ userId, accessToken }) =>
-            <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
-              <PlaylistDriver playlist={library}>
-                {({ track }) =>
-                  <Soundmanager track={track}>
-                    {({ audio }) =>
+      <Auth appId={process.env.MUSIC_APP_ID} apiVersion='5.29'>
+        {({ userId, accessToken }) =>
+          <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
+            <PlaylistDriver playlist={library}>
+              {({ track }) =>
+                <Soundmanager track={track}>
+                  {({ audio }) =>
+                    <Router>
                     <div>
                       <Match exactly pattern='/' render={() => <UserProfile userId={userId} /> } />
                       <Match pattern='/library' render={() => <UserProfile userId={userId} /> } />
@@ -125,14 +125,14 @@ class MusicApp extends Component {
                           {run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault={true} />}
                         </Effect>
                       </div>
-                    }
-                  </Soundmanager>
-                }
-              </PlaylistDriver>
-            </VkDriver>
-          }
-        </Auth>
-      </Router>
+                    </Router>
+                  }
+                </Soundmanager>
+              }
+            </PlaylistDriver>
+          </VkDriver>
+        }
+      </Auth>
     )
   }
 }
