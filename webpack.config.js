@@ -35,9 +35,9 @@ module.exports = function (env) {
 
     module: {
       rules: [
-        { test: /\.jsx?/, use: ['babel'], include: path.join(__dirname, 'src') },
-        { test: /\.css$/, use: ['style', 'css', 'postcss'] },
-        { test: /\.svg$/, use: 'svg-sprite' }
+        { test: /\.jsx?/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
+        { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
+        { test: /\.svg$/, use: 'svg-sprite-loader' }
       ]
     },
 
