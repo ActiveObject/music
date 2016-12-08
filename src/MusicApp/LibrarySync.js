@@ -34,11 +34,7 @@ class LibrarySync extends EffectComponent {
       .filter(t => this.state.cache.has(t.trackId))
       .map(t => this.state.cache.get(t.trackId));
 
-    return (
-      <div>
-        {this.props.children(tracks)}
-      </div>
-    )
+    return this.props.children(tracks);
   }
 
   sync() {
