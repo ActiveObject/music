@@ -10,7 +10,9 @@ import {
   useTrack,
   togglePlay,
   rewind,
-  forward
+  forward,
+  prevTrack,
+  nextTrack
 } from 'app/effects';
 import { Effect } from 'app/shared/effects';
 
@@ -116,6 +118,8 @@ class MusicApp extends Component {
                         <Effect children={run => <Shortcut bindTo='left' onKeyDown={() => run(rewind(5000))} />} />
                         <Effect children={run => <Shortcut bindTo='right' onKeyDown={() => run(forward(5000))} />} />
                         <Effect children={run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault />} />
+                        <Effect children={run => <Shortcut bindTo='shift+left' onKeyDown={() => run(prevTrack())} />} />
+                        <Effect children={run => <Shortcut bindTo='shift+right' onKeyDown={() => run(nextTrack())} />} />
                       </div>
                     </Router>
                   }

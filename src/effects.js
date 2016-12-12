@@ -5,6 +5,7 @@ export const PLAYER_TOGGLE_PLAY = 'PLAYER_TOGGLE_PLAY';
 
 export const PLAYER_TOGGLE_TRACK = 'PLAYER_TOGGLE_TRACK';
 export const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
+export const PLAYER_PREV_TRACK = 'PLAYER_PREV_TRACK';
 export const PLAYER_USE_TRACK = 'PLAYER_USE_TRACK';
 
 export function rewind(ms) {
@@ -44,6 +45,12 @@ export function toggleTrack(track, playlist) {
 export function nextTrack() {
   return {
     type: PLAYER_NEXT_TRACK
+  };
+}
+
+export function prevTrack() {
+  return {
+    type: PLAYER_PREV_TRACK
   };
 }
 
