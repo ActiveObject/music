@@ -1,1 +1,1 @@
-export { default } from './vk';
+export { default, VK_REQUEST } from './vk';

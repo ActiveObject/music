@@ -1,8 +1,10 @@
 import methods from './methods';
 
+export const VK_REQUEST = "VK_REQUEST";
+
 export default function vk(method, params, callback) {
   return {
-    type: "vk-request",
+    type: VK_REQUEST,
     method,
     params,
     callback,

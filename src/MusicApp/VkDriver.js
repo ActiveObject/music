@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import request from 'jsonp';
 import merge from 'app/shared/merge';
 import { EffectHandler } from 'app/shared/effects';
+import { VK_REQUEST } from 'app/shared/vk';
 
 class VkDriver extends React.Component {
   static propTypes = {
@@ -55,7 +56,7 @@ class VkDriver extends React.Component {
       };
 
       return (
-        <EffectHandler type="vk-request" onEffect={e => this.enqueRequest(e)}>
+        <EffectHandler type={VK_REQUEST} onEffect={e => this.enqueRequest(e)}>
           <div style={style}>
             <img src={this.state.captchaUrl} />
             <input type='text' ref={(c) => this._input = c } />
@@ -66,7 +67,7 @@ class VkDriver extends React.Component {
     }
 
     return (
-      <EffectHandler type="vk-request" onEffect={e => this.enqueRequest(e)}>
+      <EffectHandler type={VK_REQUEST} onEffect={e => this.enqueRequest(e)}>
         {this.props.children}
       </EffectHandler>
     );
