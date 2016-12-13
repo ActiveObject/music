@@ -8,7 +8,9 @@ import {
   PLAYER_TOGGLE_TRACK,
   PLAYER_REWIND,
   PLAYER_FORWARD,
-  PLAYER_TOGGLE_PLAY
+  PLAYER_TOGGLE_PLAY,
+  PLAYER_VOLUME_UP,
+  PLAYER_VOLUME_DOWN
 } from 'app/effects';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
 import { EffectComponent, EffectHandler } from 'app/shared/effects';
@@ -16,7 +18,8 @@ import { EffectComponent, EffectHandler } from 'app/shared/effects';
 class AudioDriver extends EffectComponent {
   state = {
     audio: null,
-    isPlaying: false
+    isPlaying: false,
+    volume: 100
   }
 
   onToggleTrack = () => {
@@ -42,6 +45,26 @@ class AudioDriver extends EffectComponent {
     console.log(`[AudioDriver] toggle play`);
     if (this.audio) {
       this.setState({ isPlaying: !this.state.isPlaying });
+    }
+  }
+
+  onVolumeUp = () => {
+    if (this.state.volume < 100) {
+      var volume = this.state.volume + 10;
+
+      this.setState({
+        volume: volume < 100 ? volume : 100
+      });
+    }
+  }
+
+  onVolumeDown = () => {
+    if (this.state.volume > 0) {
+      var volume = this.state.volume - 10;
+
+      this.setState({
+        volume: volume > 0 ? volume : 0
+      });
     }
   }
 
@@ -105,6 +128,8 @@ class AudioDriver extends EffectComponent {
     if (isPlaying && this.audio.paused) {
       return this.audio.play();
     }
+
+    this.audio.volume = this.state.volume / 100;
   }
 
   componentWillUnmount() {
@@ -117,7 +142,11 @@ class AudioDriver extends EffectComponent {
       <EffectHandler type={PLAYER_FORWARD} onEffect={this.onForward}>
       <EffectHandler type={PLAYER_REWIND} onEffect={this.onRewind}>
       <EffectHandler type={PLAYER_TOGGLE_PLAY} onEffect={this.onTogglePlay}>
+      <EffectHandler type={PLAYER_VOLUME_UP} onEffect={this.onVolumeUp}>
+      <EffectHandler type={PLAYER_VOLUME_DOWN} onEffect={this.onVolumeDown}>
         {this.props.children(this.state)}
+      </EffectHandler>
+      </EffectHandler>
       </EffectHandler>
       </EffectHandler>
       </EffectHandler>

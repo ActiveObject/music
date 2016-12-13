@@ -12,7 +12,9 @@ import {
   rewind,
   forward,
   prevTrack,
-  nextTrack
+  nextTrack,
+  volumeUp,
+  volumeDown
 } from 'app/effects';
 import { Effect } from 'app/shared/effects';
 
@@ -120,6 +122,8 @@ class MusicApp extends Component {
                         <Effect children={run => <Shortcut bindTo='space' onKeyDown={() => run(togglePlay())} preventDefault />} />
                         <Effect children={run => <Shortcut bindTo='shift+left' onKeyDown={() => run(prevTrack())} />} />
                         <Effect children={run => <Shortcut bindTo='shift+right' onKeyDown={() => run(nextTrack())} />} />
+                        <Effect children={run => <Shortcut bindTo='shift+up' onKeyDown={() => run(volumeUp())} />} />
+                        <Effect children={run => <Shortcut bindTo='shift+down' onKeyDown={() => run(volumeDown())} />} />
                       </div>
                     </Router>
                   }

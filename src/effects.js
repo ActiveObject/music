@@ -2,6 +2,8 @@ export const PLAYER_REWIND = 'PLAYER_REWIND';
 export const PLAYER_FORWARD = 'PLAYER_FORWARD';
 export const PLAYER_PLAY = 'PLAYER_PLAY';
 export const PLAYER_TOGGLE_PLAY = 'PLAYER_TOGGLE_PLAY';
+export const PLAYER_VOLUME_UP = 'PLAYER_VOLUME_UP';
+export const PLAYER_VOLUME_DOWN = 'PLAYER_VOLUME_DOWN';
 
 export const PLAYER_TOGGLE_TRACK = 'PLAYER_TOGGLE_TRACK';
 export const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
@@ -31,6 +33,18 @@ export function play() {
 export function togglePlay() {
   return {
     type: PLAYER_TOGGLE_PLAY
+  };
+}
+
+export function volumeUp() {
+  return {
+    type: PLAYER_VOLUME_UP
+  };
+}
+
+export function volumeDown() {
+  return {
+    type: PLAYER_VOLUME_DOWN
   };
 }
 
