@@ -6,6 +6,55 @@ import PlayBtn from './PlayBtn/PlayBtn';
 import TracklistTable from 'app/MusicApp/tracklist/TracklistTable';
 import LazyTracklist from 'app/MusicApp/tracklist/LazyTracklist';
 
+class AudioProgressLine extends React.Component {
+  state = {
+    currentTime: 0,
+    duration: 0
+  }
+
+  onTimeUpdate = () => this.setState({ currentTime: this.props.audio.currentTime })
+  onDurationChange = () => this.setState({ duration: this.props.audio.duration })
+
+  componentDidMount() {
+    this.connect(this.props.audio);
+  }
+
+  componentDidUpdate({ audio }) {
+    this.disconnect(audio);
+    this.connect(this.props.audio);
+  }
+
+  componentWillUnmount() {
+    this.disconnect(this.props.audio);
+  }
+
+  connect(audio) {
+    if (audio) {
+      audio.addEventListener('timeupdate', this.onTimeUpdate, false);
+      audio.addEventListener('durationchange', this.onDurationChange, false);
+    }
+  }
+
+  disconnect(audio) {
+    if (audio) {
+      audio.removeEventListener('timeupdate', this.onTimeUpdate, false);
+      audio.removeEventListener('durationchange', this.onDurationChange, false);
+    }
+  }
+
+  render() {
+    var { currentTime, duration } = this.state;
+    var width = duration > 0 ? currentTime / duration * 100 : 0;
+
+    return (
+      <div style={{ position: 'relative', width: '100%', height: 3 }}>
+        <div style={{ position: 'absolute', width: `100%`, height: '100%', backgroundColor: '#FEA5CD' }} />
+        <div style={{ position: 'absolute', width: `${width}%`, height: '100%', backgroundColor: 'white' }} />
+      </div>
+    )
+  }
+}
+
 class PlayerPopover extends React.Component {
   componentDidMount() {
     key('esc', this.props.onHide);
@@ -46,7 +95,11 @@ class PlayerPopover extends React.Component {
             <div className='PlayerView__title'>{title}</div>
           </div>
 
-          <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 300, backgroundColor: 'white', padding: '10px'}}>
+          <div style={{ width: '100%', padding: '20px' }}>
+            <AudioProgressLine audio={audio} />
+          </div>
+
+          <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 300, backgroundColor: 'white', padding: '20px'}}>
             <TracklistTable>
               <LazyTracklist tracks={playlist} audio={audio} currentTrack={track} />
             </TracklistTable>
