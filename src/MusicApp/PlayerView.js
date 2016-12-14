@@ -59,17 +59,48 @@ class PlayerPopover extends React.Component {
 
 class PlayerView extends React.Component {
   state = {
-    shape: 'button'
+    shape: 'button',
+    isPlaying: false
+  }
+
+  onPaused = () => this.setState({ isPlaying: false })
+  onPlaying = () => this.setState({ isPlaying: true })
+
+  componentDidMount() {
+    this.connect(this.props.audio);
+  }
+
+  componentDidUpdate({ audio }) {
+    this.disconnect(audio);
+    this.connect(this.props.audio);
+  }
+
+  componentWillUnmount() {
+    this.disconnect(this.props.audio);
+  }
+
+  connect(audio) {
+    if (audio) {
+      audio.addEventListener('pause', this.onPaused, false);
+      audio.addEventListener('play', this.onPlaying, false);
+    }
+  }
+
+  disconnect(audio) {
+    if (audio) {
+      audio.removeEventListener('pause', this.onPaused, false);
+      audio.removeEventListener('play', this.onPlaying, false);
+    }
   }
 
   render() {
     var { audio, track, playlist } = this.props;
-    var { shape } = this.state;
+    var { shape, isPlaying } = this.state;
 
     if (shape == 'button') {
       return (
         <div style={{position: 'fixed', left: 0, bottom: 0, padding: '20px 30px'}}>
-          <PlayBtn isPlaying={this.props.isPlaying} onClick={() => this.setState({ shape: 'popover' })} />
+          <PlayBtn isPlaying={isPlaying} onClick={() => this.setState({ shape: 'popover' })} />
         </div>
       );
     }
