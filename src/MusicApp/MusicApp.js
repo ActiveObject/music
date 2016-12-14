@@ -58,7 +58,7 @@ class MusicApp extends Component {
         {({ userId, accessToken }) =>
           <VkDriver userId={userId} accessToken={accessToken} apiVersion='5.29'>
             <PlaylistDriver playlist={library}>
-              {({ track }) =>
+              {({ track, playlist }) =>
                 <AudioDriver track={track}>
                   {({ audio }) =>
                     <Router>
@@ -112,7 +112,7 @@ class MusicApp extends Component {
                           </div>
                         } />
 
-                        <Player audio={audio} track={track} isPlaying={true} />
+                        <Player audio={audio} track={track} isPlaying={true} playlist={playlist} />
 
                         <VkAudioSync userId={userId} onSync={this.onAudioSync} interval={10} />
                         <VkGroupSync userId={userId} onSync={this.onGroupSync} interval={60} />

@@ -44,6 +44,7 @@ a:hover {
 
 .track:nth-child(odd),
 .track-container:nth-child(odd) .track {
+  color: $base-text-color;
   background-color: #F2F2F2;
 }
 
@@ -62,6 +63,7 @@ a:hover {
 }
 
 .TracklistTable__columns {
+  color: $base-text-color;
   border-bottom: 1px solid #eee;
 }
 

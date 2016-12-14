@@ -5,11 +5,6 @@ import Cursor from './cursor';
 import TrackCtrl from './TrackCtrl';
 
 class TrackContainer extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return (this.props.track !== nextProps.track
-      || this.props.tracklist !== nextProps.tracklist);
-  }
-
   render() {
     return <TrackCtrl
       audio={this.props.audio}
