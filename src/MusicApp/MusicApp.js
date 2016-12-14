@@ -112,7 +112,7 @@ class MusicApp extends Component {
                           </div>
                         } />
 
-                        <Player audio={audio} track={track} playlist={playlist} />
+                        {track && <Player audio={audio} track={track} playlist={playlist} />}
 
                         <VkAudioSync userId={userId} onSync={this.onAudioSync} interval={10} />
                         <VkGroupSync userId={userId} onSync={this.onGroupSync} interval={60} />
