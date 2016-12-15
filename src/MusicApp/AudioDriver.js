@@ -5,12 +5,12 @@ import {
   nextTrack,
   useTrack,
   PLAYER_TOGGLE_TRACK,
-  PLAYER_REWIND,
-  PLAYER_FORWARD,
-  PLAYER_TOGGLE_PLAY,
-  PLAYER_VOLUME_UP,
-  PLAYER_VOLUME_DOWN,
-  PLAYER_SEEK_TO
+  AUDIO_REWIND,
+  AUDIO_FORWARD,
+  AUDIO_TOGGLE_PLAY,
+  AUDIO_VOLUME_UP,
+  AUDIO_VOLUME_DOWN,
+  AUDIO_SEEK_TO
 } from 'app/effects';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
 import { EffectComponent, EffectHandler } from 'app/shared/effects';
@@ -146,12 +146,12 @@ class AudioDriver extends EffectComponent {
   render() {
     return (
       <EffectHandler type={PLAYER_TOGGLE_TRACK} onEffect={this.onToggleTrack}>
-      <EffectHandler type={PLAYER_FORWARD} onEffect={this.onForward}>
-      <EffectHandler type={PLAYER_REWIND} onEffect={this.onRewind}>
-      <EffectHandler type={PLAYER_TOGGLE_PLAY} onEffect={this.onTogglePlay}>
-      <EffectHandler type={PLAYER_VOLUME_UP} onEffect={this.onVolumeUp}>
-      <EffectHandler type={PLAYER_VOLUME_DOWN} onEffect={this.onVolumeDown}>
-      <EffectHandler type={PLAYER_SEEK_TO} onEffect={this.onSeekTo}>
+      <EffectHandler type={AUDIO_FORWARD} onEffect={this.onForward}>
+      <EffectHandler type={AUDIO_REWIND} onEffect={this.onRewind}>
+      <EffectHandler type={AUDIO_TOGGLE_PLAY} onEffect={this.onTogglePlay}>
+      <EffectHandler type={AUDIO_VOLUME_UP} onEffect={this.onVolumeUp}>
+      <EffectHandler type={AUDIO_VOLUME_DOWN} onEffect={this.onVolumeDown}>
+      <EffectHandler type={AUDIO_SEEK_TO} onEffect={this.onSeekTo}>
         {this.props.children(this.state)}
       </EffectHandler>
       </EffectHandler>
