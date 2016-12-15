@@ -36,6 +36,12 @@ class AudioProgressLine extends React.Component {
     this.connect(this.props.audio);
   }
 
+  componentWillUpdate({ audio }) {
+    if (audio !== this.props.audio) {
+      this.setState({ currentTime: 0 });
+    }
+  }
+
   componentDidUpdate({ audio }) {
     if (audio !== this.props.audio) {
       this.disconnect(audio);
