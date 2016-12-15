@@ -27,7 +27,7 @@ import VkGroupSync from './VkGroupSync';
 import VkDriver from './VkDriver';
 import PlaylistDriver from './PlaylistDriver';
 import PlayerSync from './PlayerSync';
-import Player from './PlayerView';
+import Player from './Player';
 import GroupsListContainer from './GroupsListContainer';
 import LibrarySync from './LibrarySync';
 import TracklistTable from './tracklist/TracklistTable';

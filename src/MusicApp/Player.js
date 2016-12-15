@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import key from 'keymaster';
-import './PlayerView.css';
 import PlayBtn from './PlayBtn/PlayBtn';
 import TracklistTable from 'app/MusicApp/tracklist/TracklistTable';
 import LazyTracklist from 'app/MusicApp/tracklist/LazyTracklist';
 import { Effect } from 'app/shared/effects';
 import { seekTo } from 'app/effects';
+import './Player.css';
 
 class AudioProgressLine extends React.Component {
   static propTypes = {
@@ -175,7 +175,7 @@ class Popover extends React.Component {
   }
 }
 
-class PlayerView extends React.Component {
+export default class Player extends React.Component {
   state = {
     shape: 'button',
     isPlaying: false
@@ -228,18 +228,18 @@ class PlayerView extends React.Component {
 
     return (
       <Popover onHide={() => this.setState({ shape: 'button' })}>
-        <div className='PlayerView'>
-          <div className='PlayerView-b'>
-            <div className='PlayerView__top'>
-              <div className='PlayerView__visualization'>
+        <div className='Player'>
+          <div className='Player-b'>
+            <div className='Player__top'>
+              <div className='Player__visualization'>
                 <FrequencyBar audio={audio} width={460} height={150} />
               </div>
-              <div className='PlayerView__audio'></div>
+              <div className='Player__audio'></div>
             </div>
 
-            <div className='PlayerView__info'>
-              <div className='PlayerView__artist'>{artist}</div>
-              <div className='PlayerView__title'>{title}</div>
+            <div className='Player__info'>
+              <div className='Player__artist'>{artist}</div>
+              <div className='Player__title'>{title}</div>
             </div>
 
             <div style={{ width: '100%', padding: '20px' }}>
@@ -351,5 +351,3 @@ function addEventListener(el, eventName, listener, isCapture) {
     el.removeEventListener(eventName, listener, isCapture);
   };
 }
-
-export default PlayerView;
