@@ -2,7 +2,6 @@ import React from 'react';
 import { Map } from 'immutable';
 import vk from 'app/shared/vk';
 import { fromVk } from 'app/shared/Track';
-import merge from 'app/shared/merge';
 import { EffectComponent } from 'app/shared/effects';
 import TracklistTable from '../tracklist/TracklistTable';
 import TracklistPreview from '../tracklist/TracklistPreview';
@@ -64,7 +63,7 @@ function topAudios(posts) {
 let TopTracks = ({ audio, posts, albums, currentTrack }) => {
   var tracks = topAudios(top5(posts))
     .map(x => fromVk(x, Map()))
-    .map((x, i) => merge(x, { audio: merge(x.audio, { index: i })}))
+    .map((x, i) => Object.assign({}, x, { audio: Object.assign({}, x.audio, { index: i })}))
     .slice(0, 5);
 
   return (

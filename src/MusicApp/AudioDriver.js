@@ -1,5 +1,4 @@
 import React from 'react';
-import merge from 'app/shared/merge';
 import vk from 'app/shared/vk';
 import { toString } from 'app/shared/Track';
 import {
@@ -173,7 +172,7 @@ function reload(track, run) {
       return console.log(err);
     }
 
-    run(useTrack(merge(track, {
+    run(useTrack(Object.assign({}, track, {
       url: res.response[0]
     })));
   });

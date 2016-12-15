@@ -2,7 +2,6 @@ import Url from 'url';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import request from 'jsonp';
-import merge from 'app/shared/merge';
 import { EffectHandler } from 'app/shared/effects';
 import { VK_REQUEST } from 'app/shared/vk';
 
@@ -83,7 +82,7 @@ class VkDriver extends React.Component {
     if (!this.state.isWaitingForCaptcha && this.state.queue.length > 0) {
       var { accessToken, apiVersion, entryPoint } = this.props;
       var reqParams = this.state.queue[0];
-      var req = new Request(merge(reqParams, {
+      var req = new Request(Object.assign({}, reqParams, {
         entryPoint,
         token: accessToken,
         version: apiVersion
@@ -124,8 +123,8 @@ class VkDriver extends React.Component {
     var { reqParams } = this.state;
 
     this.setState(({ queue, captchaSid }) => ({
-      queue: queue.concat(merge(reqParams, {
-        params: merge(reqParams.params, {
+      queue: queue.concat(Object.assign({}, reqParams, {
+        params: Object.assign({}, reqParams.params, {
           captcha_key: captchaKey,
           captcha_sid: captchaSid
         })
@@ -152,7 +151,7 @@ function Request(attrs) {
     protocol: Url.parse(this.entryPoint).protocol,
     host: Url.parse(this.entryPoint).host,
     pathname: Url.parse(this.entryPoint).pathname + this.method,
-    query: merge(this.params, {
+    query: Object.assign({}, this.params, {
       access_token: this.token,
       v: this.version
     })
@@ -185,7 +184,7 @@ Request.prototype.nextAttempt = function() {
 };
 
 Request.prototype.modify = function(attrs) {
-  return new Request(merge(this, attrs));
+  return new Request(Object.assign({}, this, attrs));
 };
 
 function Response(err, data) {
