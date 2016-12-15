@@ -150,7 +150,7 @@ class AudioProgressLine extends React.Component {
   }
 }
 
-class PlayerPopover extends React.Component {
+class Popover extends React.Component {
   componentDidMount() {
     key('esc', this.props.onHide);
 
@@ -171,37 +171,7 @@ class PlayerPopover extends React.Component {
   }
 
   render() {
-    var { track, audio, playlist } = this.props;
-    var artist = track && track.artist;
-    var title = track && track.title;
-
-    return (
-      <div className='PlayerView'>
-        <div className='PlayerView-b'>
-          <div className='PlayerView__top'>
-            <div className='PlayerView__visualization'>
-              <FrequencyBar audio={audio} width={460} height={150} />
-            </div>
-            <div className='PlayerView__audio'></div>
-          </div>
-
-          <div className='PlayerView__info'>
-            <div className='PlayerView__artist'>{artist}</div>
-            <div className='PlayerView__title'>{title}</div>
-          </div>
-
-          <div style={{ width: '100%', padding: '20px' }}>
-            <Effect children={run => <AudioProgressLine audio={audio} onSeek={position => run(seekTo(position))} />} />
-          </div>
-
-          <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 300, backgroundColor: 'white', padding: '20px'}}>
-            <TracklistTable>
-              <LazyTracklist tracks={playlist} audio={audio} currentTrack={track} />
-            </TracklistTable>
-          </div>
-        </div>
-      </div>
-    )
+    return this.props.children;
   }
 }
 
@@ -253,12 +223,37 @@ class PlayerView extends React.Component {
       );
     }
 
+    var artist = track && track.artist;
+    var title = track && track.title;
+
     return (
-      <PlayerPopover
-        audio={audio}
-        track={track}
-        playlist={playlist}
-        onHide={() => this.setState({ shape: 'button' })} />
+      <Popover onHide={() => this.setState({ shape: 'button' })}>
+        <div className='PlayerView'>
+          <div className='PlayerView-b'>
+            <div className='PlayerView__top'>
+              <div className='PlayerView__visualization'>
+                <FrequencyBar audio={audio} width={460} height={150} />
+              </div>
+              <div className='PlayerView__audio'></div>
+            </div>
+
+            <div className='PlayerView__info'>
+              <div className='PlayerView__artist'>{artist}</div>
+              <div className='PlayerView__title'>{title}</div>
+            </div>
+
+            <div style={{ width: '100%', padding: '20px' }}>
+              <Effect children={run => <AudioProgressLine audio={audio} onSeek={position => run(seekTo(position))} />} />
+            </div>
+
+            <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 300, backgroundColor: 'white', padding: '20px'}}>
+              <TracklistTable>
+                <LazyTracklist tracks={playlist} audio={audio} currentTrack={track} />
+              </TracklistTable>
+            </div>
+          </div>
+        </div>
+      </Popover>
     );
   }
 }
