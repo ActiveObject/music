@@ -8,6 +8,89 @@ import { Effect } from 'app/shared/effects';
 import { seekTo } from 'app/effects';
 import './Player.css';
 
+export default class Player extends React.Component {
+  state = {
+    shape: 'button',
+    isPlaying: false
+  }
+
+  onPaused = () => this.setState({ isPlaying: false })
+  onPlaying = () => this.setState({ isPlaying: true })
+
+  componentDidMount() {
+    this.connect(this.props.audio);
+  }
+
+  componentDidUpdate({ audio }) {
+    this.disconnect(audio);
+    this.connect(this.props.audio);
+  }
+
+  componentWillUnmount() {
+    this.disconnect(this.props.audio);
+  }
+
+  connect(audio) {
+    if (audio) {
+      audio.addEventListener('pause', this.onPaused, false);
+      audio.addEventListener('play', this.onPlaying, false);
+    }
+  }
+
+  disconnect(audio) {
+    if (audio) {
+      audio.removeEventListener('pause', this.onPaused, false);
+      audio.removeEventListener('play', this.onPlaying, false);
+    }
+  }
+
+  render() {
+    var { audio, track, playlist } = this.props;
+    var { shape, isPlaying } = this.state;
+
+    if (shape == 'button') {
+      return (
+        <div style={{position: 'fixed', left: 0, bottom: 0, padding: '20px 30px'}}>
+          <PlayBtn isPlaying={isPlaying} onClick={() => this.setState({ shape: 'popover' })} />
+        </div>
+      );
+    }
+
+    var artist = track && track.artist;
+    var title = track && track.title;
+
+    return (
+      <Popover onHide={() => this.setState({ shape: 'button' })}>
+        <div className='Player'>
+          <div className='Player-b'>
+            <div className='Player__top'>
+              <div className='Player__visualization'>
+                <FrequencyBar audio={audio} width={460} height={150} />
+              </div>
+              <div className='Player__audio'></div>
+            </div>
+
+            <div className='Player__info'>
+              <div className='Player__artist'>{artist}</div>
+              <div className='Player__title'>{title}</div>
+            </div>
+
+            <div style={{ width: '100%', padding: '20px' }}>
+              <Effect children={run => <AudioProgressLine audio={audio} onSeek={position => run(seekTo(position))} />} />
+            </div>
+
+            <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 300, backgroundColor: 'white', padding: '20px'}}>
+              <TracklistTable>
+                <LazyTracklist tracks={playlist} audio={audio} currentTrack={track} />
+              </TracklistTable>
+            </div>
+          </div>
+        </div>
+      </Popover>
+    );
+  }
+}
+
 class AudioProgressLine extends React.Component {
   static propTypes = {
     audio: PropTypes.instanceOf(HTMLMediaElement).isRequired,
@@ -172,89 +255,6 @@ class Popover extends React.Component {
 
   render() {
     return this.props.children;
-  }
-}
-
-export default class Player extends React.Component {
-  state = {
-    shape: 'button',
-    isPlaying: false
-  }
-
-  onPaused = () => this.setState({ isPlaying: false })
-  onPlaying = () => this.setState({ isPlaying: true })
-
-  componentDidMount() {
-    this.connect(this.props.audio);
-  }
-
-  componentDidUpdate({ audio }) {
-    this.disconnect(audio);
-    this.connect(this.props.audio);
-  }
-
-  componentWillUnmount() {
-    this.disconnect(this.props.audio);
-  }
-
-  connect(audio) {
-    if (audio) {
-      audio.addEventListener('pause', this.onPaused, false);
-      audio.addEventListener('play', this.onPlaying, false);
-    }
-  }
-
-  disconnect(audio) {
-    if (audio) {
-      audio.removeEventListener('pause', this.onPaused, false);
-      audio.removeEventListener('play', this.onPlaying, false);
-    }
-  }
-
-  render() {
-    var { audio, track, playlist } = this.props;
-    var { shape, isPlaying } = this.state;
-
-    if (shape == 'button') {
-      return (
-        <div style={{position: 'fixed', left: 0, bottom: 0, padding: '20px 30px'}}>
-          <PlayBtn isPlaying={isPlaying} onClick={() => this.setState({ shape: 'popover' })} />
-        </div>
-      );
-    }
-
-    var artist = track && track.artist;
-    var title = track && track.title;
-
-    return (
-      <Popover onHide={() => this.setState({ shape: 'button' })}>
-        <div className='Player'>
-          <div className='Player-b'>
-            <div className='Player__top'>
-              <div className='Player__visualization'>
-                <FrequencyBar audio={audio} width={460} height={150} />
-              </div>
-              <div className='Player__audio'></div>
-            </div>
-
-            <div className='Player__info'>
-              <div className='Player__artist'>{artist}</div>
-              <div className='Player__title'>{title}</div>
-            </div>
-
-            <div style={{ width: '100%', padding: '20px' }}>
-              <Effect children={run => <AudioProgressLine audio={audio} onSeek={position => run(seekTo(position))} />} />
-            </div>
-
-            <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 300, backgroundColor: 'white', padding: '20px'}}>
-              <TracklistTable>
-                <LazyTracklist tracks={playlist} audio={audio} currentTrack={track} />
-              </TracklistTable>
-            </div>
-          </div>
-        </div>
-      </Popover>
-    );
   }
 }
 
