@@ -4,6 +4,7 @@ export const PLAYER_PLAY = 'PLAYER_PLAY';
 export const PLAYER_TOGGLE_PLAY = 'PLAYER_TOGGLE_PLAY';
 export const PLAYER_VOLUME_UP = 'PLAYER_VOLUME_UP';
 export const PLAYER_VOLUME_DOWN = 'PLAYER_VOLUME_DOWN';
+export const PLAYER_SEEK_TO = 'PLAYER_SEEK_TO';
 
 export const PLAYER_TOGGLE_TRACK = 'PLAYER_TOGGLE_TRACK';
 export const PLAYER_NEXT_TRACK = 'PLAYER_NEXT_TRACK';
@@ -45,6 +46,13 @@ export function volumeUp() {
 export function volumeDown() {
   return {
     type: PLAYER_VOLUME_DOWN
+  };
+}
+
+export function seekTo(position) {
+  return {
+    type: PLAYER_SEEK_TO,
+    position
   };
 }
 

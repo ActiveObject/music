@@ -10,7 +10,8 @@ import {
   PLAYER_FORWARD,
   PLAYER_TOGGLE_PLAY,
   PLAYER_VOLUME_UP,
-  PLAYER_VOLUME_DOWN
+  PLAYER_VOLUME_DOWN,
+  PLAYER_SEEK_TO
 } from 'app/effects';
 import { showMediaError, MEDIA_ERR_SRC_NOT_SUPPORTED } from 'app/shared/MediaError';
 import { EffectComponent, EffectHandler } from 'app/shared/effects';
@@ -65,6 +66,13 @@ class AudioDriver extends EffectComponent {
       this.setState({
         volume: volume > 0 ? volume : 0
       });
+    }
+  }
+
+  onSeekTo = ({ position }) => {
+    console.log(`[AudioDriver] seek to ${position}`);
+    if (this.audio) {
+      this.audio.currentTime = this.audio.duration * position;
     }
   }
 
@@ -144,7 +152,9 @@ class AudioDriver extends EffectComponent {
       <EffectHandler type={PLAYER_TOGGLE_PLAY} onEffect={this.onTogglePlay}>
       <EffectHandler type={PLAYER_VOLUME_UP} onEffect={this.onVolumeUp}>
       <EffectHandler type={PLAYER_VOLUME_DOWN} onEffect={this.onVolumeDown}>
+      <EffectHandler type={PLAYER_SEEK_TO} onEffect={this.onSeekTo}>
         {this.props.children(this.state)}
+      </EffectHandler>
       </EffectHandler>
       </EffectHandler>
       </EffectHandler>

@@ -1,15 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import key from 'keymaster';
 import './PlayerView.css';
 import PlayBtn from './PlayBtn/PlayBtn';
 import TracklistTable from 'app/MusicApp/tracklist/TracklistTable';
 import LazyTracklist from 'app/MusicApp/tracklist/LazyTracklist';
+import { Effect } from 'app/shared/effects';
+import { seekTo } from 'app/effects';
 
 class AudioProgressLine extends React.Component {
+  static propTypes = {
+    audio: PropTypes.instanceOf(HTMLMediaElement).isRequired,
+    onSeek: PropTypes.func.isRequired
+  }
+
   state = {
     currentTime: 0,
-    duration: 0
+    duration: 0,
+    isSeekIndicatorVisible: false
   }
 
   onTimeUpdate = () => this.setState({ currentTime: this.props.audio.currentTime })
@@ -20,8 +28,10 @@ class AudioProgressLine extends React.Component {
   }
 
   componentDidUpdate({ audio }) {
-    this.disconnect(audio);
-    this.connect(this.props.audio);
+    if (audio !== this.props.audio) {
+      this.disconnect(audio);
+      this.connect(this.props.audio);
+    }
   }
 
   componentWillUnmount() {
@@ -30,6 +40,7 @@ class AudioProgressLine extends React.Component {
 
   connect(audio) {
     if (audio) {
+      console.log('connect');
       audio.addEventListener('timeupdate', this.onTimeUpdate, false);
       audio.addEventListener('durationchange', this.onDurationChange, false);
     }
@@ -37,21 +48,78 @@ class AudioProgressLine extends React.Component {
 
   disconnect(audio) {
     if (audio) {
+      console.log('disconnect');
       audio.removeEventListener('timeupdate', this.onTimeUpdate, false);
       audio.removeEventListener('durationchange', this.onDurationChange, false);
     }
   }
 
   render() {
-    var { currentTime, duration } = this.state;
+    var { currentTime, duration, isSeekIndicatorVisible } = this.state;
     var width = duration > 0 ? currentTime / duration * 100 : 0;
 
+    var style = {
+      position: 'relative',
+      width: '100%',
+      height: 10,
+      display: 'flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+      userSelect: 'none'
+    };
+
+    var seekIndicatorStyle = {
+      position: 'absolute',
+      width: 10,
+      height: 10,
+      borderRadius: '50%',
+      opacity: isSeekIndicatorVisible ? 1 : 0,
+      transition: 'opacity 0.1s',
+      marginLeft: -5,
+      backgroundColor: 'white',
+      left: `${width}%`
+    };
+
+    var bgLineStyle = {
+      position: 'absolute',
+      width: `100%`,
+      height: 3,
+      backgroundColor: '#FEA5CD'
+    };
+
+    var fgLineStyle = {
+      position: 'absolute',
+      width: `${width}%`,
+      height: 3,
+      backgroundColor: 'white'
+    };
+
     return (
-      <div style={{ position: 'relative', width: '100%', height: 3 }}>
-        <div style={{ position: 'absolute', width: `100%`, height: '100%', backgroundColor: '#FEA5CD' }} />
-        <div style={{ position: 'absolute', width: `${width}%`, height: '100%', backgroundColor: 'white' }} />
+      <div
+        style={style}
+        onMouseOver={this.showSeekIndicator}
+        onMouseOut={this.hideSeekIndicator}
+        onMouseLeave={this.moveSeekIndicator}
+        onClick={this.seekToPosition} >
+        <div style={bgLineStyle} />
+        <div style={fgLineStyle} />
+        <div style={seekIndicatorStyle} onMouseDown={this.startDragging} />
       </div>
     )
+  }
+
+  showSeekIndicator = () => this.setState({ isSeekIndicatorVisible: true })
+  hideSeekIndicator = () => this.setState({ isSeekIndicatorVisible: false })
+  moveSeekIndicator = () => console.log('move')
+  startDragging = () => console.log('start dragging')
+  seekToPosition = event => {
+    var node = ReactDOM.findDOMNode(this);
+    var lineWidth = node.offsetWidth;
+    var leftX = node.getBoundingClientRect().left;
+    var position = event.clientX - leftX;
+    var relativePosition = position / lineWidth;
+
+    this.props.onSeek(relativePosition);
   }
 }
 
@@ -96,7 +164,7 @@ class PlayerPopover extends React.Component {
           </div>
 
           <div style={{ width: '100%', padding: '20px' }}>
-            <AudioProgressLine audio={audio} />
+            <Effect children={run => <AudioProgressLine audio={audio} onSeek={position => run(seekTo(position))} />} />
           </div>
 
           <div style={{ position: 'absolute', top: 400, left: 0, width: '100%', height: 300, backgroundColor: 'white', padding: '20px'}}>
