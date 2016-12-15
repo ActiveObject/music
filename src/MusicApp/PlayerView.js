@@ -25,6 +25,13 @@ class AudioProgressLine extends React.Component {
   onTimeUpdate = () => this.setState({ currentTime: this.props.audio.currentTime })
   onDurationChange = () => this.setState({ duration: this.props.audio.duration })
 
+  componentWillMount() {
+    this.setState({
+      currentTime: this.props.audio.currentTime,
+      duration: this.props.audio.duration
+    });
+  }
+
   componentDidMount() {
     this.connect(this.props.audio);
   }
@@ -41,19 +48,13 @@ class AudioProgressLine extends React.Component {
   }
 
   connect(audio) {
-    if (audio) {
-      console.log('connect');
-      audio.addEventListener('timeupdate', this.onTimeUpdate, false);
-      audio.addEventListener('durationchange', this.onDurationChange, false);
-    }
+    audio.addEventListener('timeupdate', this.onTimeUpdate, false);
+    audio.addEventListener('durationchange', this.onDurationChange, false);
   }
 
   disconnect(audio) {
-    if (audio) {
-      console.log('disconnect');
-      audio.removeEventListener('timeupdate', this.onTimeUpdate, false);
-      audio.removeEventListener('durationchange', this.onDurationChange, false);
-    }
+    audio.removeEventListener('timeupdate', this.onTimeUpdate, false);
+    audio.removeEventListener('durationchange', this.onDurationChange, false);
   }
 
   render() {
