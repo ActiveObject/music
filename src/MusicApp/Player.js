@@ -271,7 +271,7 @@ class FrequencyBar extends React.Component {
     this.analyser.minDecibels = -80;
     this.analyser.maxDecibels = -20;
     this.analyser.smoothingTimeConstant = 0.85;
-    this.analyser.fftSize = 256;
+    this.analyser.fftSize = 128;
     this.bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(this.bufferLength);
     this.connect(this.props.audio);
@@ -322,7 +322,8 @@ class FrequencyBar extends React.Component {
     ctx.fillStyle = '#FD76B3';
     ctx.fillRect(0, 0, width, height);
 
-    var barWidth = Math.floor(width / this.bufferLength);
+    var barWidth = Math.floor(width / this.bufferLength) / 2;
+    var offset = width / 2;
     var barHeight;
     var x = 0;
     var y = 0;
@@ -335,8 +336,10 @@ class FrequencyBar extends React.Component {
       for (var j = 0, count = Math.floor(barHeight / (size + margin)); j < count; j++) {
         ctx.fillStyle = '#df699e';
         y = j * (size + margin);
-        ctx.fillRect(x, height / 2 - y, barWidth, size);
-        ctx.fillRect(x, height / 2 + y, barWidth, size);
+        ctx.fillRect(offset + x, height / 2 - y, barWidth, size);
+        ctx.fillRect(offset + x, height / 2 + y, barWidth, size);
+        ctx.fillRect(offset - x, height / 2 - y, barWidth, size);
+        ctx.fillRect(offset - x, height / 2 + y, barWidth, size);
       }
 
       x += barWidth + margin;
