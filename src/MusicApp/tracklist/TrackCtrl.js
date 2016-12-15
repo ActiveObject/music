@@ -5,13 +5,19 @@ import { Effect } from 'app/shared/effects';
 
 class TrackCtrl extends React.Component {
   state = {
-    position: 0
+    currentTime: 0
   }
 
   onTimeUpdate = () => {
     this.setState({
-      position: this.props.audio.currentTime * 1000
+      currentTime: this.props.audio.currentTime
     });
+  }
+
+  componentWillUpdate({ audio }) {
+    if (audio !== this.props.audio) {
+      this.setState({ currentTime: 0 });
+    }
   }
 
   componentDidMount() {
@@ -41,7 +47,7 @@ class TrackCtrl extends React.Component {
 
   render() {
     var { audio, currentTrack, track, tracklist } = this.props;
-    var { position } = this.state;
+    var { currentTime } = this.state;
     var index = track ? tracklist.findIndex(t => t.id === track.id) + 1 : 0;
     var isActive = currentTrack ? track.id === currentTrack.id : false;
 
@@ -52,7 +58,7 @@ class TrackCtrl extends React.Component {
             track={track}
             index={index}
             isActive={isActive}
-            position={position}
+            position={currentTime * 1000}
             onTogglePlay={() => run(toggleTrack(track, tracklist))} />
         }
       </Effect>
