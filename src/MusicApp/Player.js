@@ -234,6 +234,10 @@ class AudioProgressLine extends React.Component {
 }
 
 class Popover extends React.Component {
+  static propTypes = {
+    onHide: PropTypes.func.isRequired
+  }
+
   componentDidMount() {
     key('esc', this.props.onHide);
 
