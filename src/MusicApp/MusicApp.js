@@ -97,11 +97,6 @@ class MusicApp extends Component {
 
                       <Match pattern='/library' render={() =>
                           <div className='Library'>
-                            <div className='toolbar-container'>
-                              <div className='toolbar'>
-                                <span className={cx({ 'action': true, 'action--active': false })}>shuffle</span>
-                              </div>
-                            </div>
                             <LibrarySync userId={userId} library={library} albums={albums}>
                               {tracks =>
                                 <TracklistTable>
