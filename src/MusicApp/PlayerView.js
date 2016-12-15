@@ -17,7 +17,9 @@ class AudioProgressLine extends React.Component {
   state = {
     currentTime: 0,
     duration: 0,
-    isSeekIndicatorVisible: false
+    isSeekIndicatorVisible: false,
+    isSeeking: false,
+    seekPosition: 0
   }
 
   onTimeUpdate = () => this.setState({ currentTime: this.props.audio.currentTime })
@@ -55,8 +57,13 @@ class AudioProgressLine extends React.Component {
   }
 
   render() {
-    var { currentTime, duration, isSeekIndicatorVisible } = this.state;
-    var width = duration > 0 ? currentTime / duration * 100 : 0;
+    var { currentTime, duration, isSeeking, isSeekIndicatorVisible, seekPosition } = this.state;
+
+    var position = duration > 0 ? currentTime / duration * 100 : 0;
+
+    if (isSeeking) {
+      position = seekPosition * 100;
+    }
 
     var style = {
       position: 'relative',
@@ -73,11 +80,11 @@ class AudioProgressLine extends React.Component {
       width: 10,
       height: 10,
       borderRadius: '50%',
-      opacity: isSeekIndicatorVisible ? 1 : 0,
+      opacity: isSeekIndicatorVisible || isSeeking ? 1 : 0,
       transition: 'opacity 0.1s',
       marginLeft: -5,
       backgroundColor: 'white',
-      left: `${width}%`
+      left: `${position}%`
     };
 
     var bgLineStyle = {
@@ -89,7 +96,7 @@ class AudioProgressLine extends React.Component {
 
     var fgLineStyle = {
       position: 'absolute',
-      width: `${width}%`,
+      width: `${position}%`,
       height: 3,
       backgroundColor: 'white'
     };
@@ -99,8 +106,9 @@ class AudioProgressLine extends React.Component {
         style={style}
         onMouseOver={this.showSeekIndicator}
         onMouseOut={this.hideSeekIndicator}
-        onMouseLeave={this.moveSeekIndicator}
-        onClick={this.seekToPosition} >
+        onMouseMove={this.moveSeekIndicator}
+        onClick={this.seekToPosition}
+        onMouseUp={this.stopDragging} >
         <div style={bgLineStyle} />
         <div style={fgLineStyle} />
         <div style={seekIndicatorStyle} onMouseDown={this.startDragging} />
@@ -110,16 +118,28 @@ class AudioProgressLine extends React.Component {
 
   showSeekIndicator = () => this.setState({ isSeekIndicatorVisible: true })
   hideSeekIndicator = () => this.setState({ isSeekIndicatorVisible: false })
-  moveSeekIndicator = () => console.log('move')
-  startDragging = () => console.log('start dragging')
+  startDragging = event => this.setState({ isSeeking: true, seekPosition: this.relativePosition(event) })
+  stopDragging = event => this.setState({ isSeeking: false })
+
+  moveSeekIndicator = event => {
+    if (this.state.isSeeking) {
+      this.setState({
+        seekPosition: this.relativePosition(event)
+      });
+    }
+  }
+
   seekToPosition = event => {
+    this.props.onSeek(this.relativePosition(event));
+  }
+
+  relativePosition(event) {
     var node = ReactDOM.findDOMNode(this);
     var lineWidth = node.offsetWidth;
     var leftX = node.getBoundingClientRect().left;
     var position = event.clientX - leftX;
-    var relativePosition = position / lineWidth;
 
-    this.props.onSeek(relativePosition);
+    return position / lineWidth;
   }
 }
 
